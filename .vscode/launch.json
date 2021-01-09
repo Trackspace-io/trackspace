@@ -1,0 +1,12 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "pwa-node",
+      "request": "attach",
+      "name": "Server",
+      "processId": "${command:PickProcess}",
+      "restart": true
+    }
+  ]
+}
