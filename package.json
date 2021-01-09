@@ -1,0 +1,21 @@
+{
+  "name": "trackspace",
+  "main": "./server/dist/index.js",
+  "scripts": {
+    "build": "cd server && npm run build",
+    "install": "cd server && npm install",
+    "prestart": "npm run install && npm run build",
+    "start": "node .",
+    "start-dev": "cd server && npm run start-dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Trackspace-io/trackspace.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Trackspace-io/trackspace/issues"
+  },
+  "homepage": "https://github.com/Trackspace-io/trackspace#readme",
+  "devDependencies": {}
+}
