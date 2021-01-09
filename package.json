@@ -3,7 +3,8 @@
   "main": "./server/dist/index.js",
   "scripts": {
     "build": "cd server && npm run build",
-    "prestart": "npm run build",
+    "install": "cd server && npm install",
+    "prestart": "npm run install && npm run build",
     "start": "node .",
     "start-dev": "cd server && npm run start-dev"
   },
