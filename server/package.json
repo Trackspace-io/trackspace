@@ -2,11 +2,10 @@
   "name": "trackspace-server",
   "main": "dist/index.js",
   "scripts": {
-    "prebuild": "eslint --fix",
     "build": "rimraf ./dist && tsc",
     "prestart": "npm run build",
     "start": "node .",
-    "start-dev": "nodemon --inspect"
+    "start-dev": "eslint --fix && nodemon --inspect"
   },
   "repository": {
     "type": "git",
