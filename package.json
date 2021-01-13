@@ -9,6 +9,7 @@
     "install-app": "concurrently \"npm run install-client\" \"npm run install-server\"",
     "build-app": "concurrently \"npm run build-client\" \"npm run build-server\"",
     "prestart": "npm run install-app && npm run build-app",
+    "heroku-postbuild": "npm run install-app && npm run build-app",
     "start": "node .",
     "start-client": "cd client && npm start",
     "start-server-dev": "cd server && npm run start-dev",
