@@ -5,10 +5,10 @@
     "build": "cd server && npm run build",
     "install": "cd server && npm install",
     "prestart": "npm run install && npm run build",
+    "start": "node .",
     "start-client": "cd client && npm start",
-    "start-server": "node .",
     "start-server-dev": "cd server && npm run start-dev",
-    "start": "concurrently \"npm run start-server\" \"npm run start-client\""
+    "dev": "concurrently \"npm run start-server-dev\" \"npm run start-client\""
   },
   "repository": {
     "type": "git",
