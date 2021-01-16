@@ -30,11 +30,9 @@ users.post(
   body("role").toLowerCase().isIn(["teacher", "student", "parent"]),
 
   body("email").custom(async (value: string) => {
-    return await User.findByEmail(value).then((user) => {
-      if (user) {
-        return Promise.reject("E-mail already in use");
-      }
-    });
+    if (await User.findByEmail(value)) {
+      return Promise.reject("E-mail already in use");
+    }
   }),
 
   async (req: Request, res: Response): Promise<Response> => {
