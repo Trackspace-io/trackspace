@@ -1,5 +1,7 @@
+import { Router } from "express";
 import { Sequelize } from "sequelize";
 import { initUser } from "./models/User";
+import users from "./routes/users";
 
 class Server {
   /**
@@ -23,21 +25,26 @@ class Server {
   private _sequelize: Sequelize;
 
   /**
+   * Server express router.
+   */
+  private _router: Router;
+
+  /**
    * Builds the server.
    */
   private constructor() {
-    // Configure Sequelize
     this._sequelize = new Sequelize(process.env.DATABASE_URL);
+    this._router = Router();
 
-    // Initialize the models
+    // Register the models.
     initUser(this._sequelize);
+
+    // Register the routes.
+    this._router.use("/users", users);
   }
 
-  /**
-   * Sequelize instance.
-   */
-  public get sequelize(): Sequelize {
-    return this._sequelize;
+  public get router(): Router {
+    return this._router;
   }
 }
 

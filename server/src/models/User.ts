@@ -1,6 +1,17 @@
-import { DataTypes, Model, Sequelize } from "sequelize/types";
+import { DataTypes, Model, Sequelize } from "sequelize";
 
-class User extends Model {}
+export class User extends Model {
+  /**
+   * Finds a user using an email address.
+   *
+   * @param email The email address.
+   *
+   * @returns The user or null.
+   */
+  public static async findByEmail(email: string): Promise<User> {
+    return this.findOne({ where: { email } });
+  }
+}
 
 export function initUser(sequelize: Sequelize): void {
   User.init(
@@ -13,6 +24,7 @@ export function initUser(sequelize: Sequelize): void {
       email: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true,
       },
       firstName: {
         type: DataTypes.STRING,
@@ -31,6 +43,11 @@ export function initUser(sequelize: Sequelize): void {
         allowNull: false,
       },
     },
-    { sequelize, modelName: User.name }
+    {
+      sequelize,
+      freezeTableName: true,
+      timestamps: false,
+      modelName: User.name,
+    }
   );
 }
