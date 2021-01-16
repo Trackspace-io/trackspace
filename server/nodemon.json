@@ -5,7 +5,9 @@
     "ts": "node -r ts-node/register"
   },
   "env": {
-    "NODE_ENV": "development"
+    "NODE_ENV": "development",
+    "DATABASE_URL": "postgres://trackspace-root:abc@localhost:5432/trackspace"
   },
-  "ext": "js,json,ts"
+  "ext": "js,json,ts",
+  "exec": "npm start"
 }
