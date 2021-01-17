@@ -2,9 +2,9 @@
   "name": "trackspace-server",
   "main": "dist/index.js",
   "scripts": {
-    "build": "rimraf ./dist && tsc",
+    "build": "rimraf ./dist && tsc && npm run migrate",
     "migrate": "sequelize-cli db:migrate --url %DATABASE_URL%",
-    "prestart": "npm run build && npm run migrate",
+    "prestart": "npm run build",
     "start": "node .",
     "start-dev": "eslint --fix && nodemon --inspect"
   },
