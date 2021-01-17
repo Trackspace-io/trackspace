@@ -1,24 +1,21 @@
-import React from 'react';
-import logo from './logo.svg';
+import * as React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
+import SignIn from './components/common/SignIn';
+import Navbar from './components/gui/Navbar';
 
-function App() {
+const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-          Learn React
-        </a>
-        <Hello who="Test" />
-      </header>
-    </div>
+    <Router>
+      <Navbar />
+      <Switch>
+        {/* Public routes */}
+        <Route exact path="/" component={SignIn} />
+      </Switch>
+    </Router>
   );
-}
+};
 
-const Hello = (props: { who: string }) => <p> Hello {props.who} </p>;
+// const Hello = (props: { who: string }) => <p> Hello {props.who} </p>;
 
 export default App;

@@ -1,0 +1,49 @@
+.button {
+  font-family: inherit;
+  border-radius: 16px;
+  padding: 8px 32px;
+  margin: 8px 0;
+  cursor: pointer;
+  letter-spacing: 1px;
+  box-shadow: none;
+}
+.button:focus {
+  outline: 0;
+}
+
+.button[disabled] {
+  cursor: not-allowed;
+  border-color: rgb(200, 200, 200);
+  box-shadow: 0 0 0 2px rgb(180, 180, 180);
+}
+
+.primary {
+  border: 1px solid var(--black-light);
+  color: var(--black-light);
+  background: linear-gradient(to right, var(--green-light) 50%, #fff 50%);
+  background-size: 200% 100%;
+  background-position: right bottom;
+  transition: all 0.2s ease-out;
+}
+
+.primary:hover:not([disabled]) {
+  background-position: left bottom;
+  border: 1px solid var(--green-dark);
+  color: var(--black);
+}
+
+.xs {
+  padding: 8px 36px;
+}
+
+.sm {
+  padding: 8px 48px;
+}
+
+.md {
+  padding: 8px 64px;
+}
+
+.lg {
+  padding: 8px 80px;
+}

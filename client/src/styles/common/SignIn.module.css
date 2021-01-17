@@ -1,0 +1,26 @@
+.container {
+  composes: wrapper from '../gui/Container.module.css';
+  overflow: hidden;
+  background-color: var(--yellow-light);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.body {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: var(--white);
+  border-radius: 16px;
+  width: 80vw;
+  height: 75vh;
+  position: relative;
+}
+
+.img {
+  margin: 0 36px;
+  width: 500px;
+}
