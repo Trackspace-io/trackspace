@@ -8,7 +8,6 @@
     "build-app": "npm run build-client && npm run build-server",
     "build-client": "cd client && npm run build",
     "build-server": "cd server && npm run build",
-    "prestart": "npm run install-app && npm run build-app",
     "heroku-postbuild": "npm run install-app && npm run build-app",
     "start": "node .",
     "dev": "concurrently --kill-others-on-fail \"npm run start-dev-server\" \"npm run start-dev-client\"",
