@@ -8,4 +8,14 @@
 }
 
 .subtitle {
+  font-size: 160%;
+  font-weight: 500;
+}
+
+.align-center {
+  text-align: center;
+}
+
+.align-right {
+  text-align: right;
 }

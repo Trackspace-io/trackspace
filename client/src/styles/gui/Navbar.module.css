@@ -1,4 +1,5 @@
 .container {
+  composes: wrapper from '../gui/Container.module.css';
   position: absolute;
   height: 72px;
   background: transparent;
@@ -8,7 +9,7 @@
   width: 100%;
   box-sizing: border-box;
   margin: 0;
-  padding: 0px 32px;
+  padding-top: 16px;
 }
 
 .logo {

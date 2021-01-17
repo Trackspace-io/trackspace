@@ -2,10 +2,11 @@
   padding: 8px 10px;
   font-size: inherit;
   border-radius: 3px;
-  border: solid 2px rgb(202, 202, 202);
+  border: none;
+  border-bottom: solid 2px rgb(202, 202, 202);
   /* border-left-width: 4px; */
   /* border-left-color: var(--yellow-main); */
-  margin: 4px 0 2px;
+  margin: 4px 0 12px;
   box-sizing: border-box;
   width: 100%;
 }

@@ -1,5 +1,7 @@
 import * as React from 'react';
+
 import style from '../../styles/gui/Input.module.css';
+
 /**
  * Component representing an input.
  *
@@ -7,10 +9,12 @@ import style from '../../styles/gui/Input.module.css';
  * 	label: string,
  * 	type: string,
  * 	name: string,
- * 	placeholder: string
- *  disabled: bool
  *  value: string
+ * 	placeholder?: string
+ *  disabled?: bool
  * }} props The props of the component.
+ *
+ * @returns ReactNode
  */
 interface IInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   name: string;
@@ -38,7 +42,7 @@ const Input: React.FC<IInputProps> = ({ name, label, type, disabled, placeholder
 };
 
 /**
- * Field hook function.
+ * Custom input hook
  *
  * @param {any} initialValue The initial value of the field.
  *
@@ -46,26 +50,20 @@ const Input: React.FC<IInputProps> = ({ name, label, type, disabled, placeholder
  * 	input: any
  * 	setInput: (any) => void
  * 	handleInputChange: (any) => void
- * 	handleInputBlur: (any) => void
- * 	reset: () => void
  * }} The use helpers.
  */
-
 const useInput = (initialState: any) => {
   const [input, setInput] = React.useState(initialState);
-
+  console.log('input', input);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log('e', e.target.value);
     setInput({
       ...input,
       [e.target.name]: e.target.value,
     });
   };
 
-  return {
-    input,
-    setInput,
-    handleInputChange,
-  };
+  return { input, setInput, handleInputChange };
 };
 
 export { Input, useInput };

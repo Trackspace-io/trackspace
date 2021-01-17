@@ -1,7 +1,7 @@
 .container {
   composes: wrapper from '../gui/Container.module.css';
   overflow: hidden;
-  background-color: var(--yellow-light);
+  background-color: var(--blue-light);
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -37,9 +37,4 @@
   width: 100%;
   position: relative;
   padding: 0 72px;
-}
-
-.form {
-  position: relative;
-  width: 100%;
 }

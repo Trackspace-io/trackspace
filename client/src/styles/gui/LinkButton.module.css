@@ -1,4 +1,4 @@
-.button {
+.link-button {
   font-family: inherit;
   font-size: 16px;
   font-weight: 400;
@@ -10,11 +10,11 @@
   box-shadow: none;
 }
 
-.button:focus {
+.link-button:focus {
   outline: 0;
 }
 
-.button[disabled] {
+.link-button[disabled] {
   cursor: not-allowed;
   border-color: rgb(200, 200, 200);
   box-shadow: 0 0 0 2px rgb(180, 180, 180);
@@ -36,22 +36,11 @@
   font-weight: 500;
 }
 
-.xs {
-  padding: 8px 36px;
-}
-
-.sm {
-  padding: 8px 48px;
-}
-
-.md {
-  padding: 8px 64px;
-}
-
-.lg {
-  padding: 8px 80px;
-}
-
-.fullWidth-true {
-  width: 100%;
+.secondary {
+  border: none;
+  background: transparent;
+  display: block;
+  margin: 0 auto;
+  font-weight: 300;
+  color: var(--black-light);
 }
