@@ -42,11 +42,9 @@ users.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    // Hash the password.
-    req.body.password = bcrypt.hashSync(req.body.password, 10);
-
-    // Generate the identifier.
+    // Generate the identifier and hash the password.
     req.body.id = shortid.generate();
+    req.body.password = bcrypt.hashSync(req.body.password, 10);
 
     // Create the user.
     try {
