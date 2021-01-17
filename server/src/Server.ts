@@ -33,8 +33,10 @@ class Server {
    * Builds the server.
    */
   private constructor() {
-    this._sequelize = new Sequelize(process.env.DATABASE_URL);
     this._router = Router();
+    this._sequelize = new Sequelize(process.env.DATABASE_URL, {
+      logging: false,
+    });
 
     // Register the models.
     initUser(this._sequelize);
@@ -43,6 +45,9 @@ class Server {
     this._router.use("/users", users);
   }
 
+  /**
+   * Express router containing the routes of the server.
+   */
   public get router(): Router {
     return this._router;
   }

@@ -6,7 +6,9 @@
   },
   "env": {
     "NODE_ENV": "development",
-    "DATABASE_URL": "postgres://trackspace-root:abc@localhost:5432/trackspace"
+    "DATABASE_URL": "postgres://trackspace-root:abc@localhost:5432/trackspace",
+    "SESSION_SECRET": "secret",
+    "CLIENT_URL": "http://localhost:3000"
   },
   "ext": "js,json,ts",
   "exec": "npm start"

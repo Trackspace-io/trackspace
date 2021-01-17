@@ -1,8 +1,9 @@
-import bcrypt from "bcrypt";
 import { Request, Response, Router } from "express";
 import { body, validationResult } from "express-validator";
+import bcrypt from "bcrypt";
 import shortid from "shortid";
 import { User } from "../models/User";
+import passport from "passport";
 
 const users = Router();
 
@@ -18,7 +19,7 @@ const users = Router();
  * @param req.password  {string}                  User password.
  * @param req.role      {teacher|teacher|student} User's role.
  *
- * @returns 200, 400
+ * @returns 200, 400, 500
  */
 users.post(
   "/sign-up",
@@ -53,6 +54,27 @@ users.post(
     } catch (e) {
       res.sendStatus(500);
     }
+  }
+);
+
+/**
+ * Sign-in. On success, redirects users to their role's home page (/<role>).
+ * Otherwise, returns 401.
+ *
+ * @method  POST
+ * @url     /users/sign-in
+ *
+ * @param req.email     {string}  User email address.
+ * @param req.password  {string}  User password.
+ *
+ * @returns 200, 401, 500
+ */
+users.post(
+  "/sign-in",
+  passport.authenticate("local"),
+  async (req: Request, res: Response): Promise<void> => {
+    const user: User = <User>req.user;
+    res.redirect(`${process.env.CLIENT_URL}/${user.getDataValue("role")}`);
   }
 );
 
