@@ -74,7 +74,7 @@ users.post(
   passport.authenticate("local"),
   async (req: Request, res: Response): Promise<void> => {
     const user: User = <User>req.user;
-    res.redirect(`${process.env.CLIENT_URL}/${user.getDataValue("role")}`);
+    res.redirect(`${process.env.CLIENT_URL}/${user.role}`);
   }
 );
 

@@ -21,7 +21,7 @@ export class User extends Model {
         return done(null, false);
       }
 
-      const hash = user.getDataValue("password");
+      const hash = user.passwordHash;
       if (!bcrypt.compareSync(password, hash)) {
         return done(null, false);
       }
@@ -52,6 +52,34 @@ export class User extends Model {
    */
   public static async findById(id: string): Promise<User> {
     return this.findOne({ where: { id } });
+  }
+
+  /**
+   * Identifier of the user.
+   */
+  public get id(): string {
+    return this.getDataValue("id");
+  }
+
+  /**
+   * Email address of the user.
+   */
+  public get email(): string {
+    return this.getDataValue("email");
+  }
+
+  /**
+   * (Hashed) password of the user.
+   */
+  public get passwordHash(): string {
+    return this.getDataValue("password");
+  }
+
+  /**
+   * Role address of the user.
+   */
+  public get role(): "teacher" | "student" | "parent" {
+    return this.getDataValue("role");
   }
 }
 
