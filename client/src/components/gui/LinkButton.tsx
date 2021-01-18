@@ -9,7 +9,7 @@ import style from '../../styles/gui/LinkButton.module.css';
  *
  * @param {{
  * 	to: string,
- *  variant: 'primary' | 'secondary',
+ *  variant?: 'default' | 'primary' | 'secondary',
  *  children: ReactNode,
  *  history: History
  * }} props The props of the component.
@@ -18,10 +18,10 @@ import style from '../../styles/gui/LinkButton.module.css';
  */
 interface ILinkButtonProps extends RouteComponentProps {
   to: string;
-  variant: 'primary' | 'secondary';
+  variant?: 'primary' | 'secondary';
 }
 
-const LinkButton: React.FC<ILinkButtonProps> = ({ children, to, history, variant = 'primary', ...rest }) => {
+const LinkButton: React.FC<ILinkButtonProps> = ({ children, to, history, variant = 'default', ...rest }) => {
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     history.push(to);

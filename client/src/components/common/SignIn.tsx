@@ -52,7 +52,7 @@ const SignIn: React.FC = () => {
               Sign in
             </Button>
           </form>
-          <LinkButton to="/forgot-password" variant="secondary">
+          <LinkButton to="/reset-password/send" variant="secondary">
             Forgot password?
           </LinkButton>
         </div>

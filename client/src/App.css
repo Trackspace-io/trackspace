@@ -18,8 +18,11 @@
   --green-light: #cbebb6;
   --green-dark: #9ab986;
 
-  --blue-light: #ace9e1;
-  --blue-dark: #8ec2ba;
+  --blue-light: #b7e5ff;
+  --blue-dark: #93b7cc;
+
+  --mint-light: #ace9e1;
+  --mint-dark: #8ec2ba;
 }
 
 body {

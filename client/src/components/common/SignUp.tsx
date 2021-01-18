@@ -1,10 +1,11 @@
-import * as React from 'react';
-import style from '../../styles/common/SignUp.module.css';
-import SignUpSrc from '../../images/sign-up.svg';
-import Typography from 'components/gui/Typography';
-import { Input, useInput } from 'components/gui/Input';
 import Button from 'components/gui/Button';
+import { Input, useInput } from 'components/gui/Input';
 import LinkButton from 'components/gui/LinkButton';
+import Typography from 'components/gui/Typography';
+import * as React from 'react';
+
+import SignUpSrc from '../../images/sign-up.svg';
+import style from '../../styles/common/SignUp.module.css';
 
 /**
  * Sign up page
@@ -28,7 +29,7 @@ const SignUp: React.FC = () => {
           <img src={SignUpSrc} className={style['img']} />
         </div>
         <div className={style['content']}>
-          <Typography variant="subtitle" align="center">
+          <Typography variant="title" align="center">
             Sign Up
           </Typography>
           <br />

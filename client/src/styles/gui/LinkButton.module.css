@@ -23,13 +23,14 @@
 .primary {
   border: 1px solid var(--black-light);
   color: var(--black-light);
-  background: linear-gradient(to right, var(--green-light) 50%, #fff 50%);
+  background: transparent;
   background-size: 200% 100%;
   background-position: right bottom;
   transition: all 0.2s ease-out;
 }
 
 .primary:hover:not([disabled]) {
+  background: var(--green-light);
   background-position: left bottom;
   border: 1px solid var(--green-dark);
   color: var(--black);

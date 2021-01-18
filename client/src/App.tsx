@@ -1,8 +1,11 @@
-import SignUp from 'components/common/SignUp';
+import './App.css';
+
 import * as React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import './App.css';
+
+import { ResetPasswordConfirm, ResetPasswordSend } from './components/common/ResetPassword';
 import SignIn from './components/common/SignIn';
+import SignUp from './components/common/SignUp';
 import Navbar from './components/gui/Navbar';
 
 const App: React.FC = () => {
@@ -13,6 +16,8 @@ const App: React.FC = () => {
         {/* Public routes */}
         <Route exact path="/" component={SignIn} />
         <Route exact path="/sign-up" component={SignUp} />
+        <Route exact path="/reset-password/send" component={ResetPasswordSend} />
+        <Route exact path="/reset-password/confirm" component={ResetPasswordConfirm} />
       </Switch>
     </Router>
   );
