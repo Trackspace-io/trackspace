@@ -6,10 +6,10 @@ import style from '../../styles/gui/Input.module.css';
  * Component representing an input.
  *
  * @param {{
- * 	label: string,
+ * 	label?: string,
  * 	type: string,
  * 	name: string,
- *  value: string
+ *  value?: string
  * 	placeholder?: string
  *  disabled?: bool
  * }} props The props of the component.
@@ -17,10 +17,23 @@ import style from '../../styles/gui/Input.module.css';
  * @returns ReactNode
  */
 interface IInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  /* The unique input's name */
   name: string;
-  label: string;
+
+  /* The label text for the input */
+  label?: string;
+
+  /* The input's type */
   type: string;
-  value: string | number;
+
+  /* The input's value */
+  value?: string | number;
+
+  /* The input's placeholder */
+  placeholder?: string;
+
+  /* The input's state */
+  disabled?: boolean;
 }
 
 const Input: React.FC<IInputProps> = ({ name, label, type, disabled, placeholder, value, onChange, onBlur }) => {
@@ -54,9 +67,8 @@ const Input: React.FC<IInputProps> = ({ name, label, type, disabled, placeholder
  */
 const useInput = (initialState: any) => {
   const [input, setInput] = React.useState(initialState);
-  console.log('input', input);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('e', e.target.value);
     setInput({
       ...input,
       [e.target.name]: e.target.value,

@@ -1,6 +1,8 @@
-import Button from 'components/gui/Button';
+import { userAPI } from 'api/api';
+import Form from 'components/gui/Form';
 import { Input, useInput } from 'components/gui/Input';
 import LinkButton from 'components/gui/LinkButton';
+import Select from 'components/gui/Select';
 import Typography from 'components/gui/Typography';
 import * as React from 'react';
 
@@ -14,13 +16,22 @@ import style from '../../styles/common/SignUp.module.css';
  * @returns ReactNode
  */
 const SignUp: React.FC = () => {
+  //  const [register, setRegister] = React.useState<SignUp>(createEmptyLogin());
+
   const { input, handleInputChange } = useInput({
     email: '',
     lastName: '',
     firstName: '',
     password: '',
     confirmPassword: '',
+    role: '',
   });
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    userAPI.register(input);
+  };
 
   return (
     <div className={style['container']}>
@@ -34,35 +45,50 @@ const SignUp: React.FC = () => {
           </Typography>
           <br />
           <br />
-          <form className={style['form']}>
-            <Input name="email" type="email" label="Email address" value={input.email} onChange={handleInputChange} />
-            <Input name="lastName" type="text" label="Last name" value={input.lastName} onChange={handleInputChange} />
-            <Input
-              name="firstName"
-              type="text"
-              label="First name"
-              value={input.firstName}
-              onChange={handleInputChange}
-            />
-            <Input
-              name="password"
-              type="password"
-              label="Password"
-              value={input.password}
-              onChange={handleInputChange}
-            />
-            <Input
-              name="confirmPassword"
-              type="password"
-              label="Confirm password"
-              value={input.password}
-              onChange={handleInputChange}
-            />
-            <br />
-            <Button variant="primary" fullWidth>
-              Create account
-            </Button>
-          </form>
+          <Form
+            handleSubmit={handleSubmit}
+            action="Create account"
+            render={() => (
+              <React.Fragment>
+                <Select name="role" options={['teacher', 'student', 'parent']} />
+                <Input
+                  name="email"
+                  type="email"
+                  label="Email address"
+                  value={input.email}
+                  onChange={handleInputChange}
+                />
+                <Input
+                  name="lastName"
+                  type="text"
+                  label="Last name"
+                  value={input.lastName}
+                  onChange={handleInputChange}
+                />
+                <Input
+                  name="firstName"
+                  type="text"
+                  label="First name"
+                  value={input.firstName}
+                  onChange={handleInputChange}
+                />
+                <Input
+                  name="password"
+                  type="password"
+                  label="Password"
+                  value={input.password}
+                  onChange={handleInputChange}
+                />
+                <Input
+                  name="confirmPassword"
+                  type="password"
+                  label="Confirm password"
+                  value={input.password}
+                  onChange={handleInputChange}
+                />
+              </React.Fragment>
+            )}
+          />
           <LinkButton to="/" variant="secondary">
             Already have an account? Sign in here
           </LinkButton>
