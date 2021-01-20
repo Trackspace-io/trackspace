@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 module.exports = {
 	parser: "@typescript-eslint/parser", // Specifies the ESLint parser
-	plugins: [ "simple-import-sort" ],
+	plugins: ["simple-import-sort"],
 	extends: [
 		"plugin:react/recommended", // Uses the recommended rules from @eslint-plugin-react
 		"plugin:@typescript-eslint/recommended", // Uses the recommended rules from the @typescript-eslint/eslint-plugin
