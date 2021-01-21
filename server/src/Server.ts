@@ -1,5 +1,6 @@
 import Email from "email-templates";
 import { Router } from "express";
+import jsonfile from "jsonfile";
 import { Sequelize } from "sequelize";
 import { initUser } from "./models/User";
 import users from "./routes/users";
@@ -39,14 +40,28 @@ class Server {
    * Builds the server.
    */
   private constructor() {
+    // Get the configuration.
+    const env = process.env.NODE_ENV || "development";
+    const path = __dirname + "/../config/config.json";
+    const config = jsonfile.readFileSync(path)[env];
+
     // Initialize the Express router.
     this._router = Router();
 
     // Configure Sequelize.
-    this._sequelize = new Sequelize(process.env.DATABASE_URL, {
-      logging: false,
-      ssl: true,
-    });
+    if (config.use_env_variable) {
+      this._sequelize = new Sequelize(
+        process.env[config.use_env_variable],
+        config
+      );
+    } else {
+      this._sequelize = new Sequelize(
+        config.database,
+        config.username,
+        config.password,
+        config
+      );
+    }
 
     // Configure Email-templates.
     this._email = new Email({
