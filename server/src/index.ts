@@ -42,6 +42,9 @@ passport.deserializeUser(function (id: string, done) {
 // Serve the API routes.
 app.use("/api", Server.get().router);
 
+// Serve the public assets files
+app.use("/assets", express.static(path.join(__dirname, "../assets")));
+
 // Serve static files from the React app.
 app.use(express.static(path.join(__dirname, "../../client/build")));
 app.get("*", (req, res) => {

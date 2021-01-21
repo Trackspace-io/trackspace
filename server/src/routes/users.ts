@@ -1,8 +1,9 @@
 import { Request, Response, Router } from "express";
 import { body, validationResult } from "express-validator";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import shortid from "shortid";
-import { User } from "../models/User";
+import { IResetPasswordToken, User } from "../models/User";
 import passport from "passport";
 
 const users = Router();
@@ -75,6 +76,109 @@ users.post(
   async (req: Request, res: Response): Promise<void> => {
     const user: User = <User>req.user;
     res.redirect(`${process.env.CLIENT_URL}/${user.role}`);
+  }
+);
+
+/**
+ * Send an email to reset the password of a user.
+ *
+ * @method  POST
+ * @url     /users/reset/send
+ *
+ * @param req.email {string}  User email address.
+ *
+ * @returns 200, 400, 500
+ */
+users.post(
+  "/reset/send",
+
+  body("email").not().isEmpty().isEmail().normalizeEmail(),
+  body("email").custom(async (value: string) => {
+    const user = await User.findByEmail(value);
+    if (!user) {
+      return Promise.reject("Account not found.");
+    }
+  }),
+
+  async (req: Request, res: Response): Promise<Response> => {
+    // Check if the request is valid.
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    // Send the email.
+    const user = await User.findByEmail(req.body.email);
+    const success = await user.sendResetPasswordEmail();
+
+    return res.sendStatus(success ? 200 : 500);
+  }
+);
+
+/**
+ * Reset the password of a user.
+ *
+ * @method  POST
+ * @url     /users/reset/confirm
+ *
+ * @param req.token    {string} The token received in the reset email.
+ * @param req.password {string} The new password.
+ *
+ * @returns Redirect, 400 (if token is expired), 500
+ */
+users.post(
+  "/reset/confirm",
+
+  body("token").not().isEmpty(),
+  body("password").not().isEmpty(),
+
+  async (req: Request, res: Response): Promise<Response | void> => {
+    // Check if the request is valid.
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    // Decode the token to get the user identifier.
+    let userId = undefined;
+    let oldPassword = undefined;
+
+    try {
+      const data = jwt.verify(
+        req.body.token,
+        process.env.RESET_PASSWORD_TOKEN_SECRET
+      );
+
+      userId = (<IResetPasswordToken>data).userId;
+      oldPassword = (<IResetPasswordToken>data).oldPassword;
+    } catch (e) {
+      return res.status(400).json({
+        errors: [{ msg: "The request is expired. Please try again." }],
+      });
+    }
+
+    // Set the password.
+    try {
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.sendStatus(500);
+      }
+
+      // If the current hash is different, it means that the password has been set
+      // in the meantime. Therefore the token has expired.
+      if (user.passwordHash !== oldPassword) {
+        return res.status(400).json({
+          errors: [{ msg: "The request is expired. Please try again." }],
+        });
+      }
+
+      user.setDataValue("password", bcrypt.hashSync(req.body.password, 10));
+      user.save();
+
+      res.redirect(`${process.env.CLIENT_URL}/`);
+    } catch (e) {
+      return res.sendStatus(500);
+    }
   }
 );
 
