@@ -45,6 +45,7 @@ class Server {
     // Configure Sequelize.
     this._sequelize = new Sequelize(process.env.DATABASE_URL, {
       logging: false,
+      ssl: true,
     });
 
     // Configure Email-templates.
