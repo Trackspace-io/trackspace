@@ -6,7 +6,7 @@
   },
   "env": {
     "NODE_ENV": "development",
-    "DATABASE_URL": "postgres://aichvufmaiusjs:5be470f8b6991e32c16ff61571c2877aef170fdccc09908cfc36f2feb5acd7af@ec2-52-44-46-66.compute-1.amazonaws.com:5432/d5vt44k4psnv47",
+    "DATABASE_URL": "postgres://trackspace-root:abc@localhost:5432/trackspace",
     "SESSION_SECRET": "secret",
     "CLIENT_URL": "http://localhost:3000",
     "SERVER_URL": "http://localhost:8000",
