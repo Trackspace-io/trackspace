@@ -69,6 +69,7 @@ class Server {
       views: {
         root: __dirname + "/../emails",
       },
+      send: true,
       transport: {
         host: process.env.SMTP_HOST,
         port: parseInt(process.env.SMTP_PORT),
@@ -77,7 +78,6 @@ class Server {
           user: process.env.SMTP_USERNAME,
           pass: process.env.SMTP_PASSWORD,
         },
-        ignoreTLS: true,
       },
     });
 
