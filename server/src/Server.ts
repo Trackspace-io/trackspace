@@ -66,6 +66,9 @@ class Server {
     // Configure Email-templates.
     this._email = new Email({
       message: { from: "no-reply@trackspace.io" },
+      views: {
+        root: __dirname + "/../emails",
+      },
       transport: {
         host: process.env.SMTP_HOST,
         port: parseInt(process.env.SMTP_PORT),
