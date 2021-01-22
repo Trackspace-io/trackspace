@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import shortid from "shortid";
 import { IResetPasswordToken, User } from "../models/User";
 import passport from "passport";
+import { ensureLoggedIn } from "connect-ensure-login";
 
 const users = Router();
 
@@ -179,6 +180,34 @@ users.post(
     } catch (e) {
       return res.sendStatus(500);
     }
+  }
+);
+
+/**
+ * Get the profile of the user.
+ *
+ * @method  POST
+ * @url     /users/reset/confirm
+ *
+ * @param res.email     {string} Email address of the user.
+ * @param res.firstName {string} First name of the user.
+ * @param res.lastName  {string} Last name of the user.
+ * @param res.role      {string} Role of the user.
+ *
+ * @returns Redirect, 400 (if token is expired), 500
+ */
+users.get(
+  "/profile",
+  ensureLoggedIn(`${process.env.CLIENT_URL}/`),
+  async (req: Request, res: Response): Promise<Response> => {
+    const user: User = <User>req.user;
+
+    return res.status(200).json({
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      role: user.role,
+    });
   }
 );
 
