@@ -5,8 +5,10 @@ import { Strategy as LocalStrategy } from "passport-local";
 import path from "path";
 import { User } from "./models/User";
 import Server from "./Server";
+import cors from "cors";
 
 const app = express();
+app.use(cors());
 const port = process.env.PORT || 8000;
 
 // Configure Express.

@@ -1,4 +1,5 @@
-import Button from 'components/gui/Button';
+import { UserAPI } from 'api';
+import Form from 'components/gui/Form';
 import { Input, useInput } from 'components/gui/Input';
 import LinkButton from 'components/gui/LinkButton';
 import Typography from 'components/gui/Typography';
@@ -16,6 +17,13 @@ import style from '../../styles/common/SignIn.module.css';
 const SignIn: React.FC = () => {
   const { input, handleInputChange } = useInput({ email: '', password: '' });
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    console.log('input', input);
+    UserAPI.login(input);
+  };
+
   return (
     <div className={style['container']}>
       <div className={style['body']}>
@@ -31,27 +39,29 @@ const SignIn: React.FC = () => {
             Sign In
           </Typography>
           <br />
-          <form className={style['form']}>
-            <Input
-              name="email"
-              type="email"
-              label="Email"
-              value={input.email}
-              placeholder="johndoe@email.com"
-              onChange={handleInputChange}
-            />
-            <Input
-              name="password"
-              type="password"
-              label="Password"
-              value={input.password}
-              onChange={handleInputChange}
-            />
-            <br />
-            <Button variant="primary" fullWidth>
-              Sign in
-            </Button>
-          </form>
+          <Form
+            handleSubmit={handleSubmit}
+            action="Sign in"
+            render={() => (
+              <React.Fragment>
+                <Input
+                  name="email"
+                  type="email"
+                  label="Email"
+                  value={input.email}
+                  placeholder="johndoe@email.com"
+                  onChange={handleInputChange}
+                />
+                <Input
+                  name="password"
+                  type="password"
+                  label="Password"
+                  value={input.password}
+                  onChange={handleInputChange}
+                />
+              </React.Fragment>
+            )}
+          />
           <LinkButton to="/reset-password/send" variant="secondary">
             Forgot password?
           </LinkButton>

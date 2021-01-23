@@ -1,4 +1,5 @@
-export interface IUserProfile {
+/* States and props */
+export interface IUser {
   id: string;
   email: string;
   firstName: string;
@@ -23,3 +24,10 @@ export interface IUserSignIn {
 export interface ISignUpProps {
   signUp: IUserSignUp;
 }
+
+/* Context */
+export type IUserContext = {
+  user: IUser;
+  register: (body: IUserSignUp) => void;
+  login: (body: IUserSignIn) => void;
+};

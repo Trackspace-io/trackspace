@@ -1,24 +1,9 @@
-// import axios from 'axios';
+const DEFAULT_API_URL = 'http://localhost:8000';
 
-import User from './modules/User';
+let _apiUrl = DEFAULT_API_URL;
 
-// class ApplicationAPI {
-//   get = async <T>(url: string): Promise<T> => {
-//     const { data } = await axios.get(url);
+if (process.env.REACT_APP_API_URL) {
+  _apiUrl = process.env.REACT_APP_API_URL;
+}
 
-//     return data;
-//   };
-
-//   post = async <T>(url: string, body: T): Promise<T> => {
-//     const { data } = await axios.post(url, body);
-
-//     return data;
-//   };
-// }
-
-// // Instanciate the API caller.
-// const api = new ApplicationAPI();
-
-const userAPI = new User();
-
-export { userAPI };
+export { _apiUrl };

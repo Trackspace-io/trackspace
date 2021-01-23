@@ -1,8 +1,8 @@
-import { userAPI } from 'api/api';
+import { UserAPI } from 'api';
 import Form from 'components/gui/Form';
 import { Input, useInput } from 'components/gui/Input';
 import LinkButton from 'components/gui/LinkButton';
-import Select from 'components/gui/Select';
+import { Select, useSelect } from 'components/gui/Select';
 import Typography from 'components/gui/Typography';
 import * as React from 'react';
 
@@ -24,13 +24,15 @@ const SignUp: React.FC = () => {
     firstName: '',
     password: '',
     confirmPassword: '',
-    role: '',
   });
+
+  const { select, handleSelectChange } = useSelect({ role: 'teacher' });
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    userAPI.register(input);
+    const fields = { ...input, role: select.role };
+    UserAPI.register(fields);
   };
 
   return (
@@ -43,14 +45,22 @@ const SignUp: React.FC = () => {
           <Typography variant="title" align="center">
             Sign Up
           </Typography>
-          <br />
-          <br />
+          <Typography variant="caption" align="center">
+            as
+          </Typography>
           <Form
             handleSubmit={handleSubmit}
             action="Create account"
             render={() => (
               <React.Fragment>
-                <Select name="role" options={['teacher', 'student', 'parent']} />
+                <Select
+                  name="role"
+                  options={['teacher', 'student', 'parent']}
+                  value={select.role}
+                  onChange={handleSelectChange}
+                />
+                <br />
+                <br />
                 <Input
                   name="email"
                   type="email"
@@ -83,7 +93,7 @@ const SignUp: React.FC = () => {
                   name="confirmPassword"
                   type="password"
                   label="Confirm password"
-                  value={input.password}
+                  value={input.confirmPassword}
                   onChange={handleInputChange}
                 />
               </React.Fragment>

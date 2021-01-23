@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.select {
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 400;
+  padding: 8px 16px;
+  margin: 8px 0;
+  cursor: pointer;
+  letter-spacing: 1px;
+  box-shadow: none;
+  width: 300px;
+  text-transform: capitalize;
+}
