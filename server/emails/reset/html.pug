@@ -1,0 +1,48 @@
+doctype transitional
+head
+  meta(http-equiv='Content-Type' content='text/html; charset=UTF-8')
+  title Reset your password
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+table(role='presentation' align='center' border='0' cellpadding='0' cellspacing='0' width='600' style='\
+  border-collapse: collapse;\
+  font-family: Arial, sans-serif;\
+  padding: 30px;\
+')
+  tr
+    td(style='padding: 0')
+      table(align='center')
+        tr
+          td
+            img(src=assetsUrl+'/logo.svg' alt='Trackspace logo' width='200' height='100' style='display: block')
+  tr
+    td(style='padding: 0 30px 0 30px')
+      table
+        tr
+          td Hello #{firstName},
+        tr
+          td
+            | You have recently requested to reset the password of your
+            | Trackspace account. If you have not made a request, please
+            | ignore this email.
+            | The link below is valid for one hour and can be used only once.
+        tr
+          td(style='padding: 20px')
+            table(align='center')
+              tr
+                td(style='border-radius: 2px')
+                  a(href=link style='\
+                  padding: 8px 12px;\
+                  border: 1px solid #000000;\
+                  color: #000000;\
+                  border-radius: 2px;\
+                  font-size: 14px;\
+                  text-decoration: none;\
+                  font-weight: bold;\
+                  display: inline-block;\
+                  ') Reset your password
+  tr
+    td(style='font-size: 11px')
+      table(align='center')
+        tr
+          td
+            p Copyright &copy; #{year} Trackspace.io

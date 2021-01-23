@@ -8,7 +8,9 @@
     "NODE_ENV": "development",
     "DATABASE_URL": "postgres://trackspace-root:abc@localhost:5432/trackspace",
     "SESSION_SECRET": "secret",
-    "CLIENT_URL": "http://localhost:3000"
+    "CLIENT_URL": "http://localhost:3000",
+    "SERVER_URL": "http://localhost:8000",
+    "RESET_PASSWORD_TOKEN_SECRET": "secret"
   },
   "ext": "js,json,ts",
   "exec": "npm start"
