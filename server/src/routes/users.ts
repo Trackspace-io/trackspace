@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import shortid from "shortid";
 import { IResetPasswordToken, User } from "../models/User";
 import passport from "passport";
-import { ensureLoggedIn } from "connect-ensure-login";
+import isAuthenticated from "../middlewares/isAuthenticated";
 
 const users = Router();
 
@@ -76,7 +76,9 @@ users.post(
   passport.authenticate("local"),
   async (req: Request, res: Response): Promise<void> => {
     const user: User = <User>req.user;
-    res.redirect(`${process.env.CLIENT_URL}/${user.role}`);
+    res
+      .status(200)
+      .json({ redirect: `${process.env.CLIENT_URL}/${user.role}` });
   }
 );
 
@@ -89,7 +91,7 @@ users.get(
   "/sign-out",
   async (req: Request, res: Response): Promise<void> => {
     req.logout();
-    res.redirect("/");
+    res.status(200).json({ redirect: `${process.env.CLIENT_URL}/` });
   }
 );
 
@@ -211,7 +213,7 @@ users.post(
  */
 users.get(
   "/profile",
-  ensureLoggedIn(`${process.env.CLIENT_URL}/`),
+  isAuthenticated(),
   async (req: Request, res: Response): Promise<Response> => {
     const user: User = <User>req.user;
 
@@ -240,7 +242,7 @@ users.get(
  */
 users.put(
   "/profile",
-  ensureLoggedIn(`${process.env.CLIENT_URL}/`),
+  isAuthenticated(),
   async (req: Request, res: Response): Promise<Response> => {
     const user: User = <User>req.user;
 
