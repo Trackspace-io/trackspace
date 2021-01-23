@@ -66,7 +66,7 @@ users.post(
  * @method  POST
  * @url     /users/sign-in
  *
- * @param req.email     {string}  User email address.
+ * @param req.username  {string}  User email address.
  * @param req.password  {string}  User password.
  *
  * @returns 200, 401, 500
@@ -77,6 +77,19 @@ users.post(
   async (req: Request, res: Response): Promise<void> => {
     const user: User = <User>req.user;
     res.redirect(`${process.env.CLIENT_URL}/${user.role}`);
+  }
+);
+
+/**
+ * Sign-out.
+ *
+ * @returns Redirect.
+ */
+users.get(
+  "/sign-out",
+  async (req: Request, res: Response): Promise<void> => {
+    req.logout();
+    res.redirect("/");
   }
 );
 
@@ -187,7 +200,7 @@ users.post(
  * Get the profile of the user.
  *
  * @method  POST
- * @url     /users/reset/confirm
+ * @url     /users/profile
  *
  * @param res.email     {string} Email address of the user.
  * @param res.firstName {string} First name of the user.
@@ -208,6 +221,66 @@ users.get(
       lastName: user.lastName,
       role: user.role,
     });
+  }
+);
+
+/**
+ * Updates the profile of the user.
+ *
+ * @method PUT
+ * @url    /users/profile
+ *
+ * @param req.email       {string | undefined} New email address.
+ * @param req.firstName   {string | undefined} New first name.
+ * @param req.lastName    {string | undefined} New last name.
+ * @param req.oldPassword {string | undefined} Old password. Required to set a new password.
+ * @param req.password    {string | undefined} New password.
+ *
+ * @returns 200, 400, 500
+ */
+users.put(
+  "/profile",
+  ensureLoggedIn(`${process.env.CLIENT_URL}/`),
+  async (req: Request, res: Response): Promise<Response> => {
+    const user: User = <User>req.user;
+
+    try {
+      if (req.body.email) {
+        user.setDataValue("email", req.body.email);
+      }
+
+      if (req.body.firstName) {
+        user.setDataValue("firstName", req.body.firstName);
+      }
+
+      if (req.body.lastName) {
+        user.setDataValue("lastName", req.body.lastName);
+      }
+
+      if (req.body.password) {
+        if (
+          !req.body.oldPassword ||
+          !bcrypt.compareSync(req.body.oldPassword, user.passwordHash)
+        ) {
+          return res.status(400).json({
+            errors: {
+              msg: "Invalid password",
+              param: "oldPassword",
+              location: "body",
+            },
+          });
+        }
+
+        const hash = bcrypt.hashSync(req.body.password, 10);
+        user.setDataValue("password", hash);
+      }
+
+      user.save();
+      return res.sendStatus(200);
+    } catch (e) {
+      console.error(e);
+      return res.sendStatus(500);
+    }
   }
 );
 
