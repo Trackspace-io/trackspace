@@ -1,3 +1,4 @@
+import cors from "cors";
 import express from "express";
 import session from "express-session";
 import passport from "passport";
@@ -21,6 +22,10 @@ app.use(
 app.use(express.json());
 app.use(passport.initialize());
 app.use(passport.session());
+
+if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+  app.use(cors());
+}
 
 // Configure Passport.
 passport.use(new LocalStrategy(User.authenticate));
