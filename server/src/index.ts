@@ -1,3 +1,4 @@
+import cors from "cors";
 import express from "express";
 import session from "express-session";
 import passport from "passport";
@@ -24,6 +25,10 @@ app.use(express.json());
 app.use(passport.initialize());
 app.use(passport.session());
 
+if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+  app.use(cors());
+}
+
 // Configure Passport.
 passport.use(new LocalStrategy(User.authenticate));
 
@@ -43,6 +48,9 @@ passport.deserializeUser(function (id: string, done) {
 
 // Serve the API routes.
 app.use("/api", Server.get().router);
+
+// Serve the public assets files
+app.use("/assets", express.static(path.join(__dirname, "../assets")));
 
 // Serve static files from the React app.
 app.use(express.static(path.join(__dirname, "../../client/build")));

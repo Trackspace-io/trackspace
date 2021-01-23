@@ -1,5 +1,12 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import { DataTypes, Model, Sequelize } from "sequelize";
+import Server from "../Server";
+
+export interface IResetPasswordToken {
+  userId: string;
+  oldPassword: string;
+}
 
 export class User extends Model {
   /**
@@ -69,6 +76,20 @@ export class User extends Model {
   }
 
   /**
+   * First name of the user.
+   */
+  public get firstName(): string {
+    return this.getDataValue("firstName");
+  }
+
+  /**
+   * Last name of the user.
+   */
+  public get lastName(): string {
+    return this.getDataValue("lastName");
+  }
+
+  /**
    * (Hashed) password of the user.
    */
   public get passwordHash(): string {
@@ -80,6 +101,51 @@ export class User extends Model {
    */
   public get role(): "teacher" | "student" | "parent" {
     return this.getDataValue("role");
+  }
+
+  /**
+   * Sends an email containing a link to reset the user's password.
+   *
+   * @returns True if the email was sent, false otherwise.
+   */
+  public async sendResetPasswordEmail(): Promise<boolean> {
+    const serverUrl = process.env.SERVER_URL;
+    const clientUrl = process.env.CLIENT_URL;
+
+    const tokenData: IResetPasswordToken = {
+      userId: this.id,
+      oldPassword: this.passwordHash,
+    };
+
+    const tokenSecret: string = process.env.RESET_PASSWORD_TOKEN_SECRET;
+    const token = jwt.sign(tokenData, tokenSecret, {
+      expiresIn: "1h",
+    });
+
+    let success = false;
+
+    await Server.get()
+      .email.send({
+        template: "reset",
+        message: {
+          to: this.email,
+        },
+        locals: {
+          firstName: this.firstName,
+          assetsUrl: `${serverUrl}/assets`,
+          link: `${clientUrl}/reset?token=${token}`,
+          year: new Date().getFullYear(),
+        },
+      })
+      .then(() => {
+        success = true;
+      })
+      .catch((e) => {
+        console.error(e);
+        success = false;
+      });
+
+    return success;
   }
 }
 
