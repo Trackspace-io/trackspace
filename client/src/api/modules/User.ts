@@ -36,11 +36,12 @@ export const register = async (body: IUserSignUp): Promise<void> => {
  */
 export const login = async (body: IUserSignIn): Promise<void> => {
   try {
-    const response = await axios.post(`${_apiUrl}/api/users/sign-in`, body);
+    const response = await axios.post(`http://localhost:8000/api/users/sign-in`, body);
     console.log('response', response);
+
     return response.data;
   } catch (error) {
-    console.log('error', error);
+    console.log('error', `${error.response.data} (${error.response.status})`);
   }
 };
 

@@ -7,8 +7,11 @@ import { ResetPasswordConfirm, ResetPasswordSend } from './components/common/Res
 import SignIn from './components/common/SignIn';
 import SignUp from './components/common/SignUp';
 import Navbar from './components/gui/Navbar';
+import Cookies from 'js-cookie';
 
 const App: React.FC = () => {
+  const cookie = Cookies.get('connect.sid');
+  console.log('cookie', cookie);
   return (
     <Router>
       <Navbar />

@@ -17,7 +17,7 @@ export interface IUserSignUp {
 }
 
 export interface IUserSignIn {
-  email: string;
+  username: string;
   password: string;
 }
 

@@ -7,6 +7,8 @@ import * as React from 'react';
 
 import SignInSrc from '../../images/teacher.svg';
 import style from '../../styles/common/SignIn.module.css';
+import { useHistory } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 /**
  * Sign in page.
@@ -15,14 +17,19 @@ import style from '../../styles/common/SignIn.module.css';
  * @returns ReactNode
  */
 const SignIn: React.FC = () => {
-  const { input, handleInputChange } = useInput({ email: '', password: '' });
-
+  const { input, handleInputChange } = useInput({ username: '', password: '' });
+  const history = useHistory();
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    console.log('input', input);
-    UserAPI.login(input);
+    UserAPI.login(input).then((res) => {
+      console.log('res', res);
+      history.replace('/test');
+    });
   };
+
+  const cookie = Cookies.get('connect.sid');
+  console.log('cookie', cookie);
 
   return (
     <div className={style['container']}>
@@ -45,10 +52,10 @@ const SignIn: React.FC = () => {
             render={() => (
               <React.Fragment>
                 <Input
-                  name="email"
+                  name="username"
                   type="email"
                   label="Email"
-                  value={input.email}
+                  value={input.username}
                   placeholder="johndoe@email.com"
                   onChange={handleInputChange}
                 />
