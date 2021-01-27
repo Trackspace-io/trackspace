@@ -16,7 +16,11 @@ app.use(
   session({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+      httpOnly: false
+    }
   })
 );
 
@@ -25,7 +29,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
-  app.use(cors());
+  app.use(cors({
+    origin: "http://localhost:3000", // allow to server to accept request from different origin
+    credentials: true, // allow session cookie from browser to pass through
+  }));
 }
 
 // Configure Passport.

@@ -10,6 +10,7 @@ import style from '../../styles/gui/LinkButton.module.css';
  * @param {{
  * 	to: string,
  *  variant?: 'default' | 'primary' | 'secondary',
+ *  align?: 'left' | 'center' | 'right'
  *  children: ReactNode,
  *  history: History
  * }} props The props of the component.
@@ -19,16 +20,27 @@ import style from '../../styles/gui/LinkButton.module.css';
 interface ILinkButtonProps extends RouteComponentProps {
   to: string;
   variant?: 'primary' | 'secondary';
+  align?: 'left' | 'center' | 'right';
 }
 
-const LinkButton: React.FC<ILinkButtonProps> = ({ children, to, history, variant = 'default', ...rest }) => {
+const LinkButton: React.FC<ILinkButtonProps> = ({
+  children,
+  to,
+  history,
+  variant = 'default',
+  align = 'left',
+  ...rest
+}) => {
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     history.push(to);
   };
 
   return (
-    <button className={cx(style['link-button'], style[variant])} onClick={handleClick} {...rest}>
+    <button
+      className={cx(style['link-button'], style[variant], style[`align-${align}`])}
+      onClick={handleClick}
+      {...rest}>
       {children}
     </button>
   );

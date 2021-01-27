@@ -41,7 +41,6 @@
   border: none;
   background: transparent;
   display: block;
-  margin: 0 auto;
   font-weight: 300;
   color: var(--black-light);
 }

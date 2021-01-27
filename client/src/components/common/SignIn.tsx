@@ -1,4 +1,3 @@
-import { UserAPI } from 'api';
 import Form from 'components/gui/Form';
 import { Input, useInput } from 'components/gui/Input';
 import LinkButton from 'components/gui/LinkButton';
@@ -7,8 +6,7 @@ import * as React from 'react';
 
 import SignInSrc from '../../images/teacher.svg';
 import style from '../../styles/common/SignIn.module.css';
-import { useHistory } from 'react-router-dom';
-import Cookies from 'js-cookie';
+import useUser from 'controllers/useUser';
 
 /**
  * Sign in page.
@@ -17,19 +15,15 @@ import Cookies from 'js-cookie';
  * @returns ReactNode
  */
 const SignIn: React.FC = () => {
+  const { login } = useUser();
+
   const { input, handleInputChange } = useInput({ username: '', password: '' });
-  const history = useHistory();
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    UserAPI.login(input).then((res) => {
-      console.log('res', res);
-      history.replace('/test');
-    });
+    login(input);
   };
-
-  const cookie = Cookies.get('connect.sid');
-  console.log('cookie', cookie);
 
   return (
     <div className={style['container']}>
@@ -69,7 +63,7 @@ const SignIn: React.FC = () => {
               </React.Fragment>
             )}
           />
-          <LinkButton to="/reset-password/send" variant="secondary">
+          <LinkButton to="/reset-password/send" variant="secondary" align="center">
             Forgot password?
           </LinkButton>
         </div>

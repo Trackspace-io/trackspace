@@ -1,36 +1,38 @@
 import { UserAPI } from 'api';
+import { UserContext } from 'contexts/userContext';
 import * as React from 'react';
-import { IUser } from 'types';
+import { IUser, IUserSignIn } from 'types';
+import { useHistory } from 'react-router-dom';
 
-// export const UserContext = React.createContext(null);
-
-// const UserProvider: React.FC = ({ children }) => {
-//   const [user, setUser] = React.useState<IUser>({
-//     id: 'abc',
-//     email: 'spiderman@avengers.com',
-//     firstName: 'Peter',
-//     lastName: 'Parker',
-//     role: 'teacher',
-//   });
-// };
-
-interface IUserState {
-  user: IUser | undefined;
-  setUser: React.Dispatch<React.SetStateAction<IUser | undefined>>;
+interface IUserController {
+  user: Partial<IUser>;
+  login: (input: IUserSignIn) => void;
 }
 
-const useUser = (id: string): IUserState => {
-  const [user, setUser] = React.useState<IUser>();
+const useUser = (): IUserController => {
+  const context = React.useContext(UserContext);
+  const history = useHistory();
+
+  if (context === undefined) {
+    throw new Error('useCountState must be used within a CountProvider');
+  }
 
   React.useEffect(() => {
-    UserAPI.get(id).then((response) => {
-      setUser(response);
+    UserAPI.get().then((response) => {
+      context.dispatch({ type: 'GET_USER', payload: response });
     });
-  }, [user]);
+  }, [context.state.isAuthenticated]);
+
+  const login = (input: IUserSignIn) => {
+    UserAPI.login(input).then((data) => {
+      history.replace(data.redirect);
+      context.dispatch({ type: 'LOGIN' });
+    });
+  };
 
   return {
-    user,
-    setUser,
+    user: context.state.user,
+    login: login,
   };
 };
 
