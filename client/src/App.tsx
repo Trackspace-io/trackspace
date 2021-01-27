@@ -16,19 +16,20 @@ const App: React.FC = () => {
   console.log('cookie', cookie);
 
   const { isAuthenticated } = useUser();
-
+  console.log(isAuthenticated);
   return (
     <Router>
       <Navbar />
       <Switch>
         {/* Public routes */}
         <Route exact path="/" component={SignIn} />
-        <Route exact path="/sign-up" component={SignUp} />
-        <Route exact path="/reset-password/send" component={ResetPasswordSend} />
-        <Route exact path="/reset-password/confirm" component={ResetPasswordConfirm} />
-        <PrivateRoute isAuth={isAuthenticated} redirectPath="/" path="/user/:firstName-:lastName/">
+        <Route path="/sign-up" component={SignUp} />
+        <Route path="/reset-password/send" component={ResetPasswordSend} />
+        <Route path="/reset-password/confirm" component={ResetPasswordConfirm} />
+        <Route path="/user/:firstName-:lastName/" component={UserProfile} />
+        {/* <PrivateRoute isAuth={isAuthenticated} redirectPath="/" path="/user/:firstName-:lastName/">
           <UserProfile />
-        </PrivateRoute>
+        </PrivateRoute> */}
       </Switch>
     </Router>
   );
@@ -50,4 +51,5 @@ const PrivateRoute: React.FC<IPrivateRouteProps> = (props) => {
     <Redirect to={{ pathname: props.redirectPath }} />
   );
 };
+console.log(PrivateRoute);
 export default App;

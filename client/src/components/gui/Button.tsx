@@ -15,8 +15,10 @@ import style from '../../styles/gui/Button.module.css';
  * @returns ReactNode
  */
 interface IButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  /** Choose between primary and secondary styling. */
+  /* Choose between primary and secondary styling. */
   variant: 'primary' | 'secondary';
+
+  /* Set the button to max width */
   fullWidth?: boolean;
 }
 

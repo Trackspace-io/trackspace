@@ -17,7 +17,7 @@ import { Dropdown, DropdownItem } from './Dropdown';
 const Navbar: React.FC = () => {
   const cookie = Cookies.get('connect.sid');
 
-  const { user } = useUser();
+  const { user, logout } = useUser();
 
   console.log('state', user);
   return (
@@ -31,10 +31,12 @@ const Navbar: React.FC = () => {
         </LinkButton>
       ) : (
         <Dropdown title={`${user?.firstName} ${user?.lastName}`}>
-          <DropdownItem to={`/user/${user?.firstName?.toLowerCase()}-${user?.lastName?.toLowerCase()}`}>
+          <DropdownItem type="link" to={`/user/${user?.firstName?.toLowerCase()}-${user?.lastName?.toLowerCase()}`}>
             Profile
           </DropdownItem>
-          <DropdownItem to="/"> Logout </DropdownItem>
+          <DropdownItem type="button" onClick={logout}>
+            Logout
+          </DropdownItem>
         </Dropdown>
       )}
     </div>

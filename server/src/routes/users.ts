@@ -91,7 +91,7 @@ users.get(
   "/sign-out",
   async (req: Request, res: Response): Promise<void> => {
     req.logout();
-    res.status(200).json({ redirect: `${process.env.CLIENT_URL}/` });
+    res.status(200).json({ redirect: `/` });
   }
 );
 

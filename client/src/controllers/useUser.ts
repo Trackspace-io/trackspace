@@ -1,13 +1,15 @@
 import { UserAPI } from 'api';
 import { UserContext } from 'contexts/userContext';
+import Cookies from 'js-cookie';
 import * as React from 'react';
-import { IUser, IUserSignIn } from 'types';
 import { useHistory } from 'react-router-dom';
+import { IUser, IUserSignIn } from 'types';
 
 interface IUserController {
   user: Partial<IUser>;
   isAuthenticated: boolean;
   login: (input: IUserSignIn) => void;
+  logout: () => void;
 }
 
 const useUser = (): IUserController => {
@@ -26,8 +28,16 @@ const useUser = (): IUserController => {
 
   const login = (input: IUserSignIn) => {
     UserAPI.login(input).then((data) => {
-      history.replace(data.redirect);
       context.dispatch({ type: 'LOGIN' });
+      history.replace(data.redirect);
+    });
+  };
+
+  const logout = () => {
+    UserAPI.logout().then((data) => {
+      context.dispatch({ type: 'LOGOUT' });
+      Cookies.remove('connect.sid');
+      history.replace(data.redirect);
     });
   };
 
@@ -35,6 +45,7 @@ const useUser = (): IUserController => {
     user: context.state.user,
     isAuthenticated: context.state.isAuthenticated,
     login: login,
+    logout: logout,
   };
 };
 
