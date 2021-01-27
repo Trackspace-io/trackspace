@@ -6,6 +6,7 @@ import { useHistory } from 'react-router-dom';
 
 interface IUserController {
   user: Partial<IUser>;
+  isAuthenticated: boolean;
   login: (input: IUserSignIn) => void;
 }
 
@@ -32,6 +33,7 @@ const useUser = (): IUserController => {
 
   return {
     user: context.state.user,
+    isAuthenticated: context.state.isAuthenticated,
     login: login,
   };
 };

@@ -78,7 +78,7 @@ users.post(
     const user: User = <User>req.user;
     res
       .status(200)
-      .json({ redirect: `${process.env.CLIENT_URL}/${user.role}` });
+      .json({ redirect: `${user.role}` });
   }
 );
 

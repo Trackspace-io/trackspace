@@ -1,37 +1,53 @@
 import './App.css';
 
 import * as React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Redirect, Route, RouteProps, Switch } from 'react-router-dom';
 
 import { ResetPasswordConfirm, ResetPasswordSend } from './components/common/ResetPassword';
 import SignIn from './components/common/SignIn';
 import SignUp from './components/common/SignUp';
 import Navbar from './components/gui/Navbar';
 import Cookies from 'js-cookie';
-import { UserProvider } from 'contexts/userContext';
 import UserProfile from 'components/common/UserProfile';
+import useUser from 'controllers/useUser';
 
 const App: React.FC = () => {
   const cookie = Cookies.get('connect.sid');
   console.log('cookie', cookie);
 
+  const { isAuthenticated } = useUser();
+
   return (
-    <UserProvider>
-      <Router>
-        <Navbar />
-        <Switch>
-          {/* Public routes */}
-          <Route exact path="/" component={SignIn} />
-          <Route exact path="/sign-up" component={SignUp} />
-          <Route exact path="/reset-password/send" component={ResetPasswordSend} />
-          <Route exact path="/reset-password/confirm" component={ResetPasswordConfirm} />
-          <Route exact path="/user/:firstName-:lastName/" component={UserProfile} />
-        </Switch>
-      </Router>
-    </UserProvider>
+    <Router>
+      <Navbar />
+      <Switch>
+        {/* Public routes */}
+        <Route exact path="/" component={SignIn} />
+        <Route exact path="/sign-up" component={SignUp} />
+        <Route exact path="/reset-password/send" component={ResetPasswordSend} />
+        <Route exact path="/reset-password/confirm" component={ResetPasswordConfirm} />
+        <PrivateRoute isAuth={isAuthenticated} redirectPath="/" path="/user/:firstName-:lastName/">
+          <UserProfile />
+        </PrivateRoute>
+      </Switch>
+    </Router>
   );
 };
 
-// const Hello = (props: { who: string }) => <p> Hello {props.who} </p>;
+/**
+ * Component representing a route that requires authentication in order to be
+ * accessed.
+ */
+interface IPrivateRouteProps extends RouteProps {
+  isAuth: boolean; // is authenticate route.
+  redirectPath: string; // redirect path if don't authenticate route.
+}
 
+const PrivateRoute: React.FC<IPrivateRouteProps> = (props) => {
+  return props.isAuth ? (
+    <Route {...props} component={props.component} render={undefined} />
+  ) : (
+    <Redirect to={{ pathname: props.redirectPath }} />
+  );
+};
 export default App;
