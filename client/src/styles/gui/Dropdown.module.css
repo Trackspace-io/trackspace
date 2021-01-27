@@ -39,6 +39,14 @@
   display: block;
 }
 
+.menu li span {
+  text-decoration: none;
+  color: #333333;
+  padding: 15px 20px;
+  display: block;
+  cursor: pointer;
+}
+
 .trigger {
   background: transparent;
   cursor: pointer;
@@ -53,4 +61,5 @@
   font-size: 16px;
   margin: 0 10px;
   letter-spacing: 1px;
+  outline: none;
 }

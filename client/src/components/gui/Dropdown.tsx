@@ -1,8 +1,8 @@
 import * as React from 'react';
 import style from '../../styles/gui/Dropdown.module.css';
 import cx from 'classnames';
-import LinkButton from './LinkButton';
 import ClickHandler from './ClickHandler';
+import { Link } from 'react-router-dom';
 
 interface IDropdownProps {
   title: string;
@@ -30,17 +30,15 @@ const Dropdown: React.FC<IDropdownProps> = ({ children, title }) => {
 };
 
 interface IDropdownMenuProps {
-  to: string;
+  type: 'button' | 'link';
+  to?: string;
+  onClick?: () => void;
 }
 
-const DropdownItem: React.FC<IDropdownMenuProps> = ({ children, to }) => {
+const DropdownItem: React.FC<IDropdownMenuProps> = ({ children, type, to = '', onClick }) => {
   return (
     <ul>
-      <li>
-        <LinkButton to={to} variant="secondary">
-          {children}
-        </LinkButton>
-      </li>
+      <li>{type === 'link' ? <Link to={to}> {children} </Link> : <span onClick={onClick}> {children}</span>}</li>
     </ul>
   );
 };
