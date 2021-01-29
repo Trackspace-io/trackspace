@@ -3,11 +3,13 @@ import { UserContext } from 'contexts/userContext';
 import Cookies from 'js-cookie';
 import * as React from 'react';
 import { useHistory } from 'react-router-dom';
-import { IUser, IUserSignIn } from 'types';
+import { IUser, IUserSignIn, IUserUpdate } from 'types';
 
 interface IUserController {
   user: Partial<IUser>;
   isAuthenticated: boolean;
+
+  updateUser: (input: IUserUpdate) => void;
   login: (input: IUserSignIn) => void;
   logout: () => void;
 }
@@ -21,10 +23,20 @@ const useUser = (): IUserController => {
   }
 
   React.useEffect(() => {
-    UserAPI.get().then((response) => {
-      context.dispatch({ type: 'GET_USER', payload: response });
-    });
+    get();
   }, [context.state.isAuthenticated]);
+
+  const get = () => {
+    UserAPI.get().then((data) => {
+      context.dispatch({ type: 'GET_USER', payload: data });
+    });
+  };
+
+  const updateUser = (input: IUserUpdate) => {
+    UserAPI.updateUser(input).then(() => {
+      get();
+    });
+  };
 
   const login = (input: IUserSignIn) => {
     UserAPI.login(input).then((data) => {
@@ -44,6 +56,8 @@ const useUser = (): IUserController => {
   return {
     user: context.state.user,
     isAuthenticated: context.state.isAuthenticated,
+
+    updateUser: updateUser,
     login: login,
     logout: logout,
   };

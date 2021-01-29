@@ -1,0 +1,47 @@
+.container {
+  composes: wrapper from '../gui/Container.module.css';
+  overflow: hidden;
+  background-color: var(--yellow-light);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  min-height: 100vh;
+  padding-top: 96px;
+  padding-bottom: 48px;
+  box-sizing: border-box;
+}
+
+.header {
+  background: var(--white);
+  border-radius: 16px;
+  width: 20vw;
+  height: 100%;
+  padding: 32px;
+  margin-right: 24px;
+}
+
+.tab {
+  padding: 8px 0px;
+  margin: 8px 0;
+  border-left: 4px solid transparent;
+  transition: transform 0.4s ease-out;
+}
+
+.tab:hover {
+  transform: translate(8px, 0);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.icon {
+  cursor: pointer;
+}
+
+.body {
+  position: relative;
+  background: var(--white);
+  border-radius: 16px;
+  width: 60vw;
+  height: 100%;
+  padding: 32px 48px;
+}

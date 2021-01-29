@@ -3,17 +3,18 @@
 }
 
 .menu {
+  outline: none;
   background: #ffffff;
   border-radius: 8px;
   position: absolute;
-  top: 72px;
-  right: 16px;
-  width: 300px;
+  margin-top: 8px;
+  width: 256px;
   box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
   opacity: 0;
   visibility: hidden;
   transform: translateY(-20px);
   transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
+  z-index: 999;
 }
 
 .menu.active {
@@ -62,4 +63,8 @@
   margin: 0 10px;
   letter-spacing: 1px;
   outline: none;
+}
+
+.icon {
+  cursor: pointer;
 }

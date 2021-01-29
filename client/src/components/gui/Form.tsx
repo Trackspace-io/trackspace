@@ -12,7 +12,7 @@ const Form: React.FC<IFormProps> = ({ handleSubmit, render, action }) => {
     <form onSubmit={handleSubmit}>
       {render()}
       <br />
-      <Button variant="primary" type="submit" fullWidth>
+      <Button variant="primary" type="submit" float="right">
         {action}
       </Button>
     </form>

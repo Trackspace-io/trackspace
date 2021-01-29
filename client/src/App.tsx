@@ -8,7 +8,7 @@ import SignIn from './components/common/SignIn';
 import SignUp from './components/common/SignUp';
 import Navbar from './components/gui/Navbar';
 import Cookies from 'js-cookie';
-import UserProfile from 'components/common/UserProfile';
+import Profile from 'components/common/Profile';
 import useUser from 'controllers/useUser';
 
 const App: React.FC = () => {
@@ -26,7 +26,7 @@ const App: React.FC = () => {
         <Route path="/sign-up" component={SignUp} />
         <Route path="/reset-password/send" component={ResetPasswordSend} />
         <Route path="/reset-password/confirm" component={ResetPasswordConfirm} />
-        <Route path="/user/:firstName-:lastName/" component={UserProfile} />
+        <Route path="/user/:firstName-:lastName/" component={Profile} />
         {/* <PrivateRoute isAuth={isAuthenticated} redirectPath="/" path="/user/:firstName-:lastName/">
           <UserProfile />
         </PrivateRoute> */}

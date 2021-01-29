@@ -2,7 +2,6 @@
   font-family: inherit;
   font-size: 16px;
   font-weight: 400;
-  border-radius: 24px;
   padding: 8px 32px;
   margin: 8px 0;
   cursor: pointer;
@@ -22,6 +21,7 @@
 
 .primary {
   border: 1px solid var(--black-light);
+  border-radius: 24px;
   color: var(--black-light);
   background: linear-gradient(to right, var(--green-light) 50%, #fff 50%);
   background-size: 200% 100%;
@@ -34,6 +34,12 @@
   border: 1px solid var(--green-dark);
   color: var(--black);
   font-weight: 500;
+}
+
+.secondary {
+  border: none;
+  border-left: 1px solid var(--yellow-dark);
+  background: transparent;
 }
 
 .xs {
@@ -54,4 +60,12 @@
 
 .fullWidth-true {
   width: 100%;
+}
+
+.float-left {
+  float: left;
+}
+
+.float-right {
+  float: right;
 }

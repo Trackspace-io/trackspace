@@ -27,7 +27,7 @@ interface IInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   type: string;
 
   /* The input's value */
-  value?: string | number;
+  value: string | number;
 
   /* The input's placeholder */
   placeholder?: string;
@@ -49,7 +49,8 @@ const Input: React.FC<IInputProps> = ({ name, label, type, disabled, placeholder
         onChange={onChange}
         onBlur={onBlur}
         className={style['input']}
-      />{' '}
+      />
+      {<div className={style['error']}> </div>}
     </div>
   );
 };
@@ -67,6 +68,7 @@ const Input: React.FC<IInputProps> = ({ name, label, type, disabled, placeholder
  */
 const useInput = (initialState: any) => {
   const [input, setInput] = React.useState(initialState);
+  const [errors, setErrors] = React.useState(initialState);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput({
@@ -75,7 +77,16 @@ const useInput = (initialState: any) => {
     });
   };
 
-  return { input, setInput, handleInputChange };
+  return { input, setInput, errors, setErrors, handleInputChange };
 };
+
+// /**
+//  * Validates whether a field has a value
+//  * @param {IValues} values - All the field values in the form
+//  * @param {string} fieldName - The field to validate
+//  * @returns {string} - The error message
+//  */
+// export const required = (value: string | number): string =>
+//   value === undefined || value === null || value === '' ? 'This must be populated' : '';
 
 export { Input, useInput };

@@ -30,7 +30,7 @@ const Navbar: React.FC = () => {
           Sign Up
         </LinkButton>
       ) : (
-        <Dropdown title={`${user?.firstName} ${user?.lastName}`}>
+        <Dropdown type="title" title={`${user?.firstName} ${user?.lastName}`}>
           <DropdownItem type="link" to={`/user/${user?.firstName?.toLowerCase()}-${user?.lastName?.toLowerCase()}`}>
             Profile
           </DropdownItem>

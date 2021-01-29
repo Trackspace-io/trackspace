@@ -8,7 +8,7 @@ export interface UserState {
 
 export type UserAction =
   | { type: 'GET_USER'; payload: IUser }
-  | { type: 'EDIT_USER'; payload: Partial<IUser> }
+  | { type: 'UPDATE_USER'; payload: Partial<IUser> }
   | { type: 'LOGIN' }
   | { type: 'LOGOUT' };
 
@@ -31,6 +31,7 @@ const userReducer = (state: UserState, action: UserAction): UserState => {
   switch (action.type) {
     case 'GET_USER':
       return { ...state, user: action.payload };
+
     case 'LOGIN':
       return { ...state, isAuthenticated: true };
     case 'LOGOUT':

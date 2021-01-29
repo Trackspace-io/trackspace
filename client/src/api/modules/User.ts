@@ -55,7 +55,7 @@ export const login = async (body: IUserSignIn): Promise<any> => {
 export const logout = async (): Promise<any> => {
   try {
     const response = await axios.get(`${_apiUrl}/api/users/sign-out`, { withCredentials: true });
-    console.log('logout response', response);
+
     return response.data;
   } catch (error) {
     console.log('error', `${error.response.data} (${error.response.status})`);
@@ -75,7 +75,7 @@ export const logout = async (): Promise<any> => {
 export const get = async (): Promise<any> => {
   try {
     const response = await axios.get(`${_apiUrl}/api/users/profile`, { withCredentials: true });
-    console.log('response user', response.data);
+
     return response.data;
   } catch (error) {
     console.log('error', error);

@@ -7,7 +7,7 @@ import style from '../../styles/gui/Typography.module.css';
  * Component representing a text.
  *
  * @param {{
- * 	variant?: 'default' | 'subtitle' | 'title' | 'caption'
+ * 	variant?: 'default' | 'subtitle' | 'title' | 'caption' | 'info'
  *  align? 'left' | 'center' | 'right'
  *  children: ReactNode
  * }} props The props of the component.
@@ -16,7 +16,7 @@ import style from '../../styles/gui/Typography.module.css';
  */
 interface ITypographyProps {
   /** Choose between primary and secondary styling. */
-  variant?: 'title' | 'subtitle' | 'caption';
+  variant?: 'title' | 'subtitle' | 'caption' | 'info';
   align?: 'center' | 'right';
   // onClick?: (e: any) => void;
 }

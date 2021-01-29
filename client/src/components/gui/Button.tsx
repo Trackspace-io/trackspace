@@ -20,10 +20,24 @@ interface IButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
   /* Set the button to max width */
   fullWidth?: boolean;
+  type?: 'submit' | 'reset' | 'button';
+  float?: 'right' | 'left';
 }
 
-const Button: React.FC<IButtonProps> = ({ children, variant = 'primary', fullWidth = false }) => {
-  return <button className={cx(style[variant], style['button'], style[`fullWidth-${fullWidth}`])}>{children}</button>;
+const Button: React.FC<IButtonProps> = ({
+  children,
+  variant = 'primary',
+  type = 'submit',
+  float = 'none',
+  fullWidth = false,
+}) => {
+  return (
+    <button
+      className={cx(style[variant], style['button'], style[`fullWidth-${fullWidth}`], style[`float-${float}`])}
+      type={type}>
+      {children}
+    </button>
+  );
 };
 
 export default Button;
