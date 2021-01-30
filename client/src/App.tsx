@@ -10,6 +10,7 @@ import Navbar from './components/gui/Navbar';
 import Cookies from 'js-cookie';
 import Profile from 'components/common/Profile';
 import useUser from 'controllers/useUser';
+import Messages from 'components/gui/Messages';
 
 const App: React.FC = () => {
   const cookie = Cookies.get('connect.sid');
@@ -31,6 +32,7 @@ const App: React.FC = () => {
           <UserProfile />
         </PrivateRoute> */}
       </Switch>
+      <Messages />
     </Router>
   );
 };

@@ -1,0 +1,48 @@
+@keyframes slide {
+  from {
+    transform: translate(-20rem, 0rem);
+  }
+  to {
+    transform: translate(0px, 0rem);
+  }
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+}
+
+.notifier {
+  color: rgb(255, 255, 255);
+  min-width: 15vw;
+  border-radius: 5px;
+  padding: 15px 20px;
+  margin: 4px 0;
+  font-size: 90%;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2);
+  animation-duration: 0.5s;
+  animation-name: slide;
+  animation-iteration-count: 1;
+  animation-direction: normal;
+  animation-fill-mode: forwards;
+  z-index: 1000;
+}
+
+.notifier svg {
+  margin-right: 5px;
+}
+
+.notifier a {
+  color: white;
+}
+
+.success {
+  background: #7aa37c;
+}
+
+.error {
+  background: #ff6969;
+}
