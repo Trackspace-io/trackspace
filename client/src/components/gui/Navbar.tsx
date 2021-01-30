@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import logo from '../../images/logo.svg';
 import style from '../../styles/gui/Navbar.module.css';
 import LinkButton from './LinkButton';
-import Cookies from 'js-cookie';
 import useUser from 'controllers/useUser';
 import { Dropdown, DropdownItem } from './Dropdown';
 
@@ -15,17 +14,14 @@ import { Dropdown, DropdownItem } from './Dropdown';
  * @returns ReactNode
  */
 const Navbar: React.FC = () => {
-  const cookie = Cookies.get('connect.sid');
+  const { user, isAuthenticated, logout } = useUser();
 
-  const { user, logout } = useUser();
-
-  console.log('state', user);
   return (
     <div className={style['container']}>
       <Link to="/">
         <img src={logo} className={style['logo']} />
       </Link>
-      {!cookie ? (
+      {!isAuthenticated ? (
         <LinkButton to="/sign-up" variant="primary">
           Sign Up
         </LinkButton>

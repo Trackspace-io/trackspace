@@ -37,14 +37,13 @@ export const register = async (body: IUserSignUp): Promise<void> => {
  * @returns {Promise<void>}
  */
 export const login = async (body: IUserSignIn): Promise<any> => {
-  try {
-    const response = await axios.post(`${_apiUrl}/api/users/sign-in`, body, { withCredentials: true });
-    console.log('login response', response);
+  const response = await axios.post(`${_apiUrl}/api/users/sign-in`, body, { withCredentials: true });
 
+  if (response.status === 200) {
     return response.data;
-  } catch (error) {
-    console.log('error', `${error.response.data} (${error.response.status})`);
   }
+
+  throw new Error(`Test ${response.data} (${response.status})`);
 };
 
 /**

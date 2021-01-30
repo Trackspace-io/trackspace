@@ -7,6 +7,8 @@ import * as React from 'react';
 import SignInSrc from '../../images/teacher.svg';
 import style from '../../styles/common/SignIn.module.css';
 import useUser from 'controllers/useUser';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
+import useMessage from 'controllers/useMessage';
 
 /**
  * Sign in page.
@@ -14,10 +16,23 @@ import useUser from 'controllers/useUser';
  * @param none
  * @returns ReactNode
  */
-const SignIn: React.FC = () => {
+
+interface ISignInProps extends RouteComponentProps {
+  location: any | undefined;
+}
+
+const SignIn: React.FC<ISignInProps> = ({ location }) => {
   const { login } = useUser();
+  const { update } = useMessage();
 
   const { input, handleInputChange } = useInput({ username: '', password: '' });
+
+  // Verify if the user was redirected to the login page forcefully.
+  React.useEffect(() => {
+    if (location.state?.error) {
+      update({ type: 'error', text: `${location.state.error}` });
+    }
+  }, []);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -72,4 +87,4 @@ const SignIn: React.FC = () => {
   );
 };
 
-export default SignIn;
+export default withRouter(SignIn);

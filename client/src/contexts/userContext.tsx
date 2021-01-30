@@ -10,7 +10,8 @@ export type UserAction =
   | { type: 'GET_USER'; payload: IUser }
   | { type: 'UPDATE_USER'; payload: Partial<IUser> }
   | { type: 'LOGIN' }
-  | { type: 'LOGOUT' };
+  | { type: 'LOGOUT' }
+  | { type: 'AUTH_CHECK' };
 
 interface IUserContext {
   state: UserState;
@@ -31,11 +32,12 @@ const userReducer = (state: UserState, action: UserAction): UserState => {
   switch (action.type) {
     case 'GET_USER':
       return { ...state, user: action.payload };
-
     case 'LOGIN':
       return { ...state, isAuthenticated: true };
     case 'LOGOUT':
       return { ...state, isAuthenticated: false };
+    case 'AUTH_CHECK':
+      return { ...state, isAuthenticated: true };
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
   }

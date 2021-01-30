@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 import * as React from 'react';
 import { useHistory } from 'react-router-dom';
 import { IUser, IUserSignIn, IUserUpdate } from 'types';
+import useMessage from './useMessage';
 
 interface IUserController {
   user: Partial<IUser>;
@@ -12,10 +13,12 @@ interface IUserController {
   updateUser: (input: IUserUpdate) => void;
   login: (input: IUserSignIn) => void;
   logout: () => void;
+  authCheck: (cookie: string) => void;
 }
 
 const useUser = (): IUserController => {
   const context = React.useContext(UserContext);
+  const { update } = useMessage();
   const history = useHistory();
 
   if (context === undefined) {
@@ -23,13 +26,19 @@ const useUser = (): IUserController => {
   }
 
   React.useEffect(() => {
-    get();
+    context.state.isAuthenticated && get();
   }, [context.state.isAuthenticated]);
 
   const get = () => {
     UserAPI.get().then((data) => {
       context.dispatch({ type: 'GET_USER', payload: data });
     });
+  };
+
+  const authCheck = (cookie: string | undefined) => {
+    if (cookie) {
+      context.dispatch({ type: 'AUTH_CHECK' });
+    }
   };
 
   const updateUser = (input: IUserUpdate) => {
@@ -39,10 +48,21 @@ const useUser = (): IUserController => {
   };
 
   const login = (input: IUserSignIn) => {
-    UserAPI.login(input).then((data) => {
-      context.dispatch({ type: 'LOGIN' });
-      history.replace(data.redirect);
-    });
+    UserAPI.login(input)
+      .then((data) => {
+        context.dispatch({ type: 'LOGIN' });
+        history.replace(data.redirect);
+        update({
+          type: 'success',
+          text: `Welcome back!`,
+        });
+      })
+      .catch((e) => {
+        update({
+          type: 'error',
+          text: `An unexpected error occurred. Please ` + `contact the system administrator (code: ${e}).`,
+        });
+      });
   };
 
   const logout = () => {
@@ -50,6 +70,10 @@ const useUser = (): IUserController => {
       context.dispatch({ type: 'LOGOUT' });
       Cookies.remove('connect.sid');
       history.replace(data.redirect);
+      update({
+        type: 'success',
+        text: `Goodbye!`,
+      });
     });
   };
 
@@ -60,6 +84,7 @@ const useUser = (): IUserController => {
     updateUser: updateUser,
     login: login,
     logout: logout,
+    authCheck: authCheck,
   };
 };
 

@@ -13,11 +13,13 @@ import useUser from 'controllers/useUser';
 import Messages from 'components/gui/Messages';
 
 const App: React.FC = () => {
-  const cookie = Cookies.get('connect.sid');
-  console.log('cookie', cookie);
+  const cookie = Cookies.get('connect.sid') || '';
+  const { isAuthenticated, authCheck } = useUser();
 
-  const { isAuthenticated } = useUser();
-  console.log(isAuthenticated);
+  React.useEffect(() => {
+    authCheck(cookie);
+  }, []);
+
   return (
     <Router>
       <Navbar />
@@ -27,10 +29,10 @@ const App: React.FC = () => {
         <Route path="/sign-up" component={SignUp} />
         <Route path="/reset-password/send" component={ResetPasswordSend} />
         <Route path="/reset-password/confirm" component={ResetPasswordConfirm} />
-        <Route path="/user/:firstName-:lastName/" component={Profile} />
-        {/* <PrivateRoute isAuth={isAuthenticated} redirectPath="/" path="/user/:firstName-:lastName/">
-          <UserProfile />
-        </PrivateRoute> */}
+        {/* <Route path="/user/:firstName-:lastName/" component={Profile} /> */}
+        <PrivateRoute isAuth={isAuthenticated} redirectPath="/" path="/user/:firstName-:lastName/">
+          <Profile />
+        </PrivateRoute>
       </Switch>
       <Messages />
     </Router>
@@ -50,8 +52,16 @@ const PrivateRoute: React.FC<IPrivateRouteProps> = (props) => {
   return props.isAuth ? (
     <Route {...props} component={props.component} render={undefined} />
   ) : (
-    <Redirect to={{ pathname: props.redirectPath }} />
+    <Redirect
+      to={{
+        pathname: '/',
+        state: {
+          prevLocation: props.path,
+          error: 'You need to login first!',
+        },
+      }}
+    />
   );
 };
-console.log(PrivateRoute);
+
 export default App;
