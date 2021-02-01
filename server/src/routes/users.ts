@@ -6,8 +6,11 @@ import shortid from "shortid";
 import { IResetPasswordToken, User } from "../models/User";
 import passport from "passport";
 import isAuthenticated from "../middlewares/isAuthenticated";
+import teachers from "./teachers";
 
 const users = Router();
+
+users.use("/teachers", teachers);
 
 /**
  * Sign-up.

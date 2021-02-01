@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { DataTypes, Model, Sequelize } from "sequelize";
 import Server from "../Server";
+import { Classroom } from "./Classroom";
 
 export interface IResetPasswordToken {
   userId: string;
@@ -104,6 +105,16 @@ export class User extends Model {
   }
 
   /**
+   * Returns the list of classrooms associated to the user.
+   */
+  public async getClassrooms(): Promise<Classroom[]> {
+    if (this.role !== "teacher") return [];
+
+    const classrooms = this.getDataValue("teacherClassrooms");
+    return classrooms ? classrooms : await Classroom.findByTeacher(this.id);
+  }
+
+  /**
    * Sends an email containing a link to reset the user's password.
    *
    * @returns True if the email was sent, false otherwise.
@@ -149,7 +160,7 @@ export class User extends Model {
   }
 }
 
-export function initUser(sequelize: Sequelize): void {
+export function userSchema(sequelize: Sequelize): void {
   User.init(
     {
       id: {
@@ -186,4 +197,11 @@ export function initUser(sequelize: Sequelize): void {
       modelName: User.name,
     }
   );
+}
+
+export function userAssociations(): void {
+  User.hasMany(Classroom, {
+    foreignKey: "teacherId",
+    as: "teacherClassrooms",
+  });
 }
