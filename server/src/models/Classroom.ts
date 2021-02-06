@@ -51,8 +51,21 @@ export class Classroom extends Model {
     return this.getDataValue("name");
   }
 
+  /**
+   * Teacher identifier.
+   */
   public get teacherId(): string {
     return this.getDataValue("teacherId");
+  }
+
+  /**
+   * Returns the teacher of the classroom.
+   *
+   * @returns The teacher.
+   */
+  public async getTeacher(): Promise<User> {
+    const teacher = this.getDataValue("teacher");
+    return teacher ? teacher : await User.findById(this.teacherId);
   }
 }
 

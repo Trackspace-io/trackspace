@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { DataTypes, Model, Sequelize } from "sequelize";
 import Server from "../Server";
 import { Classroom } from "./Classroom";
+import { Notification } from "./Notification";
 
 export interface IResetPasswordToken {
   userId: string;
@@ -203,5 +204,10 @@ export function userAssociations(): void {
   User.hasMany(Classroom, {
     foreignKey: "teacherId",
     as: "teacherClassrooms",
+  });
+
+  User.hasMany(Notification, {
+    foreignKey: "recipientId",
+    as: "notifications",
   });
 }
