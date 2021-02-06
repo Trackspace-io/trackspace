@@ -140,8 +140,9 @@ users.post(
  * @method  POST
  * @url     /users/reset/confirm
  *
- * @param req.token    {string} The token received in the reset email.
- * @param req.password {string} The new password.
+ * @param req.token           {string} The token received in the reset email.
+ * @param req.password        {string} The new password.
+ * @param req.confirmPassword {string} Confirm password.
  *
  * @returns Redirect, 400 (if token is expired), 500
  */
@@ -150,6 +151,18 @@ users.post(
 
   body("token").not().isEmpty(),
   body("password").not().isEmpty(),
+  body("confirmPassword")
+    .not()
+    .isEmpty()
+    .withMessage("The passwords do not match"),
+
+  body("confirmPassword").custom((value: string, { req }) => {
+    if (req.body.confirmPassword && value !== req.body.password) {
+      return Promise.reject("The passwords do not match");
+    }
+
+    return true;
+  }),
 
   async (req: Request, res: Response): Promise<Response | void> => {
     // Check if the request is valid.
@@ -194,7 +207,7 @@ users.post(
       user.setDataValue("password", bcrypt.hashSync(req.body.password, 10));
       user.save();
 
-      res.redirect(`${process.env.CLIENT_URL}/`);
+      res.status(200).json({ redirect: `${process.env.CLIENT_URL}/` });
     } catch (e) {
       return res.sendStatus(500);
     }
@@ -235,49 +248,64 @@ users.get(
  * @method PUT
  * @url    /users/profile
  *
- * @param req.email       {string | undefined} New email address.
- * @param req.firstName   {string | undefined} New first name.
- * @param req.lastName    {string | undefined} New last name.
- * @param req.oldPassword {string | undefined} Old password. Required to set a new password.
- * @param req.password    {string | undefined} New password.
+ * @param req.email           {string | undefined} New email address.
+ * @param req.firstName       {string | undefined} New first name.
+ * @param req.lastName        {string | undefined} New last name.
+ * @param req.oldPassword     {string | undefined} Old password. Required to set a new password.
+ * @param req.password        {string | undefined} New password.
+ * @param req.confirmPassword {string | undefined} Confirm password.
  *
  * @returns 200, 400, 500
  */
 users.put(
   "/profile",
   isAuthenticated(),
-  async (req: Request, res: Response): Promise<Response> => {
-    const user: User = <User>req.user;
 
+  body("oldPassword").custom((value: string, { req }) => {
+    if (!req.body.password) return;
+
+    const passwordIsOk: boolean = bcrypt.compareSync(
+      req.body.oldPassword,
+      (<User>req.user).passwordHash
+    );
+
+    if (!passwordIsOk) {
+      return Promise.reject("Invalid password");
+    }
+
+    return true;
+  }),
+
+  body("confirmPassword").custom((value: string, { req }) => {
+    if (req.body.password && value !== req.body.password) {
+      return Promise.reject("The passwords do not match");
+    }
+
+    return true;
+  }),
+
+  async (req: Request, res: Response): Promise<Response> => {
+    // Check if the request is valid.
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    // Set the values.
     try {
+      const user: User = <User>req.user;
+
       if (req.body.email) {
         user.setDataValue("email", req.body.email);
       }
-
       if (req.body.firstName) {
         user.setDataValue("firstName", req.body.firstName);
       }
-
       if (req.body.lastName) {
         user.setDataValue("lastName", req.body.lastName);
       }
-
       if (req.body.password) {
-        if (
-          !req.body.oldPassword ||
-          !bcrypt.compareSync(req.body.oldPassword, user.passwordHash)
-        ) {
-          return res.status(400).json({
-            errors: {
-              msg: "Invalid password",
-              param: "oldPassword",
-              location: "body",
-            },
-          });
-        }
-
-        const hash = bcrypt.hashSync(req.body.password, 10);
-        user.setDataValue("password", hash);
+        user.setDataValue("password", bcrypt.hashSync(req.body.password, 10));
       }
 
       user.save();
