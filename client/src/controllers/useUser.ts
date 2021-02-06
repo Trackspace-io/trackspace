@@ -16,7 +16,7 @@ interface IUserController {
   logout: () => void;
   sendResetPassword: (input: IUserSendResetPassword) => Promise<any>;
 
-  updateUser: (input: IUserUpdate) => void;
+  updateUser: (input: IUserUpdate) => Promise<any>;
 }
 
 const useUser = (): IUserController => {
@@ -115,23 +115,27 @@ const useUser = (): IUserController => {
   };
 
   const updateUser = (input: IUserUpdate) => {
-    UserAPI.updateUser(input)
-      .then(() => {
-        get();
+    return new Promise((resolve) => {
+      UserAPI.updateUser(input)
+        .then(() => {
+          get();
 
-        update({
-          type: 'success',
-          text: `Profile updated.`,
-        });
-      })
-      .catch((e) => {
-        const { data } = e.response;
+          update({
+            type: 'success',
+            text: `Profile updated.`,
+          });
 
-        update({
-          type: 'error',
-          text: `${data}`,
+          return resolve(true);
+        })
+        .catch((e) => {
+          const { msg } = e.response.data.errors[0];
+
+          update({
+            type: 'error',
+            text: `${msg}`,
+          });
         });
-      });
+    });
   };
 
   const logout = () => {

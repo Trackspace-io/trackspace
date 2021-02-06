@@ -72,17 +72,18 @@ export const get = async (): Promise<any> => {
  *
  * @method  PUT
  *
- * @param {string} body.email       New email address.
- * @param {string} body.firstName   New first name.
- * @param {string} body.lastName    New last name.
- * @param {string} body.oldPassword Old password
- * @param {string} body.password    New password.
+ * @param {string} body.email           New email address.
+ * @param {string} body.firstName       New first name.
+ * @param {string} body.lastName        New last name.
+ * @param {string} body.oldPassword     Old password
+ * @param {string} body.password        New password.
+ * @param {string} body.confirmPassword Confirm new password.
  *
  * @returns 200, 400, 500
  */
 export const updateUser = async (body: IUserUpdate): Promise<any> => {
   const response = await axios.put(`${_apiUrl}/api/users/profile`, body, { withCredentials: true });
-  console.log('response', response);
+
   return response;
 };
 

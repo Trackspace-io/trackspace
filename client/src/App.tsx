@@ -14,8 +14,7 @@ import Messages from 'components/gui/Messages';
 
 const App: React.FC = () => {
   const cookie = Cookies.get('connect.sid') || '';
-  const { user, authCheck, isAuthenticated } = useUser();
-  console.log('isAuthenticated', isAuthenticated);
+  const { user, authCheck } = useUser();
 
   React.useEffect(() => {
     authCheck(cookie);
