@@ -2,7 +2,6 @@ import * as React from 'react';
 import style from '../../styles/gui/Dropdown.module.css';
 import cx from 'classnames';
 import ClickHandler from './ClickHandler';
-import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { faEllipsisH } from '@fortawesome/free-solid-svg-icons';
@@ -56,7 +55,7 @@ interface IDropdownMenuProps {
 const DropdownItem: React.FC<IDropdownMenuProps> = ({ children, type, to = '', onClick }) => {
   return (
     <ul>
-      <li>{type === 'link' ? <Link to={to}> {children} </Link> : <span onClick={onClick}> {children}</span>}</li>
+      <li>{type === 'link' ? <a href={to}> {children} </a> : <span onClick={onClick}> {children}</span>}</li>
     </ul>
   );
 };

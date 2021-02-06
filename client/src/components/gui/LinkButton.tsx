@@ -1,6 +1,5 @@
 import cx from 'classnames';
 import * as React from 'react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import style from '../../styles/gui/LinkButton.module.css';
 
@@ -17,33 +16,18 @@ import style from '../../styles/gui/LinkButton.module.css';
  *
  * @returns ReactNode
  */
-interface ILinkButtonProps extends RouteComponentProps {
+interface ILinkButtonProps {
   to: string;
   variant?: 'primary' | 'secondary';
   align?: 'left' | 'center' | 'right';
 }
 
-const LinkButton: React.FC<ILinkButtonProps> = ({
-  children,
-  to,
-  history,
-  variant = 'default',
-  align = 'left',
-  ...rest
-}) => {
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    history.push(to);
-  };
-
+const LinkButton: React.FC<ILinkButtonProps> = ({ children, to, variant = 'default', align = 'left', ...rest }) => {
   return (
-    <button
-      className={cx(style['link-button'], style[variant], style[`align-${align}`])}
-      onClick={handleClick}
-      {...rest}>
+    <a href={to} className={cx(style['link-button'], style[variant], style[`align-${align}`])} {...rest}>
       {children}
-    </button>
+    </a>
   );
 };
 
-export default withRouter(LinkButton);
+export default LinkButton;

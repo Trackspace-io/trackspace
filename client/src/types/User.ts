@@ -20,10 +20,13 @@ export interface IUserSignIn {
   password: string;
 }
 
-export interface ISignUpProps {
-  signUp: IUserSignUp;
+export interface IUserSendResetPassword {
+  email: string;
 }
 
+export interface IUserConfirmResetPassword {
+  token: string;
+}
 export interface IUserUpdate {
   email?: string;
   firstName?: string;

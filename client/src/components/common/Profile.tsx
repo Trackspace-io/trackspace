@@ -2,14 +2,16 @@ import Divider from 'components/gui/Divider';
 import Form from 'components/gui/Form';
 import { Input, useInput } from 'components/gui/Input';
 import Typography from 'components/gui/Typography';
+import useMessage from 'controllers/useMessage';
 import useUser from 'controllers/useUser';
 import * as React from 'react';
 
 import style from '../../styles/common/Profile.module.css';
 
 const Profile: React.FC = () => {
-  // Get user context
+  // Get context
   const { user, updateUser } = useUser();
+  const { update } = useMessage();
 
   // Internal state
   const [selectedTab, setSelectedTab] = React.useState('profile');
@@ -44,6 +46,14 @@ const Profile: React.FC = () => {
 
     if (input.password === input.confirmPassword) {
       updateUser(input);
+    } else {
+      setInput({
+        password: '',
+        oldPassword: '',
+        confirmPassword: '',
+      });
+
+      update({ type: 'error', text: 'The new password and confirm password do not match. Please try again' });
     }
   };
 

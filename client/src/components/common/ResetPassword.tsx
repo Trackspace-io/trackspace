@@ -1,6 +1,8 @@
 import Button from 'components/gui/Button';
+import Form from 'components/gui/Form';
 import { Input, useInput } from 'components/gui/Input';
 import Typography from 'components/gui/Typography';
+import useUser from 'controllers/useUser';
 import * as React from 'react';
 
 import ResetPasswordSrc from '../../images/reset-password.svg';
@@ -14,7 +16,23 @@ import style from '../../styles/common/ResetPassword.module.css';
  * @returns ReactNode
  */
 export const ResetPasswordSend: React.FC = () => {
+  const { sendResetPassword } = useUser();
+
   const { input, handleInputChange } = useInput({ email: '' });
+  const [emailSent, setEmailSent] = React.useState(false);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    sendResetPassword(input)
+      .then((res) => {
+        console.log('res', res);
+        if (res) {
+          setEmailSent(true);
+        }
+      })
+      .catch((e) => console.log('e1', e));
+  };
 
   return (
     <div className={style['container']}>
@@ -25,20 +43,26 @@ export const ResetPasswordSend: React.FC = () => {
         <div className={style['content']}>
           <Typography variant="title">Reset your password</Typography>
           <br />
-          <form>
-            <Input
-              name="email"
-              type="email"
-              label="Email"
-              value={input.email}
-              placeholder="johndoe@email.com"
-              onChange={handleInputChange}
+          {!emailSent ? (
+            <Form
+              handleSubmit={handleSubmit}
+              action="Submit"
+              render={() => (
+                <React.Fragment>
+                  <Input
+                    name="email"
+                    type="email"
+                    label="Email"
+                    value={input.email}
+                    placeholder="johndoe@email.com"
+                    onChange={handleInputChange}
+                  />
+                </React.Fragment>
+              )}
             />
-            <br />
-            <Button variant="primary" fullWidth>
-              Send email
-            </Button>
-          </form>
+          ) : (
+            <div> The email has been sent! Please check your inbox to reset your password. </div>
+          )}
         </div>
       </div>
     </div>

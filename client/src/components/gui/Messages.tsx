@@ -14,7 +14,6 @@ import { IMessage } from 'types';
 const Messages: React.FC = () => {
   const { messages, close } = useMessage();
 
-  console.log('messages', messages);
   return (
     <div className={style['container']}>
       {messages.map((m, i) => (
@@ -51,6 +50,7 @@ const Message: React.FC<IMessageProps> = ({ message, close }) => {
   if (!message.isOpen) {
     return <div></div>;
   }
+
   // Get the icon corresponding to the message variant.
   let icon = null;
   switch (message.type) {

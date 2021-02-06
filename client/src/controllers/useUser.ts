@@ -3,21 +3,27 @@ import { UserContext } from 'contexts/userContext';
 import Cookies from 'js-cookie';
 import * as React from 'react';
 import { useHistory } from 'react-router-dom';
-import { IUser, IUserSignIn, IUserUpdate } from 'types';
+import { IUser, IUserSignIn, IUserSignUp, IUserUpdate, IUserSendResetPassword } from 'types';
 import useMessage from './useMessage';
 
 interface IUserController {
   user: Partial<IUser>;
   isAuthenticated: boolean;
 
-  updateUser: (input: IUserUpdate) => void;
+  register: (input: IUserSignUp) => void;
   login: (input: IUserSignIn) => void;
-  logout: () => void;
   authCheck: (cookie: string) => void;
+  logout: () => void;
+  sendResetPassword: (input: IUserSendResetPassword) => Promise<any>;
+
+  updateUser: (input: IUserUpdate) => void;
 }
 
 const useUser = (): IUserController => {
+  // Get user context
   const context = React.useContext(UserContext);
+
+  // Message controller to send notification
   const { update } = useMessage();
   const history = useHistory();
 
@@ -25,14 +31,26 @@ const useUser = (): IUserController => {
     throw new Error('useCountState must be used within a CountProvider');
   }
 
+  // Fetch the user if the cookie is set.
   React.useEffect(() => {
     context.state.isAuthenticated && get();
   }, [context.state.isAuthenticated]);
 
   const get = () => {
-    UserAPI.get().then((data) => {
-      context.dispatch({ type: 'GET_USER', payload: data });
-    });
+    UserAPI.get()
+      .then((response) => {
+        const { data } = response;
+
+        context.dispatch({ type: 'GET_USER', payload: data });
+      })
+      .catch((e) => {
+        const { data } = e.response;
+
+        update({
+          type: 'error',
+          text: `${data}`,
+        });
+      });
   };
 
   const authCheck = (cookie: string | undefined) => {
@@ -41,35 +59,88 @@ const useUser = (): IUserController => {
     }
   };
 
-  const updateUser = (input: IUserUpdate) => {
-    UserAPI.updateUser(input).then(() => {
-      get();
-    });
+  const register = (input: IUserSignUp) => {
+    UserAPI.register(input)
+      .then(() => {
+        history.replace('/');
+      })
+      .catch((e) => {
+        const { data } = e.response;
+
+        update({
+          type: 'error',
+          text: `${data}`,
+        });
+      });
   };
 
   const login = (input: IUserSignIn) => {
     UserAPI.login(input)
-      .then((data) => {
-        context.dispatch({ type: 'LOGIN' });
-        history.replace(data.redirect);
+      .then((response) => {
+        const { data } = response;
+
+        history.go(data.redirect);
+      })
+      .catch((e) => {
+        const { data } = e.response;
+
+        update({
+          type: 'error',
+          text: `${data}`,
+        });
+      });
+  };
+
+  const sendResetPassword = async (input: IUserSendResetPassword) => {
+    return new Promise((resolve, reject) => {
+      UserAPI.sendResetPassword(input)
+        .then((response) => {
+          const { data } = response;
+          console.log('response', data);
+
+          history.replace('/reset-password/confirm');
+          resolve(data);
+        })
+        .catch((e) => {
+          const { msg } = e.response.data.errors[0];
+
+          update({
+            type: 'error',
+            text: `${msg}`,
+          });
+
+          reject();
+        });
+    });
+  };
+
+  const updateUser = (input: IUserUpdate) => {
+    UserAPI.updateUser(input)
+      .then(() => {
+        get();
+
         update({
           type: 'success',
-          text: `Welcome back!`,
+          text: `Profile updated.`,
         });
       })
       .catch((e) => {
+        const { data } = e.response;
+
         update({
           type: 'error',
-          text: `An unexpected error occurred. Please ` + `contact the system administrator (code: ${e}).`,
+          text: `${data}`,
         });
       });
   };
 
   const logout = () => {
-    UserAPI.logout().then((data) => {
-      context.dispatch({ type: 'LOGOUT' });
+    UserAPI.logout().then((response) => {
+      const { data } = response;
+
       Cookies.remove('connect.sid');
-      history.replace(data.redirect);
+      history.go(data.redirect);
+
       update({
         type: 'success',
         text: `Goodbye!`,
@@ -77,14 +148,19 @@ const useUser = (): IUserController => {
     });
   };
 
+  const { user, isAuthenticated } = context.state;
+
   return {
-    user: context.state.user,
-    isAuthenticated: context.state.isAuthenticated,
+    user: user,
+    isAuthenticated: isAuthenticated,
+
+    login: login,
+    register: register,
+    authCheck: authCheck,
+    logout: logout,
+    sendResetPassword: sendResetPassword,
 
     updateUser: updateUser,
-    login: login,
-    logout: logout,
-    authCheck: authCheck,
   };
 };
 

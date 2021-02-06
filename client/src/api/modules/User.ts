@@ -1,29 +1,25 @@
 import { _apiUrl } from 'api/api';
 import axios from 'axios';
-import { IUserUpdate, IUserSignIn, IUserSignUp } from 'types';
+import { IUserConfirmResetPassword, IUserSendResetPassword, IUserSignIn, IUserSignUp, IUserUpdate } from 'types';
 
 /**
  * Registers a user.
  *
- * @param {{
- *  email: string,
- *  firstName: string,
- *  lastName: string,
- *  password: string,
- *  role: string
- * }} body The request body
+ * @method POST
  *
- * @returns {Promise<void>}
+ * @param {string} body.email     Email address of the user.
+ * @param {string} body.firstName First name of the user.
+ * @param {string} body.lastName  Last name of the user.
+ * @param {string} body.password  Password of the user.
+ * @param {string} body.role      Role of the user
+ *
+ * @returns 200, 400, 500
  */
 
-export const register = async (body: IUserSignUp): Promise<void> => {
-  try {
-    const response = await axios.post(`${_apiUrl}/api/users/sign-up`, body);
+export const register = async (body: IUserSignUp): Promise<any> => {
+  const response = await axios.post(`${_apiUrl}/api/users/sign-up`, body, { withCredentials: true });
 
-    return response.data;
-  } catch (error) {
-    console.log('error', error);
-  }
+  return response;
 };
 
 /**
@@ -39,11 +35,7 @@ export const register = async (body: IUserSignUp): Promise<void> => {
 export const login = async (body: IUserSignIn): Promise<any> => {
   const response = await axios.post(`${_apiUrl}/api/users/sign-in`, body, { withCredentials: true });
 
-  if (response.status === 200) {
-    return response.data;
-  }
-
-  throw new Error(`Test ${response.data} (${response.status})`);
+  return response;
 };
 
 /**
@@ -52,17 +44,15 @@ export const login = async (body: IUserSignIn): Promise<any> => {
  * @returns Redirect.
  */
 export const logout = async (): Promise<any> => {
-  try {
-    const response = await axios.get(`${_apiUrl}/api/users/sign-out`, { withCredentials: true });
+  const response = await axios.get(`${_apiUrl}/api/users/sign-out`, { withCredentials: true });
 
-    return response.data;
-  } catch (error) {
-    console.log('error', `${error.response.data} (${error.response.status})`);
-  }
+  return response;
 };
 
 /**
  * Get the profile of a user
+ *
+ * @method GET
  *
  * @returns {Promise<{
  *  firstName: string,
@@ -72,17 +62,13 @@ export const logout = async (): Promise<any> => {
  * }>} data.
  */
 export const get = async (): Promise<any> => {
-  try {
-    const response = await axios.get(`${_apiUrl}/api/users/profile`, { withCredentials: true });
+  const response = await axios.get(`${_apiUrl}/api/users/profile`, { withCredentials: true });
 
-    return response.data;
-  } catch (error) {
-    console.log('error', error);
-  }
+  return response;
 };
 
 /**
- * Get the user's profile
+ * Update the profile of a user
  *
  * @method  PUT
  *
@@ -95,12 +81,38 @@ export const get = async (): Promise<any> => {
  * @returns 200, 400, 500
  */
 export const updateUser = async (body: IUserUpdate): Promise<any> => {
-  try {
-    const response = await axios.put(`${_apiUrl}/api/users/profile`, body, { withCredentials: true });
-    console.log('response user update', response.data);
+  const response = await axios.put(`${_apiUrl}/api/users/profile`, body, { withCredentials: true });
+  console.log('response', response);
+  return response;
+};
 
-    return response.data;
-  } catch (error) {
-    console.log('error', `${error.response.data} (${error.response.status})`);
-  }
+/**
+ * Send a reset password email.
+ *
+ * @method  POST
+ *
+ * @param {string} body.email       New email address.
+ *
+ * @returns 200, 400, 500
+ */
+export const sendResetPassword = async (body: IUserSendResetPassword): Promise<any> => {
+  const response = await axios.post(`${_apiUrl}/api/users/reset/send`, body, { withCredentials: true });
+
+  return response;
+};
+
+/**
+ * Send a reset password email.
+ *
+ * @method  POST
+ *
+ * @param {string} body.token       The received token.
+ * @param {string} body.password    New password.
+ *
+ * @returns 200, 400, 500
+ */
+export const confirmResetPassword = async (body: IUserConfirmResetPassword): Promise<any> => {
+  const response = await axios.post(`${_apiUrl}/api/users/reset/confirm`, body, { withCredentials: true });
+
+  return response;
 };

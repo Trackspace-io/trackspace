@@ -14,7 +14,8 @@ import Messages from 'components/gui/Messages';
 
 const App: React.FC = () => {
   const cookie = Cookies.get('connect.sid') || '';
-  const { isAuthenticated, authCheck } = useUser();
+  const { user, authCheck, isAuthenticated } = useUser();
+  console.log('isAuthenticated', isAuthenticated);
 
   React.useEffect(() => {
     authCheck(cookie);
@@ -25,14 +26,18 @@ const App: React.FC = () => {
       <Navbar />
       <Switch>
         {/* Public routes */}
-        <Route exact path="/" component={SignIn} />
+        {/* <Route exact path="/" component={SignIn} /> */}
+        <ProtectedRoute condition={!Boolean(cookie)} exact path="/" redirectPath={`/${user?.role}`}>
+          <SignIn />
+        </ProtectedRoute>
         <Route path="/sign-up" component={SignUp} />
         <Route path="/reset-password/send" component={ResetPasswordSend} />
         <Route path="/reset-password/confirm" component={ResetPasswordConfirm} />
-        {/* <Route path="/user/:firstName-:lastName/" component={Profile} /> */}
-        <PrivateRoute isAuth={isAuthenticated} redirectPath="/" path="/user/:firstName-:lastName/">
+
+        {/* Private routes */}
+        <ProtectedRoute condition={Boolean(cookie)} path="/user/:firstName-:lastName/" redirectPath="/">
           <Profile />
-        </PrivateRoute>
+        </ProtectedRoute>
       </Switch>
       <Messages />
     </Router>
@@ -43,21 +48,21 @@ const App: React.FC = () => {
  * Component representing a route that requires authentication in order to be
  * accessed.
  */
-interface IPrivateRouteProps extends RouteProps {
-  isAuth: boolean; // is authenticate route.
-  redirectPath: string; // redirect path if don't authenticate route.
+interface IProtectedRouteProps extends RouteProps {
+  condition: boolean; // Flag to verify if the user should be redirected
+  path: string; // Path if condition succeeded
+  redirectPath: string; // Redirect path if condition fails.
 }
 
-const PrivateRoute: React.FC<IPrivateRouteProps> = (props) => {
-  return props.isAuth ? (
+const ProtectedRoute: React.FC<IProtectedRouteProps> = (props) => {
+  return props.condition ? (
     <Route {...props} component={props.component} render={undefined} />
   ) : (
     <Redirect
       to={{
-        pathname: '/',
+        pathname: props.redirectPath,
         state: {
-          prevLocation: props.path,
-          error: 'You need to login first!',
+          prevLocation: props.path, // Save previous path.
         },
       }}
     />

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
 
 import logo from '../../images/logo.svg';
 import style from '../../styles/gui/Navbar.module.css';
@@ -18,9 +17,9 @@ const Navbar: React.FC = () => {
 
   return (
     <div className={style['container']}>
-      <Link to="/">
+      <a href="/">
         <img src={logo} className={style['logo']} />
-      </Link>
+      </a>
       {!isAuthenticated ? (
         <LinkButton to="/sign-up" variant="primary">
           Sign Up

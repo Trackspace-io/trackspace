@@ -82,6 +82,13 @@ users.post(
   }
 );
 
+users.post(
+  "/test",
+  async (req: Request, res: Response): Promise<void> => {
+    res.redirect("/teacher");
+  }
+);
+
 /**
  * Sign-out.
  *
