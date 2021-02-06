@@ -259,7 +259,7 @@ users.put(
   isAuthenticated(),
 
   body("oldPassword").custom((value: string, { req }) => {
-    if (!req.body.password) return;
+    if (!req.body.password) return true;
 
     const passwordIsOk: boolean = bcrypt.compareSync(
       req.body.oldPassword,
