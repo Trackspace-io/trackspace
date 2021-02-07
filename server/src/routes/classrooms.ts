@@ -1,9 +1,9 @@
 import { Request, Response, Router } from "express";
 import { body, validationResult } from "express-validator";
 import { Classroom } from "../models/Classroom";
-import isAuthenticated from "../middlewares/isAuthenticated";
 import { User } from "../models/User";
 import shortid from "shortid";
+import user from "../validators/user";
 
 const classrooms = Router();
 
@@ -19,7 +19,7 @@ const classrooms = Router();
  */
 classrooms.post(
   "/create",
-  isAuthenticated("teacher"),
+  user().isA("teacher"),
 
   body("name").not().isEmpty(),
   body("name").custom(async (value: string, { req }) => {
@@ -43,9 +43,9 @@ classrooms.post(
 
     try {
       await Classroom.create(req.body);
-      res.sendStatus(200);
+      return res.sendStatus(200);
     } catch (e) {
-      res.sendStatus(500);
+      return res.sendStatus(500);
     }
   }
 );
@@ -59,21 +59,12 @@ classrooms.post(
  * @returns 200, 401, 404, 500
  */
 classrooms.delete(
-  "/:id/delete",
-  isAuthenticated("teacher"),
+  "/:classroomId/delete",
+  user().isA("teacher").isInClassroom(),
 
   async (req: Request, res: Response): Promise<Response> => {
-    const classroom = await Classroom.findById(req.params.id);
-    if (!classroom) return res.sendStatus(404);
-
-    if (classroom.teacherId !== (<User>req.user).id) {
-      return res
-        .status(401)
-        .json({ msg: "You are not allowed to delete this classroom." });
-    }
-
     try {
-      await classroom.destroy();
+      await req.classroom.destroy();
       return res.sendStatus(200);
     } catch (e) {
       return res.sendStatus(500);
@@ -92,8 +83,8 @@ classrooms.delete(
  * @returns 200, 400, 401, 404, 500
  */
 classrooms.put(
-  "/:id/modify",
-  isAuthenticated("teacher"),
+  "/:classroomId/modify",
+  user().isA("teacher").isInClassroom(),
 
   body("name").trim().escape(),
   body("name").custom(async (value: string, { req }) => {
@@ -114,23 +105,13 @@ classrooms.put(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    // Find the classroom.
-    const classroom = await Classroom.findById(req.params.id);
-    if (!classroom) return res.sendStatus(404);
-
-    if (classroom.teacherId !== (<User>req.user).id) {
-      return res
-        .status(401)
-        .json({ msg: "You are not allowed to modify this classroom." });
-    }
-
     // Set the values.
     try {
       if (req.body.name) {
-        classroom.setDataValue("name", req.body.name);
+        req.classroom.setDataValue("name", req.body.name);
       }
 
-      await classroom.save();
+      await req.classroom.save();
       return res.sendStatus(200);
     } catch (e) {
       return res.sendStatus(500);

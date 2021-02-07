@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
 import { User } from "../models/User";
-import isAuthenticated from "../middlewares/isAuthenticated";
+import user from "../validators/user";
 
 const teachers = Router();
 
@@ -17,7 +17,7 @@ const teachers = Router();
  */
 teachers.get(
   "/classrooms",
-  isAuthenticated("teacher"),
+  user().isA("teacher"),
 
   async (req: Request, res: Response): Promise<Response> => {
     try {

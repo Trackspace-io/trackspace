@@ -5,8 +5,8 @@ import jwt from "jsonwebtoken";
 import shortid from "shortid";
 import { IResetPasswordToken, User } from "../models/User";
 import passport from "passport";
-import isAuthenticated from "../middlewares/isAuthenticated";
 import teachers from "./teachers";
+import user from "../validators/user";
 
 const users = Router();
 
@@ -55,9 +55,9 @@ users.post(
     // Create the user.
     try {
       await User.create(req.body);
-      res.sendStatus(200);
+      return res.sendStatus(200);
     } catch (e) {
-      res.sendStatus(500);
+      return res.sendStatus(500);
     }
   }
 );
@@ -229,7 +229,7 @@ users.post(
  */
 users.get(
   "/profile",
-  isAuthenticated(),
+  user().isAuthenticated(),
   async (req: Request, res: Response): Promise<Response> => {
     const user: User = <User>req.user;
 
@@ -259,7 +259,7 @@ users.get(
  */
 users.put(
   "/profile",
-  isAuthenticated(),
+  user().isAuthenticated(),
 
   body("oldPassword").custom((value: string, { req }) => {
     if (!req.body.password) return;
