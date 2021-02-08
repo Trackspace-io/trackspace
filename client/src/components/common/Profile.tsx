@@ -86,14 +86,6 @@ const Profile: React.FC = () => {
                     value={input.lastName}
                     onChange={handleInputChange}
                   />
-                  <Input
-                    name="role"
-                    type="text"
-                    label="Role"
-                    value={input.role}
-                    disabled
-                    onChange={handleInputChange}
-                  />
                 </React.Fragment>
               )}
             />
@@ -156,9 +148,7 @@ const Profile: React.FC = () => {
 
         <br />
       </div>
-      <div className={style['body']}>
-        <div className={style['content']}>{renderContent()}</div>
-      </div>
+      <div className={style['body']}>{renderContent()}</div>
     </div>
   );
 };
