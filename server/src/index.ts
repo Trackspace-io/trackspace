@@ -54,9 +54,12 @@ app.use("/assets", express.static(path.join(__dirname, "../assets")));
 // Short links.
 app.get("/l/:id", async (req, res) => {
   const shortLink = await ShortLink.findOne({ where: { id: req.params.id } });
-  return shortLink
-    ? res.redirect(shortLink.fullUrl)
-    : res.status(404).send("Not found.");
+
+  if (!shortLink || shortLink.expirationDate < new Date()) {
+    return res.status(404).send("Not found.");
+  }
+
+  return res.redirect(shortLink.fullUrl);
 });
 
 // Serve static files from the React app.

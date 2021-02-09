@@ -1,4 +1,6 @@
+import jwt from "jsonwebtoken";
 import { DataTypes, Model, Sequelize } from "sequelize";
+import { ShortLink } from "./ShortLink";
 import { User } from "./User";
 
 export class Classroom extends Model {
@@ -66,6 +68,29 @@ export class Classroom extends Model {
   public async getTeacher(): Promise<User> {
     const teacher = this.getDataValue("teacher");
     return teacher ? teacher : await User.findById(this.teacherId);
+  }
+
+  /**
+   * Generate a new invitation link.
+   *
+   * @param shorten   True if the link must be shortened.
+   * @param expiresIn (Optional) Number of seconds after which the link expires.
+   */
+  public async generateLink(
+    shorten?: boolean,
+    expiresIn?: number
+  ): Promise<string> {
+    const secret: string = process.env.CLASSROOM_INVITATION_SECRET;
+    const data = { classroomId: this.id };
+    const token: string = jwt.sign(data, secret, { expiresIn });
+    const clientUrl: string = process.env.CLIENT_URL;
+
+    let link = `${clientUrl}/students/classrooms/invitations/accept?t=${token}`;
+    if (shorten) {
+      link = await ShortLink.shorten(link, expiresIn);
+    }
+
+    return link;
   }
 }
 

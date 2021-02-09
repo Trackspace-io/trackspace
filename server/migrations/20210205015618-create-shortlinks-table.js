@@ -13,6 +13,7 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
+      expirationDate: Sequelize.DataTypes.DATE
     });
   },
 
