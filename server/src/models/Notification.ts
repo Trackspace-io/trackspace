@@ -17,7 +17,7 @@ export class Notification extends Model {
   /**
    * Notification types.
    */
-  static readonly TYPES: Record<string, INotificationType> = {
+  private static readonly TYPES: Record<string, INotificationType> = {
     studentInvitation: {
       text: (params: string[]): string =>
         `You have received an invitation to join ${params[0]} ${params[1]}'s classroom.`,
@@ -41,9 +41,22 @@ export class Notification extends Model {
   ): Promise<Notification | null> {
     if (student.role !== "student") return null;
 
+    // Check if the notification already exists.
+    const notif = await this.findOne({
+      where: {
+        type: "studentInvitation",
+        senderId: classroom.teacherId,
+        recipientId: student.id,
+      },
+    });
+
+    if (notif) return null;
+
+    // Get the teacher.
     const teacher: User = await classroom.getTeacher();
     if (!teacher) return null;
 
+    // Create the notification.
     return await this.create({
       id: shortid.generate(),
       type: "studentInvitation",
