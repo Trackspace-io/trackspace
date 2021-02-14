@@ -60,30 +60,20 @@ export default (): IUserValidator => {
         return res.status(401).json({ redirect: `${process.env.CLIENT_URL}/` });
       }
 
-      // Get the classroom.
-      const classroom = await Classroom.findById(req.params.classroomId);
-      if (!classroom) {
-        return res.status(404).json({ msg: "Classroom not found." });
-      }
-
-      // Check if the user is in the classroom.
-      let isAuthorized = false;
+      // Get the classrooms associated to the user.
       const user = <User>req.user;
+      const associatedClassrooms = await user.getClassrooms();
 
-      switch (user.role) {
-        case "teacher":
-          isAuthorized = classroom.teacherId === user.id;
-          break;
-        default:
-          break;
+      // CHeck if the requested classroom is associated to the user.
+      const classroom = associatedClassrooms.find(
+        (c: Classroom) => c.id === req.params.classroomId
+      );
+
+      if (!classroom) {
+        return res.sendStatus(401);
       }
 
-      if (!isAuthorized) {
-        return res
-          .status(401)
-          .json({ msg: "You don't have access to this classroom." });
-      }
-
+      // Save the classroom in the request and go to the next step.
       req.classroom = classroom;
       next();
     });

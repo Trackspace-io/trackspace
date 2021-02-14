@@ -39,17 +39,6 @@ export class Classroom extends Model {
   }
 
   /**
-   * Finds the list of classrooms associated to a teacher.
-   *
-   * @param teacherId Identifier of the teacher.
-   *
-   * @returns A list of classrooms.
-   */
-  public static async findByTeacher(teacherId: string): Promise<Classroom[]> {
-    return this.findAll({ where: { teacherId } });
-  }
-
-  /**
    * Identifier of the classroom.
    */
   public get id(): string {

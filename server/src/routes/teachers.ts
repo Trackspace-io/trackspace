@@ -6,13 +6,10 @@ import user from "../validators/user";
 const teachers = Router();
 
 /**
- * Get classroom list.
+ * Get th list of classrooms taught by a teacher.
  *
  * @method  GET
  * @url     /users/teachers/classrooms
- *
- * @param res.id   {string} Identifier of the classroom.
- * @param res.name {string} Name of the classroom.
  *
  * @returns 200, 500
  */

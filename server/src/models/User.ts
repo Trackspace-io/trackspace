@@ -1,6 +1,12 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { DataTypes, Model, Sequelize } from "sequelize";
+import {
+  BelongsToManyGetAssociationsMixin,
+  DataTypes,
+  HasManyGetAssociationsMixin,
+  Model,
+  Sequelize,
+} from "sequelize";
 import Server from "../Server";
 import { Classroom, IClassroomInvitation } from "./Classroom";
 import { Notification } from "./Notification";
@@ -133,12 +139,19 @@ export class User extends Model {
 
   /**
    * Returns the list of classrooms associated to the user.
+   *
+   * @returns A list of associated classrooms.
    */
   public async getClassrooms(): Promise<Classroom[]> {
-    if (this.role !== "teacher") return [];
+    if (this.role === "teacher") {
+      return await this.getTeacherClassrooms();
+    }
 
-    const classrooms = this.getDataValue("teacherClassrooms");
-    return classrooms ? classrooms : await Classroom.findByTeacher(this.id);
+    if (this.role === "student") {
+      return await this.getStudentClassrooms();
+    }
+
+    return [];
   }
 
   /**
@@ -185,6 +198,17 @@ export class User extends Model {
 
     return success;
   }
+
+  /**
+   * If the user is a teacher, returns the classrooms taught by him or her.
+   */
+  private getTeacherClassrooms!: HasManyGetAssociationsMixin<Classroom>;
+
+  /**
+   * If this user is a student, returns the list of classroom in which he or
+   * she is enrolled.
+   */
+  private getStudentClassrooms!: BelongsToManyGetAssociationsMixin<Classroom>;
 }
 
 export function userSchema(sequelize: Sequelize): void {
@@ -229,15 +253,16 @@ export function userSchema(sequelize: Sequelize): void {
 export function userAssociations(): void {
   User.hasMany(Classroom, {
     foreignKey: "teacherId",
-    as: "teacherClassrooms",
+    as: { singular: "TeacherClassroom", plural: "TeacherClassrooms" },
   });
 
   User.hasMany(Notification, {
     foreignKey: "recipientId",
-    as: "notifications",
+    as: { singular: "Notification", plural: "Notifications" },
   });
 
   User.belongsToMany(Classroom, {
     through: "Classroom_Student",
+    as: { singular: "StudentClassroom", plural: "StudentClassrooms" },
   });
 }

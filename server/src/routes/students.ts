@@ -134,4 +134,29 @@ students.post(
   }
 );
 
+/**
+ * Get classrooms in which a student is enrolled.
+ *
+ * @method  GET
+ * @url     /users/students/classrooms
+ *
+ * @returns 200, 500
+ */
+students.get(
+  "/classrooms",
+  user().isA("student"),
+
+  async (req: Request, res: Response): Promise<Response> => {
+    try {
+      return res.status(200).json(
+        (await (<User>req.user).getClassrooms()).map((classroom) => {
+          return { id: classroom.id, name: classroom.name };
+        })
+      );
+    } catch (e) {
+      return res.sendStatus(500);
+    }
+  }
+);
+
 export default students;
