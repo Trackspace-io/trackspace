@@ -2,7 +2,6 @@ import useUser from 'controllers/useUser';
 import * as React from 'react';
 
 import { faBell } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import logo from '../../images/logo.svg';
 import style from '../../styles/gui/Navbar.module.css';
@@ -58,7 +57,9 @@ const NavbarMini: React.FC = () => {
 
   return (
     <div className={style['container-mini']}>
-      <FontAwesomeIcon icon={faBell} className={style['icon']} />
+      <Dropdown type="icon" icon={faBell}>
+        <DropdownItem type="text">Notification</DropdownItem>
+      </Dropdown>
       <Dropdown type="title" title={`${user?.firstName} ${user?.lastName}`}>
         <DropdownItem type="link" to={`/user/${user?.firstName?.toLowerCase()}-${user?.lastName?.toLowerCase()}`}>
           Profile

@@ -8,7 +8,6 @@
   border-radius: 8px;
   position: absolute;
   margin-top: 8px;
-  right: 8px;
   width: 256px;
   box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
   opacity: 0;
@@ -39,6 +38,21 @@
   color: #333333;
   padding: 15px 20px;
   display: block;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.menu li button {
+  text-decoration: none;
+  color: #333333;
+  padding: 15px 20px;
+  display: block;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
+    'Helvetica Neue', sans-serif;
 }
 
 .menu li span {
@@ -46,7 +60,7 @@
   color: #333333;
   padding: 15px 20px;
   display: block;
-  cursor: pointer;
+  font-size: 16px;
 }
 
 .trigger {
@@ -68,4 +82,5 @@
 
 .icon {
   cursor: pointer;
+  color: var(--green-dark);
 }

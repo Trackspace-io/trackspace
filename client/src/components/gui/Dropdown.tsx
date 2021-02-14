@@ -39,7 +39,7 @@ const Dropdown: React.FC<IDropdownProps> = ({ children, type, icon = faEllipsisH
       {renderTrigger(type)}
       <ClickHandler onClickOutside={() => setIsActive(false)}>
         <nav className={cx(style['menu'], style[isActive ? 'active' : 'inactive'])} onClick={handleClick}>
-          {children}
+          <ul>{children}</ul>
         </nav>
       </ClickHandler>
     </div>
@@ -47,17 +47,26 @@ const Dropdown: React.FC<IDropdownProps> = ({ children, type, icon = faEllipsisH
 };
 
 interface IDropdownMenuProps {
-  type: 'button' | 'link';
+  type: 'button' | 'link' | 'text';
   to?: string;
   onClick?: () => void;
 }
 
 const DropdownItem: React.FC<IDropdownMenuProps> = ({ children, type, to = '', onClick }) => {
-  return (
-    <ul>
-      <li>{type === 'link' ? <a href={to}> {children} </a> : <span onClick={onClick}> {children}</span>}</li>
-    </ul>
-  );
+  const renderItem = () => {
+    switch (type) {
+      case 'link':
+        return <a href={to}> {children} </a>;
+      case 'button':
+        return <button onClick={onClick}> {children}</button>;
+      case 'text':
+        return <span> {children} </span>;
+      default:
+        throw new Error('Unable to render.');
+    }
+  };
+
+  return <li>{renderItem()}</li>;
 };
 
 export { Dropdown, DropdownItem };
