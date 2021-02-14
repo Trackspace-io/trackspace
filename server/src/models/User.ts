@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { DataTypes, Model, Sequelize } from "sequelize";
 import Server from "../Server";
-import { Classroom } from "./Classroom";
+import { Classroom, IClassroomInvitation } from "./Classroom";
 import { Notification } from "./Notification";
 
 export interface IResetPasswordToken {
@@ -103,6 +103,32 @@ export class User extends Model {
    */
   public get role(): "teacher" | "student" | "parent" {
     return this.getDataValue("role");
+  }
+
+  /**
+   * Accepts an invitation to join a classroom.
+   *
+   * @param token Invitation token.
+   *
+   * @returns True on success, false otherwise.
+   */
+  public async acceptStudentInvitation(token: string): Promise<boolean> {
+    if (this.role !== "student") return false;
+
+    try {
+      const data = jwt.verify(token, process.env.CLASSROOM_INVITATION_SECRET);
+      const classroomId = (<IClassroomInvitation>data).classroomId;
+      const classroom = await Classroom.findById(classroomId);
+
+      if (!classroom) return false;
+
+      await classroom.addStudent(this);
+      await classroom.save();
+
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   /**
@@ -209,5 +235,9 @@ export function userAssociations(): void {
   User.hasMany(Notification, {
     foreignKey: "recipientId",
     as: "notifications",
+  });
+
+  User.belongsToMany(Classroom, {
+    through: "Classroom_Student",
   });
 }

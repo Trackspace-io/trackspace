@@ -7,10 +7,12 @@ import { IResetPasswordToken, User } from "../models/User";
 import passport from "passport";
 import teachers from "./teachers";
 import user from "../validators/user";
+import students from "./students";
 
 const users = Router();
 
 users.use("/teachers", teachers);
+users.use("/students", students);
 
 /**
  * Sign-up.

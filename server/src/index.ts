@@ -55,7 +55,10 @@ app.use("/assets", express.static(path.join(__dirname, "../assets")));
 app.get("/l/:id", async (req, res) => {
   const shortLink = await ShortLink.findOne({ where: { id: req.params.id } });
 
-  if (!shortLink || shortLink.expirationDate < new Date()) {
+  if (
+    !shortLink ||
+    (shortLink.expirationDate && shortLink.expirationDate < new Date())
+  ) {
     return res.status(404).send("Not found.");
   }
 

@@ -1,8 +1,17 @@
 import jwt from "jsonwebtoken";
-import { DataTypes, Model, Sequelize } from "sequelize";
+import {
+  BelongsToManyAddAssociationMixin,
+  DataTypes,
+  Model,
+  Sequelize,
+} from "sequelize";
 import { Notification } from "./Notification";
 import { ShortLink } from "./ShortLink";
 import { User } from "./User";
+
+export interface IClassroomInvitation {
+  classroomId: string;
+}
 
 export class Classroom extends Model {
   /**
@@ -72,6 +81,11 @@ export class Classroom extends Model {
   }
 
   /**
+   * Adds a student to this classroom.
+   */
+  public addStudent!: BelongsToManyAddAssociationMixin<User, string>;
+
+  /**
    * Generate a new invitation link.
    *
    * @param shorten   True if the link must be shortened.
@@ -82,8 +96,10 @@ export class Classroom extends Model {
     expiresIn?: number
   ): Promise<string> {
     const secret: string = process.env.CLASSROOM_INVITATION_SECRET;
-    const data = { classroomId: this.id };
-    const token: string = jwt.sign(data, secret, { expiresIn });
+    const data: IClassroomInvitation = { classroomId: this.id };
+    const token: string = jwt.sign(data, secret, {
+      expiresIn: expiresIn ? expiresIn : Number.MAX_SAFE_INTEGER,
+    });
     const clientUrl: string = process.env.CLIENT_URL;
 
     let link = `${clientUrl}/students/classrooms/invitations/accept?t=${token}`;
@@ -125,7 +141,6 @@ export function classroomSchema(sequelize: Sequelize): void {
     {
       sequelize,
       freezeTableName: true,
-      timestamps: false,
       modelName: Classroom.name,
     }
   );
@@ -135,5 +150,10 @@ export function classroomAssociations(): void {
   Classroom.belongsTo(User, {
     foreignKey: "teacherId",
     as: "teacher",
+  });
+
+  Classroom.belongsToMany(User, {
+    through: "Classroom_Student",
+    as: { singular: "Student", plural: "Students" },
   });
 }
