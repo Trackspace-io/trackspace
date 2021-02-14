@@ -27,20 +27,21 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className={style['container']}>
-      <nav className={style['sidebar']}>
+      <div className={style['sidebar']}>
         <Sidebar classrooms={classrooms} />
-      </nav>
-      <main className={style['main']}>
-        <section className={style['content']}>
+      </div>
+      <div className={style['main']}>
+        <div className={style['content']}>
           <Switch>
             <Route exact path="/teacher" component={Home} />
-            <Route path="/teacher/classroom/:id" component={Classroom} />
+            <Route exact path="/teacher/classrooms" component={Home} />
+            <Route path="/teacher/classrooms/:id" component={Classroom} />
           </Switch>
-        </section>
-        <section className={style['menu']}>
+        </div>
+        <div className={style['menu']}>
           <Menu />
-        </section>
-      </main>
+        </div>
+      </div>
     </div>
   );
 };
@@ -63,13 +64,11 @@ const Sidebar: React.FC<ISidebarProps> = ({ classrooms }) => {
         H
       </a>
       <Divider />
-      {classrooms.map((classroom) => {
-        return (
-          <a key={classroom.id} href={`/teacher/classroom/${classroom.id}`} className={style['bubble']}>
-            {classroom.name[0]}
-          </a>
-        );
-      })}
+      {classrooms.map((classroom) => (
+        <a key={classroom.id} href={`/teacher/classrooms/${classroom.id}`} className={style['bubble']}>
+          {classroom.name[0]}
+        </a>
+      ))}
     </div>
   );
 };

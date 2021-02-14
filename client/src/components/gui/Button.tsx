@@ -22,6 +22,7 @@ interface IButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   fullWidth?: boolean;
   type?: 'submit' | 'reset' | 'button';
   float?: 'right' | 'left';
+  onClick?: () => void;
 }
 
 const Button: React.FC<IButtonProps> = ({
@@ -30,11 +31,13 @@ const Button: React.FC<IButtonProps> = ({
   type = 'submit',
   float = 'none',
   fullWidth = false,
+  onClick,
 }) => {
   return (
     <button
       className={cx(style[variant], style['button'], style[`fullWidth-${fullWidth}`], style[`float-${float}`])}
-      type={type}>
+      type={type}
+      onClick={onClick}>
       {children}
     </button>
   );

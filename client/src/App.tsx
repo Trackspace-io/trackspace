@@ -41,16 +41,19 @@ const App: React.FC = () => {
         <ProtectedRoute condition={Boolean(cookie)} exact path="/teacher" redirectPath="/">
           <TeacherDashboard />
         </ProtectedRoute>
-        <ProtectedRoute condition={Boolean(cookie)} path="/teacher/classroom/:id" redirectPath="/">
+        <ProtectedRoute condition={Boolean(cookie)} exact path="/teacher/classrooms" redirectPath="/">
           <TeacherDashboard />
         </ProtectedRoute>
-        <ProtectedRoute condition={Boolean(cookie)} path="/teacher/classroom/:id/students" redirectPath="/">
+        <ProtectedRoute condition={Boolean(cookie)} path="/teacher/classrooms/:id" redirectPath="/">
           <TeacherDashboard />
         </ProtectedRoute>
-        <ProtectedRoute condition={Boolean(cookie)} path="/teacher/classroom/:id/subjects" redirectPath="/">
+        <ProtectedRoute condition={Boolean(cookie)} path="/teacher/classrooms/:id/students" redirectPath="/">
           <TeacherDashboard />
         </ProtectedRoute>
-        <ProtectedRoute condition={Boolean(cookie)} path="/teacher/classroom/:id/terms" redirectPath="/">
+        <ProtectedRoute condition={Boolean(cookie)} path="/teacher/classrooms/:id/subjects" redirectPath="/">
+          <TeacherDashboard />
+        </ProtectedRoute>
+        <ProtectedRoute condition={Boolean(cookie)} path="/teacher/classrooms/:id/terms" redirectPath="/">
           <TeacherDashboard />
         </ProtectedRoute>
       </Switch>
