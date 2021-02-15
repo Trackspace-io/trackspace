@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { body, validationResult } from "express-validator";
+import { body, param, validationResult } from "express-validator";
 import { Classroom } from "../models/Classroom";
 import { User } from "../models/User";
 import shortid from "shortid";
@@ -112,6 +112,78 @@ classrooms.put(
       }
 
       await req.classroom.save();
+      return res.sendStatus(200);
+    } catch (e) {
+      return res.sendStatus(500);
+    }
+  }
+);
+
+/**
+ * Get the list of students enrolled in the classroom.
+ *
+ * @method  GET
+ * @url     /classrooms/:id/students
+ *
+ * @returns 200, 400, 401, 500
+ */
+classrooms.get(
+  "/:classroomId/students",
+  user().isA("teacher").isInClassroom(),
+
+  async (req: Request, res: Response): Promise<Response> => {
+    try {
+      return res.status(200).json(
+        (await req.classroom.getStudents()).map((student) => {
+          return {
+            id: student.id,
+            email: student.email,
+            firstName: student.firstName,
+            lastName: student.lastName,
+          };
+        })
+      );
+    } catch (e) {
+      return res.sendStatus(500);
+    }
+  }
+);
+
+/**
+ * Removes a student from this classroom.
+ *
+ * @method  DELETE
+ * @url     /classrooms/:id/students/:id/remove
+ *
+ * @returns 200, 400, 401, 500
+ */
+classrooms.delete(
+  "/:classroomId/students/:studentId/remove",
+  user().isA("teacher").isInClassroom(),
+
+  param("studentId").custom(async (value: string, { req }) => {
+    const student = await User.findById(value);
+
+    if (!student || student.role !== "student") {
+      return Promise.reject("Invalid student identifier.");
+    }
+
+    const classrooms = await student.getClassrooms();
+    if (!classrooms.find((c) => c.id === req.params.classroomId)) {
+      return Promise.reject("The student is not in the classroom.");
+    }
+  }),
+
+  async (req: Request, res: Response): Promise<Response> => {
+    // Check if the request is valid.
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    // Remove the student.
+    try {
+      await req.classroom.removeStudent(`${req.params.studentId}`);
       return res.sendStatus(200);
     } catch (e) {
       return res.sendStatus(500);
