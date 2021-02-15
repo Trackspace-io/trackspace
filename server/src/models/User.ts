@@ -133,7 +133,7 @@ export class User extends Model {
         locals: {
           firstName: this.firstName,
           assetsUrl: `${serverUrl}/assets`,
-          link: `${clientUrl}/reset?token=${token}`,
+          link: `${clientUrl}/reset-password/confirm?t=${token}`,
           year: new Date().getFullYear(),
         },
       })
