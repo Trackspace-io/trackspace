@@ -1,0 +1,38 @@
+.container {
+  composes: wrapper from '../gui/Container.module.css';
+  position: absolute;
+  height: 72px;
+  background: transparent;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding-top: 16px;
+}
+
+.logo {
+  position: relative;
+  cursor: pointer;
+  width: 200px;
+}
+
+.container-mini {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 8px;
+}
+
+.icon {
+  padding: 8px;
+  transform: scale(1.1);
+  cursor: pointer;
+  color: var(--green-dark);
+  border-radius: 4px;
+}
+
+.icon:hover {
+  box-shadow: 0 1px 5px #ccc;
+}

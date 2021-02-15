@@ -1,38 +1,52 @@
-.App {
-  text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+:root {
+  /**
+    * Main colors
+    */
+  --black: #000000;
+  --black-light: #3d3d3d;
+  --white: #ffffff;
+  --white-dark: #cccccc;
+
+  --purple-light: #ebe1f6;
+  --purple-dark: #b9afc3;
+
+  --yellow-light: #fbf0c3;
+  --yellow-dark: #c8be92;
+
+  --green-light: #cbebb6;
+  --green-dark: #9ab986;
+
+  --blue-light: #b7e5ff;
+  --blue-dark: #93b7cc;
+
+  --mint-light: #ace9e1;
+  --mint-dark: #8ec2ba;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+body {
+  margin: 0;
+  height: 100%;
+  font-size: 18px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
+/* @media (min-width: 576px) {
+		padding-left: 1rem;
+		padding-right: 1rem;
+	}
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
+	@media (min-width: 768px) {
+		padding-left: 2rem;
+		padding-right: 2rem;
+	}
 
-.App-link {
-  color: #61dafb;
-}
+	@media (min-width: 1024px) {
+		padding-left: 4rem;
+		padding-right: 4rem;
+	}
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
+	@media (min-width: 1200px) {
+		padding-left: 8rem;
+		padding-right: 8rem;
+	} */

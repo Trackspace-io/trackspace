@@ -1,0 +1,6 @@
+.divider {
+  display: block;
+  height: 1px;
+  background: #ccc;
+  margin: 16px 0;
+}

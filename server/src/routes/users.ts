@@ -78,7 +78,14 @@ users.post(
     const user: User = <User>req.user;
     res
       .status(200)
-      .json({ redirect: `${process.env.CLIENT_URL}/${user.role}` });
+      .json({ redirect: `${user.role}` });
+  }
+);
+
+users.post(
+  "/test",
+  async (req: Request, res: Response): Promise<void> => {
+    res.redirect("/teacher");
   }
 );
 
@@ -91,7 +98,7 @@ users.get(
   "/sign-out",
   async (req: Request, res: Response): Promise<void> => {
     req.logout();
-    res.status(200).json({ redirect: `${process.env.CLIENT_URL}/` });
+    res.status(200).json({ redirect: `/` });
   }
 );
 

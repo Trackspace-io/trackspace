@@ -1,0 +1,51 @@
+.container {
+  box-sizing: border-box;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0 0 32px;
+}
+
+.share {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 4px 16px;
+  font-size: 16px;
+  font-weight: 300;
+  cursor: pointer;
+}
+
+.share:hover {
+  box-shadow: 0 1px 5px #ccc;
+}
+
+.share svg {
+  color: var(--green-dark);
+  padding: 0px 8px;
+}
+
+.body {
+  display: flex;
+  flex-direction: row;
+}
+
+.sidebar {
+  flex: 0;
+  margin: 32px 0;
+}
+
+.content {
+  flex: 1;
+  padding: 32px 0;
+}
+
+.students-list {
+  height: 150px;
+  overflow-y: scroll;
+  box-shadow: 0 1px 5px #ccc;
+  padding: 8px;
+  margin-bottom: 16px;
+}

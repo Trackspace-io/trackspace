@@ -1,0 +1,42 @@
+.container {
+  composes: wrapper from '../gui/Container.module.css';
+  overflow: hidden;
+  background-color: var(--blue-light);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  min-height: 100vh;
+  padding-top: 96px;
+  padding-bottom: 48px;
+  box-sizing: border-box;
+}
+
+.body {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: var(--white);
+  border-radius: 16px;
+  width: 100%;
+  max-height: 100%;
+  padding: 48px;
+}
+
+.img-container {
+  flex: 1;
+  width: 100%;
+  padding: 0 72px;
+}
+
+.img {
+  display: block;
+  width: 550px;
+  margin: 0 auto;
+}
+
+.content {
+  flex: 1;
+  width: 100%;
+  position: relative;
+  padding: 0 72px;
+}

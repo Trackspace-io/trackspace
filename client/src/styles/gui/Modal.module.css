@@ -1,0 +1,33 @@
+.modal {
+  border: 2px solid rgb(110, 110, 110);
+  background: rgb(255, 255, 255) none repeat scroll 0% 0%;
+  outline: currentcolor none medium;
+  padding: 16px 24px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 5px;
+  user-select: none;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  max-width: 90%;
+  max-height: 80%;
+  overflow: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  min-width: 550px;
+}
+
+.modal::-webkit-scrollbar {
+  display: none;
+}
+
+.modal form input {
+  margin-bottom: 10px;
+}
+
+@media only screen and (max-width: 600px) {
+  .modal {
+    min-width: 70%;
+  }
+}

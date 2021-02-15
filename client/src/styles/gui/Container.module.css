@@ -1,0 +1,27 @@
+@media only screen and (min-width: 576px) {
+  .wrapper {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .wrapper {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+@media only screen and (min-width: 1024px) {
+  .wrapper {
+    padding-left: 4rem;
+    padding-right: 4rem;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  .wrapper {
+    padding-left: 8rem;
+    padding-right: 8rem;
+  }
+}

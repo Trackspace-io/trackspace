@@ -1,0 +1,47 @@
+.link-button {
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 400;
+  border-radius: 24px;
+  padding: 8px 32px;
+  margin: 8px 0;
+  cursor: pointer;
+  letter-spacing: 1px;
+  box-shadow: none;
+  text-decoration: none;
+}
+
+.link-button:focus {
+  outline: 0;
+}
+
+.link-button[disabled] {
+  cursor: not-allowed;
+  border-color: rgb(200, 200, 200);
+  box-shadow: 0 0 0 2px rgb(180, 180, 180);
+}
+
+.primary {
+  border: 1px solid var(--black-light);
+  color: var(--black-light);
+  background: transparent;
+  background-size: 200% 100%;
+  background-position: right bottom;
+  transition: all 0.2s ease-out;
+}
+
+.primary:hover:not([disabled]) {
+  background: var(--green-light);
+  background-position: left bottom;
+  border: 1px solid var(--green-dark);
+  color: var(--black);
+  font-weight: 500;
+}
+
+.secondary {
+  border: none;
+  background: transparent;
+  display: block;
+  font-weight: 300;
+  color: var(--black-light);
+}

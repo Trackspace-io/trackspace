@@ -1,0 +1,26 @@
+.input {
+  padding: 8px 16px;
+  font-size: inherit;
+  border-radius: 4px;
+  border: 1px solid rgb(202, 202, 202);
+  /* border-left-width: 4px; */
+  /* border-left-color: var(--yellow-main); */
+  margin: 8px 0 0px;
+  box-sizing: border-box;
+  width: 100%;
+  background: transparent;
+}
+
+.input:focus {
+  background: var(--yellow-light);
+  outline: none;
+}
+
+.error {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 300px;
+  letter-spacing: 1px;
+  padding: 4px 4px 8px;
+  line-height: 14px;
+}
