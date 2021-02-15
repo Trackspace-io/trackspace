@@ -2,8 +2,8 @@ import Email from "email-templates";
 import { Router } from "express";
 import jsonfile from "jsonfile";
 import { Sequelize } from "sequelize";
-import { initUser } from "./models/User";
-import users from "./routes/users";
+import { registerModels } from "./models";
+import router from "./routes";
 
 class Server {
   /**
@@ -81,10 +81,10 @@ class Server {
     });
 
     // Register the models.
-    initUser(this._sequelize);
+    registerModels(this._sequelize);
 
     // Register the routes.
-    this._router.use("/users", users);
+    this._router.use("/", router);
   }
 
   /**

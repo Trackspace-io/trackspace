@@ -5,9 +5,14 @@ import jwt from "jsonwebtoken";
 import shortid from "shortid";
 import { IResetPasswordToken, User } from "../models/User";
 import passport from "passport";
-import isAuthenticated from "../middlewares/isAuthenticated";
+import teachers from "./teachers";
+import user from "../validators/user";
+import students from "./students";
 
 const users = Router();
+
+users.use("/teachers", teachers);
+users.use("/students", students);
 
 /**
  * Sign-up.
@@ -31,6 +36,18 @@ users.post(
   body("lastName").not().isEmpty().trim().escape(),
   body("password").not().isEmpty(),
   body("role").toLowerCase().isIn(["teacher", "student", "parent"]),
+  body("confirmPassword")
+    .not()
+    .isEmpty()
+    .withMessage("The passwords do not match"),
+
+  body("confirmPassword").custom((value: string, { req }) => {
+    if (req.body.confirmPassword && value !== req.body.password) {
+      return Promise.reject("The passwords do not match");
+    }
+
+    return true;
+  }),
 
   body("email").custom(async (value: string) => {
     if (await User.findByEmail(value)) {
@@ -52,9 +69,9 @@ users.post(
     // Create the user.
     try {
       await User.create(req.body);
-      res.sendStatus(200);
+      return res.sendStatus(200);
     } catch (e) {
-      res.sendStatus(500);
+      return res.sendStatus(500);
     }
   }
 );
@@ -233,7 +250,7 @@ users.post(
  */
 users.get(
   "/profile",
-  isAuthenticated(),
+  user().isAuthenticated(),
   async (req: Request, res: Response): Promise<Response> => {
     const user: User = <User>req.user;
 
@@ -263,7 +280,7 @@ users.get(
  */
 users.put(
   "/profile",
-  isAuthenticated(),
+  user().isAuthenticated(),
 
   body("oldPassword").custom((value: string, { req }) => {
     if (!req.body.password) return true;

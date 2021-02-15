@@ -1,7 +1,15 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { DataTypes, Model, Sequelize } from "sequelize";
+import {
+  BelongsToManyGetAssociationsMixin,
+  DataTypes,
+  HasManyGetAssociationsMixin,
+  Model,
+  Sequelize,
+} from "sequelize";
 import Server from "../Server";
+import { Classroom, IClassroomInvitation } from "./Classroom";
+import { Notification } from "./Notification";
 
 export interface IResetPasswordToken {
   userId: string;
@@ -104,6 +112,49 @@ export class User extends Model {
   }
 
   /**
+   * Accepts an invitation to join a classroom.
+   *
+   * @param token Invitation token.
+   *
+   * @returns True on success, false otherwise.
+   */
+  public async acceptStudentInvitation(token: string): Promise<boolean> {
+    if (this.role !== "student") return false;
+
+    try {
+      const data = jwt.verify(token, process.env.CLASSROOM_INVITATION_SECRET);
+      const classroomId = (<IClassroomInvitation>data).classroomId;
+      const classroom = await Classroom.findById(classroomId);
+
+      if (!classroom) return false;
+
+      await classroom.addStudent(this);
+      await classroom.save();
+
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /**
+   * Returns the list of classrooms associated to the user.
+   *
+   * @returns A list of associated classrooms.
+   */
+  public async getClassrooms(): Promise<Classroom[]> {
+    if (this.role === "teacher") {
+      return await this.getTeacherClassrooms();
+    }
+
+    if (this.role === "student") {
+      return await this.getStudentClassrooms();
+    }
+
+    return [];
+  }
+
+  /**
    * Sends an email containing a link to reset the user's password.
    *
    * @returns True if the email was sent, false otherwise.
@@ -147,9 +198,20 @@ export class User extends Model {
 
     return success;
   }
+
+  /**
+   * If the user is a teacher, returns the classrooms taught by him or her.
+   */
+  private getTeacherClassrooms!: HasManyGetAssociationsMixin<Classroom>;
+
+  /**
+   * If this user is a student, returns the list of classroom in which he or
+   * she is enrolled.
+   */
+  private getStudentClassrooms!: BelongsToManyGetAssociationsMixin<Classroom>;
 }
 
-export function initUser(sequelize: Sequelize): void {
+export function userSchema(sequelize: Sequelize): void {
   User.init(
     {
       id: {
@@ -186,4 +248,21 @@ export function initUser(sequelize: Sequelize): void {
       modelName: User.name,
     }
   );
+}
+
+export function userAssociations(): void {
+  User.hasMany(Classroom, {
+    foreignKey: "teacherId",
+    as: { singular: "TeacherClassroom", plural: "TeacherClassrooms" },
+  });
+
+  User.hasMany(Notification, {
+    foreignKey: "recipientId",
+    as: { singular: "Notification", plural: "Notifications" },
+  });
+
+  User.belongsToMany(Classroom, {
+    through: "Classroom_Student",
+    as: { singular: "StudentClassroom", plural: "StudentClassrooms" },
+  });
 }

@@ -4,6 +4,7 @@ import session from "express-session";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import path from "path";
+import { ShortLink } from "./models/ShortLink";
 import { User } from "./models/User";
 import Server from "./Server";
 
@@ -55,8 +56,22 @@ passport.deserializeUser(function (id: string, done) {
 // Serve the API routes.
 app.use("/api", Server.get().router);
 
-// Serve the public assets files
+// Serve the public assets files.
 app.use("/assets", express.static(path.join(__dirname, "../assets")));
+
+// Short links.
+app.get("/l/:id", async (req, res) => {
+  const shortLink = await ShortLink.findOne({ where: { id: req.params.id } });
+
+  if (
+    !shortLink ||
+    (shortLink.expirationDate && shortLink.expirationDate < new Date())
+  ) {
+    return res.status(404).send("Not found.");
+  }
+
+  return res.redirect(shortLink.fullUrl);
+});
 
 // Serve static files from the React app.
 app.use(express.static(path.join(__dirname, "../../client/build")));
