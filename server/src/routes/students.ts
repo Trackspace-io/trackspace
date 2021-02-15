@@ -72,8 +72,10 @@ students.post(
     }
 
     try {
-      const success = await user.acceptStudentInvitation(`${req.query.t}`);
-      return res.sendStatus(success ? 200 : 400);
+      if (!(await user.acceptStudentInvitation(`${req.query.t}`)))
+        return res.sendStatus(400);
+
+      return res.status(200).json({ redirect: `${process.env.CLIENT_URL}/` });
     } catch (e) {
       return res.sendStatus(500);
     }
@@ -96,7 +98,6 @@ students.post(
  */
 students.post(
   "/invitations/accept/sign-up",
-  passport.authenticate("local"),
 
   query("t").not().isEmpty().withMessage("Missing invitation token."),
 
@@ -104,6 +105,18 @@ students.post(
   body("firstName").not().isEmpty().trim().escape(),
   body("lastName").not().isEmpty().trim().escape(),
   body("password").not().isEmpty(),
+  body("confirmPassword")
+    .not()
+    .isEmpty()
+    .withMessage("The passwords do not match"),
+
+  body("confirmPassword").custom((value: string, { req }) => {
+    if (req.body.confirmPassword && value !== req.body.password) {
+      return Promise.reject("The passwords do not match");
+    }
+
+    return true;
+  }),
 
   body("email").custom(async (value: string) => {
     if (await User.findByEmail(value)) {

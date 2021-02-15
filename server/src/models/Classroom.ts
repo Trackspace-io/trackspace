@@ -138,7 +138,7 @@ export function classroomSchema(sequelize: Sequelize): void {
 export function classroomAssociations(): void {
   Classroom.belongsTo(User, {
     foreignKey: "teacherId",
-    as: "teacher",
+    as: "Teacher",
   });
 
   Classroom.belongsToMany(User, {

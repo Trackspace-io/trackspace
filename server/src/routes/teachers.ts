@@ -34,7 +34,7 @@ teachers.get(
  * Generates an invitation link for a classroom.
  *
  * @method GET
- * @url    /users/teachers/classrooms/:id/invitations/link
+ * @url    /users/teachers/classrooms/:id/invitations/link?expiresIn={expiresIn}
  *
  * @param query.expiresIn {int} Number of seconds after which the link will
  *                         expire. If empty, the link will never expire.
@@ -50,7 +50,7 @@ teachers.get(
   query("expiresIn")
     .optional()
     .isInt()
-    .withMessage("ExpiresAfter must be a duration in seconds."),
+    .withMessage("ExpiresIn must be a duration in seconds."),
 
   async (req: Request, res: Response): Promise<Response> => {
     // Check if the request is valid.
@@ -80,7 +80,7 @@ teachers.get(
  * @method POST
  * @url    /users/teachers/classrooms/:id/invitations/send
  *
- * @param req.studentId {string} Identifier of the student to invite.
+ * @param req.studentEmail {string} Email address of the student to invite.
  *
  * @returns 200, 400, 401, 404, 500
  */
@@ -88,11 +88,11 @@ teachers.post(
   "/classrooms/:classroomId/invitations/send",
   user().isA("teacher").isInClassroom(),
 
-  body("studentId").not().isEmpty(),
-  body("studentId").custom(async (value) => {
+  body("studentEmail").not().isEmpty(),
+  body("studentEmail").custom(async (value) => {
     if (!value) return true;
 
-    const student = await User.findById(value);
+    const student = await User.findByEmail(value);
     if (!student || student.role != "student") {
       return Promise.reject("Invalid student identifier.");
     }
@@ -109,7 +109,7 @@ teachers.post(
 
     // Send the invitation.
     try {
-      const student = await User.findById(req.body.studentId);
+      const student = await User.findByEmail(req.body.studentEmail);
       await req.classroom.inviteStudent(student);
       return res.sendStatus(200);
     } catch (e) {

@@ -36,6 +36,18 @@ users.post(
   body("lastName").not().isEmpty().trim().escape(),
   body("password").not().isEmpty(),
   body("role").toLowerCase().isIn(["teacher", "student", "parent"]),
+  body("confirmPassword")
+    .not()
+    .isEmpty()
+    .withMessage("The passwords do not match"),
+
+  body("confirmPassword").custom((value: string, { req }) => {
+    if (req.body.confirmPassword && value !== req.body.password) {
+      return Promise.reject("The passwords do not match");
+    }
+
+    return true;
+  }),
 
   body("email").custom(async (value: string) => {
     if (await User.findByEmail(value)) {
