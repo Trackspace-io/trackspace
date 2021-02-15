@@ -75,7 +75,7 @@ students.post(
       if (!(await user.acceptStudentInvitation(`${req.query.t}`)))
         return res.sendStatus(400);
 
-      return res.status(200).json({ redirect: `${process.env.CLIENT_URL}/` });
+      return res.status(200).json({ redirect: `${user.role}` });
     } catch (e) {
       return res.sendStatus(500);
     }

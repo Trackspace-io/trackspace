@@ -1,6 +1,8 @@
 import jwt from "jsonwebtoken";
 import {
   BelongsToManyAddAssociationMixin,
+  BelongsToManyGetAssociationsMixin,
+  BelongsToManyRemoveAssociationMixin,
   DataTypes,
   Model,
   Sequelize,
@@ -73,6 +75,16 @@ export class Classroom extends Model {
    * Adds a student to this classroom.
    */
   public addStudent!: BelongsToManyAddAssociationMixin<User, string>;
+
+  /**
+   * Gets the students of the classroom.
+   */
+  public getStudents!: BelongsToManyGetAssociationsMixin<User>;
+
+  /**
+   * Removes a student from this classroom;
+   */
+  public removeStudent!: BelongsToManyRemoveAssociationMixin<User, string>;
 
   /**
    * Generate a new invitation link.
