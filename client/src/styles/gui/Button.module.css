@@ -7,6 +7,7 @@
   cursor: pointer;
   letter-spacing: 1px;
   box-shadow: none;
+  display: inline;
 }
 
 .button:focus {
@@ -38,8 +39,8 @@
 
 .secondary {
   border: none;
-  border-left: 1px solid var(--yellow-dark);
   background: transparent;
+  letter-spacing: 1px;
 }
 
 .xs {

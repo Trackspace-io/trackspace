@@ -1,17 +1,19 @@
+import Button from 'components/gui/Button';
 import Divider from 'components/gui/Divider';
+import Form from 'components/gui/Form';
+import { Input, useInput } from 'components/gui/Input';
+import Modal from 'components/gui/Modal';
 import { Sidebar, SidebarItem } from 'components/gui/Sidebar';
 import Typography from 'components/gui/Typography';
 import useClassroom from 'controllers/useClassroom';
 import * as React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { IClassroom, IClassroomCreate, IClassroomRemove, IClassroomUpdate } from 'types';
-import style from '../../styles/teacher/Home.module.css';
-import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
+
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Button from 'components/gui/Button';
-import Modal from 'components/gui/Modal';
-import Form from 'components/gui/Form';
-import { Input, useInput } from 'components/gui/Input';
+
+import style from '../../styles/teacher/Home.module.css';
 
 const Home: React.FC = () => {
   return (

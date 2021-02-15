@@ -96,9 +96,7 @@ const useUser = (): IUserController => {
       UserAPI.sendResetPassword(input)
         .then((response) => {
           const { data } = response;
-          console.log('response', data);
 
-          history.replace('/reset-password/confirm');
           resolve(data);
         })
         .catch((e) => {
