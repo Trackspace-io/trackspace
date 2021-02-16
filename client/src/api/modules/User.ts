@@ -114,6 +114,6 @@ export const sendResetPassword = async (body: IUserSendResetPassword): Promise<a
  */
 export const confirmResetPassword = async (body: IUserConfirmResetPassword): Promise<any> => {
   const response = await axios.post(`${_apiUrl}/api/users/reset/confirm`, body, { withCredentials: true });
-
+  console.log('response', response);
   return response;
 };

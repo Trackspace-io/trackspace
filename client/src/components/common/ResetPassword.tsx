@@ -1,4 +1,3 @@
-import Button from 'components/gui/Button';
 import Form from 'components/gui/Form';
 import { Input, useInput } from 'components/gui/Input';
 import Typography from 'components/gui/Typography';
@@ -7,6 +6,8 @@ import * as React from 'react';
 
 import ResetPasswordSrc from '../../images/reset-password.svg';
 import style from '../../styles/common/ResetPassword.module.css';
+import { useHistory } from 'react-router-dom';
+import qs from 'query-string';
 
 /**
  * Reset password page
@@ -16,7 +17,7 @@ import style from '../../styles/common/ResetPassword.module.css';
  * @returns ReactNode
  */
 export const ResetPasswordSend: React.FC = () => {
-  const { sendResetPassword } = useUser();
+  const User = useUser();
 
   const { input, handleInputChange } = useInput({ email: '' });
   const [emailSent, setEmailSent] = React.useState(false);
@@ -24,9 +25,8 @@ export const ResetPasswordSend: React.FC = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    sendResetPassword(input)
+    User.sendResetPassword(input)
       .then((res) => {
-        console.log('res', res);
         if (res) {
           setEmailSent(true);
         }
@@ -77,7 +77,24 @@ export const ResetPasswordSend: React.FC = () => {
  * @returns ReactNode
  */
 export const ResetPasswordConfirm: React.FC = () => {
+  const User = useUser();
+  const history = useHistory();
+
+  const { t: token } = qs.parse(history.location.search);
+
   const { input, handleInputChange } = useInput({ password: '', confirmPassword: '' });
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const { password, confirmPassword } = input;
+
+    User.confirmResetPassword({
+      token,
+      password,
+      confirmPassword,
+    });
+  };
 
   return (
     <div className={style['container']}>
@@ -88,26 +105,28 @@ export const ResetPasswordConfirm: React.FC = () => {
         <div className={style['content']}>
           <Typography variant="title">Choose a new password</Typography>
           <br />
-          <form>
-            <Input
-              name="password"
-              type="password"
-              label="Password"
-              value={input.password}
-              onChange={handleInputChange}
-            />
-            <Input
-              name="confirmPassword"
-              type="password"
-              label="Confirm Password"
-              value={input.confirmPassword}
-              onChange={handleInputChange}
-            />
-            <br />
-            <Button variant="primary" fullWidth>
-              Confirm
-            </Button>
-          </form>
+          <Form
+            handleSubmit={handleSubmit}
+            action="Submit"
+            render={() => (
+              <React.Fragment>
+                <Input
+                  name="password"
+                  type="password"
+                  label="Password"
+                  value={input.password}
+                  onChange={handleInputChange}
+                />
+                <Input
+                  name="confirmPassword"
+                  type="password"
+                  label="Confirm Password"
+                  value={input.confirmPassword}
+                  onChange={handleInputChange}
+                />
+              </React.Fragment>
+            )}
+          />
         </div>
       </div>
     </div>

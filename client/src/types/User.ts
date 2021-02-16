@@ -25,7 +25,9 @@ export interface IUserSendResetPassword {
 }
 
 export interface IUserConfirmResetPassword {
-  token: string;
+  token: string | string[] | null;
+  password: string;
+  confirmPassword: string;
 }
 export interface IUserUpdate {
   email?: string;

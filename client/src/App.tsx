@@ -1,5 +1,11 @@
 import './App.css';
 
+import Error from 'components/common/Error';
+import Profile from 'components/common/Profile';
+import Messages from 'components/gui/Messages';
+import TeacherDashboard from 'components/teacher/Dashboard';
+import useUser from 'controllers/useUser';
+import Cookies from 'js-cookie';
 import * as React from 'react';
 import { BrowserRouter as Router, Redirect, Route, RouteProps, Switch } from 'react-router-dom';
 
@@ -7,11 +13,6 @@ import { ResetPasswordConfirm, ResetPasswordSend } from './components/common/Res
 import SignIn from './components/common/SignIn';
 import SignUp from './components/common/SignUp';
 import { Navbar } from './components/gui/Navbar';
-import Cookies from 'js-cookie';
-import Profile from 'components/common/Profile';
-import useUser from 'controllers/useUser';
-import Messages from 'components/gui/Messages';
-import TeacherDashboard from 'components/teacher/Dashboard';
 
 const App: React.FC = () => {
   const cookie = Cookies.get('connect.sid') || '';
@@ -56,6 +57,8 @@ const App: React.FC = () => {
         <ProtectedRoute condition={Boolean(cookie)} path="/teacher/classrooms/:id/terms" redirectPath="/">
           <TeacherDashboard />
         </ProtectedRoute>
+
+        <Route path="*" component={Error} />
       </Switch>
       <Messages />
     </Router>
