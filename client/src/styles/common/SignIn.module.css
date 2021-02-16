@@ -20,6 +20,7 @@
   width: 100%;
   min-height: 100%;
   padding: 32px 48px;
+  box-shadow: 0 1px 5px #ccc;
 }
 
 .img-container {

@@ -3,7 +3,7 @@ import { UserContext } from 'contexts/userContext';
 import Cookies from 'js-cookie';
 import * as React from 'react';
 import { useHistory } from 'react-router-dom';
-import { IUser, IUserSignIn, IUserSignUp, IUserUpdate, IUserSendResetPassword } from 'types';
+import { IUser, IUserSignIn, IUserSignUp, IUserUpdate, IUserSendResetPassword, IUserConfirmResetPassword } from 'types';
 import useMessage from './useMessage';
 
 interface IUserController {
@@ -15,7 +15,7 @@ interface IUserController {
   authCheck: (cookie: string) => void;
   logout: () => void;
   sendResetPassword: (input: IUserSendResetPassword) => Promise<any>;
-
+  confirmResetPassword: (input: IUserConfirmResetPassword) => Promise<any>;
   updateUser: (input: IUserUpdate) => Promise<any>;
 }
 
@@ -112,6 +112,28 @@ const useUser = (): IUserController => {
     });
   };
 
+  const confirmResetPassword = async (input: IUserConfirmResetPassword) => {
+    UserAPI.confirmResetPassword(input)
+      .then((response) => {
+        const { data } = response;
+
+        history.replace(data.redirect);
+
+        update({
+          type: 'success',
+          text: 'Password reset',
+        });
+      })
+      .catch((e) => {
+        const { msg } = e.response.data.errors[0];
+
+        update({
+          type: 'error',
+          text: `${msg}`,
+        });
+      });
+  };
+
   const updateUser = (input: IUserUpdate) => {
     return new Promise((resolve) => {
       UserAPI.updateUser(input)
@@ -142,11 +164,6 @@ const useUser = (): IUserController => {
 
       Cookies.remove('connect.sid');
       history.go(data.redirect);
-
-      update({
-        type: 'success',
-        text: `Goodbye!`,
-      });
     });
   };
 
@@ -161,6 +178,7 @@ const useUser = (): IUserController => {
     authCheck: authCheck,
     logout: logout,
     sendResetPassword: sendResetPassword,
+    confirmResetPassword: confirmResetPassword,
 
     updateUser: updateUser,
   };

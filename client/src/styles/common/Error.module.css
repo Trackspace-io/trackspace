@@ -1,7 +1,7 @@
 .container {
   composes: wrapper from '../gui/Container.module.css';
   overflow: hidden;
-  background-color: var(--blue-light);
+  background-color: var(--yellow-light);
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -13,31 +13,22 @@
 
 .body {
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
   background: var(--white);
   border-radius: 16px;
   width: 100%;
-  max-height: 100%;
-  padding: 48px;
+  min-height: 100%;
   box-shadow: 0 1px 5px #ccc;
 }
 
 .img-container {
-  flex: 1;
   width: 100%;
-  padding: 0 72px;
 }
 
 .img {
   display: block;
-  width: 550px;
+  width: 350px;
   margin: 0 auto;
-}
-
-.content {
-  flex: 1;
-  width: 100%;
-  position: relative;
-  padding: 0 72px;
 }
