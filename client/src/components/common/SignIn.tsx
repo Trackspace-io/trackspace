@@ -22,22 +22,24 @@ interface ISignInProps extends RouteComponentProps {
 }
 
 const SignIn: React.FC<ISignInProps> = ({ location }) => {
-  const { login } = useUser();
-  const { update } = useMessage();
+  // Controllers
+  const User = useUser();
+  const Messages = useMessage();
 
-  const { input, handleInputChange } = useInput({ username: '', password: '' });
+  // Inputs
+  const Inputs = useInput({ username: '', password: '' });
 
   // Verify if the user was redirected to the login page forcefully.
   React.useEffect(() => {
     if (location.state?.error) {
-      update({ type: 'error', text: `${location.state.error}` });
+      Messages.add({ type: 'error', text: `${location.state.error}` });
     }
   }, []);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    login(input);
+    User.login(Inputs.values);
   };
 
   return (
@@ -64,16 +66,16 @@ const SignIn: React.FC<ISignInProps> = ({ location }) => {
                   name="username"
                   type="email"
                   label="Email"
-                  value={input.username}
+                  value={Inputs.values.username}
                   placeholder="johndoe@email.com"
-                  onChange={handleInputChange}
+                  onChange={Inputs.handleInputChange}
                 />
                 <Input
                   name="password"
                   type="password"
                   label="Password"
-                  value={input.password}
-                  onChange={handleInputChange}
+                  value={Inputs.values.password}
+                  onChange={Inputs.handleInputChange}
                 />
               </React.Fragment>
             )}

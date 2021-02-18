@@ -41,7 +41,7 @@ const Home: React.FC = () => {
 };
 
 const Classrooms: React.FC = () => {
-  const Classroom = useClassroom();
+  const Classrooms = useClassroom();
 
   const [action, setAction] = React.useState('');
   const [classroom, setClassroom] = React.useState<IClassroom | undefined>(undefined);
@@ -58,7 +58,7 @@ const Classrooms: React.FC = () => {
       <div className={style['classrooms-body']}>
         <Typography variant="info"> List of classrooms </Typography>
         <div className={style['classrooms-list']}>
-          {Classroom.classrooms.map((classroom) => (
+          {Classrooms.list.map((classroom) => (
             <div key={classroom.id} className={style['classroom-item']}>
               {classroom.name}
               <div className={style['classroom-actions']}>
@@ -84,21 +84,21 @@ const Classrooms: React.FC = () => {
       <ClassroomCreate
         isOpen={Boolean(action && action === 'create')}
         onClose={() => setAction('')}
-        create={Classroom.create}
+        create={Classrooms.create}
       />
 
       <ClassroomUpdate
         isOpen={Boolean(action && action === 'update')}
         onClose={() => setAction('')}
         classroom={classroom}
-        update={Classroom.update}
+        update={Classrooms.update}
       />
 
       <ClassroomRemove
         isOpen={Boolean(action && action === 'remove')}
         onClose={() => setAction('')}
         classroom={classroom}
-        remove={Classroom.remove}
+        remove={Classrooms.remove}
       />
     </div>
   );
@@ -111,10 +111,10 @@ interface IClassroomCreateProps {
 }
 
 const ClassroomCreate: React.FC<IClassroomCreateProps> = ({ isOpen, onClose, create }) => {
-  const { input, handleInputChange } = useInput({ name: '' });
+  const Inputs = useInput({ name: '' });
 
   const handleSubmit = () => {
-    create(input);
+    create(Inputs.values);
   };
 
   return (
@@ -127,7 +127,13 @@ const ClassroomCreate: React.FC<IClassroomCreateProps> = ({ isOpen, onClose, cre
           handleSubmit={handleSubmit}
           render={() => (
             <React.Fragment>
-              <Input name="username" type="text" label="Name" value={input.name} onChange={handleInputChange} />
+              <Input
+                name="username"
+                type="text"
+                label="Name"
+                value={Inputs.values.name}
+                onChange={Inputs.handleInputChange}
+              />
             </React.Fragment>
           )}
         />
@@ -144,14 +150,14 @@ interface IClassroomUpdateProps {
 }
 
 const ClassroomUpdate: React.FC<IClassroomUpdateProps> = ({ isOpen, onClose, classroom, update }) => {
-  const { input, setInput, handleInputChange } = useInput({ name: '' });
+  const Inputs = useInput({ name: '' });
 
   React.useEffect(() => {
-    classroom && setInput({ ...input, name: classroom.name });
+    classroom && Inputs.setValues({ ...Inputs.values, name: classroom.name });
   });
 
   const handleSubmit = () => {
-    update(input);
+    update(Inputs.values);
   };
 
   return (
@@ -164,7 +170,13 @@ const ClassroomUpdate: React.FC<IClassroomUpdateProps> = ({ isOpen, onClose, cla
           handleSubmit={handleSubmit}
           render={() => (
             <React.Fragment>
-              <Input name="username" type="text" label="Name" value={input.name} onChange={handleInputChange} />
+              <Input
+                name="username"
+                type="text"
+                label="Name"
+                value={Inputs.values.name}
+                onChange={Inputs.handleInputChange}
+              />
             </React.Fragment>
           )}
         />
@@ -181,10 +193,10 @@ interface IClassroomRemoveProps {
 }
 
 const ClassroomRemove: React.FC<IClassroomRemoveProps> = ({ isOpen, onClose, classroom, remove }) => {
-  const { input, handleInputChange } = useInput({ text: '' });
+  const Inputs = useInput({ text: '' });
 
   const handleSubmit = () => {
-    remove(input);
+    remove(Inputs.values);
   };
 
   return (
@@ -203,8 +215,8 @@ const ClassroomRemove: React.FC<IClassroomRemoveProps> = ({ isOpen, onClose, cla
                 name="text"
                 type="text"
                 label="I would like to remove this classroom."
-                value={input.text}
-                onChange={handleInputChange}
+                value={Inputs.values.text}
+                onChange={Inputs.handleInputChange}
               />
             </React.Fragment>
           )}
