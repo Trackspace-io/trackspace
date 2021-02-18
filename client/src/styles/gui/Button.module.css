@@ -1,3 +1,7 @@
+.container {
+  display: flex;
+}
+
 .button {
   font-family: inherit;
   font-size: 16px;
@@ -63,10 +67,14 @@
   width: 100%;
 }
 
-.float-left {
-  float: left;
+.align-start {
+  justify-content: flex-start;
 }
 
-.float-right {
-  float: right;
+.align-center {
+  justify-content: center;
+}
+
+.align-end {
+  justify-content: flex-end;
 }

@@ -45,3 +45,18 @@
   font-weight: 300;
   color: var(--black-light);
 }
+
+.align-start {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.align-center {
+  display: flex;
+  justify-content: center;
+}
+
+.align-end {
+  display: flex;
+  justify-content: flex-end;
+}
