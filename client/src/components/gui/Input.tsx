@@ -67,17 +67,17 @@ const Input: React.FC<IInputProps> = ({ name, label, type, disabled, placeholder
  * }} The use helpers.
  */
 const useInput = (initialState: any) => {
-  const [input, setInput] = React.useState(initialState);
+  const [values, setValues] = React.useState(initialState);
   const [errors, setErrors] = React.useState(initialState);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInput({
-      ...input,
+    setValues({
+      ...values,
       [e.target.name]: e.target.value,
     });
   };
 
-  return { input, setInput, errors, setErrors, handleInputChange };
+  return { values, setValues, errors, setErrors, handleInputChange };
 };
 
 // /**

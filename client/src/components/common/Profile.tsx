@@ -15,7 +15,7 @@ const Profile: React.FC = () => {
   const [selectedTab, setSelectedTab] = React.useState('profile');
 
   // Input's fields
-  const { input, setInput, handleInputChange } = useInput({
+  const Inputs = useInput({
     email: '',
     firstName: '',
     lastName: '',
@@ -26,7 +26,7 @@ const Profile: React.FC = () => {
   });
 
   React.useEffect(() => {
-    setInput({
+    Inputs.setValues({
       email: User.current.email,
       firstName: User.current.firstName,
       lastName: User.current.lastName,
@@ -36,14 +36,14 @@ const Profile: React.FC = () => {
 
   const handleProfileSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    User.updateUser(input);
+    User.updateUser(Inputs.values);
   };
 
   const handleSecuritySubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    User.updateUser(input).then(() => {
-      setInput({
+    User.updateUser(Inputs.values).then(() => {
+      Inputs.setValues({
         password: '',
         oldPassword: '',
         confirmPassword: '',
@@ -68,23 +68,23 @@ const Profile: React.FC = () => {
                     name="email"
                     type="email"
                     label="Email"
-                    value={input.email}
+                    value={Inputs.values.email}
                     placeholder="johndoe@email.com"
-                    onChange={handleInputChange}
+                    onChange={Inputs.handleInputChange}
                   />
                   <Input
                     name="firstName"
                     type="text"
                     label="First name"
-                    value={input.firstName}
-                    onChange={handleInputChange}
+                    value={Inputs.values.firstName}
+                    onChange={Inputs.handleInputChange}
                   />
                   <Input
                     name="lastName"
                     type="text"
                     label="Last name"
-                    value={input.lastName}
-                    onChange={handleInputChange}
+                    value={Inputs.values.lastName}
+                    onChange={Inputs.handleInputChange}
                   />
                 </React.Fragment>
               )}
@@ -106,22 +106,22 @@ const Profile: React.FC = () => {
                     name="oldPassword"
                     type="password"
                     label="Old password"
-                    value={input.oldPassword}
-                    onChange={handleInputChange}
+                    value={Inputs.values.oldPassword}
+                    onChange={Inputs.handleInputChange}
                   />
                   <Input
                     name="password"
                     type="password"
                     label="New password"
-                    value={input.password}
-                    onChange={handleInputChange}
+                    value={Inputs.values.password}
+                    onChange={Inputs.handleInputChange}
                   />
                   <Input
                     name="confirmPassword"
                     type="password"
                     label="Confirm new password"
-                    value={input.confirmPassword}
-                    onChange={handleInputChange}
+                    value={Inputs.values.confirmPassword}
+                    onChange={Inputs.handleInputChange}
                   />
                 </React.Fragment>
               )}

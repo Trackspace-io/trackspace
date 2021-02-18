@@ -18,7 +18,7 @@ import style from '../../styles/common/SignUp.module.css';
 const SignUp: React.FC = () => {
   const User = useUser();
 
-  const { input, handleInputChange } = useInput({
+  const Inputs = useInput({
     email: '',
     lastName: '',
     firstName: '',
@@ -31,7 +31,7 @@ const SignUp: React.FC = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const fields = { ...input, role: select.role };
+    const fields = { ...Inputs.values, role: select.role };
     User.register(fields);
   };
 
@@ -65,36 +65,36 @@ const SignUp: React.FC = () => {
                   name="email"
                   type="email"
                   label="Email address"
-                  value={input.email}
-                  onChange={handleInputChange}
+                  value={Inputs.values.email}
+                  onChange={Inputs.handleInputChange}
                 />
                 <Input
                   name="lastName"
                   type="text"
                   label="Last name"
-                  value={input.lastName}
-                  onChange={handleInputChange}
+                  value={Inputs.values.lastName}
+                  onChange={Inputs.handleInputChange}
                 />
                 <Input
                   name="firstName"
                   type="text"
                   label="First name"
-                  value={input.firstName}
-                  onChange={handleInputChange}
+                  value={Inputs.values.firstName}
+                  onChange={Inputs.handleInputChange}
                 />
                 <Input
                   name="password"
                   type="password"
                   label="Password"
-                  value={input.password}
-                  onChange={handleInputChange}
+                  value={Inputs.values.password}
+                  onChange={Inputs.handleInputChange}
                 />
                 <Input
                   name="confirmPassword"
                   type="password"
                   label="Confirm password"
-                  value={input.confirmPassword}
-                  onChange={handleInputChange}
+                  value={Inputs.values.confirmPassword}
+                  onChange={Inputs.handleInputChange}
                 />
               </React.Fragment>
             )}

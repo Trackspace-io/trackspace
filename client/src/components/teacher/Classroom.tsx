@@ -60,7 +60,7 @@ interface IShareLinkProps {
 }
 
 const ShareLink: React.FC<IShareLinkProps> = ({ isOpen, onClose }) => {
-  const { input } = useInput({ link: '', search: '' });
+  const Inputs = useInput({ link: '', search: '' });
 
   return (
     <div>
@@ -69,12 +69,12 @@ const ShareLink: React.FC<IShareLinkProps> = ({ isOpen, onClose }) => {
         <br />
         <div className={style['search-container']}>
           <Typography variant="info"> Search </Typography>
-          <Input name="search" type="text" value={input.search} />
+          <Input name="search" type="text" value={Inputs.values.search} />
         </div>
         <div className={style['students-list']}>Student name</div>
         <div className={style['link-container']}>
           <Typography variant="caption"> Or, send the following link to your students </Typography>
-          <Input name="link" type="text" value={input.link} disabled />
+          <Input name="link" type="text" value={Inputs.values.link} disabled />
         </div>
       </Modal>
     </div>
