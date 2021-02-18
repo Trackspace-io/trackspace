@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { IClassroom } from 'types';
+console.log('context');
 
 /* Interface */
 
@@ -14,7 +15,7 @@ export interface ClassroomState {
 /**
  * Dispatchers. Actions that update the state.
  */
-export type ClassroomAction = { type: 'GET_CLASSROOM'; payload: IClassroom[] };
+export type ClassroomAction = { type: 'GET'; payload: IClassroom[] };
 
 interface IClassroomContext {
   state: ClassroomState;
@@ -25,18 +26,7 @@ interface IClassroomContext {
  * Initial state.
  */
 const initialState: ClassroomState = {
-  list: [
-    {
-      id: 'c1',
-      name: 'classroom1',
-      teacherId: 't1',
-    },
-    {
-      id: 'c2',
-      name: 'classroom2',
-      teacherId: 't2',
-    },
-  ],
+  list: [],
 };
 
 /**
@@ -49,7 +39,7 @@ const initialState: ClassroomState = {
  */
 const classroomReducer = (state: ClassroomState, action: ClassroomAction): ClassroomState => {
   switch (action.type) {
-    case 'GET_CLASSROOM':
+    case 'GET':
       return { ...state, list: action.payload };
 
     default:

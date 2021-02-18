@@ -15,7 +15,7 @@ import { IClassroomCreate, IClassroomRemove, IClassroomUpdate } from 'types';
  * }[]>} response.data.
  */
 export const get = async (): Promise<any> => {
-  return await axios.get(`${_apiUrl}/api/classrooms/get`, { withCredentials: true });
+  return await axios.get(`${_apiUrl}/api/users/teachers/classrooms`, { withCredentials: true });
 };
 
 /**
