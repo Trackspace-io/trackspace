@@ -9,7 +9,7 @@ import style from '../../styles/common/Profile.module.css';
 
 const Profile: React.FC = () => {
   // Get context
-  const { user, updateUser } = useUser();
+  const User = useUser();
 
   // Internal state
   const [selectedTab, setSelectedTab] = React.useState('profile');
@@ -27,22 +27,22 @@ const Profile: React.FC = () => {
 
   React.useEffect(() => {
     setInput({
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      role: user.role,
+      email: User.current.email,
+      firstName: User.current.firstName,
+      lastName: User.current.lastName,
+      role: User.current.role,
     });
-  }, [user]);
+  }, [User.current]);
 
   const handleProfileSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    updateUser(input);
+    User.updateUser(input);
   };
 
   const handleSecuritySubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    updateUser(input).then(() => {
+    User.updateUser(input).then(() => {
       setInput({
         password: '',
         oldPassword: '',
@@ -135,9 +135,9 @@ const Profile: React.FC = () => {
     <div className={style['container']}>
       <div className={style['header']}>
         <Typography variant="subtitle">
-          {user?.firstName} {user?.lastName}
+          {User.current?.firstName} {User.current?.lastName}
         </Typography>
-        <Typography variant="info">{user?.role}</Typography>
+        <Typography variant="info">{User.current?.role}</Typography>
         <br />
         <div className={style['tab']} onClick={() => setSelectedTab('profile')}>
           Profile

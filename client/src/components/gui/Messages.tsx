@@ -1,22 +1,22 @@
 import cx from 'classnames';
 import useMessage from 'controllers/useMessage';
 import * as React from 'react';
+import { IMessage } from 'types';
 
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import style from '../../styles/gui/Messages.module.css';
-import { IMessage } from 'types';
 
 /**
  * Component that displays the global messages.
  */
 const Messages: React.FC = () => {
-  const { messages, close } = useMessage();
+  const Messages = useMessage();
 
   return (
     <div className={style['container']}>
-      {messages.map((m, i) => (
+      {Messages.list.map((m, i) => (
         <Message key={i} message={m} close={close} />
       ))}
     </div>

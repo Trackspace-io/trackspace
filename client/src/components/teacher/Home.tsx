@@ -41,7 +41,7 @@ const Home: React.FC = () => {
 };
 
 const Classrooms: React.FC = () => {
-  const Classroom = useClassroom();
+  const Classrooms = useClassroom();
 
   const [action, setAction] = React.useState('');
   const [classroom, setClassroom] = React.useState<IClassroom | undefined>(undefined);
@@ -58,7 +58,7 @@ const Classrooms: React.FC = () => {
       <div className={style['classrooms-body']}>
         <Typography variant="info"> List of classrooms </Typography>
         <div className={style['classrooms-list']}>
-          {Classroom.classrooms.map((classroom) => (
+          {Classrooms.list.map((classroom) => (
             <div key={classroom.id} className={style['classroom-item']}>
               {classroom.name}
               <div className={style['classroom-actions']}>
@@ -84,21 +84,21 @@ const Classrooms: React.FC = () => {
       <ClassroomCreate
         isOpen={Boolean(action && action === 'create')}
         onClose={() => setAction('')}
-        create={Classroom.create}
+        create={Classrooms.create}
       />
 
       <ClassroomUpdate
         isOpen={Boolean(action && action === 'update')}
         onClose={() => setAction('')}
         classroom={classroom}
-        update={Classroom.update}
+        update={Classrooms.update}
       />
 
       <ClassroomRemove
         isOpen={Boolean(action && action === 'remove')}
         onClose={() => setAction('')}
         classroom={classroom}
-        remove={Classroom.remove}
+        remove={Classrooms.remove}
       />
     </div>
   );

@@ -1,9 +1,9 @@
-import { UserAPI } from 'api';
 import Form from 'components/gui/Form';
 import { Input, useInput } from 'components/gui/Input';
 import LinkButton from 'components/gui/LinkButton';
 import { Select, useSelect } from 'components/gui/Select';
 import Typography from 'components/gui/Typography';
+import useUser from 'controllers/useUser';
 import * as React from 'react';
 
 import SignUpSrc from '../../images/sign-up.svg';
@@ -16,7 +16,7 @@ import style from '../../styles/common/SignUp.module.css';
  * @returns ReactNode
  */
 const SignUp: React.FC = () => {
-  //  const [register, setRegister] = React.useState<SignUp>(createEmptyLogin());
+  const User = useUser();
 
   const { input, handleInputChange } = useInput({
     email: '',
@@ -32,7 +32,7 @@ const SignUp: React.FC = () => {
     e.preventDefault();
 
     const fields = { ...input, role: select.role };
-    UserAPI.register(fields);
+    User.register(fields);
   };
 
   return (

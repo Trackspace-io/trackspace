@@ -5,7 +5,7 @@ import { ClassroomAPI } from 'api';
 import useMessage from './useMessage';
 
 interface IClassroomController {
-  classrooms: IClassroom[];
+  list: IClassroom[];
   create: (input: IClassroomCreate) => void;
   update: (input: IClassroomUpdate) => void;
   remove: (input: IClassroomRemove) => void;
@@ -15,11 +15,14 @@ const useClassroom = (): IClassroomController => {
   const context = React.useContext(ClassroomContext.Ctx);
 
   // Notification
-  const Message = useMessage();
+  const Messages = useMessage();
 
   if (context === undefined) {
     throw new Error('MessageContext  must be used within a Provider');
   }
+
+  // States
+  const { list } = context.state;
 
   // Fetch the list of classrooms.
   React.useEffect(() => {
@@ -45,7 +48,7 @@ const useClassroom = (): IClassroomController => {
       .then(() => {
         get();
 
-        Message.update({
+        Messages.add({
           type: 'success',
           text: `Classroom added.`,
         });
@@ -53,7 +56,7 @@ const useClassroom = (): IClassroomController => {
       .catch((e) => {
         const { msg } = e.response.data.errors[0];
 
-        Message.update({
+        Messages.add({
           type: 'error',
           text: `${msg}`,
         });
@@ -73,7 +76,7 @@ const useClassroom = (): IClassroomController => {
       .then(() => {
         get();
 
-        Message.update({
+        Messages.add({
           type: 'success',
           text: `Classroom's name updated.`,
         });
@@ -81,7 +84,7 @@ const useClassroom = (): IClassroomController => {
       .catch((e) => {
         const { msg } = e.response.data.errors[0];
 
-        Message.update({
+        Messages.add({
           type: 'error',
           text: `${msg}`,
         });
@@ -100,7 +103,7 @@ const useClassroom = (): IClassroomController => {
       .then(() => {
         get();
 
-        Message.update({
+        Messages.add({
           type: 'success',
           text: `Classroom removed.`,
         });
@@ -108,18 +111,18 @@ const useClassroom = (): IClassroomController => {
       .catch((e) => {
         const { msg } = e.response.data.errors[0];
 
-        Message.update({
+        Messages.add({
           type: 'error',
           text: `${msg}`,
         });
       });
   };
 
-  const { classrooms } = context.state;
-
   return {
-    classrooms,
+    // States
+    list,
 
+    // Dispatchers
     create,
     update,
     remove,

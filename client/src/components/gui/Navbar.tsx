@@ -1,4 +1,5 @@
 import useUser from 'controllers/useUser';
+import Cookies from 'js-cookie';
 import * as React from 'react';
 
 import { faBell } from '@fortawesome/free-solid-svg-icons';
@@ -7,7 +8,6 @@ import logo from '../../images/logo.svg';
 import style from '../../styles/gui/Navbar.module.css';
 import { Dropdown, DropdownItem } from './Dropdown';
 import LinkButton from './LinkButton';
-import Cookies from 'js-cookie';
 
 /**
  * Component representing the navbar.
@@ -53,18 +53,20 @@ const Navbar: React.FC = () => {
 };
 
 const NavbarMini: React.FC = () => {
-  const { user, logout } = useUser();
+  const User = useUser();
 
   return (
     <div className={style['container-mini']}>
       <Dropdown type="icon" icon={faBell}>
         <DropdownItem type="text">Notification</DropdownItem>
       </Dropdown>
-      <Dropdown type="title" title={`${user?.firstName} ${user?.lastName}`}>
-        <DropdownItem type="link" to={`/user/${user?.firstName?.toLowerCase()}-${user?.lastName?.toLowerCase()}`}>
+      <Dropdown type="title" title={`${User.current?.firstName} ${User.current?.lastName}`}>
+        <DropdownItem
+          type="link"
+          to={`/user/${User.current?.firstName?.toLowerCase()}-${User.current?.lastName?.toLowerCase()}`}>
           Profile
         </DropdownItem>
-        <DropdownItem type="button" onClick={logout}>
+        <DropdownItem type="button" onClick={User.logout}>
           Logout
         </DropdownItem>
       </Dropdown>

@@ -1,17 +1,17 @@
 import 'rc-calendar/assets/index.css';
 
 import Divider from 'components/gui/Divider';
+import useClassroom from 'controllers/useClassroom';
 import moment from 'moment';
 import { default as SimpleCalendar } from 'rc-calendar';
 import * as React from 'react';
 import { Route, Switch } from 'react-router-dom';
+import { IClassroom } from 'types';
 
 import style from '../../styles/teacher/Dashboard.module.css';
 import { NavbarMini } from '../gui/Navbar';
 import Classroom from './Classroom';
 import Home from './Home';
-import useClassroom from 'controllers/useClassroom';
-import { IClassroom } from 'types';
 
 const now = moment();
 
@@ -23,12 +23,12 @@ const now = moment();
  * @returns ReactNode
  */
 const Dashboard: React.FC = () => {
-  const { classrooms } = useClassroom();
+  const Classrooms = useClassroom();
 
   return (
     <div className={style['container']}>
       <div className={style['sidebar']}>
-        <Sidebar classrooms={classrooms} />
+        <Sidebar classrooms={Classrooms.list} />
       </div>
       <div className={style['main']}>
         <div className={style['content']}>

@@ -22,7 +22,6 @@ const Classroom: React.FC = () => {
   const { id } = useParams<RouteParams>();
   const [shareModal, setShareModal] = React.useState(false);
 
-  // const { classrooms } = useClassroom();
   return (
     <div className={style['container']}>
       <div className={style['header']}>

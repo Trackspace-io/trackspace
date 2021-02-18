@@ -3,18 +3,16 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { UserProvider } from 'contexts/userContext';
-import { MessageProvider } from 'contexts/messageContext';
-import { ClassroomContext } from 'contexts';
+import { ClassroomContext, MessageContext, UserContext } from 'contexts';
 
 ReactDOM.render(
   <React.StrictMode>
     <ClassroomContext.Provider>
-      <MessageProvider>
-        <UserProvider>
+      <MessageContext.Provider>
+        <UserContext.Provider>
           <App />
-        </UserProvider>
-      </MessageProvider>
+        </UserContext.Provider>
+      </MessageContext.Provider>
     </ClassroomContext.Provider>
   </React.StrictMode>,
   document.getElementById('root'),

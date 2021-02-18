@@ -16,10 +16,10 @@ import { Navbar } from './components/gui/Navbar';
 
 const App: React.FC = () => {
   const cookie = Cookies.get('connect.sid') || '';
-  const { user, authCheck } = useUser();
+  const User = useUser();
 
   React.useEffect(() => {
-    authCheck(cookie);
+    User.authCheck(cookie);
   }, []);
 
   return (
@@ -27,7 +27,7 @@ const App: React.FC = () => {
       <Navbar />
       <Switch>
         {/* Public routes */}
-        <ProtectedRoute condition={!Boolean(cookie)} exact path="/" redirectPath={`/${user.role}`}>
+        <ProtectedRoute condition={!Boolean(cookie)} exact path="/" redirectPath={`/${User.current.role}`}>
           <SignIn />
         </ProtectedRoute>
         <Route path="/sign-up" component={SignUp} />

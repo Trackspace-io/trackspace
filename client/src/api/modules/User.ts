@@ -81,7 +81,7 @@ export const get = async (): Promise<any> => {
  *
  * @returns 200, 400, 500
  */
-export const updateUser = async (body: IUserUpdate): Promise<any> => {
+export const update = async (body: IUserUpdate): Promise<any> => {
   const response = await axios.put(`${_apiUrl}/api/users/profile`, body, { withCredentials: true });
 
   return response;

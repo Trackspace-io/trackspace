@@ -1,19 +1,23 @@
-import { MessageContext } from 'contexts/messageContext';
+import { MessageContext } from 'contexts';
 import * as React from 'react';
 import { IMessage } from 'types';
 
 interface IMessageController {
-  messages: IMessage[];
-  update: (payload: IMessage) => void;
+  list: IMessage[];
+
+  add: (payload: IMessage) => void;
   close: () => void;
 }
 
 const useMessage = (): IMessageController => {
-  const context = React.useContext(MessageContext);
+  const context = React.useContext(MessageContext.Ctx);
 
   if (context === undefined) {
     throw new Error('MessageContext  must be used within a Provider');
   }
+
+  // States
+  const { list } = context.state;
 
   /**
    * Update the list of messages
@@ -21,19 +25,20 @@ const useMessage = (): IMessageController => {
    * @param {string} payload.type
    * @param {string} payload.text
    */
-  const update = (payload: IMessage) => {
-    context.dispatch({ type: 'UPDATE_MESSAGE', payload: payload });
+  const add = (payload: IMessage) => {
+    context.dispatch({ type: 'ADD', payload });
   };
 
   const close = () => {
-    context.dispatch({ type: 'CLOSE_MESSAGE' });
+    context.dispatch({ type: 'CLOSE' });
   };
 
-  const { messages } = context.state;
-
   return {
-    messages,
-    update,
+    // States
+    list,
+
+    // Dispatchers
+    add,
     close,
   };
 };

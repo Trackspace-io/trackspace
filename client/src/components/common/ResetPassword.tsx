@@ -2,12 +2,12 @@ import Form from 'components/gui/Form';
 import { Input, useInput } from 'components/gui/Input';
 import Typography from 'components/gui/Typography';
 import useUser from 'controllers/useUser';
+import qs from 'query-string';
 import * as React from 'react';
+import { useHistory } from 'react-router-dom';
 
 import ResetPasswordSrc from '../../images/reset-password.svg';
 import style from '../../styles/common/ResetPassword.module.css';
-import { useHistory } from 'react-router-dom';
-import qs from 'query-string';
 
 /**
  * Reset password page

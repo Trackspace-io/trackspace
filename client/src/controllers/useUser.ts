@@ -1,5 +1,5 @@
 import { UserAPI } from 'api';
-import { UserContext } from 'contexts/userContext';
+import { UserContext } from 'contexts';
 import Cookies from 'js-cookie';
 import * as React from 'react';
 import { useHistory } from 'react-router-dom';
@@ -7,8 +7,8 @@ import { IUser, IUserSignIn, IUserSignUp, IUserUpdate, IUserSendResetPassword, I
 import useMessage from './useMessage';
 
 interface IUserController {
-  user: Partial<IUser>;
-  isAuthenticated: boolean;
+  current: IUser;
+  isAuth: boolean;
 
   register: (input: IUserSignUp) => void;
   login: (input: IUserSignIn) => void;
@@ -20,22 +20,32 @@ interface IUserController {
 }
 
 const useUser = (): IUserController => {
-  // Get user context
-  const context = React.useContext(UserContext);
+  // Get user context.
+  const context = React.useContext(UserContext.Ctx);
 
-  // Message controller to send notification
-  const { update } = useMessage();
+  // Message controller to send notification.
+  const Messages = useMessage();
+
+  // Router used to redirect.
   const history = useHistory();
 
   if (context === undefined) {
     throw new Error('useCountState must be used within a CountProvider');
   }
 
+  // States
+  const { current, isAuth } = context.state;
+
   // Fetch the user if the cookie is set.
   React.useEffect(() => {
-    context.state.isAuthenticated && get();
-  }, [context.state.isAuthenticated]);
+    isAuth && get();
+  }, [isAuth]);
 
+  /**
+   * Get the list of users.
+   *
+   * @returns void
+   */
   const get = () => {
     UserAPI.get()
       .then((response) => {
@@ -46,19 +56,38 @@ const useUser = (): IUserController => {
       .catch((e) => {
         const { data } = e.response;
 
-        update({
+        Messages.add({
           type: 'error',
           text: `${data}`,
         });
       });
   };
 
+  /**
+   * Set isAuthenticated if the cookie exists.
+   *
+   * @param {string | undefined} cookie The session token.
+   *
+   * @returns void
+   */
   const authCheck = (cookie: string | undefined) => {
     if (cookie) {
       context.dispatch({ type: 'AUTH_CHECK' });
     }
   };
 
+  /**
+   * Create a new user
+   *
+   * @param {string} input.email            The name of the user.
+   * @param {string} input.firstName        The first name of the user.
+   * @param {string} input.lastName         The last name of the user.
+   * @param {string} input.password         The new password of the user.
+   * @param {string} input.confirmPassword  The confirmed new password of the user.
+   * @param {string} input.role             The role of the user.
+   *
+   * @returns void
+   */
   const register = (input: IUserSignUp) => {
     UserAPI.register(input)
       .then(() => {
@@ -67,13 +96,57 @@ const useUser = (): IUserController => {
       .catch((e) => {
         const { data } = e.response;
 
-        update({
+        Messages.add({
           type: 'error',
           text: `${data}`,
         });
       });
   };
 
+  /**
+   * Update the user's information
+   *
+   * @param {string} input.email?            The name of the user.
+   * @param {string} input.firstName?        The first name of the user.
+   * @param {string} input.lastName?         The last name of the user.
+   * @param {string} input.password?         The new password of the user.
+   * @param {string} input.confirmPassword?  The confirmed new password of the user.
+   * @param {string} input.role?             The role of the user.
+   *
+   * @returns Promise
+   */
+  const updateUser = (input: IUserUpdate) => {
+    return new Promise((resolve) => {
+      UserAPI.update(input)
+        .then(() => {
+          get();
+
+          Messages.add({
+            type: 'success',
+            text: `Profile updated.`,
+          });
+
+          return resolve(true);
+        })
+        .catch((e) => {
+          const { msg } = e.response.data.errors[0];
+
+          Messages.add({
+            type: 'error',
+            text: `${msg}`,
+          });
+        });
+    });
+  };
+
+  /**
+   * Logs the user.
+   *
+   * @param {string} input.email    The name of the user.
+   * @param {string} input.password The name of the user.
+   *
+   * @returns void
+   */
   const login = (input: IUserSignIn) => {
     UserAPI.login(input)
       .then((response) => {
@@ -84,78 +157,11 @@ const useUser = (): IUserController => {
       .catch((e) => {
         const { data } = e.response;
 
-        update({
+        Messages.add({
           type: 'error',
           text: `${data}`,
         });
       });
-  };
-
-  const sendResetPassword = async (input: IUserSendResetPassword) => {
-    return new Promise((resolve, reject) => {
-      UserAPI.sendResetPassword(input)
-        .then((response) => {
-          const { data } = response;
-
-          resolve(data);
-        })
-        .catch((e) => {
-          const { msg } = e.response.data.errors[0];
-
-          update({
-            type: 'error',
-            text: `${msg}`,
-          });
-
-          reject();
-        });
-    });
-  };
-
-  const confirmResetPassword = async (input: IUserConfirmResetPassword) => {
-    UserAPI.confirmResetPassword(input)
-      .then((response) => {
-        const { data } = response;
-
-        history.replace(data.redirect);
-
-        update({
-          type: 'success',
-          text: 'Password reset',
-        });
-      })
-      .catch((e) => {
-        const { msg } = e.response.data.errors[0];
-
-        update({
-          type: 'error',
-          text: `${msg}`,
-        });
-      });
-  };
-
-  const updateUser = (input: IUserUpdate) => {
-    return new Promise((resolve) => {
-      UserAPI.updateUser(input)
-        .then(() => {
-          get();
-
-          update({
-            type: 'success',
-            text: `Profile updated.`,
-          });
-
-          return resolve(true);
-        })
-        .catch((e) => {
-          const { msg } = e.response.data.errors[0];
-
-          update({
-            type: 'error',
-            text: `${msg}`,
-          });
-        });
-    });
   };
 
   const logout = () => {
@@ -167,20 +173,79 @@ const useUser = (): IUserController => {
     });
   };
 
-  const { user, isAuthenticated } = context.state;
+  /**
+   * Send reset password email.
+   *
+   * @param {string} input.email  The name of the user.
+   *
+   * @returns Promise
+   */
+  const sendResetPassword = async (input: IUserSendResetPassword) => {
+    return new Promise((resolve, reject) => {
+      UserAPI.sendResetPassword(input)
+        .then((response) => {
+          const { data } = response;
+
+          resolve(data);
+        })
+        .catch((e) => {
+          const { msg } = e.response.data.errors[0];
+
+          Messages.add({
+            type: 'error',
+            text: `${msg}`,
+          });
+
+          reject();
+        });
+    });
+  };
+
+  /**
+   * Set a new password.
+   *
+   * @param {string} input.token              The token params, from url.
+   * @param {string} input.password           The new password.
+   * @param {string} input.confirmPassword    The confirmed new password.
+   *
+   * @returns void
+   */
+  const confirmResetPassword = async (input: IUserConfirmResetPassword) => {
+    UserAPI.confirmResetPassword(input)
+      .then((response) => {
+        const { data } = response;
+
+        history.replace(data.redirect);
+
+        Messages.add({
+          type: 'success',
+          text: 'Password reset',
+        });
+      })
+      .catch((e) => {
+        const { msg } = e.response.data.errors[0];
+
+        Messages.add({
+          type: 'error',
+          text: `${msg}`,
+        });
+      });
+  };
 
   return {
-    user: user,
-    isAuthenticated: isAuthenticated,
+    // States
+    current,
+    isAuth,
 
-    login: login,
-    register: register,
-    authCheck: authCheck,
-    logout: logout,
-    sendResetPassword: sendResetPassword,
-    confirmResetPassword: confirmResetPassword,
+    // Dispatchers
+    login,
+    logout,
+    authCheck,
+    register,
+    updateUser,
 
-    updateUser: updateUser,
+    sendResetPassword,
+    confirmResetPassword,
   };
 };
 

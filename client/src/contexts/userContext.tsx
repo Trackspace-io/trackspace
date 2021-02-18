@@ -2,8 +2,11 @@ import * as React from 'react';
 import { IUser } from 'types';
 
 export interface UserState {
-  user: Partial<IUser>;
-  isAuthenticated: boolean;
+  /* Current logged user */
+  current: IUser;
+
+  /* User's logged state */
+  isAuth: boolean;
 }
 
 export type UserAction = { type: 'GET_USER'; payload: IUser } | { type: 'AUTH_CHECK' };
@@ -14,36 +17,36 @@ interface IUserContext {
 }
 
 const initialState: UserState = {
-  user: {
+  current: {
     email: '',
     firstName: '',
     lastName: '',
     role: '',
   },
-  isAuthenticated: false,
+  isAuth: false,
 };
 
 const userReducer = (state: UserState, action: UserAction): UserState => {
   switch (action.type) {
     case 'GET_USER':
-      return { ...state, user: action.payload };
+      return { ...state, current: action.payload };
     case 'AUTH_CHECK':
-      return { ...state, isAuthenticated: true };
+      return { ...state, isAuth: true };
     // default:
     //   throw new Error(`Unhandled action type: ${action.type}`);
   }
 };
 
-const UserContext = React.createContext<IUserContext | undefined>(undefined);
+const Ctx = React.createContext<IUserContext | undefined>(undefined);
 
-const UserContextProvider = UserContext.Provider;
+const CtxProvider = Ctx.Provider;
 
-const UserContextConsumer = UserContext.Consumer;
+const CtxConsumer = Ctx.Consumer;
 
-const UserProvider: React.FC = ({ children }) => {
+const Provider: React.FC = ({ children }) => {
   const [state, dispatch] = React.useReducer(userReducer, initialState);
 
-  return <UserContextProvider value={{ state, dispatch }}> {children} </UserContextProvider>;
+  return <CtxProvider value={{ state, dispatch }}> {children} </CtxProvider>;
 };
 
-export { UserProvider, UserContextProvider, UserContextConsumer, UserContext };
+export { Provider, Ctx, CtxProvider, CtxConsumer };

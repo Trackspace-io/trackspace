@@ -5,14 +5,15 @@ import { IClassroom } from 'types';
 
 /**
  * Classroom state
- *
- * @param {IClassroom[]} classrooms  List of classrooms.
  */
 export interface ClassroomState {
-  classrooms: IClassroom[];
+  /* List of classrooms */
+  list: IClassroom[];
 }
 
-/* Actions */
+/**
+ * Dispatchers. Actions that update the state.
+ */
 export type ClassroomAction = { type: 'GET_CLASSROOM'; payload: IClassroom[] };
 
 interface IClassroomContext {
@@ -20,8 +21,11 @@ interface IClassroomContext {
   dispatch: (action: ClassroomAction) => void;
 }
 
+/**
+ * Initial state.
+ */
 const initialState: ClassroomState = {
-  classrooms: [
+  list: [
     {
       id: 'c1',
       name: 'classroom1',
@@ -35,10 +39,18 @@ const initialState: ClassroomState = {
   ],
 };
 
+/**
+ * State management reducer pattern. Accepts an initial state, returns the current application state, then dispatches functions.
+ *
+ * @param {MessageState} state    Initial state.
+ * @param {MessageAction} action  Dispatchers.
+ *
+ * @returns The current state
+ */
 const classroomReducer = (state: ClassroomState, action: ClassroomAction): ClassroomState => {
   switch (action.type) {
     case 'GET_CLASSROOM':
-      return { ...state, classrooms: action.payload };
+      return { ...state, list: action.payload };
 
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
@@ -49,12 +61,10 @@ const Ctx = React.createContext<IClassroomContext | undefined>(undefined);
 
 const CtxProvider = Ctx.Provider;
 
-const CtxConsumer = Ctx.Consumer;
-
 const Provider: React.FC = ({ children }) => {
   const [state, dispatch] = React.useReducer(classroomReducer, initialState);
 
   return <CtxProvider value={{ state, dispatch }}> {children} </CtxProvider>;
 };
 
-export { Provider, Ctx, CtxProvider, CtxConsumer };
+export { Ctx, Provider };

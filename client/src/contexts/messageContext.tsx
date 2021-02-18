@@ -4,52 +4,62 @@ import { IMessage } from 'types';
 /* Interface */
 
 /**
- * Message state
- *
- * @param {IMessage[]} messages  List of messages.
+ * Message State.
  */
 export interface MessageState {
-  messages: IMessage[];
+  /* List of messages */
+  list: IMessage[];
 }
 
-/* Actions */
-export type MessageAction = { type: 'UPDATE_MESSAGE'; payload: IMessage } | { type: 'CLOSE_MESSAGE' };
+/**
+ * Dispatchers. Actions that update the state.
+ */
+export type MessageAction = { type: 'ADD'; payload: IMessage } | { type: 'CLOSE' };
 
 interface IMessageContext {
   state: MessageState;
   dispatch: (action: MessageAction) => void;
 }
 
+/**
+ * Initial state.
+ */
 const initialState: MessageState = {
-  messages: [],
+  list: [],
 };
 
+/**
+ * State management reducer pattern. Accepts an initial state, returns the current application state, then dispatches functions.
+ *
+ * @param {MessageState} state    Initial state.
+ * @param {MessageAction} action  Dispatchers.
+ *
+ * @returns The current state
+ */
 const messageReducer = (state: MessageState, action: MessageAction): MessageState => {
   switch (action.type) {
-    case 'UPDATE_MESSAGE':
-      return { ...state, messages: [...state.messages, { ...action.payload, isOpen: true }] };
-    case 'CLOSE_MESSAGE':
-      const _messages = state.messages.map((m) => {
+    case 'ADD':
+      return { ...state, list: [...state.list, { ...action.payload, isOpen: true }] };
+    case 'CLOSE':
+      const _messages = state.list.map((m) => {
         m = { ...m, isOpen: false };
         return m;
       });
 
-      return { ...state, messages: _messages };
+      return { ...state, list: _messages };
     // default:
     //   throw new Error(`Unhandled action type: ${action.type}`);
   }
 };
 
-const MessageContext = React.createContext<IMessageContext | undefined>(undefined);
+const Ctx = React.createContext<IMessageContext | undefined>(undefined);
 
-const MessageContextProvider = MessageContext.Provider;
+const CtxProvider = Ctx.Provider;
 
-const MessageContextConsumer = MessageContext.Consumer;
-
-const MessageProvider: React.FC = ({ children }) => {
+const Provider: React.FC = ({ children }) => {
   const [state, dispatch] = React.useReducer(messageReducer, initialState);
 
-  return <MessageContextProvider value={{ state, dispatch }}> {children} </MessageContextProvider>;
+  return <CtxProvider value={{ state, dispatch }}> {children} </CtxProvider>;
 };
 
-export { MessageProvider, MessageContextProvider, MessageContextConsumer, MessageContext };
+export { Ctx, Provider };
