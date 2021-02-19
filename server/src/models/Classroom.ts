@@ -139,10 +139,6 @@ export function classroomSchema(sequelize: Sequelize): void {
         allowNull: false,
         unique: true,
       },
-      teacherId: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
     },
     {
       sequelize,
@@ -154,7 +150,7 @@ export function classroomSchema(sequelize: Sequelize): void {
 
 export function classroomAssociations(): void {
   Classroom.belongsTo(User, {
-    foreignKey: "teacherId",
+    foreignKey: "TeacherId",
     as: "Teacher",
   });
 

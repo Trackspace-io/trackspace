@@ -81,14 +81,6 @@ export function notificationSchema(sequelize: Sequelize): void {
         allowNull: false,
         unique: true,
       },
-      senderId: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      recipientId: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
       params: {
         type: DataTypes.STRING,
         allowNull: true,
@@ -109,12 +101,10 @@ export function notificationSchema(sequelize: Sequelize): void {
 
 export function notificationAssociations(): void {
   Notification.belongsTo(User, {
-    foreignKey: "recipientId",
-    as: "recipient",
+    as: "Recipient",
   });
 
   Notification.belongsTo(User, {
-    foreignKey: "senderId",
-    as: "sender",
+    as: "Sender",
   });
 }

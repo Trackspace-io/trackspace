@@ -252,12 +252,12 @@ export function userSchema(sequelize: Sequelize): void {
 
 export function userAssociations(): void {
   User.hasMany(Classroom, {
-    foreignKey: "teacherId",
+    foreignKey: "TeacherId",
     as: { singular: "TeacherClassroom", plural: "TeacherClassrooms" },
   });
 
   User.hasMany(Notification, {
-    foreignKey: "recipientId",
+    foreignKey: "RecipientId",
     as: { singular: "Notification", plural: "Notifications" },
   });
 
