@@ -9,7 +9,7 @@ interface IMessageController {
   close: () => void;
 }
 
-const useMessage = (): IMessageController => {
+const useMessages = (): IMessageController => {
   const context = React.useContext(MessageContext.Ctx);
 
   if (context === undefined) {
@@ -43,4 +43,4 @@ const useMessage = (): IMessageController => {
   };
 };
 
-export default useMessage;
+export default useMessages;

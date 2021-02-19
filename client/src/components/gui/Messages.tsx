@@ -1,5 +1,5 @@
 import cx from 'classnames';
-import useMessage from 'controllers/useMessage';
+import useMessages from 'controllers/useMessages';
 import * as React from 'react';
 import { IMessage } from 'types';
 
@@ -12,7 +12,7 @@ import style from '../../styles/gui/Messages.module.css';
  * Component that displays the global messages.
  */
 const Messages: React.FC = () => {
-  const Messages = useMessage();
+  const Messages = useMessages();
 
   return (
     <div className={style['container']}>

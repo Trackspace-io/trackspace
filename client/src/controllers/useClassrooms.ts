@@ -2,7 +2,7 @@ import { ClassroomContext } from '../contexts';
 import * as React from 'react';
 import { IClassroom, IClassroomCreate, IClassroomRemove, IClassroomUpdate } from 'types';
 import { ClassroomAPI } from 'api';
-import useMessage from './useMessage';
+import useMessages from './useMessages';
 
 interface IClassroomController {
   list: IClassroom[];
@@ -11,11 +11,11 @@ interface IClassroomController {
   remove: (input: IClassroomRemove) => Promise<any>;
 }
 
-const useClassroom = (): IClassroomController => {
+const useClassrooms = (): IClassroomController => {
   const context = React.useContext(ClassroomContext.Ctx);
 
   // Notification
-  const Messages = useMessage();
+  const Messages = useMessages();
 
   if (context === undefined) {
     throw new Error('MessageContext  must be used within a Provider');
@@ -49,7 +49,6 @@ const useClassroom = (): IClassroomController => {
           text: `${data}`,
         });
       });
-    // context.dispatch({ type: 'GET_CLASSROOM', payload: [] });
   };
 
   /**
@@ -163,4 +162,4 @@ const useClassroom = (): IClassroomController => {
   };
 };
 
-export default useClassroom;
+export default useClassrooms;

@@ -40,6 +40,16 @@
   padding: 16px;
 }
 
+.classroom-item a {
+  text-decoration: none;
+  color: var(--black);
+  outline: none;
+}
+
+.classroom-item:hover {
+  box-shadow: 0 1px 5px #ccc;
+}
+
 .classroom-item:last-child {
   border: none;
 }
@@ -48,4 +58,5 @@
   color: var(--green-dark);
   cursor: pointer;
   margin: 0 4px;
+  padding: 4px;
 }

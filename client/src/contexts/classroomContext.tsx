@@ -10,6 +10,7 @@ console.log('context');
 export interface ClassroomState {
   /* List of classrooms */
   list: IClassroom[];
+  current: Partial<IClassroom>;
 }
 
 /**
@@ -27,6 +28,7 @@ interface IClassroomContext {
  */
 const initialState: ClassroomState = {
   list: [],
+  current: {},
 };
 
 /**

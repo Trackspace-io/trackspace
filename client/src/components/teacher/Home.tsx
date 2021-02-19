@@ -5,7 +5,7 @@ import { Input, useInput } from 'components/gui/Input';
 import Modal from 'components/gui/Modal';
 import { Sidebar, SidebarItem } from 'components/gui/Sidebar';
 import Typography from 'components/gui/Typography';
-import useClassroom from 'controllers/useClassroom';
+import useClassrooms from 'controllers/useClassrooms';
 import * as React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { IClassroom, IClassroomCreate, IClassroomRemove, IClassroomUpdate } from 'types';
@@ -41,7 +41,7 @@ const Home: React.FC = () => {
 };
 
 const Classrooms: React.FC = () => {
-  const Classrooms = useClassroom();
+  const Classrooms = useClassrooms();
 
   const [action, setAction] = React.useState('');
   const [classroom, setClassroom] = React.useState<IClassroom | undefined>(undefined);
@@ -61,7 +61,7 @@ const Classrooms: React.FC = () => {
           {Classrooms.list.length !== 0 ? (
             Classrooms.list.map((classroom) => (
               <div key={classroom.id} className={style['classroom-item']}>
-                {classroom.name}
+                <a href={`/teacher/classrooms/${classroom.id}`}>{classroom.name}</a>
                 <div className={style['classroom-actions']}>
                   <FontAwesomeIcon
                     icon={faEdit}
@@ -87,6 +87,7 @@ const Classrooms: React.FC = () => {
           )}
         </div>
       </div>
+
       {action === 'create' && (
         <ClassroomCreate
           isOpen={Boolean(action === 'create')}

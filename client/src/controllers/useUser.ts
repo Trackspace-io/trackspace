@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 import * as React from 'react';
 import { useHistory } from 'react-router-dom';
 import { IUser, IUserSignIn, IUserSignUp, IUserUpdate, IUserSendResetPassword, IUserConfirmResetPassword } from 'types';
-import useMessage from './useMessage';
+import useMessages from './useMessages';
 
 interface IUserController {
   current: IUser;
@@ -24,7 +24,7 @@ const useUser = (): IUserController => {
   const context = React.useContext(UserContext.Ctx);
 
   // Message controller to send notification.
-  const Messages = useMessage();
+  const Messages = useMessages();
 
   // Router used to redirect.
   const history = useHistory();

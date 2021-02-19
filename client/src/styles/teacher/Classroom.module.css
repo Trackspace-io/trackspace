@@ -12,7 +12,7 @@
 .share {
   border: 1px solid #ccc;
   border-radius: 8px;
-  padding: 4px 16px;
+  padding: 8px 16px;
   font-size: 16px;
   font-weight: 300;
   cursor: pointer;
@@ -48,4 +48,16 @@
   box-shadow: 0 1px 5px #ccc;
   padding: 8px;
   margin-bottom: 16px;
+}
+
+.link-container {
+  display: flex;
+}
+
+.link {
+  flex: 1;
+}
+
+.button {
+  flex: 0 0 120px;
 }
