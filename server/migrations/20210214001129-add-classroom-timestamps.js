@@ -16,7 +16,7 @@ module.exports = {
     ]);
   },
 
-  down: (queryInterface, Sequelize) => {
+  down: (queryInterface) => {
     return Promise.all([
       queryInterface.removeColumn('Classroom', 'createdAt'),
       queryInterface.removeColumn('Classroom', 'updatedAt')
