@@ -3,17 +3,21 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { ClassroomContext, MessageContext, UserContext } from 'contexts';
+import { ClassroomContext, MessageContext, StudentContext, TeacherContext, UserContext } from 'contexts';
 
 ReactDOM.render(
   <React.StrictMode>
-    <ClassroomContext.Provider>
-      <MessageContext.Provider>
-        <UserContext.Provider>
-          <App />
-        </UserContext.Provider>
-      </MessageContext.Provider>
-    </ClassroomContext.Provider>
+    <TeacherContext.Provider>
+      <StudentContext.Provider>
+        <ClassroomContext.Provider>
+          <MessageContext.Provider>
+            <UserContext.Provider>
+              <App />
+            </UserContext.Provider>
+          </MessageContext.Provider>
+        </ClassroomContext.Provider>
+      </StudentContext.Provider>
+    </TeacherContext.Provider>
   </React.StrictMode>,
   document.getElementById('root'),
 );

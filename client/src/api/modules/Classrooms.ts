@@ -3,22 +3,6 @@ import axios from 'axios';
 import { IClassroomCreate, IClassroomRemove, IClassroomUpdate } from 'types';
 
 /**
- * Get the list of classrooms.
- *
- * @method  GET
- * @url     /api/classrooms/get
- *
- * @returns {Promise<{
- *  id: string,
- *  name: string,
- *  teacherId: string,
- * }[]>} response.data.
- */
-export const get = async (): Promise<any> => {
-  return await axios.get(`${_apiUrl}/api/users/teachers/classrooms`, { withCredentials: true });
-};
-
-/**
  * Create a classroom.
  *
  * @method  POST

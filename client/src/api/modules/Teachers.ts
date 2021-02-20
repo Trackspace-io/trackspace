@@ -33,12 +33,10 @@ export const getClassrooms = async (): Promise<any> => {
  * @returns 200, 400, 401, 404, 500
  */
 export const generateLink = async (body: ITeacherGenerateLink): Promise<any> => {
-  const response = await axios.get(
+  return await axios.get(
     `${_apiUrl}/api/users/teachers/classrooms/${body.classroomId}/invitations/link?expiresIn=${body.expiresIn}`,
     {
       withCredentials: true,
     },
   );
-
-  return response;
 };

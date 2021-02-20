@@ -1,4 +1,4 @@
-export interface IStudentInvitation {
+export interface IStudentAcceptInvitation {
   token: string;
 }
 

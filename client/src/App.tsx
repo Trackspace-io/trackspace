@@ -4,6 +4,7 @@ import Error from 'components/common/Error';
 import Profile from 'components/common/Profile';
 import Messages from 'components/gui/Messages';
 import TeacherDashboard from 'components/teacher/Dashboard';
+import StudentDashboard from 'components/student/Dashboard';
 import useUser from 'controllers/useUser';
 import Cookies from 'js-cookie';
 import * as React from 'react';
@@ -13,6 +14,7 @@ import { ResetPasswordConfirm, ResetPasswordSend } from './components/common/Res
 import SignIn from './components/common/SignIn';
 import SignUp from './components/common/SignUp';
 import { Navbar } from './components/gui/Navbar';
+import Invitation from 'components/student/Invitation';
 
 const App: React.FC = () => {
   const cookie = Cookies.get('connect.sid') || '';
@@ -39,10 +41,11 @@ const App: React.FC = () => {
           <Profile />
         </ProtectedRoute>
 
+        {/* Teachers */}
         <ProtectedRoute condition={Boolean(cookie)} exact path="/teacher" redirectPath="/">
           <TeacherDashboard />
         </ProtectedRoute>
-        <ProtectedRoute condition={Boolean(cookie)} exact path="/teacher/classrooms" redirectPath="/">
+        <ProtectedRoute condition={Boolean(cookie)} path="/teacher/classrooms" redirectPath="/">
           <TeacherDashboard />
         </ProtectedRoute>
         <ProtectedRoute condition={Boolean(cookie)} path="/teacher/classrooms/:id" redirectPath="/">
@@ -57,6 +60,12 @@ const App: React.FC = () => {
         <ProtectedRoute condition={Boolean(cookie)} path="/teacher/classrooms/:id/terms" redirectPath="/">
           <TeacherDashboard />
         </ProtectedRoute>
+
+        {/* Students */}
+        <ProtectedRoute condition={Boolean(cookie)} path="/student" redirectPath="/">
+          <StudentDashboard />
+        </ProtectedRoute>
+        <Route path="/students/classrooms/invitations/accept" component={Invitation} />
 
         <Route path="*" component={Error} />
       </Switch>

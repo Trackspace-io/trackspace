@@ -1,13 +1,58 @@
 import { TeachersAPI } from 'api';
-import { ITeacherGenerateLink } from 'types';
+import { TeacherContext } from 'contexts';
+import * as React from 'react';
+import { IClassroom, ITeacherGenerateLink } from 'types';
+
 import useMessages from './useMessages';
 
 interface ITeachersController {
+  classroomsList: IClassroom[];
+
+  getClassrooms: () => void;
   generateLink: (payload: ITeacherGenerateLink) => Promise<any>;
 }
 
 const useTeachers = (): ITeachersController => {
+  const context = React.useContext(TeacherContext.Ctx);
+
   const Messages = useMessages();
+
+  if (context === undefined) {
+    throw new Error('MessageContext  must be used within a Provider');
+  }
+
+  // States
+  const { classroomsList } = context.state;
+
+  React.useEffect(() => {
+    getClassrooms();
+  }, []);
+
+  /**
+   * Get the classrooms list of the teacher.
+   *
+   * @param   none.
+   *
+   * @returns void
+   */
+  const getClassrooms = () => {
+    TeachersAPI.getClassrooms()
+      .then((response) => {
+        const { data } = response;
+        console.log('teachers get classrooms', data);
+
+        context.dispatch({ type: 'GET', payload: data });
+      })
+      .catch((e) => {
+        const { data } = e.response;
+        console.log('teachers get classrooms error', data);
+
+        Messages.add({
+          type: 'error',
+          text: `${data}`,
+        });
+      });
+  };
 
   /**
    * Generate an invitation link to add students to a classroom.
@@ -39,6 +84,11 @@ const useTeachers = (): ITeachersController => {
   };
 
   return {
+    // State
+    classroomsList,
+
+    // Dispatchers
+    getClassrooms,
     generateLink,
   };
 };

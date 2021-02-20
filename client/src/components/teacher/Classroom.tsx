@@ -3,7 +3,7 @@ import Modal from 'components/gui/Modal';
 import { Sidebar, SidebarItem } from 'components/gui/Sidebar';
 import Typography from 'components/gui/Typography';
 import * as React from 'react';
-import { Route, Switch, useParams } from 'react-router-dom';
+import { Redirect, Route, Switch, useParams } from 'react-router-dom';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { faShare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -44,9 +44,9 @@ const Classroom: React.FC = () => {
         </div>
         <div className={style['content']}>
           <Switch>
-            {/* <Route exact path="/teacher/classrooms/:id">
-              <Redirect to="/teacher/classrooms/:id/students" />
-            </Route> */}
+            <Route exact path="/teacher/classrooms/:id">
+              <Redirect to={`/teacher/classrooms/${id}/students`} />
+            </Route>
             <Route path="/teacher/classrooms/:id/students" component={Students} />
             <Route path="/teacher/classrooms/:id/subjects" component={Subjects} />
             <Route path="/teacher/classrooms/:id/terms" component={Terms} />
@@ -65,8 +65,11 @@ interface IShareLinkProps {
 }
 
 const ShareLink: React.FC<IShareLinkProps> = ({ isOpen, onClose, classroomId }) => {
+  // Controllers
   const Teachers = useTeachers();
   const Inputs = useInput({ link: '', search: '' });
+
+  // Internal state
   const [onCopied, setOnCopied] = React.useState(false);
 
   React.useEffect(() => {

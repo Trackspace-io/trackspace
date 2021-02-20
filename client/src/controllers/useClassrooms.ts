@@ -1,56 +1,18 @@
-import { ClassroomContext } from '../contexts';
-import * as React from 'react';
-import { IClassroom, IClassroomCreate, IClassroomRemove, IClassroomUpdate } from 'types';
+import { IClassroomCreate, IClassroomRemove, IClassroomUpdate } from 'types';
 import { ClassroomAPI } from 'api';
 import useMessages from './useMessages';
+import useTeachers from './useTeachers';
 
 interface IClassroomController {
-  list: IClassroom[];
   create: (input: IClassroomCreate) => Promise<any>;
   update: (input: IClassroomUpdate) => Promise<any>;
   remove: (input: IClassroomRemove) => Promise<any>;
 }
 
 const useClassrooms = (): IClassroomController => {
-  const context = React.useContext(ClassroomContext.Ctx);
-
   // Notification
   const Messages = useMessages();
-
-  if (context === undefined) {
-    throw new Error('MessageContext  must be used within a Provider');
-  }
-
-  // States
-  const { list } = context.state;
-
-  // Fetch the list of classrooms.
-  React.useEffect(() => {
-    console.log('controller');
-
-    get();
-  }, []);
-
-  /**
-   * Get the list of classroom
-   */
-  const get = () => {
-    ClassroomAPI.get()
-      .then((response) => {
-        const { data } = response;
-
-        context.dispatch({ type: 'GET', payload: data });
-      })
-      .catch((e) => {
-        const { data } = e.response;
-
-        Messages.add({
-          type: 'error',
-          text: `${data}`,
-        });
-      });
-  };
-
+  const Teachers = useTeachers();
   /**
    * Create a new classroom.
    *
@@ -64,7 +26,7 @@ const useClassrooms = (): IClassroomController => {
         .then((response) => {
           const { data } = response;
 
-          get();
+          Teachers.getClassrooms();
 
           Messages.add({
             type: 'success',
@@ -98,7 +60,7 @@ const useClassrooms = (): IClassroomController => {
         .then((response) => {
           const { data } = response;
 
-          get();
+          Teachers.getClassrooms();
 
           Messages.add({
             type: 'success',
@@ -131,7 +93,7 @@ const useClassrooms = (): IClassroomController => {
         .then((response) => {
           const { data } = response;
 
-          get();
+          Teachers.getClassrooms();
 
           Messages.add({
             type: 'success',
@@ -152,9 +114,6 @@ const useClassrooms = (): IClassroomController => {
   };
 
   return {
-    // States
-    list,
-
     // Dispatchers
     create,
     update,

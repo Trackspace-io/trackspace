@@ -1,6 +1,6 @@
 import { _apiUrl } from 'api/api';
 import axios from 'axios';
-import { IStudentInvitation, IStudentInvitationBySignIn, IStudentInvitationBySignUp } from 'types';
+import { IStudentAcceptInvitation, IStudentInvitationBySignIn, IStudentInvitationBySignUp } from 'types';
 
 /**
  * Get classrooms in which a student is enrolled.
@@ -19,7 +19,7 @@ export const getClassrooms = async (): Promise<any> => {
 };
 
 /**
- * Accept an invitation. Must be used if the student is already authenticated.
+ * Accept an invitation link to join to a classroom. Must be used if the student is already authenticated.
  *
  * @method  POST
  * @url     /api/users/students/invitations/accept?t={token}
@@ -28,14 +28,14 @@ export const getClassrooms = async (): Promise<any> => {
  *
  * @returns 200, 400, 401, 404, 500
  */
-export const acceptInvitation = async (body: IStudentInvitation): Promise<any> => {
-  return await axios.post(`${_apiUrl}/api/users/students/invitations/accept?t={${body.token}}`, {
+export const acceptInvitation = async (body: IStudentAcceptInvitation): Promise<any> => {
+  return await axios.post(`${_apiUrl}/api/users/students/invitations/accept?t=${body.token}`, {
     withCredentials: true,
   });
 };
 
 /**
- * Sign-in and accept an invitation. Must be used if the student has an account.
+ * Sign-in and accept an invitation link to join to a classroom. Must be used if the student has an account.
  *
  * @method  POST
  * @url     /api/users/students/invitations/accept/sign-in?t={token}
@@ -47,13 +47,13 @@ export const acceptInvitation = async (body: IStudentInvitation): Promise<any> =
  * @returns 200, 400, 401, 404, 500
  */
 export const acceptInvitationBySignIn = async (body: IStudentInvitationBySignIn): Promise<any> => {
-  return await axios.post(`${_apiUrl}/api/users/students/invitations/accept/sign-in?t={${body.token}}`, body, {
+  return await axios.post(`${_apiUrl}/api/users/students/invitations/accept/sign-in?t=${body.token}`, body, {
     withCredentials: true,
   });
 };
 
 /**
- * Sign-up and accept an invitation. Must be used if the student doesn't have an account yet.
+ * Sign-up and accept an invitation to join a classroom. Must be used if the student doesn't have an account yet.
  *
  * @method  POST
  * @url     /api/users/students/invitations/accept/sign-up?t={token}

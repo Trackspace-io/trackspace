@@ -45,6 +45,8 @@
   border: none;
   background: transparent;
   letter-spacing: 1px;
+  padding: 0;
+  font-weight: 300;
 }
 
 .xs {

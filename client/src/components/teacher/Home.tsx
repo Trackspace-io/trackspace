@@ -14,6 +14,7 @@ import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import style from '../../styles/teacher/Home.module.css';
+import useTeachers from 'controllers/useTeachers';
 
 const Home: React.FC = () => {
   return (
@@ -42,6 +43,7 @@ const Home: React.FC = () => {
 
 const Classrooms: React.FC = () => {
   const Classrooms = useClassrooms();
+  const Teachers = useTeachers();
 
   const [action, setAction] = React.useState('');
   const [classroom, setClassroom] = React.useState<IClassroom | undefined>(undefined);
@@ -58,8 +60,8 @@ const Classrooms: React.FC = () => {
       <div className={style['classrooms-body']}>
         <Typography variant="info"> List of classrooms </Typography>
         <div className={style['classrooms-list']}>
-          {Classrooms.list.length !== 0 ? (
-            Classrooms.list.map((classroom) => (
+          {Teachers.classroomsList.length !== 0 ? (
+            Teachers.classroomsList.map((classroom) => (
               <div key={classroom.id} className={style['classroom-item']}>
                 <a href={`/teacher/classrooms/${classroom.id}`}>{classroom.name}</a>
                 <div className={style['classroom-actions']}>

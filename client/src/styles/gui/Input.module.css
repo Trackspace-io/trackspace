@@ -16,6 +16,11 @@
   outline: none;
 }
 
+.label {
+  font-size: 16px;
+  font-weight: 300;
+}
+
 .error {
   display: inline-block;
   font-size: 14px;

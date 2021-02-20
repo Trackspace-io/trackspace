@@ -1,0 +1,48 @@
+.tooltip {
+  position: relative;
+  display: block;
+}
+
+.tooltip .text {
+  visibility: hidden;
+  font-size: 16px;
+  width: 120px;
+  background: #555;
+  color: var(--white);
+  text-align: center;
+  border-radius: 4px;
+  letter-spacing: 1px;
+  padding: 8px;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+  transform: scale(0);
+  transition: all 0.2s ease-in-out;
+  pointer-events: none;
+}
+
+.tooltip:hover .text {
+  visibility: visible;
+  transform: scale(1);
+}
+
+.position-left {
+  right: 48px;
+  top: 15%;
+}
+
+.position-top {
+  left: -50%;
+  bottom: 48px;
+}
+
+.position-right {
+  left: 48px;
+  top: 15%;
+}
+
+.position-bottom {
+  left: -50%;
+  top: 48px;
+}
