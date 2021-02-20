@@ -4,8 +4,11 @@ import { Classroom } from "../models/Classroom";
 import { User } from "../models/User";
 import shortid from "shortid";
 import user from "../validators/user";
+import subjects from "./subjects";
 
 const classrooms = Router();
+
+classrooms.use("/:classroomId/subjects", user().isInClassroom(), subjects);
 
 /**
  * Create a classroom.

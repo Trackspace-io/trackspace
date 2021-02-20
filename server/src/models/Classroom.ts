@@ -1,14 +1,19 @@
 import jwt from "jsonwebtoken";
 import {
+  BelongsToGetAssociationMixin,
   BelongsToManyAddAssociationMixin,
   BelongsToManyGetAssociationsMixin,
   BelongsToManyRemoveAssociationMixin,
   DataTypes,
+  HasManyAddAssociationMixin,
+  HasManyGetAssociationsMixin,
+  HasManyRemoveAssociationMixin,
   Model,
   Sequelize,
 } from "sequelize";
 import { Notification } from "./Notification";
 import { ShortLink } from "./ShortLink";
+import { Subject } from "./Subject";
 import { User } from "./User";
 
 export interface IClassroomInvitation {
@@ -63,13 +68,8 @@ export class Classroom extends Model {
 
   /**
    * Returns the teacher of the classroom.
-   *
-   * @returns The teacher.
    */
-  public async getTeacher(): Promise<User> {
-    const teacher = this.getDataValue("teacher");
-    return teacher ? teacher : await User.findById(this.teacherId);
-  }
+  public getTeacher!: BelongsToGetAssociationMixin<User>;
 
   /**
    * Adds a student to this classroom.
@@ -85,6 +85,11 @@ export class Classroom extends Model {
    * Removes a student from this classroom;
    */
   public removeStudent!: BelongsToManyRemoveAssociationMixin<User, string>;
+
+  /**
+   * Returns the list of subjects.
+   */
+  public getSubjects!: HasManyGetAssociationsMixin<Subject>;
 
   /**
    * Generate a new invitation link.
@@ -134,10 +139,6 @@ export function classroomSchema(sequelize: Sequelize): void {
         allowNull: false,
         unique: true,
       },
-      teacherId: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
     },
     {
       sequelize,
@@ -149,7 +150,7 @@ export function classroomSchema(sequelize: Sequelize): void {
 
 export function classroomAssociations(): void {
   Classroom.belongsTo(User, {
-    foreignKey: "teacherId",
+    foreignKey: "TeacherId",
     as: "Teacher",
   });
 
@@ -157,4 +158,6 @@ export function classroomAssociations(): void {
     through: "Classroom_Student",
     as: { singular: "Student", plural: "Students" },
   });
+
+  Classroom.hasMany(Subject);
 }
