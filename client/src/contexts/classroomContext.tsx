@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IClassroom } from 'types';
+import { IClassroom, IStudent, ISubject } from 'types';
 console.log('context');
 
 /* Interface */
@@ -9,14 +9,17 @@ console.log('context');
  */
 export interface ClassroomState {
   /* List of classrooms */
-  list: IClassroom[];
+  studentsList: IStudent[];
+  subjectsList: ISubject[];
   current: Partial<IClassroom>;
 }
 
 /**
  * Dispatchers. Actions that update the state.
  */
-export type ClassroomAction = { type: 'GET'; payload: IClassroom[] };
+export type ClassroomAction =
+  | { type: 'GET_STUDENTS'; payload: IStudent[] }
+  | { type: 'GET_SUBJECTS'; payload: ISubject[] };
 
 interface IClassroomContext {
   state: ClassroomState;
@@ -27,7 +30,8 @@ interface IClassroomContext {
  * Initial state.
  */
 const initialState: ClassroomState = {
-  list: [],
+  studentsList: [],
+  subjectsList: [],
   current: {},
 };
 
@@ -41,11 +45,12 @@ const initialState: ClassroomState = {
  */
 const classroomReducer = (state: ClassroomState, action: ClassroomAction): ClassroomState => {
   switch (action.type) {
-    case 'GET':
-      return { ...state, list: action.payload };
-
-    default:
-      throw new Error(`Unhandled action type: ${action.type}`);
+    case 'GET_STUDENTS':
+      return { ...state, studentsList: action.payload };
+    case 'GET_SUBJECTS':
+      return { ...state, subjectsList: action.payload };
+    // default:
+    //   throw new Error(`Unhandled action type: ${action.type}`);
   }
 };
 

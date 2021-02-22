@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { IClassroom, IStudentAcceptInvitation, IStudentInvitationBySignIn, IStudentInvitationBySignUp } from 'types';
 
 import useMessages from './useMessages';
+import useUser from './useUser';
 
 interface IStudentsController {
   classroomsList: IClassroom[];
@@ -18,6 +19,7 @@ const useStudents = (): IStudentsController => {
   const context = React.useContext(StudentContext.Ctx);
 
   const Messages = useMessages();
+  const User = useUser();
 
   const history = useHistory();
 
@@ -29,8 +31,8 @@ const useStudents = (): IStudentsController => {
   const { classroomsList } = context.state;
 
   React.useEffect(() => {
-    getClassrooms();
-  }, []);
+    User.isAuth && getClassrooms();
+  }, [User.isAuth]);
 
   /**
    * Get the classrooms list of the student.
@@ -45,7 +47,7 @@ const useStudents = (): IStudentsController => {
         const { data } = response;
         console.log('students get classrooms', data);
 
-        context.dispatch({ type: 'GET', payload: data });
+        context.dispatch({ type: 'GET_CLASSROOMS', payload: data });
       })
       .catch((e) => {
         const { data } = e.response;
@@ -100,9 +102,9 @@ const useStudents = (): IStudentsController => {
       StudentsAPI.acceptInvitationBySignIn(payload)
         .then((response) => {
           const { data } = response;
+          console.log('data', data);
 
-          history.go(data.redirect);
-          console.log('acceptInvitation', data);
+          history.replace(data.redirect);
 
           resolve(data);
         })
@@ -121,11 +123,12 @@ const useStudents = (): IStudentsController => {
   /**
    * Sign-up and accept an invitation to join a classroom. Must be used if the student doesn't have an account yet.
    *
-   * @param   {string} payload.email     The email of the user.
-   * @param   {string} payload.firstName The firstName of the user.
-   * @param   {string} payload.lastName  The lastName of the user.
-   * @param   {string} payload.password  The password of the user.
-   * @param   {string} payload.token     The received token.
+   * @param   {string} payload.email            The email of the user.
+   * @param   {string} payload.firstName        The firstName of the user.
+   * @param   {string} payload.lastName         The lastName of the user.
+   * @param   {string} payload.password         The password of the user.
+   * @param   {string} payload.confirmPassword  The password of the user.
+   * @param   {string} payload.token            The received token.
    *
    * @returns Promise
    */
@@ -135,6 +138,7 @@ const useStudents = (): IStudentsController => {
         .then((response) => {
           const { data } = response;
           console.log('acceptInvitation', data);
+          history.replace('/');
 
           resolve(data);
         })

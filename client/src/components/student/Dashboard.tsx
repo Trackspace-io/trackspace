@@ -52,12 +52,12 @@ interface ISidebarProps {
 const Sidebar: React.FC<ISidebarProps> = ({ classrooms }) => {
   return (
     <div>
-      <a href="/teacher" className={style['bubble']}>
+      <a href="/student" className={style['bubble']}>
         H
       </a>
       <Divider />
       {classrooms.map((classroom) => (
-        <a key={classroom.id} href={`/teacher/classrooms/${classroom.id}`} className={style['bubble']}>
+        <a key={classroom.id} href={`/student/classrooms/${classroom.id}`} className={style['bubble']}>
           {classroom.name[0]}
         </a>
       ))}

@@ -14,7 +14,7 @@ export interface IStudentState {
 /**
  * Dispatchers. Actions that update the state.
  */
-export type IStudentActions = { type: 'GET'; payload: IClassroom[] };
+export type IStudentActions = { type: 'GET_CLASSROOMS'; payload: IClassroom[] };
 
 interface IStudentContext {
   state: IStudentState;
@@ -38,7 +38,7 @@ const initialState: IStudentState = {
  */
 const studentReducer = (state: IStudentState, action: IStudentActions): IStudentState => {
   switch (action.type) {
-    case 'GET':
+    case 'GET_CLASSROOMS':
       return { ...state, classroomsList: action.payload };
 
     default:

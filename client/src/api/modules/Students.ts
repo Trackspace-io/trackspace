@@ -67,7 +67,7 @@ export const acceptInvitationBySignIn = async (body: IStudentInvitationBySignIn)
  * @returns 200, 400, 401, 404, 500
  */
 export const acceptInvitationBySignUp = async (body: IStudentInvitationBySignUp): Promise<any> => {
-  return await axios.post(`${_apiUrl}/api/users/students/invitations/accept/sign-up?t={${body.token}}`, body, {
+  return await axios.post(`${_apiUrl}/api/users/students/invitations/accept/sign-up?t=${body.token}`, body, {
     withCredentials: true,
   });
 };

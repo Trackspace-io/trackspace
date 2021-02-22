@@ -6,6 +6,7 @@ import Modal from 'components/gui/Modal';
 import { Sidebar, SidebarItem } from 'components/gui/Sidebar';
 import Typography from 'components/gui/Typography';
 import useClassrooms from 'controllers/useClassrooms';
+import useTeachers from 'controllers/useTeachers';
 import * as React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { IClassroom, IClassroomCreate, IClassroomRemove, IClassroomUpdate } from 'types';
@@ -14,7 +15,6 @@ import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import style from '../../styles/teacher/Home.module.css';
-import useTeachers from 'controllers/useTeachers';
 
 const Home: React.FC = () => {
   return (

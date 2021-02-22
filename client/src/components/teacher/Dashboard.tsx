@@ -9,9 +9,13 @@ import * as React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { IClassroom } from 'types';
 
+import { faHome } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import style from '../../styles/teacher/Dashboard.module.css';
 import { NavbarMini } from '../gui/Navbar';
 import Classroom from './Classroom';
+
 import Home from './Home';
 
 const now = moment();
@@ -65,7 +69,7 @@ const Sidebar: React.FC<ISidebarProps> = ({ classrooms }) => {
     <div>
       <Tooltip text="Home" position="right">
         <a href="/teacher" className={style['bubble']}>
-          H
+          <FontAwesomeIcon icon={faHome} />
         </a>
       </Tooltip>
       <Divider />

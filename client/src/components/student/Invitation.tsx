@@ -15,7 +15,6 @@ const Invitations: React.FC = () => {
   const history = useHistory();
 
   const { t: token } = qs.parse(history.location.search);
-  console.log('t', token);
 
   const [toggle, setToggle] = React.useState(true);
 
@@ -62,6 +61,7 @@ const SignIn: React.FC<ISignInProps> = ({ token }) => {
 
     Students.acceptInvitationBySignIn(payload);
   };
+
   return (
     <div>
       <Form
@@ -99,7 +99,7 @@ const SignUp: React.FC<ISignUpProps> = ({ token }) => {
   const Students = useStudents();
 
   // Inputs
-  const Inputs = useInput({ email: '', firstName: '', lastName: '', password: '' });
+  const Inputs = useInput({ email: '', firstName: '', lastName: '', password: '', confirmPassword: '' });
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -143,6 +143,13 @@ const SignUp: React.FC<ISignUpProps> = ({ token }) => {
               type="password"
               label="Password"
               value={Inputs.values.password}
+              onChange={Inputs.handleInputChange}
+            />
+            <Input
+              name="confirmPassword"
+              type="password"
+              label="Confirm password"
+              value={Inputs.values.confirmPassword}
               onChange={Inputs.handleInputChange}
             />
           </React.Fragment>

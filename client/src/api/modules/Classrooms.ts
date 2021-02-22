@@ -1,6 +1,13 @@
 import { _apiUrl } from 'api/api';
 import axios from 'axios';
-import { IClassroomCreate, IClassroomRemove, IClassroomUpdate } from 'types';
+import {
+  IClassroomCreate,
+  IClassroomRemove,
+  IClassroomRemoveStudent,
+  IClassroomStudents,
+  IClassroomUpdate,
+  ISubjectGet,
+} from 'types';
 
 /**
  * Create a classroom.
@@ -43,4 +50,57 @@ export const update = async (body: IClassroomUpdate): Promise<any> => {
  */
 export const remove = async (body: IClassroomRemove): Promise<any> => {
   return await axios.delete(`${_apiUrl}/api/classrooms/${body.id}/delete`, { withCredentials: true });
+};
+
+/**
+ * Get the list of students enrolled in a classroom.
+ *
+ * @method  GET
+ * @url     /api/classrooms/:id/students
+ *
+ * @param   {string} body.classroomId  The id of the classroom.
+ *
+ * @returns {Promise<{
+ *  id: string,
+ *  name: string,
+ *  firstName: string,
+ *  lastName: string,
+ * }[]>} response.data.
+ */
+export const getStudents = async (body: IClassroomStudents): Promise<any> => {
+  return await axios.get(`${_apiUrl}/api/classrooms/${body.classroomId}/students`, { withCredentials: true });
+};
+
+/**
+ * Removes a student from this classroom.
+ *
+ * @method  DELETE
+ * @url     /classrooms/:id/students/:id/remove
+ *
+ * @param   {string} body.classroomId The id of the classroom.
+ * @param   {string} body.studentId   The id of the student to be removed.
+ *
+ * @returns 200, 400, 500
+ */
+export const removeStudent = async (body: IClassroomRemoveStudent): Promise<any> => {
+  return await axios.delete(`${_apiUrl}/api/classrooms/${body.classroomId}/students/${body.studentId}/remove`, {
+    withCredentials: true,
+  });
+};
+
+/**
+ * Get the list of subjects associated to a classroom.
+ *
+ * @method  GET
+ * @url     /api/classrooms/:id/subjects
+ *
+ * @param   {string} body.classroomId  The id of the classroom.
+ *
+ * @returns {Promise<{
+ *  id: string,
+ *  name: string,
+ * }[]>} response.data.
+ */
+export const getSubjects = async (body: ISubjectGet): Promise<any> => {
+  return await axios.get(`${_apiUrl}/api/classrooms/${body.classroomId}/subjects`, { withCredentials: true });
 };
