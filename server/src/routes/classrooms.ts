@@ -54,6 +54,23 @@ classrooms.post(
 );
 
 /**
+ * Get the details of a classroom.
+ *
+ * @method  GET
+ * @url     /classrooms/:id
+ *
+ * @returns 200, 400, 401, 500
+ */
+classrooms.get(
+  "/:classroomId",
+  user().isA(["teacher", "student"]).isInClassroom(),
+
+  async (req: Request, res: Response): Promise<Response> => {
+    return res.status(200).json({ name: req.classroom.name });
+  }
+);
+
+/**
  * Delete a classroom.
  *
  * @method  POST
