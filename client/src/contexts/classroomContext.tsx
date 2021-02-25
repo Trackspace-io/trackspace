@@ -19,7 +19,8 @@ export interface ClassroomState {
  */
 export type ClassroomAction =
   | { type: 'GET_STUDENTS'; payload: IStudent[] }
-  | { type: 'GET_SUBJECTS'; payload: ISubject[] };
+  | { type: 'GET_SUBJECTS'; payload: ISubject[] }
+  | { type: 'GET_CURRENT'; payload: IClassroom };
 
 interface IClassroomContext {
   state: ClassroomState;
@@ -32,7 +33,9 @@ interface IClassroomContext {
 const initialState: ClassroomState = {
   studentsList: [],
   subjectsList: [],
-  current: {},
+  current: {
+    name: '',
+  },
 };
 
 /**
@@ -45,6 +48,8 @@ const initialState: ClassroomState = {
  */
 const classroomReducer = (state: ClassroomState, action: ClassroomAction): ClassroomState => {
   switch (action.type) {
+    case 'GET_CURRENT':
+      return { ...state, current: action.payload };
     case 'GET_STUDENTS':
       return { ...state, studentsList: action.payload };
     case 'GET_SUBJECTS':

@@ -14,28 +14,23 @@ import Subjects from './Subjects';
 import Terms from './Terms';
 import useTeachers from 'controllers/useTeachers';
 import Button from 'components/gui/Button';
-import { IClassroom } from 'types';
+import useClassrooms from 'controllers/useClassrooms';
 
 interface RouteParams {
   id: string;
 }
 
 const Classroom: React.FC = () => {
-  const Teachers = useTeachers();
   const { id } = useParams<RouteParams>();
+  const Classrooms = useClassrooms({ id });
 
   // Internal state
   const [shareModal, setShareModal] = React.useState(false);
-  const [classroom, setClassroom] = React.useState<IClassroom>();
-
-  React.useEffect(() => {
-    setClassroom(Teachers.classroomsList.find((c) => c.id === id));
-  }, [Teachers.classroomsList]);
 
   return (
     <div className={style['container']}>
       <div className={style['header']}>
-        <Typography variant="subtitle">{classroom?.name}</Typography>
+        <Typography variant="subtitle">{Classrooms.current?.name}</Typography>
         <div className={style['share']} onClick={() => setShareModal(true)}>
           <FontAwesomeIcon icon={faShare} />
           Share

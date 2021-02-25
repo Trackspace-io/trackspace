@@ -1,7 +1,16 @@
-export interface IStudentAcceptInvitation {
+export interface IStudentInvitation {
   token: string;
 }
 
+export interface IStudentInvitationInfo {
+  classroomName: string;
+  teacherFirstName: string;
+  teacherLastName: string;
+}
+
+export interface IStudentAcceptInvitation {
+  token: string;
+}
 export interface IStudentInvitationBySignIn {
   token: string;
   username: string;

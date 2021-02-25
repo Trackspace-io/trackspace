@@ -1,14 +1,23 @@
 import { StudentsAPI } from 'api';
 import { StudentContext } from 'contexts';
 import * as React from 'react';
-import { IClassroom, IStudentAcceptInvitation, IStudentInvitationBySignIn, IStudentInvitationBySignUp } from 'types';
+import {
+  IClassroom,
+  IStudentAcceptInvitation,
+  IStudentInvitation,
+  IStudentInvitationBySignIn,
+  IStudentInvitationBySignUp,
+  IStudentInvitationInfo,
+} from 'types';
 
 import useMessages from './useMessages';
 import useUser from './useUser';
 
 interface IStudentsController {
   classroomsList: IClassroom[];
+  invitationInfo: IStudentInvitationInfo;
 
+  getInvitationInfo: (payload: IStudentInvitation) => Promise<any>;
   acceptInvitation: (payload: IStudentAcceptInvitation) => Promise<any>;
   acceptInvitationBySignIn: (payload: IStudentInvitationBySignIn) => Promise<any>;
   acceptInvitationBySignUp: (payload: IStudentInvitationBySignUp) => Promise<any>;
@@ -27,7 +36,7 @@ const useStudents = (): IStudentsController => {
   }
 
   // States
-  const { classroomsList } = context.state;
+  const { classroomsList, invitationInfo } = context.state;
 
   // Fetch the list of classrooms if the student is authenticated
   React.useEffect(() => {
@@ -59,13 +68,42 @@ const useStudents = (): IStudentsController => {
   };
 
   /**
+   * Get the invitation's information
+   *
+   * @param   {string} token  The invitation token
+   *
+   * @returns Promise
+   */
+  const getInvitationInfo = (payload: IStudentInvitation) => {
+    return new Promise((resolve) => {
+      StudentsAPI.getInvitationInfo(payload)
+        .then((response) => {
+          const { data } = response;
+          console.log('data', data);
+
+          context.dispatch({ type: 'GET_INVITATION_INFO', payload: data });
+
+          resolve(data);
+        })
+        .catch((e) => {
+          const { data } = e.response;
+
+          Messages.add({
+            type: 'error',
+            text: `${data}`,
+          });
+        });
+    });
+  };
+
+  /**
    * Accept an invitation link to join to a classroom. Must be used if the student is already authenticated.
    *
    * @param   {string} payload.token The received token.
    *
    * @returns Promise
    */
-  const acceptInvitation = async (payload: IStudentAcceptInvitation): Promise<any> => {
+  const acceptInvitation = (payload: IStudentAcceptInvitation): Promise<any> => {
     return new Promise((resolve) => {
       StudentsAPI.acceptInvitation(payload)
         .then((response) => {
@@ -93,7 +131,7 @@ const useStudents = (): IStudentsController => {
    *
    * @returns Promise
    */
-  const acceptInvitationBySignIn = async (payload: IStudentInvitationBySignIn): Promise<any> => {
+  const acceptInvitationBySignIn = (payload: IStudentInvitationBySignIn): Promise<any> => {
     return new Promise((resolve) => {
       StudentsAPI.acceptInvitationBySignIn(payload)
         .then((response) => {
@@ -126,7 +164,7 @@ const useStudents = (): IStudentsController => {
    *
    * @returns Promise
    */
-  const acceptInvitationBySignUp = async (payload: IStudentInvitationBySignUp): Promise<any> => {
+  const acceptInvitationBySignUp = (payload: IStudentInvitationBySignUp): Promise<any> => {
     return new Promise((resolve) => {
       StudentsAPI.acceptInvitationBySignUp(payload)
         .then((response) => {
@@ -150,8 +188,10 @@ const useStudents = (): IStudentsController => {
   return {
     // States
     classroomsList,
+    invitationInfo,
 
     // Dispatchers
+    getInvitationInfo,
     acceptInvitation,
     acceptInvitationBySignIn,
     acceptInvitationBySignUp,

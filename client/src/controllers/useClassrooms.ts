@@ -2,16 +2,15 @@ import { ClassroomAPI, SubjectsAPI } from 'api';
 import { ClassroomContext } from 'contexts';
 import * as React from 'react';
 import {
+  IClassroom,
   IClassroomCreate,
   IClassroomRemove,
   IClassroomRemoveStudent,
-  IClassroomStudents,
   IClassroomUpdate,
   IStudent,
   ISubject,
   ISubjectAdd,
   ISubjectEdit,
-  ISubjectGet,
   ISubjectRemove,
 } from 'types';
 
@@ -19,6 +18,7 @@ import useMessages from './useMessages';
 import useTeachers from './useTeachers';
 
 interface IClassroomController {
+  current: Partial<IClassroom>;
   studentsList: IStudent[];
   subjectsList: ISubject[];
 
@@ -33,7 +33,7 @@ interface IClassroomController {
   removeSubject: (payload: ISubjectRemove) => Promise<any>;
 }
 
-const useClassrooms = (classroomId?: IClassroomStudents): IClassroomController => {
+const useClassrooms = (classroomId?: Partial<IClassroom>): IClassroomController => {
   // Get classroom context.
   const context = React.useContext(ClassroomContext.Ctx);
 
@@ -46,12 +46,42 @@ const useClassrooms = (classroomId?: IClassroomStudents): IClassroomController =
   }
 
   // States
-  const { studentsList, subjectsList } = context.state;
+  const { current, studentsList, subjectsList } = context.state;
 
   React.useEffect(() => {
-    classroomId && getStudents(<IClassroomStudents>classroomId);
-    classroomId && getSubjects(<IClassroomStudents>classroomId);
+    classroomId && getCurrent(classroomId);
+    classroomId && getStudents(classroomId);
+    classroomId && getSubjects(classroomId);
   }, []);
+
+  /**
+   * Get the classroom information
+   *
+   * @param   none.
+   *
+   * @returns void
+   */
+  const getCurrent = (payload: Partial<IClassroom>) => {
+    return new Promise((resolve) => {
+      ClassroomAPI.getCurrent(payload)
+        .then((response) => {
+          const { data } = response;
+          console.log('data', data);
+
+          context.dispatch({ type: 'GET_CURRENT', payload: data });
+
+          resolve(data);
+        })
+        .catch((e) => {
+          const { data } = e.response;
+
+          Messages.add({
+            type: 'error',
+            text: `${data}`,
+          });
+        });
+    });
+  };
 
   /**
    * Create a new classroom.
@@ -160,7 +190,7 @@ const useClassrooms = (classroomId?: IClassroomStudents): IClassroomController =
    *
    * @returns void
    */
-  const getStudents = (payload: IClassroomStudents) => {
+  const getStudents = (payload: Partial<IClassroom>) => {
     ClassroomAPI.getStudents(payload)
       .then((response) => {
         const { data } = response;
@@ -193,7 +223,7 @@ const useClassrooms = (classroomId?: IClassroomStudents): IClassroomController =
         .then((response) => {
           const { data } = response;
 
-          getStudents({ classroomId });
+          getSubjects({ id: classroomId });
 
           Messages.add({
             type: 'success',
@@ -220,7 +250,7 @@ const useClassrooms = (classroomId?: IClassroomStudents): IClassroomController =
    *
    * @returns void
    */
-  const getSubjects = (payload: ISubjectGet) => {
+  const getSubjects = (payload: Partial<IClassroom>) => {
     ClassroomAPI.getSubjects(payload)
       .then((response) => {
         const { data } = response;
@@ -253,7 +283,7 @@ const useClassrooms = (classroomId?: IClassroomStudents): IClassroomController =
         .then((response) => {
           const { data } = response;
 
-          getSubjects({ classroomId });
+          getSubjects({ id: classroomId });
 
           Messages.add({
             type: 'success',
@@ -290,7 +320,7 @@ const useClassrooms = (classroomId?: IClassroomStudents): IClassroomController =
         .then((response) => {
           const { data } = response;
 
-          getSubjects({ classroomId });
+          getSubjects({ id: classroomId });
 
           Messages.add({
             type: 'success',
@@ -326,7 +356,7 @@ const useClassrooms = (classroomId?: IClassroomStudents): IClassroomController =
         .then((response) => {
           const { data } = response;
 
-          getSubjects({ classroomId });
+          getSubjects({ id: classroomId });
 
           Messages.add({
             type: 'success',
@@ -348,6 +378,7 @@ const useClassrooms = (classroomId?: IClassroomStudents): IClassroomController =
 
   return {
     // State
+    current,
     studentsList,
     subjectsList,
 

@@ -18,9 +18,9 @@ interface RouteParams {
   id: string;
 }
 const Subjects: React.FC = () => {
-  const { id: classroomId } = useParams<RouteParams>();
+  const { id } = useParams<RouteParams>();
 
-  const Classrooms = useClassrooms({ classroomId });
+  const Classrooms = useClassrooms({ id });
 
   // Internal hooks
   const [action, setAction] = React.useState('');
@@ -74,7 +74,7 @@ const Subjects: React.FC = () => {
         <AddSubject
           isOpen={Boolean(action === 'add')}
           onClose={() => setAction('')}
-          classroomId={classroomId}
+          classroomId={id}
           addSubject={Classrooms.addSubject}
         />
       )}
@@ -84,7 +84,7 @@ const Subjects: React.FC = () => {
           isOpen={Boolean(action === 'edit')}
           onClose={() => setAction('')}
           subject={subject}
-          classroomId={classroomId}
+          classroomId={id}
           editSubject={Classrooms.editSubject}
         />
       )}
@@ -94,7 +94,7 @@ const Subjects: React.FC = () => {
           isOpen={Boolean(action === 'remove')}
           onClose={() => setAction('')}
           subject={subject}
-          classroomId={classroomId}
+          classroomId={id}
           removeSubject={Classrooms.removeSubject}
         />
       )}

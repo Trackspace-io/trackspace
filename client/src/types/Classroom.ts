@@ -3,6 +3,9 @@ export interface IClassroom {
   name: string;
   teacherId: string;
 }
+
+export type IClassroomId = Pick<IClassroom, 'id'>;
+
 export interface IClassroomCreate {
   name: string;
 }

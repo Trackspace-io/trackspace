@@ -18,9 +18,9 @@ interface RouteParams {
 }
 
 const Students: React.FC = () => {
-  const { id: classroomId } = useParams<RouteParams>();
+  const { id } = useParams<RouteParams>();
 
-  const Classrooms = useClassrooms({ classroomId });
+  const Classrooms = useClassrooms({ id });
 
   // Internal hooks
   const [action, setAction] = React.useState('');
@@ -68,7 +68,7 @@ const Students: React.FC = () => {
           isOpen={Boolean(action === 'remove')}
           onClose={() => setAction('')}
           student={student}
-          classroomId={classroomId}
+          classroomId={id}
           removeStudent={Classrooms.removeStudent}
         />
       )}

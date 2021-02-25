@@ -12,11 +12,16 @@ import useStudents from 'controllers/useStudents';
 import qs from 'query-string';
 
 const Invitations: React.FC = () => {
+  const Students = useStudents();
   const history = useHistory();
 
   const { t: token } = qs.parse(history.location.search);
 
   const [toggle, setToggle] = React.useState(true);
+
+  React.useEffect(() => {
+    Students.getInvitationInfo({ token: String(token) });
+  }, []);
 
   return (
     <div className={style['container']}>
@@ -26,7 +31,8 @@ const Invitations: React.FC = () => {
             <img src={toggle ? SignInSrc : SignUpSrc} />
           </div>
           <Typography variant="subtitle1" align="center">
-            You have been invited to join ______ classroom.
+            {Students.invitationInfo.teacherFirstName} {Students.invitationInfo.teacherLastName} has invited you to join{' '}
+            {Students.invitationInfo.classroomName}.
           </Typography>
           <br />
         </div>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IClassroom } from 'types';
+import { IClassroom, IStudentInvitationInfo } from 'types';
 
 /* Interface */
 
@@ -9,12 +9,15 @@ import { IClassroom } from 'types';
 export interface IStudentState {
   /* List of classrooms */
   classroomsList: IClassroom[];
+  invitationInfo: IStudentInvitationInfo;
 }
 
 /**
  * Dispatchers. Actions that update the state.
  */
-export type IStudentActions = { type: 'GET_CLASSROOMS'; payload: IClassroom[] };
+export type IStudentActions =
+  | { type: 'GET_CLASSROOMS'; payload: IClassroom[] }
+  | { type: 'GET_INVITATION_INFO'; payload: IStudentInvitationInfo };
 
 interface IStudentContext {
   state: IStudentState;
@@ -26,6 +29,11 @@ interface IStudentContext {
  */
 const initialState: IStudentState = {
   classroomsList: [],
+  invitationInfo: {
+    classroomName: '',
+    teacherFirstName: '',
+    teacherLastName: '',
+  },
 };
 
 /**
@@ -40,9 +48,10 @@ const studentReducer = (state: IStudentState, action: IStudentActions): IStudent
   switch (action.type) {
     case 'GET_CLASSROOMS':
       return { ...state, classroomsList: action.payload };
-
-    default:
-      throw new Error(`Unhandled action type: ${action.type}`);
+    case 'GET_INVITATION_INFO':
+      return { ...state, invitationInfo: action.payload };
+    // default:
+    //   throw new Error(`Unhandled action type: ${action.type}`);
   }
 };
 
