@@ -33,11 +33,11 @@ interface IClassroomController {
   removeSubject: (payload: ISubjectRemove) => Promise<any>;
 }
 
-// ??
 const useClassrooms = (classroomId?: IClassroomStudents): IClassroomController => {
+  // Get classroom context.
   const context = React.useContext(ClassroomContext.Ctx);
 
-  // Notification
+  // Get controllers
   const Messages = useMessages();
   const Teachers = useTeachers();
 
@@ -164,7 +164,6 @@ const useClassrooms = (classroomId?: IClassroomStudents): IClassroomController =
     ClassroomAPI.getStudents(payload)
       .then((response) => {
         const { data } = response;
-        console.log('students', data);
 
         context.dispatch({ type: 'GET_STUDENTS', payload: data });
       })
@@ -225,7 +224,6 @@ const useClassrooms = (classroomId?: IClassroomStudents): IClassroomController =
     ClassroomAPI.getSubjects(payload)
       .then((response) => {
         const { data } = response;
-        console.log('subject', data);
 
         context.dispatch({ type: 'GET_SUBJECTS', payload: data });
       })

@@ -4,6 +4,7 @@ import * as React from 'react';
 import { IClassroom, ITeacherGenerateLink } from 'types';
 
 import useMessages from './useMessages';
+import useUser from './useUser';
 
 interface ITeachersController {
   classroomsList: IClassroom[];
@@ -13,20 +14,24 @@ interface ITeachersController {
 }
 
 const useTeachers = (): ITeachersController => {
+  // Get teacher context.
   const context = React.useContext(TeacherContext.Ctx);
 
+  // Use controllers
   const Messages = useMessages();
+  const User = useUser();
 
   if (context === undefined) {
-    throw new Error('MessageContext  must be used within a Provider');
+    throw new Error('Teacher context must be used within a Provider');
   }
 
   // States
   const { classroomsList } = context.state;
 
+  // Fetch the list of classrooms if the teacher is authenticated
   React.useEffect(() => {
-    getClassrooms();
-  }, []);
+    User.isAuth && getClassrooms();
+  }, [User.isAuth]);
 
   /**
    * Get the classrooms list of the teacher.
@@ -39,13 +44,11 @@ const useTeachers = (): ITeachersController => {
     TeachersAPI.getClassrooms()
       .then((response) => {
         const { data } = response;
-        console.log('teachers get classrooms', data);
 
         context.dispatch({ type: 'GET', payload: data });
       })
       .catch((e) => {
         const { data } = e.response;
-        console.log('teachers get classrooms error', data);
 
         Messages.add({
           type: 'error',

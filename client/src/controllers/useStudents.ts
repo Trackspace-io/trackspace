@@ -1,7 +1,6 @@
 import { StudentsAPI } from 'api';
 import { StudentContext } from 'contexts';
 import * as React from 'react';
-import { useHistory } from 'react-router-dom';
 import { IClassroom, IStudentAcceptInvitation, IStudentInvitationBySignIn, IStudentInvitationBySignUp } from 'types';
 
 import useMessages from './useMessages';
@@ -16,20 +15,21 @@ interface IStudentsController {
 }
 
 const useStudents = (): IStudentsController => {
+  // User context.
   const context = React.useContext(StudentContext.Ctx);
 
+  // Use controllers
   const Messages = useMessages();
   const User = useUser();
 
-  const history = useHistory();
-
   if (context === undefined) {
-    throw new Error('MessageContext  must be used within a Provider');
+    throw new Error('Student context must be used within a Provider');
   }
 
   // States
   const { classroomsList } = context.state;
 
+  // Fetch the list of classrooms if the student is authenticated
   React.useEffect(() => {
     User.isAuth && getClassrooms();
   }, [User.isAuth]);
@@ -45,13 +45,11 @@ const useStudents = (): IStudentsController => {
     StudentsAPI.getClassrooms()
       .then((response) => {
         const { data } = response;
-        console.log('students get classrooms', data);
 
         context.dispatch({ type: 'GET_CLASSROOMS', payload: data });
       })
       .catch((e) => {
         const { data } = e.response;
-        console.log('students get classrooms error', data);
 
         Messages.add({
           type: 'error',
@@ -72,13 +70,11 @@ const useStudents = (): IStudentsController => {
       StudentsAPI.acceptInvitation(payload)
         .then((response) => {
           const { data } = response;
-          console.log('acceptInvitation', data);
 
           resolve(data);
         })
         .catch((e) => {
           const { data } = e.response;
-          console.log('acceptInvitation error', data);
 
           Messages.add({
             type: 'error',
@@ -102,15 +98,13 @@ const useStudents = (): IStudentsController => {
       StudentsAPI.acceptInvitationBySignIn(payload)
         .then((response) => {
           const { data } = response;
-          console.log('data', data);
 
-          history.replace(data.redirect);
+          window.location.replace(data.redirect);
 
           resolve(data);
         })
         .catch((e) => {
           const { data } = e.response;
-          console.log('acceptInvitation error', data);
 
           Messages.add({
             type: 'error',
@@ -137,14 +131,13 @@ const useStudents = (): IStudentsController => {
       StudentsAPI.acceptInvitationBySignUp(payload)
         .then((response) => {
           const { data } = response;
-          console.log('acceptInvitation', data);
-          history.replace('/');
+
+          window.location.replace('/');
 
           resolve(data);
         })
         .catch((e) => {
           const { data } = e.response;
-          console.log('acceptInvitation error', data);
 
           Messages.add({
             type: 'error',
