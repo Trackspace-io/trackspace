@@ -1,6 +1,6 @@
 import * as React from 'react';
 import style from '../../styles/gui/Select.module.css';
-
+import cx from 'classnames';
 /**
  * Component representing a select.
  *
@@ -19,13 +19,14 @@ interface ISelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   label?: string;
   options: string[];
   value?: string | number;
+  align?: 'start' | 'center' | 'end';
 }
 
-const Select: React.FC<ISelectProps> = ({ name, label, options, value, onChange }) => {
+const Select: React.FC<ISelectProps> = ({ name, label, options, value, align, onChange }) => {
   return (
-    <div className={style['container']}>
+    <div className={cx(style['container'], style[`align-${align}`])}>
       {label && <label> {label}</label>}
-      <select name={name} value={value} onChange={onChange} className={style['select']}>
+      <select name={name} value={value} onChange={onChange} className={cx(style['select'])}>
         {options &&
           options.map((option) => (
             <option key={option} value={option}>

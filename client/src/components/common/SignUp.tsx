@@ -58,6 +58,7 @@ const SignUp: React.FC = () => {
                   options={['teacher', 'student', 'parent']}
                   value={select.role}
                   onChange={handleSelectChange}
+                  align="center"
                 />
                 <br />
                 <br />
@@ -99,7 +100,7 @@ const SignUp: React.FC = () => {
               </React.Fragment>
             )}
           />
-          <LinkButton to="/" variant="secondary">
+          <LinkButton to="/" variant="secondary" align="center">
             Already have an account? Sign in here
           </LinkButton>
         </div>

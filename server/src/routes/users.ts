@@ -93,7 +93,7 @@ users.post(
   passport.authenticate("local"),
   async (req: Request, res: Response): Promise<void> => {
     const user: User = <User>req.user;
-    res.status(200).json({ redirect: `${user.role}` });
+    res.status(200).json({ redirect: `/${user.role}` });
   }
 );
 

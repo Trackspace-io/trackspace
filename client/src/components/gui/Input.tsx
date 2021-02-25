@@ -39,7 +39,7 @@ interface IInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 const Input: React.FC<IInputProps> = ({ name, label, type, disabled, placeholder, value, onChange, onBlur }) => {
   return (
     <div>
-      {label && <label> {label}</label>}
+      {label && <label className={style['label']}> {label}</label>}
       <input
         disabled={disabled}
         type={type}

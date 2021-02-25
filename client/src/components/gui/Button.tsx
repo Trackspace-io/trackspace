@@ -21,7 +21,7 @@ interface IButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /* Set the button to max width */
   fullWidth?: boolean;
   type?: 'submit' | 'reset' | 'button';
-  float?: 'right' | 'left';
+  align?: 'start' | 'center' | 'end';
   onClick?: () => void;
 }
 
@@ -29,17 +29,19 @@ const Button: React.FC<IButtonProps> = ({
   children,
   variant = 'primary',
   type = 'submit',
-  float = 'none',
+  align = 'start',
   fullWidth = false,
   onClick,
 }) => {
   return (
-    <button
-      className={cx(style[variant], style['button'], style[`fullWidth-${fullWidth}`], style[`float-${float}`])}
-      type={type}
-      onClick={onClick}>
-      {children}
-    </button>
+    <div className={cx(style['container'], style[`align-${align}`])}>
+      <button
+        className={cx(style[variant], style['button'], style[`fullWidth-${fullWidth}`])}
+        type={type}
+        onClick={onClick}>
+        {children}
+      </button>
+    </div>
   );
 };
 

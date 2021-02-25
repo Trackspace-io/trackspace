@@ -1,48 +1,33 @@
-import 'rc-calendar/assets/index.css';
-
 import Divider from 'components/gui/Divider';
-import Tooltip from 'components/gui/Tooltip';
-import useTeachers from 'controllers/useTeachers';
+import { NavbarMini } from 'components/gui/Navbar';
+import useStudents from 'controllers/useStudents';
 import moment from 'moment';
 import { default as SimpleCalendar } from 'rc-calendar';
 import * as React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { IClassroom } from 'types';
 
-import { faHome } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-import style from '../../styles/teacher/Dashboard.module.css';
-import { NavbarMini } from '../gui/Navbar';
-import Classroom from './Classroom';
-
-import Home from './Home';
+import style from '../../styles/student/Dashboard.module.css';
 
 const now = moment();
 
-/**
- * Component representing the Teacher's home page, and access to their classrooms.
- *
- * @param none
- *
- * @returns ReactNode
- */
 const Dashboard: React.FC = () => {
-  const Teachers = useTeachers();
+  const Students = useStudents();
 
   return (
     <div className={style['container']}>
       <div className={style['sidebar']}>
-        <Sidebar classrooms={Teachers.classroomsList} />
+        <Sidebar classrooms={Students.classroomsList} />
       </div>
       <div className={style['main']}>
         <div className={style['content']}>
           <Switch>
-            <Route exact path="/teacher">
-              <Redirect to="/teacher/classrooms" />
+            <Route exact path="/student">
+              <Redirect to="/student" />
             </Route>
-            <Route exact path="/teacher/classrooms" component={Home} />
-            <Route path="/teacher/classrooms/:id" component={Classroom} />
+            <Route path="students/classrooms/invitations/accept" />
+            {/* <Route exact path="/teacher/classrooms" component={Home} />
+            <Route path="/teacher/classrooms/:id" component={Classroom} /> */}
           </Switch>
         </div>
         <div className={style['menu']}>
@@ -67,18 +52,14 @@ interface ISidebarProps {
 const Sidebar: React.FC<ISidebarProps> = ({ classrooms }) => {
   return (
     <div>
-      <Tooltip text="Home" position="right">
-        <a href="/teacher" className={style['bubble']}>
-          <FontAwesomeIcon icon={faHome} />
-        </a>
-      </Tooltip>
+      <a href="/student" className={style['bubble']}>
+        H
+      </a>
       <Divider />
       {classrooms.map((classroom) => (
-        <Tooltip key={classroom.id} text={classroom.name} position="right">
-          <a href={`/teacher/classrooms/${classroom.id}`} className={style['bubble']}>
-            {classroom.name[0]}
-          </a>
-        </Tooltip>
+        <a key={classroom.id} href={`/student/classrooms/${classroom.id}`} className={style['bubble']}>
+          {classroom.name[0]}
+        </a>
       ))}
     </div>
   );

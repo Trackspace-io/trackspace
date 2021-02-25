@@ -5,7 +5,8 @@ import { Input, useInput } from 'components/gui/Input';
 import Modal from 'components/gui/Modal';
 import { Sidebar, SidebarItem } from 'components/gui/Sidebar';
 import Typography from 'components/gui/Typography';
-import useClassroom from 'controllers/useClassroom';
+import useClassrooms from 'controllers/useClassrooms';
+import useTeachers from 'controllers/useTeachers';
 import * as React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { IClassroom, IClassroomCreate, IClassroomRemove, IClassroomUpdate } from 'types';
@@ -41,7 +42,8 @@ const Home: React.FC = () => {
 };
 
 const Classrooms: React.FC = () => {
-  const Classrooms = useClassroom();
+  const Classrooms = useClassrooms();
+  const Teachers = useTeachers();
 
   const [action, setAction] = React.useState('');
   const [classroom, setClassroom] = React.useState<IClassroom | undefined>(undefined);
@@ -58,48 +60,61 @@ const Classrooms: React.FC = () => {
       <div className={style['classrooms-body']}>
         <Typography variant="info"> List of classrooms </Typography>
         <div className={style['classrooms-list']}>
-          {Classrooms.list.map((classroom) => (
-            <div key={classroom.id} className={style['classroom-item']}>
-              {classroom.name}
-              <div className={style['classroom-actions']}>
-                <FontAwesomeIcon
-                  icon={faEdit}
-                  onClick={() => {
-                    setAction('update');
-                    setClassroom(classroom);
-                  }}
-                />
-                <FontAwesomeIcon
-                  icon={faTrash}
-                  onClick={() => {
-                    setAction('remove');
-                    setClassroom(classroom);
-                  }}
-                />
+          {Teachers.classroomsList.length !== 0 ? (
+            Teachers.classroomsList.map((classroom) => (
+              <div key={classroom.id} className={style['classroom-item']}>
+                <a href={`/teacher/classrooms/${classroom.id}`}>{classroom.name}</a>
+                <div className={style['classroom-actions']}>
+                  <FontAwesomeIcon
+                    icon={faEdit}
+                    onClick={() => {
+                      setAction('update');
+                      setClassroom(classroom);
+                    }}
+                  />
+                  <FontAwesomeIcon
+                    icon={faTrash}
+                    onClick={() => {
+                      setAction('remove');
+                      setClassroom(classroom);
+                    }}
+                  />
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <Typography variant="caption" align="center">
+              The list is empty.
+            </Typography>
+          )}
         </div>
       </div>
-      <ClassroomCreate
-        isOpen={Boolean(action && action === 'create')}
-        onClose={() => setAction('')}
-        create={Classrooms.create}
-      />
 
-      <ClassroomUpdate
-        isOpen={Boolean(action && action === 'update')}
-        onClose={() => setAction('')}
-        classroom={classroom}
-        update={Classrooms.update}
-      />
+      {action === 'create' && (
+        <ClassroomCreate
+          isOpen={Boolean(action === 'create')}
+          onClose={() => setAction('')}
+          create={Classrooms.create}
+        />
+      )}
 
-      <ClassroomRemove
-        isOpen={Boolean(action && action === 'remove')}
-        onClose={() => setAction('')}
-        classroom={classroom}
-        remove={Classrooms.remove}
-      />
+      {action === 'update' && (
+        <ClassroomUpdate
+          isOpen={Boolean(action === 'update')}
+          onClose={() => setAction('')}
+          classroom={classroom}
+          update={Classrooms.update}
+        />
+      )}
+
+      {action === 'remove' && (
+        <ClassroomRemove
+          isOpen={Boolean(action === 'remove')}
+          onClose={() => setAction('')}
+          classroom={classroom}
+          remove={Classrooms.remove}
+        />
+      )}
     </div>
   );
 };
@@ -107,14 +122,19 @@ const Classrooms: React.FC = () => {
 interface IClassroomCreateProps {
   isOpen: boolean;
   onClose: () => void;
-  create: (input: IClassroomCreate) => void;
+  create: (input: IClassroomCreate) => Promise<any>;
 }
 
 const ClassroomCreate: React.FC<IClassroomCreateProps> = ({ isOpen, onClose, create }) => {
   const Inputs = useInput({ name: '' });
 
-  const handleSubmit = () => {
-    create(Inputs.values);
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    create(Inputs.values).then(() => {
+      Inputs.setValues({});
+      onClose();
+    });
   };
 
   return (
@@ -128,7 +148,7 @@ const ClassroomCreate: React.FC<IClassroomCreateProps> = ({ isOpen, onClose, cre
           render={() => (
             <React.Fragment>
               <Input
-                name="username"
+                name="name"
                 type="text"
                 label="Name"
                 value={Inputs.values.name}
@@ -146,7 +166,7 @@ interface IClassroomUpdateProps {
   isOpen: boolean;
   onClose: () => void;
   classroom: IClassroom | undefined;
-  update: (input: IClassroomUpdate) => void;
+  update: (input: IClassroomUpdate) => Promise<any>;
 }
 
 const ClassroomUpdate: React.FC<IClassroomUpdateProps> = ({ isOpen, onClose, classroom, update }) => {
@@ -154,10 +174,20 @@ const ClassroomUpdate: React.FC<IClassroomUpdateProps> = ({ isOpen, onClose, cla
 
   React.useEffect(() => {
     classroom && Inputs.setValues({ ...Inputs.values, name: classroom.name });
-  });
+  }, [classroom]);
 
-  const handleSubmit = () => {
-    update(Inputs.values);
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const payload = {
+      name: Inputs.values.name,
+      id: String(classroom?.id),
+    };
+
+    update(payload).then(() => {
+      Inputs.setValues({});
+      onClose();
+    });
   };
 
   return (
@@ -171,7 +201,7 @@ const ClassroomUpdate: React.FC<IClassroomUpdateProps> = ({ isOpen, onClose, cla
           render={() => (
             <React.Fragment>
               <Input
-                name="username"
+                name="name"
                 type="text"
                 label="Name"
                 value={Inputs.values.name}
@@ -189,22 +219,27 @@ interface IClassroomRemoveProps {
   isOpen: boolean;
   onClose: () => void;
   classroom: IClassroom | undefined;
-  remove: (input: IClassroomRemove) => void;
+  remove: (input: IClassroomRemove) => Promise<any>;
 }
 
 const ClassroomRemove: React.FC<IClassroomRemoveProps> = ({ isOpen, onClose, classroom, remove }) => {
   const Inputs = useInput({ text: '' });
 
-  const handleSubmit = () => {
-    remove(Inputs.values);
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (Inputs.values.text === `I would like to remove the classroom ${classroom?.name}.`) {
+      remove({ id: String(classroom?.id) }).then(() => {
+        Inputs.setValues({});
+        onClose();
+      });
+    }
   };
 
   return (
     <div>
       <Modal isOpen={isOpen} onClose={onClose}>
-        <Typography variant="info">
-          Please type the following statement to remove classroom: {classroom?.name}.
-        </Typography>
+        <Typography variant="info">Please type the following statement to remove the selected classroom.</Typography>
         <br />
         <Form
           action="Confirm"
@@ -214,7 +249,7 @@ const ClassroomRemove: React.FC<IClassroomRemoveProps> = ({ isOpen, onClose, cla
               <Input
                 name="text"
                 type="text"
-                label="I would like to remove this classroom."
+                label={`I would like to remove the classroom ${classroom?.name}.`}
                 value={Inputs.values.text}
                 onChange={Inputs.handleInputChange}
               />

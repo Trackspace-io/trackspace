@@ -2,21 +2,21 @@ import { UserAPI } from 'api';
 import { UserContext } from 'contexts';
 import Cookies from 'js-cookie';
 import * as React from 'react';
-import { useHistory } from 'react-router-dom';
-import { IUser, IUserSignIn, IUserSignUp, IUserUpdate, IUserSendResetPassword, IUserConfirmResetPassword } from 'types';
-import useMessage from './useMessage';
+import { IUser, IUserConfirmResetPassword, IUserSendResetPassword, IUserSignIn, IUserSignUp, IUserUpdate } from 'types';
+
+import useMessages from './useMessages';
 
 interface IUserController {
   current: IUser;
   isAuth: boolean;
 
-  register: (input: IUserSignUp) => void;
-  login: (input: IUserSignIn) => void;
+  register: (payload: IUserSignUp) => void;
+  login: (payload: IUserSignIn) => void;
   authCheck: (cookie: string) => void;
   logout: () => void;
-  sendResetPassword: (input: IUserSendResetPassword) => Promise<any>;
-  confirmResetPassword: (input: IUserConfirmResetPassword) => Promise<any>;
-  updateUser: (input: IUserUpdate) => Promise<any>;
+  sendResetPassword: (payload: IUserSendResetPassword) => Promise<any>;
+  confirmResetPassword: (payload: IUserConfirmResetPassword) => Promise<any>;
+  updateUser: (payload: IUserUpdate) => Promise<any>;
 }
 
 const useUser = (): IUserController => {
@@ -24,13 +24,10 @@ const useUser = (): IUserController => {
   const context = React.useContext(UserContext.Ctx);
 
   // Message controller to send notification.
-  const Messages = useMessage();
-
-  // Router used to redirect.
-  const history = useHistory();
+  const Messages = useMessages();
 
   if (context === undefined) {
-    throw new Error('useCountState must be used within a CountProvider');
+    throw new Error('User context must be used within a Provider');
   }
 
   // States
@@ -88,10 +85,10 @@ const useUser = (): IUserController => {
    *
    * @returns void
    */
-  const register = (input: IUserSignUp) => {
-    UserAPI.register(input)
+  const register = (payload: IUserSignUp) => {
+    UserAPI.register(payload)
       .then(() => {
-        history.replace('/');
+        window.location.replace('/');
       })
       .catch((e) => {
         const { data } = e.response;
@@ -115,9 +112,9 @@ const useUser = (): IUserController => {
    *
    * @returns Promise
    */
-  const updateUser = (input: IUserUpdate) => {
+  const updateUser = (payload: IUserUpdate) => {
     return new Promise((resolve) => {
-      UserAPI.update(input)
+      UserAPI.update(payload)
         .then(() => {
           get();
 
@@ -126,7 +123,7 @@ const useUser = (): IUserController => {
             text: `Profile updated.`,
           });
 
-          return resolve(true);
+          resolve(true);
         })
         .catch((e) => {
           const { msg } = e.response.data.errors[0];
@@ -147,12 +144,12 @@ const useUser = (): IUserController => {
    *
    * @returns void
    */
-  const login = (input: IUserSignIn) => {
-    UserAPI.login(input)
+  const login = (payload: IUserSignIn) => {
+    UserAPI.login(payload)
       .then((response) => {
         const { data } = response;
 
-        history.go(data.redirect);
+        window.location.replace(data.redirect);
       })
       .catch((e) => {
         const { data } = e.response;
@@ -169,7 +166,7 @@ const useUser = (): IUserController => {
       const { data } = response;
 
       Cookies.remove('connect.sid');
-      history.go(data.redirect);
+      window.location.replace(data.redirect);
     });
   };
 
@@ -180,9 +177,9 @@ const useUser = (): IUserController => {
    *
    * @returns Promise
    */
-  const sendResetPassword = async (input: IUserSendResetPassword) => {
+  const sendResetPassword = (payload: IUserSendResetPassword) => {
     return new Promise((resolve, reject) => {
-      UserAPI.sendResetPassword(input)
+      UserAPI.sendResetPassword(payload)
         .then((response) => {
           const { data } = response;
 
@@ -210,26 +207,32 @@ const useUser = (): IUserController => {
    *
    * @returns void
    */
-  const confirmResetPassword = async (input: IUserConfirmResetPassword) => {
-    UserAPI.confirmResetPassword(input)
-      .then((response) => {
-        const { data } = response;
+  const confirmResetPassword = (payload: IUserConfirmResetPassword) => {
+    return new Promise((resolve, reject) => {
+      UserAPI.confirmResetPassword(payload)
+        .then((response) => {
+          const { data } = response;
 
-        history.replace(data.redirect);
+          window.location.replace(data.redirect);
 
-        Messages.add({
-          type: 'success',
-          text: 'Password reset',
+          Messages.add({
+            type: 'success',
+            text: 'Password reset',
+          });
+
+          resolve(data);
+        })
+        .catch((e) => {
+          const { msg } = e.response.data.errors[0];
+
+          Messages.add({
+            type: 'error',
+            text: `${msg}`,
+          });
+
+          reject();
         });
-      })
-      .catch((e) => {
-        const { msg } = e.response.data.errors[0];
-
-        Messages.add({
-          type: 'error',
-          text: `${msg}`,
-        });
-      });
+    });
   };
 
   return {

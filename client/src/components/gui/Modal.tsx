@@ -19,7 +19,11 @@ interface IModalProps {
 
 const Modal: React.FC<IModalProps> = ({ children, isOpen, onClose }) => {
   return (
-    <ReactModal className={style['modal']} isOpen={isOpen} onRequestClose={onClose}>
+    <ReactModal
+      className={style['modal']}
+      isOpen={isOpen}
+      onRequestClose={onClose}
+      appElement={document.getElementById('root') as HTMLElement}>
       {children}
     </ReactModal>
   );
