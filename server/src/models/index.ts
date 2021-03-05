@@ -3,6 +3,7 @@ import { classroomAssociations, classroomSchema } from "./Classroom";
 import { notificationAssociations, notificationSchema } from "./Notification";
 import { shortLinkSchema } from "./ShortLink";
 import { subjectAssociations, subjectSchema } from "./Subject";
+import { termAssociations, termSchema } from "./Term";
 import { userAssociations, userSchema } from "./User";
 
 export function registerModels(sequelize: Sequelize): void {
@@ -11,11 +12,13 @@ export function registerModels(sequelize: Sequelize): void {
   notificationSchema(sequelize);
   shortLinkSchema(sequelize);
   subjectSchema(sequelize);
+  termSchema(sequelize);
   userSchema(sequelize);
 
   // Initialize the associations.
   classroomAssociations();
   notificationAssociations();
   subjectAssociations();
+  termAssociations();
   userAssociations();
 }

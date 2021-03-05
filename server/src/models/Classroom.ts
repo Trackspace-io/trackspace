@@ -14,6 +14,7 @@ import {
 import { Notification } from "./Notification";
 import { ShortLink } from "./ShortLink";
 import { Subject } from "./Subject";
+import { Term } from "./Term";
 import { User } from "./User";
 
 export interface IClassroomInvitation {
@@ -92,6 +93,11 @@ export class Classroom extends Model {
   public getSubjects!: HasManyGetAssociationsMixin<Subject>;
 
   /**
+   * Returns the list of terms.
+   */
+  public getTerms!: HasManyGetAssociationsMixin<Term>;
+
+  /**
    * Generate a new invitation link.
    *
    * @param shorten   True if the link must be shortened.
@@ -160,4 +166,6 @@ export function classroomAssociations(): void {
   });
 
   Classroom.hasMany(Subject);
+
+  Classroom.hasMany(Term);
 }
