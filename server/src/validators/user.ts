@@ -64,7 +64,7 @@ export default (): IUserValidator => {
       const user = <User>req.user;
       const associatedClassrooms = await user.getClassrooms();
 
-      // CHeck if the requested classroom is associated to the user.
+      // Check if the requested classroom is associated to the user.
       const classroom = associatedClassrooms.find(
         (c: Classroom) => c.id === req.params.classroomId
       );
