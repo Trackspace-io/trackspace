@@ -5,9 +5,7 @@ import {
   BelongsToManyGetAssociationsMixin,
   BelongsToManyRemoveAssociationMixin,
   DataTypes,
-  HasManyAddAssociationMixin,
   HasManyGetAssociationsMixin,
-  HasManyRemoveAssociationMixin,
   Model,
   Sequelize,
 } from "sequelize";
