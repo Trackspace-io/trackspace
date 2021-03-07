@@ -22,7 +22,7 @@ interface RouteParams {
 
 const Classroom: React.FC = () => {
   const { id } = useParams<RouteParams>();
-  const Classrooms = useClassrooms({ id });
+  const Classrooms = useClassrooms(id);
 
   // Internal state
   const [shareModal, setShareModal] = React.useState(false);

@@ -17,10 +17,11 @@ import style from '../../styles/teacher/Subjects.module.css';
 interface RouteParams {
   id: string;
 }
+
 const Subjects: React.FC = () => {
   const { id } = useParams<RouteParams>();
 
-  const Classrooms = useClassrooms({ id });
+  const Classrooms = useClassrooms(id);
 
   // Internal hooks
   const [action, setAction] = React.useState('');

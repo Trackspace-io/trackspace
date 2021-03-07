@@ -1,7 +1,8 @@
-import { ClassroomAPI, SubjectsAPI } from 'api';
+import { ClassroomAPI, SubjectsAPI, TermsAPI } from 'api';
 import { ClassroomContext } from 'contexts';
 import * as React from 'react';
 import {
+  IAddTerm,
   IClassroom,
   IClassroomCreate,
   IClassroomRemove,
@@ -12,6 +13,7 @@ import {
   ISubjectAdd,
   ISubjectEdit,
   ISubjectRemove,
+  ITerm,
 } from 'types';
 
 import useMessages from './useMessages';
@@ -21,6 +23,7 @@ interface IClassroomController {
   current: Partial<IClassroom>;
   studentsList: IStudent[];
   subjectsList: ISubject[];
+  termsList: ITerm[];
 
   create: (payload: IClassroomCreate) => Promise<any>;
   update: (payload: IClassroomUpdate) => Promise<any>;
@@ -31,9 +34,13 @@ interface IClassroomController {
   addSubject: (payload: ISubjectAdd) => Promise<any>;
   editSubject: (payload: ISubjectEdit) => Promise<any>;
   removeSubject: (payload: ISubjectRemove) => Promise<any>;
+
+  addTerm: (payload: IAddTerm) => Promise<any>;
+  updateTerm: (payload: ITerm) => Promise<any>;
+  removeTerm: (payload: ITerm) => Promise<any>;
 }
 
-const useClassrooms = (classroomId?: Partial<IClassroom>): IClassroomController => {
+const useClassrooms = (classroomId?: string): IClassroomController => {
   // Get classroom context.
   const context = React.useContext(ClassroomContext.Ctx);
 
@@ -46,12 +53,13 @@ const useClassrooms = (classroomId?: Partial<IClassroom>): IClassroomController 
   }
 
   // States
-  const { current, studentsList, subjectsList } = context.state;
+  const { current, studentsList, subjectsList, termsList } = context.state;
 
   React.useEffect(() => {
     classroomId && getCurrent(classroomId);
     classroomId && getStudents(classroomId);
     classroomId && getSubjects(classroomId);
+    classroomId && getTerms(classroomId);
   }, []);
 
   /**
@@ -61,9 +69,9 @@ const useClassrooms = (classroomId?: Partial<IClassroom>): IClassroomController 
    *
    * @returns void
    */
-  const getCurrent = (payload: Partial<IClassroom>) => {
+  const getCurrent = (classroomId: string) => {
     return new Promise((resolve) => {
-      ClassroomAPI.getCurrent(payload)
+      ClassroomAPI.getCurrent(classroomId)
         .then((response) => {
           const { data } = response;
           console.log('data', data);
@@ -190,8 +198,8 @@ const useClassrooms = (classroomId?: Partial<IClassroom>): IClassroomController 
    *
    * @returns void
    */
-  const getStudents = (payload: Partial<IClassroom>) => {
-    ClassroomAPI.getStudents(payload)
+  const getStudents = (classroomId: string) => {
+    ClassroomAPI.getStudents(classroomId)
       .then((response) => {
         const { data } = response;
 
@@ -223,7 +231,7 @@ const useClassrooms = (classroomId?: Partial<IClassroom>): IClassroomController 
         .then((response) => {
           const { data } = response;
 
-          getSubjects({ id: classroomId });
+          getSubjects(classroomId);
 
           Messages.add({
             type: 'success',
@@ -250,8 +258,8 @@ const useClassrooms = (classroomId?: Partial<IClassroom>): IClassroomController 
    *
    * @returns void
    */
-  const getSubjects = (payload: Partial<IClassroom>) => {
-    ClassroomAPI.getSubjects(payload)
+  const getSubjects = (classroomId: string) => {
+    ClassroomAPI.getSubjects(classroomId)
       .then((response) => {
         const { data } = response;
 
@@ -283,7 +291,7 @@ const useClassrooms = (classroomId?: Partial<IClassroom>): IClassroomController 
         .then((response) => {
           const { data } = response;
 
-          getSubjects({ id: classroomId });
+          getSubjects(classroomId);
 
           Messages.add({
             type: 'success',
@@ -320,7 +328,7 @@ const useClassrooms = (classroomId?: Partial<IClassroom>): IClassroomController 
         .then((response) => {
           const { data } = response;
 
-          getSubjects({ id: classroomId });
+          getSubjects(classroomId);
 
           Messages.add({
             type: 'success',
@@ -356,11 +364,152 @@ const useClassrooms = (classroomId?: Partial<IClassroom>): IClassroomController 
         .then((response) => {
           const { data } = response;
 
-          getSubjects({ id: classroomId });
+          getSubjects(classroomId);
 
           Messages.add({
             type: 'success',
             text: `Subject removed.`,
+          });
+
+          resolve(data);
+        })
+        .catch((e) => {
+          const { data } = e.response;
+
+          Messages.add({
+            type: 'error',
+            text: `${data}`,
+          });
+        });
+    });
+  };
+
+  /**
+   * Get the list of subjects of a classroom.
+   *
+   * @param   {string} id The id of the classroom.
+   *
+   * @returns void
+   */
+  const getTerms = async (classroomId: string) => {
+    try {
+      const terms = await TermsAPI.get(classroomId);
+      console.log('terms', terms);
+
+      if (terms) {
+        context.dispatch({ type: 'GET_TERMS', payload: terms.data });
+      }
+    } catch (e) {
+      console.log('e', e);
+      const { data } = e.response;
+
+      Messages.add({
+        type: 'error',
+        text: `${data}`,
+      });
+    }
+  };
+
+  /**
+   * Creates a new term for the classroom.
+   *
+   * @param   {Date}      term.start        Start date of the term.
+   * @param   {Date}      term.end          End date of the term.
+   * @param   {string[]}  term.days         List of allowed days of the week in lower-case
+   *                                        (e.g. sunday, monday, etc.).
+   * @param   {string}    term.classroomID  End date of the term.
+   *
+   * @returns Promise
+   */
+  const addTerm = (payload: IAddTerm): Promise<any> => {
+    const { classroomId } = payload;
+
+    return new Promise((resolve) => {
+      TermsAPI.add(payload)
+        .then((response) => {
+          const { data } = response;
+
+          getTerms(classroomId);
+
+          Messages.add({
+            type: 'success',
+            text: `Term added.`,
+          });
+
+          resolve(data);
+        })
+        .catch((e) => {
+          const { data } = e.response;
+
+          Messages.add({
+            type: 'error',
+            text: `${data}`,
+          });
+        });
+    });
+  };
+
+  /**
+   * Updates a term
+   *
+   * @param   {string}    term.id           Id of the term.
+   * @param   {Date}      term.start        Start date of the term.
+   * @param   {Date}      term.end          End date of the term.
+   * @param   {string[]}  term.days         List of allowed days of the week in lower-case
+   *                                        (e.g. sunday, monday, etc.).
+   * @param   {string}    term.classroomID  End date of the term.
+   *
+   * @returns Promise
+   */
+  const updateTerm = (payload: ITerm): Promise<any> => {
+    const { classroomId } = payload;
+
+    return new Promise((resolve) => {
+      TermsAPI.update(payload)
+        .then((response) => {
+          const { data } = response;
+
+          getTerms(classroomId);
+
+          Messages.add({
+            type: 'success',
+            text: `Subject edited.`,
+          });
+
+          resolve(data);
+        })
+        .catch((e) => {
+          const { data } = e.response;
+
+          Messages.add({
+            type: 'error',
+            text: `${data}`,
+          });
+        });
+    });
+  };
+
+  /**
+   * Deletes a term.
+   *
+   * @param   {string}    term.id           Id of the term.
+   * @param   {string}    term.classroomID  End date of the term.
+   *
+   * @returns Promise
+   */
+  const removeTerm = (payload: ITerm): Promise<any> => {
+    const { classroomId } = payload;
+
+    return new Promise((resolve) => {
+      TermsAPI.remove(payload)
+        .then((response) => {
+          const { data } = response;
+
+          getTerms(classroomId);
+
+          Messages.add({
+            type: 'success',
+            text: `Term removed.`,
           });
 
           resolve(data);
@@ -381,6 +530,7 @@ const useClassrooms = (classroomId?: Partial<IClassroom>): IClassroomController 
     current,
     studentsList,
     subjectsList,
+    termsList,
 
     // Dispatchers
     create,
@@ -391,6 +541,10 @@ const useClassrooms = (classroomId?: Partial<IClassroom>): IClassroomController 
     addSubject,
     editSubject,
     removeSubject,
+
+    addTerm,
+    updateTerm,
+    removeTerm,
   };
 };
 

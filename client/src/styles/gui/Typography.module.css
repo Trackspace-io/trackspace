@@ -39,3 +39,11 @@
 .align-right {
   text-align: right;
 }
+
+.display-block {
+  display: block;
+}
+
+.display-inline {
+  display: inline;
+}
