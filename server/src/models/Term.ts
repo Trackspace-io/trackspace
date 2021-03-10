@@ -15,7 +15,7 @@ export class Term extends Model {
    *
    * @returns The term.
    */
-  static async findById(id: string): Promise<Term> {
+  public static async findById(id: string): Promise<Term> {
     return await this.findOne({ where: { id } });
   }
 
@@ -27,9 +27,30 @@ export class Term extends Model {
    *
    * @returns The list of terms overlapping the given period.
    */
-  static async findTermsBetween(from: Date, to: Date): Promise<Term[]> {
+  public static async findTermsBetween(from: Date, to: Date): Promise<Term[]> {
     return await this.findAll({
       where: { [Op.and]: { start: { [Op.lte]: to }, end: { [Op.gte]: from } } },
+    });
+  }
+
+  /**
+   * Finds the term at a given date.
+   *
+   * @param classroomId Identifier of the classroom.
+   * @param date        Date to check.
+   *
+   * @returns The term at the given date.
+   */
+  public static async findByDate(
+    classroomId: string,
+    date: Date
+  ): Promise<Term> {
+    return await Term.findOne({
+      where: {
+        ClassroomId: classroomId,
+        start: { [Op.lte]: date },
+        end: { [Op.gte]: date },
+      },
     });
   }
 
@@ -48,6 +69,13 @@ export class Term extends Model {
   }
 
   /**
+   * Identifier of the associated classroom.
+   */
+  private get classroomId(): string {
+    return this.getDataValue("ClassroomId");
+  }
+
+  /**
    * Sets the start date of the term and check for conflicts.
    *
    * @param date The new start date.
@@ -55,7 +83,7 @@ export class Term extends Model {
    * @returns True if the date was updated, false otherwise.
    */
   public async setStart(date: Date): Promise<boolean> {
-    const conflict = await this.getTermAtDate(date);
+    const conflict = await Term.findByDate(this.classroomId, date);
     if (conflict && conflict.id !== this.id) {
       return false;
     }
@@ -80,7 +108,7 @@ export class Term extends Model {
    * @returns True if the date was updated, false otherwise.
    */
   public async setEnd(date: Date): Promise<boolean> {
-    const conflict = await this.getTermAtDate(date);
+    const conflict = await Term.findByDate(this.classroomId, date);
     if (conflict && conflict.id !== this.id) {
       return false;
     }
@@ -201,24 +229,6 @@ export class Term extends Model {
     // Set the values.
     days.forEach((day: string | number) => {
       this.setDayIsAllowed(day, true);
-    });
-  }
-
-  /**
-   * Returns the term at a given date.
-   *
-   * @param date Date to check.
-   *
-   * @returns The term at the given date.
-   */
-  public async getTermAtDate(date: Date): Promise<Term> {
-    return await Term.findOne({
-      where: {
-        [Op.and]: {
-          start: { [Op.lte]: date },
-          end: { [Op.gte]: date },
-        },
-      },
     });
   }
 
