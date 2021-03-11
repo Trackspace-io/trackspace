@@ -96,6 +96,17 @@ export class Classroom extends Model {
   public getTerms!: HasManyGetAssociationsMixin<Term>;
 
   /**
+   * Gets the term at the given date.
+   *
+   * @param date The date.
+   *
+   * @returns The term.
+   */
+  public async getTermAtDate(date: Date): Promise<Term> {
+    return Term.findByDate(this.id, date);
+  }
+
+  /**
    * Generate a new invitation link.
    *
    * @param shorten   True if the link must be shortened.
