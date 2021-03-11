@@ -155,6 +155,19 @@ export class User extends Model {
   }
 
   /**
+   * Checks if this user is associated to a classroom.
+   *
+   * @param classroom The classroom.
+   *
+   * @returns True if this user is associated to this classroom, false
+   * otherwise.
+   */
+  public async isInClassroom(classroom: Classroom): Promise<boolean> {
+    const classrooms = await this.getClassrooms();
+    return classrooms.find((c) => classroom.id === c.id) ? true : false;
+  }
+
+  /**
    * Sends an email containing a link to reset the user's password.
    *
    * @returns True if the email was sent, false otherwise.
