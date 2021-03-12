@@ -8,11 +8,9 @@ import Typography from 'components/gui/Typography';
 import useClassrooms from 'controllers/useClassrooms';
 import useTeachers from 'controllers/useTeachers';
 import * as React from 'react';
+import { FiEdit2, FiTrash } from 'react-icons/fi';
 import { Route, Switch } from 'react-router-dom';
 import { IClassroom, IClassroomCreate, IClassroomRemove, IClassroomUpdate } from 'types';
-
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import style from '../../styles/teacher/Home.module.css';
 
@@ -65,15 +63,13 @@ const Classrooms: React.FC = () => {
               <div key={classroom.id} className={style['classroom-item']}>
                 <a href={`/teacher/classrooms/${classroom.id}`}>{classroom.name}</a>
                 <div className={style['classroom-actions']}>
-                  <FontAwesomeIcon
-                    icon={faEdit}
+                  <FiEdit2
                     onClick={() => {
                       setAction('update');
                       setClassroom(classroom);
                     }}
                   />
-                  <FontAwesomeIcon
-                    icon={faTrash}
+                  <FiTrash
                     onClick={() => {
                       setAction('remove');
                       setClassroom(classroom);

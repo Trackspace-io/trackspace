@@ -6,11 +6,9 @@ import Modal from 'components/gui/Modal';
 import Typography from 'components/gui/Typography';
 import useClassrooms from 'controllers/useClassrooms';
 import * as React from 'react';
+import { FiEdit2, FiTrash } from 'react-icons/fi';
 import { useParams } from 'react-router-dom';
 import { ISubject, ISubjectAdd, ISubjectEdit, ISubjectRemove } from 'types';
-
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import style from '../../styles/teacher/Subjects.module.css';
 
@@ -46,15 +44,13 @@ const Subjects: React.FC = () => {
                   <Typography>{subject.name}</Typography>
                 </div>
                 <div className={style['actions']}>
-                  <FontAwesomeIcon
-                    icon={faEdit}
+                  <FiEdit2
                     onClick={() => {
                       setAction('edit');
                       setSubject(subject);
                     }}
                   />
-                  <FontAwesomeIcon
-                    icon={faTrash}
+                  <FiTrash
                     onClick={() => {
                       setAction('remove');
                       setSubject(subject);

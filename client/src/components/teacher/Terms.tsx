@@ -1,20 +1,18 @@
 import Button from 'components/gui/Button';
+import Checkbox from 'components/gui/Checkbox';
 import Divider from 'components/gui/Divider';
+import Form from 'components/gui/Form';
+import { Input, useInput } from 'components/gui/Input';
+import Modal from 'components/gui/Modal';
 import Typography from 'components/gui/Typography';
 import useClassrooms from 'controllers/useClassrooms';
 import * as React from 'react';
+import { FiEdit2, FiTrash } from 'react-icons/fi';
 import { useParams } from 'react-router-dom';
+import { ITerm, ITermCreate, ITermModify, ITermRemove } from 'types';
 
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
+import { dateValue, today, WEEK_DAYS } from '../../helpers/calendar';
 import style from '../../styles/teacher/Terms.module.css';
-import { Input, useInput } from 'components/gui/Input';
-import Modal from 'components/gui/Modal';
-import Form from 'components/gui/Form';
-import { ITermCreate, ITermRemove, ITerm, ITermModify } from 'types';
-import Checkbox from 'components/gui/Checkbox';
-import { WEEK_DAYS, today, dateValue } from '../../helpers/calendar';
 
 interface RouteParams {
   id: string;
@@ -116,15 +114,13 @@ const TermItem: React.FC<ITermItem> = ({ term, index, setAction, setTerm }) => {
         </Typography>
       </div>
       <div className={style['actions']}>
-        <FontAwesomeIcon
-          icon={faEdit}
+        <FiEdit2
           onClick={() => {
             setAction('modify');
             setTerm(term);
           }}
         />
-        <FontAwesomeIcon
-          icon={faTrash}
+        <FiTrash
           onClick={() => {
             setAction('remove');
             setTerm(term);

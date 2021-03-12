@@ -6,16 +6,13 @@ import useTeachers from 'controllers/useTeachers';
 import moment from 'moment';
 import { default as SimpleCalendar } from 'rc-calendar';
 import * as React from 'react';
+import { FcHome } from 'react-icons/fc';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { IClassroom } from 'types';
-
-import { faHome } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import style from '../../styles/teacher/Dashboard.module.css';
 import { NavbarMini } from '../gui/Navbar';
 import Classroom from './Classroom';
-
 import Home from './Home';
 
 const now = moment();
@@ -68,8 +65,8 @@ const Sidebar: React.FC<ISidebarProps> = ({ classrooms }) => {
   return (
     <div>
       <Tooltip text="Home" position="right">
-        <a href="/teacher" className={style['bubble']}>
-          <FontAwesomeIcon icon={faHome} />
+        <a href="/teacher" className={style['home']}>
+          <FcHome />
         </a>
       </Tooltip>
       <Divider />

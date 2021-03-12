@@ -1,20 +1,20 @@
+import Button from 'components/gui/Button';
 import { Input, useInput } from 'components/gui/Input';
 import Modal from 'components/gui/Modal';
 import { Sidebar, SidebarItem } from 'components/gui/Sidebar';
 import Typography from 'components/gui/Typography';
+import useClassrooms from 'controllers/useClassrooms';
+import useTeachers from 'controllers/useTeachers';
 import * as React from 'react';
-import { Redirect, Route, Switch, useParams } from 'react-router-dom';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import { faShare } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FcCheckmark, FcCollaboration, FcComboChart, FcOvertime, FcTimeline } from 'react-icons/fc';
+import { FiShare2 } from 'react-icons/fi';
+import { Redirect, Route, Switch, useParams } from 'react-router-dom';
 
 import style from '../../styles/teacher/Classroom.module.css';
 import Students from './Students';
 import Subjects from './Subjects';
 import Terms from './Terms';
-import useTeachers from 'controllers/useTeachers';
-import Button from 'components/gui/Button';
-import useClassrooms from 'controllers/useClassrooms';
 
 interface RouteParams {
   id: string;
@@ -32,18 +32,28 @@ const Classroom: React.FC = () => {
       <div className={style['header']}>
         <Typography variant="subtitle">{Classrooms.current?.name}</Typography>
         <div className={style['share']} onClick={() => setShareModal(true)}>
-          <FontAwesomeIcon icon={faShare} />
-          Share
+          <FiShare2 />
+          <span className={style['text']}>Share</span>
         </div>
       </div>
       <div className={style['body']}>
         <div className={style['sidebar']}>
           <Sidebar>
-            <SidebarItem to={`/teacher/classrooms/${id}/students`}> Students </SidebarItem>
-            <SidebarItem to={`/teacher/classrooms/${id}/subjects`}> Subjects </SidebarItem>
-            <SidebarItem to={`/teacher/classrooms/${id}/terms`}> Terms </SidebarItem>
-            <SidebarItem to={`/teacher/classrooms/${id}/goals`}> Goals </SidebarItem>
-            <SidebarItem to={`/teacher/classrooms/${id}/progress`}> Progress </SidebarItem>
+            <SidebarItem to={`/teacher/classrooms/${id}/students`} icon={<FcCollaboration />}>
+              Students
+            </SidebarItem>
+            <SidebarItem to={`/teacher/classrooms/${id}/subjects`} icon={<FcTimeline />}>
+              Subjects
+            </SidebarItem>
+            <SidebarItem to={`/teacher/classrooms/${id}/terms`} icon={<FcOvertime />}>
+              Terms
+            </SidebarItem>
+            <SidebarItem to={`/teacher/classrooms/${id}/goals`} icon={<FcCheckmark />}>
+              Goals
+            </SidebarItem>
+            <SidebarItem to={`/teacher/classrooms/${id}/progress`} icon={<FcComboChart />}>
+              Progress
+            </SidebarItem>
           </Sidebar>
         </div>
         <div className={style['content']}>

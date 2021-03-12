@@ -25,7 +25,7 @@
 }
 
 .primary {
-  border: 1px solid var(--black-light);
+  border: 1px solid #ccc;
   border-radius: 24px;
   color: var(--black-light);
   background: linear-gradient(to right, var(--green-light) 50%, #fff 50%);

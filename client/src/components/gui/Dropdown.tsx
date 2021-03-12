@@ -1,18 +1,16 @@
-import * as React from 'react';
-import style from '../../styles/gui/Dropdown.module.css';
 import cx from 'classnames';
+import * as React from 'react';
+
+import style from '../../styles/gui/Dropdown.module.css';
 import ClickHandler from './ClickHandler';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { faEllipsisH } from '@fortawesome/free-solid-svg-icons';
 
 interface IDropdownProps {
   title?: string;
-  icon?: IconDefinition;
+  icon?: React.ReactNode;
   type: 'icon' | 'title';
 }
 
-const Dropdown: React.FC<IDropdownProps> = ({ children, type, icon = faEllipsisH, title }) => {
+const Dropdown: React.FC<IDropdownProps> = ({ children, type, icon, title }) => {
   const [isActive, setIsActive] = React.useState(false);
 
   const handleClick = () => {
@@ -28,7 +26,11 @@ const Dropdown: React.FC<IDropdownProps> = ({ children, type, icon = faEllipsisH
           </button>
         );
       case 'icon':
-        return <FontAwesomeIcon icon={icon} className={style['icon']} onClick={handleClick} />;
+        return (
+          <span onClick={handleClick} className={style['icon']}>
+            {icon}
+          </span>
+        );
       default:
         throw new Error('Unable to render.');
     }

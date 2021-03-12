@@ -5,11 +5,9 @@ import Modal from 'components/gui/Modal';
 import Typography from 'components/gui/Typography';
 import useClassrooms from 'controllers/useClassrooms';
 import * as React from 'react';
+import { FiTrash } from 'react-icons/fi';
 import { useParams } from 'react-router-dom';
 import { IClassroomRemoveStudent, IStudent } from 'types';
-
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import style from '../../styles/teacher/Students.module.css';
 
@@ -45,8 +43,7 @@ const Students: React.FC = () => {
                   <Typography variant="caption">{student.email}</Typography>
                 </div>
                 <div className={style['actions']}>
-                  <FontAwesomeIcon
-                    icon={faTrash}
+                  <FiTrash
                     onClick={() => {
                       setAction('remove');
                       setStudent(student);

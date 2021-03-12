@@ -7,12 +7,14 @@ const Sidebar: React.FC = ({ children }) => {
 
 interface ISidebarItemProps {
   to: string;
+  icon?: React.ReactNode;
 }
 
-const SidebarItem: React.FC<ISidebarItemProps> = ({ children, to }) => {
+const SidebarItem: React.FC<ISidebarItemProps> = ({ children, icon, to }) => {
   return (
     <a href={to} className={style['sidebar-item']}>
-      {children}
+      <span className={style['icon']}>{icon}</span>
+      <span className={style['text']}>{children}</span>
     </a>
   );
 };
