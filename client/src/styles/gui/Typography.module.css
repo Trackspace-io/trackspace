@@ -47,3 +47,11 @@
 .display-inline {
   display: inline;
 }
+
+.weight-bold {
+  font-weight: 600;
+}
+
+.weight-light {
+  font-weight: 300;
+}

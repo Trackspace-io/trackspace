@@ -2,18 +2,20 @@ import { ClassroomAPI, SubjectsAPI, TermsAPI } from 'api';
 import { ClassroomContext } from 'contexts';
 import * as React from 'react';
 import {
-  IAddTerm,
+  ITermCreate,
   IClassroom,
   IClassroomCreate,
   IClassroomRemove,
   IClassroomRemoveStudent,
   IClassroomUpdate,
+  ITermRemove,
   IStudent,
   ISubject,
   ISubjectAdd,
   ISubjectEdit,
   ISubjectRemove,
   ITerm,
+  ITermModify,
 } from 'types';
 
 import useMessages from './useMessages';
@@ -35,9 +37,9 @@ interface IClassroomController {
   editSubject: (payload: ISubjectEdit) => Promise<any>;
   removeSubject: (payload: ISubjectRemove) => Promise<any>;
 
-  addTerm: (payload: IAddTerm) => Promise<any>;
-  updateTerm: (payload: ITerm) => Promise<any>;
-  removeTerm: (payload: ITerm) => Promise<any>;
+  createTerm: (payload: ITermCreate) => Promise<any>;
+  modifyTerm: (payload: ITermModify) => Promise<any>;
+  removeTerm: (payload: ITermRemove) => Promise<any>;
 }
 
 const useClassrooms = (classroomId?: string): IClassroomController => {
@@ -400,12 +402,11 @@ const useClassrooms = (classroomId?: string): IClassroomController => {
         context.dispatch({ type: 'GET_TERMS', payload: terms.data });
       }
     } catch (e) {
-      console.log('e', e);
-      const { data } = e.response;
+      const { msg } = e.response.data.errors[0];
 
       Messages.add({
         type: 'error',
-        text: `${data}`,
+        text: `${msg}`,
       });
     }
   };
@@ -421,7 +422,7 @@ const useClassrooms = (classroomId?: string): IClassroomController => {
    *
    * @returns Promise
    */
-  const addTerm = (payload: IAddTerm): Promise<any> => {
+  const createTerm = (payload: ITermCreate): Promise<any> => {
     const { classroomId } = payload;
 
     return new Promise((resolve) => {
@@ -439,11 +440,11 @@ const useClassrooms = (classroomId?: string): IClassroomController => {
           resolve(data);
         })
         .catch((e) => {
-          const { data } = e.response;
+          const { msg } = e.response.data.errors[0];
 
           Messages.add({
             type: 'error',
-            text: `${data}`,
+            text: `${msg}`,
           });
         });
     });
@@ -461,7 +462,7 @@ const useClassrooms = (classroomId?: string): IClassroomController => {
    *
    * @returns Promise
    */
-  const updateTerm = (payload: ITerm): Promise<any> => {
+  const modifyTerm = (payload: ITermModify): Promise<any> => {
     const { classroomId } = payload;
 
     return new Promise((resolve) => {
@@ -473,17 +474,17 @@ const useClassrooms = (classroomId?: string): IClassroomController => {
 
           Messages.add({
             type: 'success',
-            text: `Subject edited.`,
+            text: `Term edited.`,
           });
 
           resolve(data);
         })
         .catch((e) => {
-          const { data } = e.response;
+          const { msg } = e.response.data.errors[0];
 
           Messages.add({
             type: 'error',
-            text: `${data}`,
+            text: `${msg}`,
           });
         });
     });
@@ -497,7 +498,7 @@ const useClassrooms = (classroomId?: string): IClassroomController => {
    *
    * @returns Promise
    */
-  const removeTerm = (payload: ITerm): Promise<any> => {
+  const removeTerm = (payload: ITermRemove): Promise<any> => {
     const { classroomId } = payload;
 
     return new Promise((resolve) => {
@@ -515,11 +516,11 @@ const useClassrooms = (classroomId?: string): IClassroomController => {
           resolve(data);
         })
         .catch((e) => {
-          const { data } = e.response;
+          const { msg } = e.response.data.errors[0];
 
           Messages.add({
             type: 'error',
-            text: `${data}`,
+            text: `${msg}`,
           });
         });
     });
@@ -542,8 +543,8 @@ const useClassrooms = (classroomId?: string): IClassroomController => {
     editSubject,
     removeSubject,
 
-    addTerm,
-    updateTerm,
+    createTerm,
+    modifyTerm,
     removeTerm,
   };
 };

@@ -12,14 +12,13 @@ import style from '../../styles/teacher/Terms.module.css';
 import { Input, useInput } from 'components/gui/Input';
 import Modal from 'components/gui/Modal';
 import Form from 'components/gui/Form';
-import { IAddTerm } from 'types';
+import { ITermCreate, ITermRemove, ITerm, ITermModify } from 'types';
 import Checkbox from 'components/gui/Checkbox';
+import { WEEK_DAYS, today, dateValue } from '../../helpers/calendar';
 
 interface RouteParams {
   id: string;
 }
-
-const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
 const Terms: React.FC = () => {
   const { id } = useParams<RouteParams>();
@@ -28,12 +27,13 @@ const Terms: React.FC = () => {
 
   // Internal hooks
   const [action, setAction] = React.useState('');
+  const [term, setTerm] = React.useState<ITerm | undefined>(undefined);
 
   return (
     <div>
       <div className={style['header']}>
         <Typography variant="subtitle"> Manage terms </Typography>
-        <Button variant="primary" onClick={() => setAction('add')}>
+        <Button variant="primary" onClick={() => setAction('create')}>
           Add term
         </Button>
       </div>
@@ -43,36 +43,7 @@ const Terms: React.FC = () => {
         <div className={style['list']}>
           {Classrooms.termsList.length !== 0 ? (
             Classrooms.termsList.map((term, i) => (
-              <div key={term.id} className={style['item']}>
-                <div>
-                  <Typography display="inline">Term {i + 1} </Typography>
-                  <Typography variant="caption" display="inline">
-                    {' | '}
-                    {term.days.map((day) => {
-                      return day[0].toUpperCase();
-                    })}
-                  </Typography>
-                  <Typography variant="caption">
-                    {new Date(term.start).toLocaleDateString()} - {new Date(term.end).toLocaleDateString()}
-                  </Typography>
-                </div>
-                <div className={style['actions']}>
-                  <FontAwesomeIcon
-                    icon={faEdit}
-                    // onClick={() => {
-                    //   setAction('edit');
-                    //   setSubject(subject);
-                    // }}
-                  />
-                  <FontAwesomeIcon
-                    icon={faTrash}
-                    // onClick={() => {
-                    //   setAction('remove');
-                    //   setSubject(subject);
-                    // }}
-                  />
-                </div>
-              </div>
+              <TermItem key={term.id} term={term} index={i} setAction={setAction} setTerm={setTerm} />
             ))
           ) : (
             <Typography variant="caption" align="center">
@@ -82,14 +53,84 @@ const Terms: React.FC = () => {
         </div>
       </div>
 
-      {action === 'add' && (
+      {action === 'create' && (
         <AddTerm
-          isOpen={Boolean(action === 'add')}
+          isOpen={Boolean(action === 'create')}
           onClose={() => setAction('')}
           classroomId={id}
-          addTerm={Classrooms.addTerm}
+          addTerm={Classrooms.createTerm}
         />
       )}
+
+      {action === 'modify' && (
+        <ModifyTerm
+          isOpen={Boolean(action === 'modify')}
+          onClose={() => setAction('')}
+          term={term}
+          classroomId={id}
+          modifyTerm={Classrooms.modifyTerm}
+        />
+      )}
+
+      {action === 'remove' && (
+        <RemoveTerm
+          isOpen={Boolean(action === 'remove')}
+          onClose={() => setAction('')}
+          term={term}
+          classroomId={id}
+          removeTerm={Classrooms.removeTerm}
+        />
+      )}
+    </div>
+  );
+};
+
+interface ITermItem {
+  term: ITerm;
+  index: number;
+  setAction: React.Dispatch<React.SetStateAction<string>>;
+  setTerm: React.Dispatch<React.SetStateAction<ITerm | undefined>>;
+}
+
+const TermItem: React.FC<ITermItem> = ({ term, index, setAction, setTerm }) => {
+  return (
+    <div key={term.id} className={style['item']}>
+      <div>
+        <Typography display="inline">Term {index + 1} </Typography>
+        <Typography variant="caption" display="inline">
+          {` | `}
+        </Typography>
+        {term.days.map((day: string) => {
+          return (
+            <Typography
+              key={day}
+              variant="caption"
+              display="inline"
+              weight={WEEK_DAYS[today] === day ? 'bold' : 'light'}>
+              {` ${day.slice(0, 3)} `}
+            </Typography>
+          );
+        })}
+        <Typography variant="caption">
+          {dateValue(term.start)} - {dateValue(term.end)}
+        </Typography>
+      </div>
+      <div className={style['actions']}>
+        <FontAwesomeIcon
+          icon={faEdit}
+          onClick={() => {
+            setAction('modify');
+            setTerm(term);
+          }}
+        />
+        <FontAwesomeIcon
+          icon={faTrash}
+          onClick={() => {
+            setAction('remove');
+            setTerm(term);
+          }}
+        />
+      </div>
     </div>
   );
 };
@@ -98,13 +139,13 @@ interface IAddTermProps {
   isOpen: boolean;
   onClose: () => void;
   classroomId: string;
-  addTerm: (payload: IAddTerm) => Promise<any>;
+  addTerm: (payload: ITermCreate) => Promise<any>;
 }
 
 const AddTerm: React.FC<IAddTermProps> = ({ isOpen, onClose, classroomId, addTerm }) => {
   const Inputs = useInput({
-    start: new Date(),
-    end: new Date(),
+    start: '',
+    end: '',
     monday: true,
     tuesday: true,
     wednesday: true,
@@ -120,7 +161,7 @@ const AddTerm: React.FC<IAddTermProps> = ({ isOpen, onClose, classroomId, addTer
     const { start, end } = Inputs.values;
 
     const days = Object.keys(Inputs.values).reduce<string[]>((acc, day) => {
-      if (DAYS.includes(day) && Inputs.values[day]) {
+      if (WEEK_DAYS.includes(day) && Inputs.values[day]) {
         acc = [...acc, day];
       }
 
@@ -152,18 +193,18 @@ const AddTerm: React.FC<IAddTermProps> = ({ isOpen, onClose, classroomId, addTer
                 name="start"
                 type="date"
                 label="Start date"
-                value={Inputs.values.start}
+                value={dateValue(Inputs.values.start)}
                 onChange={Inputs.handleInputChange}
               />
               <Input
                 name="end"
                 type="date"
                 label="End date"
-                value={Inputs.values.end}
+                value={dateValue(Inputs.values.end)}
                 onChange={Inputs.handleInputChange}
               />
               <div className={style['checkboxes']}>
-                {DAYS.map((day) => {
+                {WEEK_DAYS.map((day) => {
                   return (
                     <Checkbox
                       key={day}
@@ -183,6 +224,156 @@ const AddTerm: React.FC<IAddTermProps> = ({ isOpen, onClose, classroomId, addTer
             </React.Fragment>
           )}
         />
+      </Modal>
+    </div>
+  );
+};
+
+interface IModifyTermProps {
+  isOpen: boolean;
+  onClose: () => void;
+  term: ITerm | undefined;
+  classroomId: string;
+  modifyTerm: (input: ITermModify) => Promise<any>;
+}
+
+const ModifyTerm: React.FC<IModifyTermProps> = ({ isOpen, onClose, classroomId, term, modifyTerm }) => {
+  const Inputs = useInput({
+    start: '',
+    end: '',
+    monday: false,
+    tuesday: false,
+    wednesday: false,
+    thursday: false,
+    friday: false,
+    saturday: false,
+    sunday: false,
+  });
+
+  const isDayInclude = (day: string) => {
+    return term?.days.includes(day);
+  };
+
+  React.useEffect(() => {
+    term &&
+      Inputs.setValues({
+        ...Inputs.values,
+        start: term.start,
+        end: term.end,
+        sunday: isDayInclude('sunday'),
+        monday: isDayInclude('monday'),
+        tuesday: isDayInclude('tuesday'),
+        wednesday: isDayInclude('wednesday'),
+        thursday: isDayInclude('thursday'),
+        friday: isDayInclude('friday'),
+        saturday: isDayInclude('saturday'),
+      });
+  }, [term]);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const { start, end } = Inputs.values;
+
+    const days = Object.keys(Inputs.values).reduce<string[]>((acc, day) => {
+      if (WEEK_DAYS.includes(day) && Inputs.values[day]) {
+        acc = [...acc, day];
+      }
+
+      return acc;
+    }, []);
+
+    modifyTerm({
+      id: String(term?.id),
+      start,
+      end,
+      days,
+      classroomId,
+    }).then(() => {
+      Inputs.setValues({});
+      onClose();
+    });
+  };
+
+  return (
+    <div>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <Typography variant="info"> Update the following term. </Typography>
+        <br />
+        <Form
+          action="Modify"
+          handleSubmit={handleSubmit}
+          render={() => (
+            <React.Fragment>
+              <Input
+                name="start"
+                type="date"
+                label="Start date"
+                value={dateValue(Inputs.values.start)}
+                onChange={Inputs.handleInputChange}
+              />
+              <Input
+                name="end"
+                type="date"
+                label="End date"
+                value={dateValue(Inputs.values.end)}
+                onChange={Inputs.handleInputChange}
+              />
+              <div className={style['checkboxes']}>
+                {WEEK_DAYS.map((day) => {
+                  return (
+                    <Checkbox
+                      key={day}
+                      name={day}
+                      label={day.toUpperCase()}
+                      checked={Inputs.values[day]}
+                      onChange={(e) =>
+                        Inputs.setValues({
+                          ...Inputs.values,
+                          [e.target.name]: e.target.checked,
+                        })
+                      }
+                    />
+                  );
+                })}
+              </div>
+            </React.Fragment>
+          )}
+        />
+      </Modal>
+    </div>
+  );
+};
+
+interface IRemoveSubjectProps {
+  isOpen: boolean;
+  onClose: () => void;
+  term: ITerm | undefined;
+  classroomId: string;
+  removeTerm: (payload: ITermRemove) => Promise<any>;
+}
+
+const RemoveTerm: React.FC<IRemoveSubjectProps> = ({ isOpen, onClose, classroomId, term, removeTerm }) => {
+  const handleSubmit = () => {
+    const payload = {
+      classroomId,
+      id: String(term?.id),
+    };
+
+    removeTerm(payload).then(() => {
+      onClose();
+    });
+  };
+
+  return (
+    <div>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <Typography variant="info">Would you like to remove the following term </Typography>
+        <br />
+        <Button variant="secondary" onClick={handleSubmit}>
+          Yes
+        </Button>
+        <Button variant="secondary">No</Button>
       </Modal>
     </div>
   );

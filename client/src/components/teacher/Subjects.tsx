@@ -212,8 +212,6 @@ interface IRemoveSubjectProps {
 }
 
 const RemoveSubject: React.FC<IRemoveSubjectProps> = ({ isOpen, onClose, classroomId, subject, removeSubject }) => {
-  const Inputs = useInput({ name: '' });
-
   const handleSubmit = () => {
     const payload = {
       classroomId,
@@ -221,7 +219,6 @@ const RemoveSubject: React.FC<IRemoveSubjectProps> = ({ isOpen, onClose, classro
     };
 
     removeSubject(payload).then(() => {
-      Inputs.setValues({});
       onClose();
     });
   };

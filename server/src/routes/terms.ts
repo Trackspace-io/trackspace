@@ -256,6 +256,8 @@ terms.delete(
       await Term.destroy({ where: { id: req.params.id } });
       return res.sendStatus(200);
     } catch (e) {
+      console.log('error', e);
+      
       return res.sendStatus(500);
     }
   }

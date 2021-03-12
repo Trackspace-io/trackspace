@@ -19,6 +19,7 @@ interface ITypographyProps {
   variant?: 'title' | 'subtitle' | 'subtitle1' | 'caption' | 'info';
   align?: 'center' | 'right';
   display?: 'block' | 'inline';
+  weight?: 'bold' | 'light';
   // onClick?: (e: any) => void;
 }
 
@@ -27,8 +28,14 @@ const Typography: React.FC<ITypographyProps> = ({
   variant = 'default',
   align = 'left',
   display = 'block',
+  weight = 'inherit',
 }) => {
-  return <div className={cx(style[variant], style[`align-${align}`], style[`display-${display}`])}>{children}</div>;
+  return (
+    <div
+      className={cx(style[variant], style[`align-${align}`], style[`display-${display}`], style[`weight-${weight}`])}>
+      {children}
+    </div>
+  );
 };
 
 export default Typography;

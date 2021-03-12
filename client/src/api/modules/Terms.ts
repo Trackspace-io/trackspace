@@ -1,6 +1,6 @@
 import { _apiUrl } from 'api/api';
 import axios from 'axios';
-import { IAddTerm, ITerm } from 'types';
+import { ITermCreate, ITermModify, ITermRemove } from 'types';
 
 /**
  * Get classrooms in which a student is enrolled.
@@ -16,13 +16,7 @@ import { IAddTerm, ITerm } from 'types';
  * }[]>} terms
  */
 export const get = async (classroomId: string): Promise<any> => {
-  console.log('classroomId', classroomId);
-
-  try {
-    return await axios.get(`${_apiUrl}/api/classrooms/${classroomId}/terms`, { withCredentials: true });
-  } catch (error) {
-    throw new Error(error);
-  }
+  return await axios.get(`${_apiUrl}/api/classrooms/${classroomId}/terms`, { withCredentials: true });
 };
 
 /**
@@ -39,20 +33,16 @@ export const get = async (classroomId: string): Promise<any> => {
  *
  * @returns 200, 400, 500
  */
-export const add = async (term: IAddTerm): Promise<any> => {
-  const termAdd: Omit<IAddTerm, 'classroomId'> = {
+export const add = async (term: ITermCreate): Promise<any> => {
+  const termAdd: Omit<ITermCreate, 'classroomId'> = {
     start: term.start,
     end: term.end,
     days: term.days,
   };
 
-  try {
-    return await axios.post(`${_apiUrl}/api/classrooms/${term.classroomId}/terms/add`, termAdd, {
-      withCredentials: true,
-    });
-  } catch (error) {
-    throw new Error(error);
-  }
+  return await axios.post(`${_apiUrl}/api/classrooms/${term.classroomId}/terms/add`, termAdd, {
+    withCredentials: true,
+  });
 };
 
 /**
@@ -70,20 +60,16 @@ export const add = async (term: IAddTerm): Promise<any> => {
  *
  * @returns 200, 400, 500
  */
-export const update = async (term: ITerm): Promise<any> => {
-  const termUpdate: Omit<ITerm, 'id' | 'classroomId'> = {
+export const update = async (term: ITermModify): Promise<any> => {
+  const termUpdate: Omit<ITermModify, 'id' | 'classroomId'> = {
     start: term.start,
     end: term.end,
     days: term.days,
   };
 
-  try {
-    return await axios.put(`${_apiUrl}/api/classrooms/${term.classroomId}/terms/${term.id}/modify`, termUpdate, {
-      withCredentials: true,
-    });
-  } catch (error) {
-    return error.status(400).send(error);
-  }
+  return await axios.put(`${_apiUrl}/api/classrooms/${term.classroomId}/terms/${term.id}/modify`, termUpdate, {
+    withCredentials: true,
+  });
 };
 
 /**
@@ -97,12 +83,8 @@ export const update = async (term: ITerm): Promise<any> => {
  *
  * @returns 200, 400, 500
  */
-export const remove = async (term: ITerm): Promise<any> => {
-  try {
-    return await axios.delete(`${_apiUrl}/api/classrooms/${term.classroomId}/terms/${term.id}/remove`, {
-      withCredentials: true,
-    });
-  } catch (error) {
-    throw new Error(error);
-  }
+export const remove = async (term: ITermRemove): Promise<any> => {
+  return await axios.delete(`${_apiUrl}/api/classrooms/${term.classroomId}/terms/${term.id}/remove`, {
+    withCredentials: true,
+  });
 };

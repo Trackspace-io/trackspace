@@ -6,4 +6,8 @@ export interface ITerm {
   classroomId: string;
 }
 
-export type IAddTerm = Omit<ITerm, 'id'>;
+export type ITermCreate = Omit<ITerm, 'id'>;
+
+export type ITermRemove = Pick<ITerm, 'id' | 'classroomId'>;
+
+export type ITermModify = ITerm;
