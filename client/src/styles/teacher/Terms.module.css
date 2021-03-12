@@ -1,0 +1,45 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.list {
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding: 16px;
+}
+
+.item a {
+  text-decoration: none;
+  color: var(--black);
+  outline: none;
+}
+
+.item:hover {
+  box-shadow: 0 1px 5px #ccc;
+}
+
+.item:last-child {
+  border: none;
+}
+
+.actions svg {
+  color: var(--green-dark);
+  cursor: pointer;
+  margin: 0 4px;
+  padding: 4px;
+}
+
+.checkboxes {
+  display: flex;
+  justify-content: center;
+}

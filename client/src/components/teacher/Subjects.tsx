@@ -17,10 +17,11 @@ import style from '../../styles/teacher/Subjects.module.css';
 interface RouteParams {
   id: string;
 }
+
 const Subjects: React.FC = () => {
   const { id } = useParams<RouteParams>();
 
-  const Classrooms = useClassrooms({ id });
+  const Classrooms = useClassrooms(id);
 
   // Internal hooks
   const [action, setAction] = React.useState('');
@@ -211,8 +212,6 @@ interface IRemoveSubjectProps {
 }
 
 const RemoveSubject: React.FC<IRemoveSubjectProps> = ({ isOpen, onClose, classroomId, subject, removeSubject }) => {
-  const Inputs = useInput({ name: '' });
-
   const handleSubmit = () => {
     const payload = {
       classroomId,
@@ -220,7 +219,6 @@ const RemoveSubject: React.FC<IRemoveSubjectProps> = ({ isOpen, onClose, classro
     };
 
     removeSubject(payload).then(() => {
-      Inputs.setValues({});
       onClose();
     });
   };

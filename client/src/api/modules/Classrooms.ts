@@ -1,6 +1,6 @@
 import { _apiUrl } from 'api/api';
 import axios from 'axios';
-import { IClassroom, IClassroomCreate, IClassroomRemove, IClassroomRemoveStudent, IClassroomUpdate } from 'types';
+import { IClassroomCreate, IClassroomRemove, IClassroomRemoveStudent, IClassroomUpdate } from 'types';
 
 /**
  * Get a classroom information
@@ -12,8 +12,8 @@ import { IClassroom, IClassroomCreate, IClassroomRemove, IClassroomRemoveStudent
  *  name: string,
  * }[]>} response.data.
  */
-export const getCurrent = async (body: Partial<IClassroom>): Promise<any> => {
-  return await axios.get(`${_apiUrl}/api/classrooms/${body.id}`, { withCredentials: true });
+export const getCurrent = async (classroomId: string): Promise<any> => {
+  return await axios.get(`${_apiUrl}/api/classrooms/${classroomId}`, { withCredentials: true });
 };
 
 /**
@@ -74,8 +74,8 @@ export const remove = async (body: IClassroomRemove): Promise<any> => {
  *  lastName: string,
  * }[]>} response.data.
  */
-export const getStudents = async (body: Partial<IClassroom>): Promise<any> => {
-  return await axios.get(`${_apiUrl}/api/classrooms/${body.id}/students`, { withCredentials: true });
+export const getStudents = async (classroomId: string): Promise<any> => {
+  return await axios.get(`${_apiUrl}/api/classrooms/${classroomId}/students`, { withCredentials: true });
 };
 
 /**
@@ -108,6 +108,6 @@ export const removeStudent = async (body: IClassroomRemoveStudent): Promise<any>
  *  name: string,
  * }[]>} response.data.
  */
-export const getSubjects = async (body: Partial<IClassroom>): Promise<any> => {
-  return await axios.get(`${_apiUrl}/api/classrooms/${body.id}/subjects`, { withCredentials: true });
+export const getSubjects = async (classroomId: string): Promise<any> => {
+  return await axios.get(`${_apiUrl}/api/classrooms/${classroomId}/subjects`, { withCredentials: true });
 };

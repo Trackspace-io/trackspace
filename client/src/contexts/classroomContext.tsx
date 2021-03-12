@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { IClassroom, IStudent, ISubject } from 'types';
-console.log('context');
+import { IClassroom, IStudent, ISubject, ITerm } from 'types';
 
 /* Interface */
 
@@ -11,6 +10,7 @@ export interface ClassroomState {
   /* List of classrooms */
   studentsList: IStudent[];
   subjectsList: ISubject[];
+  termsList: ITerm[];
   current: Partial<IClassroom>;
 }
 
@@ -18,9 +18,10 @@ export interface ClassroomState {
  * Dispatchers. Actions that update the state.
  */
 export type ClassroomAction =
+  | { type: 'GET_CURRENT'; payload: IClassroom }
   | { type: 'GET_STUDENTS'; payload: IStudent[] }
   | { type: 'GET_SUBJECTS'; payload: ISubject[] }
-  | { type: 'GET_CURRENT'; payload: IClassroom };
+  | { type: 'GET_TERMS'; payload: ITerm[] };
 
 interface IClassroomContext {
   state: ClassroomState;
@@ -33,6 +34,7 @@ interface IClassroomContext {
 const initialState: ClassroomState = {
   studentsList: [],
   subjectsList: [],
+  termsList: [],
   current: {
     name: '',
   },
@@ -50,12 +52,15 @@ const classroomReducer = (state: ClassroomState, action: ClassroomAction): Class
   switch (action.type) {
     case 'GET_CURRENT':
       return { ...state, current: action.payload };
+
     case 'GET_STUDENTS':
       return { ...state, studentsList: action.payload };
+
     case 'GET_SUBJECTS':
       return { ...state, subjectsList: action.payload };
-    // default:
-    //   throw new Error(`Unhandled action type: ${action.type}`);
+
+    case 'GET_TERMS':
+      return { ...state, termsList: action.payload };
   }
 };
 

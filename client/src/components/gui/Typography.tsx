@@ -18,11 +18,24 @@ interface ITypographyProps {
   /** Choose between primary and secondary styling. */
   variant?: 'title' | 'subtitle' | 'subtitle1' | 'caption' | 'info';
   align?: 'center' | 'right';
+  display?: 'block' | 'inline';
+  weight?: 'bold' | 'light';
   // onClick?: (e: any) => void;
 }
 
-const Typography: React.FC<ITypographyProps> = ({ children, variant = 'default', align = 'left' }) => {
-  return <div className={cx(style[variant], style[`align-${align}`])}>{children}</div>;
+const Typography: React.FC<ITypographyProps> = ({
+  children,
+  variant = 'default',
+  align = 'left',
+  display = 'block',
+  weight = 'inherit',
+}) => {
+  return (
+    <div
+      className={cx(style[variant], style[`align-${align}`], style[`display-${display}`], style[`weight-${weight}`])}>
+      {children}
+    </div>
+  );
 };
 
 export default Typography;

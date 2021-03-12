@@ -39,3 +39,19 @@
 .align-right {
   text-align: right;
 }
+
+.display-block {
+  display: block;
+}
+
+.display-inline {
+  display: inline;
+}
+
+.weight-bold {
+  font-weight: 600;
+}
+
+.weight-light {
+  font-weight: 300;
+}

@@ -27,16 +27,29 @@ interface IInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   type: string;
 
   /* The input's value */
-  value: string | number;
+  value?: string | number;
 
   /* The input's placeholder */
   placeholder?: string;
 
   /* The input's state */
   disabled?: boolean;
+
+  /* Checkbox */
+  checked?: boolean;
 }
 
-const Input: React.FC<IInputProps> = ({ name, label, type, disabled, placeholder, value, onChange, onBlur }) => {
+const Input: React.FC<IInputProps> = ({
+  name,
+  label,
+  type,
+  disabled,
+  checked,
+  placeholder,
+  value,
+  onChange,
+  onBlur,
+}) => {
   return (
     <div>
       {label && <label className={style['label']}> {label}</label>}
@@ -49,6 +62,7 @@ const Input: React.FC<IInputProps> = ({ name, label, type, disabled, placeholder
         onChange={onChange}
         onBlur={onBlur}
         className={style['input']}
+        checked={checked}
       />
       {<div className={style['error']}> </div>}
     </div>
