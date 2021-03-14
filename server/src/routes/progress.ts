@@ -186,7 +186,7 @@ progress.post(
  * @response
  */
 progress.get(
-  "/student/:studentId/terms/:termId/weeks/:weekNumber",
+  "/terms/:termId/student/:studentId/weeks/:weekNumber",
   user().isA(["teacher", "student"]),
 
   param("studentId").custom(async (value) => {
