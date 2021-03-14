@@ -1,9 +1,10 @@
 import { Request, Response, Router } from "express";
-import { body, validationResult } from "express-validator";
+import { body, param, validationResult } from "express-validator";
 import user from "../validators/user";
 import { Subject } from "../models/Subject";
 import { User } from "../models/User";
 import { Progress } from "../models/Progress";
+import { Term } from "../models/Term";
 
 const progress = Router();
 
@@ -166,6 +167,115 @@ progress.post(
       // Save the values.
       await progress.save();
       return res.sendStatus(200);
+    } catch (e) {
+      return res.sendStatus(500);
+    }
+  }
+);
+
+/**
+ * Get the progress values.
+ *
+ * @method GET
+ * @url    /progress/student/:id/terms/:id/weeks/:number
+ *
+ * @param params.studentId  The student identifier.
+ * @param params.termId     Identifier of the term.
+ * @param params.weekNumber Number of the week (1-n).
+ *
+ * @response
+ */
+progress.get(
+  "/student/:studentId/terms/:termId/weeks/:weekNumber",
+  user().isA(["teacher", "student"]),
+
+  param("studentId").custom(async (value) => {
+    const student = await User.findById(value);
+    const invalid = !student || student.role !== "student";
+    return invalid ? Promise.reject("Invalid student.") : true;
+  }),
+
+  param("termId").custom(async (value, { req }) => {
+    const user = <User>req.user;
+    const term = await Term.findById(value);
+    const classroom = term ? await term.getClassroom() : null;
+
+    const invalid = !term || !classroom || !user.isInClassroom(classroom);
+    return invalid ? Promise.reject("Invalid term.") : true;
+  }),
+
+  async (req: Request, res: Response): Promise<Response> => {
+    // Check if the request is valid.
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const term = await Term.findById(req.params.termId);
+      const classroom = await term.getClassroom();
+
+      // Get the start and end date of the week.
+      const weekNumber = parseInt(req.params.weekNumber);
+      const [weekStart, weekEnd] = term.getWeekDates(weekNumber);
+
+      if (!weekStart || !weekEnd) {
+        return res.status(400).json({
+          errors: [
+            {
+              value: weekNumber,
+              msg: "Invalid week number.",
+              param: "weekNumber",
+              location: "params",
+            },
+          ],
+        });
+      }
+
+      // Get the student.
+      const student = await User.findById(req.params.studentId);
+
+      // Get the list of subjects.
+      const subjects = await classroom.getSubjects();
+
+      // Get the progress values.
+      const progress = await Progress.findByDateInterval(
+        req.params.studentId,
+        weekStart,
+        weekEnd
+      );
+
+      // Build the response.
+      return res.status(200).json({
+        days: term.days,
+        dates: [weekStart, weekEnd],
+        progress: subjects.map((subject) => {
+          return {
+            subject: {
+              id: subject.id,
+              name: subject.name,
+            },
+            values: term.days.map((day) => {
+              const value = progress.find(
+                (p) => p.weekDay === day && p.subjectId === subject.id
+              );
+              return {
+                day,
+                progressKey: {
+                  subjectId: subject.id,
+                  studentId: student.id,
+                  date: term.getDate(weekNumber, day),
+                },
+                pageFrom: value ? value.pageFrom : null,
+                pageSet: value ? value.pageSet : null,
+                pageDone: value ? value.pageDone : null,
+                homework: value ? value.homework : null,
+                homeworkDone: value ? value.homeworkDone : false,
+              };
+            }),
+          };
+        }),
+      });
     } catch (e) {
       return res.sendStatus(500);
     }
