@@ -2,6 +2,7 @@ import {
   BelongsToGetAssociationMixin,
   DataTypes,
   Model,
+  Op,
   Sequelize,
 } from "sequelize";
 import shortid from "shortid";
@@ -69,6 +70,30 @@ export class Progress extends Model {
   }
 
   /**
+   * Finds the progress values registered in a date interval.
+   *
+   * @param termId    Term identifier.
+   * @param studentId Student identifier.
+   * @param start     Interval start date.
+   * @param end       Interval end date.
+   *
+   * @returns
+   */
+  public static async findByDateInterval(
+    studentId: string,
+    start: Date,
+    end: Date
+  ): Promise<Progress[]> {
+    return await this.findAll({
+      where: {
+        StudentId: studentId,
+        date: { [Op.and]: [{ [Op.gte]: start }, { [Op.lte]: end }] },
+      },
+      order: [["date", "ASC"]],
+    });
+  }
+
+  /**
    * Checks whether a user is allowed to access to a progress object or not.
    *
    * @param user      User who wants to access to the progress.
@@ -100,6 +125,44 @@ export class Progress extends Model {
     }
 
     return true;
+  }
+
+  /**
+   * Subject identifier.
+   */
+  public get subjectId(): string {
+    return this.getDataValue("SubjectId");
+  }
+
+  /**
+   * Date of the progress.
+   */
+  public get date(): Date {
+    return this.getDataValue("date");
+  }
+
+  /**
+   * Week day of the progress.
+   */
+  public get weekDay(): string {
+    switch (this.date.getDay()) {
+      case 0:
+        return "sunday";
+      case 1:
+        return "monday";
+      case 2:
+        return "tuesday";
+      case 3:
+        return "wednesday";
+      case 4:
+        return "thursday";
+      case 5:
+        return "friday";
+      case 6:
+        return "saturday";
+      default:
+        return "";
+    }
   }
 
   /**
@@ -172,7 +235,16 @@ export class Progress extends Model {
    * Number of pages that the student must do as a homework.
    */
   public get homework(): number {
-    return this.pageFrom - this.pageDone;
+    return this.pageSet !== null && this.pageDone !== null
+      ? this.pageSet - this.pageDone
+      : null;
+  }
+
+  /**
+   * Indicates if the homework was done or not.
+   */
+  public get homeworkDone(): boolean {
+    return this.getDataValue("homeworkDone");
   }
 
   /**

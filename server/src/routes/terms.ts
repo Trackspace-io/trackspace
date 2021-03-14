@@ -127,6 +127,7 @@ terms.get(
               start: term.start,
               end: term.end,
               days: term.days,
+              numberOfWeeks: term.numberOfWeeks,
             };
           }
         )

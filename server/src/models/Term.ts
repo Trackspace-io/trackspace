@@ -101,21 +101,13 @@ export class Term extends Model {
   }
 
   /**
-   * Sets the end date of the term and check for conflicts.
-   *
-   * @param date The new start date.
-   *
-   * @returns True if the date was updated, false otherwise.
+   * Number of weeks in this term.
    */
-  public async setEnd(date: Date): Promise<boolean> {
-    const conflict = await Term.findByDate(this.classroomId, date);
-    if (conflict && conflict.id !== this.id) {
-      return false;
-    }
+  public get numberOfWeeks(): number {
+    const timeDiff = this.end.getTime() - this.start.getTime();
+    const daysDiff = timeDiff / (1000 * 3600 * 24);
 
-    this.setDataValue("end", date);
-    this.save();
-    return true;
+    return daysDiff > 0 ? 1 + Math.floor(daysDiff / 7) + 1 : 0;
   }
 
   /**
@@ -150,6 +142,59 @@ export class Term extends Model {
   }
 
   /**
+   * Calculates the date of one day of one week of this term.
+   *
+   * @param week Week number (1 → n)
+   * @param day  Day string (e.g. monday, tuesday, etc.)
+   *
+   * @returns The date or null if the date is not valid.
+   */
+  public getDate(week: number, day: string): Date | null {
+    const WEEK_DAYS = [
+      "sunday",
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+    ];
+
+    const dayInt = WEEK_DAYS.indexOf(day);
+    if (dayInt < 0) {
+      return null;
+    }
+
+    const [weekStart] = this.getWeekDates(week);
+
+    const dateDays =
+      Math.floor(weekStart.getTime() / (24 * 3600 * 1000)) -
+      weekStart.getDay() +
+      dayInt;
+
+    const date = new Date(dateDays * (24 * 3600 * 1000));
+    return this.isDateAllowed(date) ? date : null;
+  }
+
+  /**
+   * Sets the end date of the term and check for conflicts.
+   *
+   * @param date The new start date.
+   *
+   * @returns True if the date was updated, false otherwise.
+   */
+  public async setEnd(date: Date): Promise<boolean> {
+    const conflict = await Term.findByDate(this.classroomId, date);
+    if (conflict && conflict.id !== this.id) {
+      return false;
+    }
+
+    this.setDataValue("end", date);
+    this.save();
+    return true;
+  }
+
+  /**
    * Gets the classroom associated to this term.
    */
   public getClassroom!: BelongsToGetAssociationMixin<Classroom>;
@@ -165,6 +210,35 @@ export class Term extends Model {
     return (
       date >= this.start && date <= this.end && this.isDayAllowed(date.getDay())
     );
+  }
+
+  /**
+   * Computes the start and end date of a week.
+   *
+   * @param week Week number (1 → n).
+   *
+   * @returns The start and end date of the week.
+   */
+  public getWeekDates(week: number): [Date | null, Date | null] {
+    if (week <= 0 || week > this.numberOfWeeks) {
+      return [null, null];
+    }
+
+    // Get the time value in days.
+    const termStartDays = Math.floor(this.start.getTime() / (24 * 3600 * 1000));
+
+    // Compute the week start date.
+    const weekStartDays = termStartDays - this.start.getDay() + 7 * (week - 1);
+    const weekStartDate = new Date(weekStartDays * (24 * 3600 * 1000));
+
+    // Compute the week end date.
+    const weekEndDays = weekStartDays + 7;
+    const weekEndDate = new Date(weekEndDays * (24 * 3600 * 1000));
+
+    return [
+      this.start > weekStartDate ? this.start : weekStartDate,
+      this.end < weekEndDate ? this.end : weekEndDate,
+    ];
   }
 
   /**
@@ -201,18 +275,6 @@ export class Term extends Model {
       default:
         return false;
     }
-  }
-
-  /**
-   * Returns the number of weeks in this term.
-   *
-   * @returns Number of weeks.
-   */
-  public numberOfWeeks(): number {
-    const timeDiff = this.end.getTime() - this.start.getTime();
-    const daysDiff = timeDiff / (1000 * 3600 * 24);
-
-    return daysDiff > 0 ? 1 + Math.floor(daysDiff / 7) + 1 : 0;
   }
 
   /**
