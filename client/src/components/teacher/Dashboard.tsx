@@ -2,7 +2,6 @@ import 'rc-calendar/assets/index.css';
 
 import Divider from 'components/gui/Divider';
 import Tooltip from 'components/gui/Tooltip';
-import useTeachers from 'controllers/useTeachers';
 import moment from 'moment';
 import { default as SimpleCalendar } from 'rc-calendar';
 import * as React from 'react';
@@ -14,6 +13,7 @@ import style from '../../styles/teacher/Dashboard.module.css';
 import { NavbarMini } from '../gui/Navbar';
 import Classroom from './Classroom';
 import Home from './Home';
+import { useTeachers } from 'controllers';
 
 const now = moment();
 

@@ -15,12 +15,19 @@ import SignIn from './components/common/SignIn';
 import SignUp from './components/common/SignUp';
 import { Navbar } from './components/gui/Navbar';
 import Invitation from 'components/student/Invitation';
+import { useTeachers, useUsers } from './controllers/index';
 
 const App: React.FC = () => {
   const cookie = Cookies.get('connect.sid') || '';
   const User = useUser();
+  const Teachers = useTeachers();
+  const Users = useUsers();
+
+  console.log('Teachers', Teachers);
+  console.log('Users', Users);
 
   React.useEffect(() => {
+    Users.authCheck(cookie);
     User.authCheck(cookie);
   }, []);
 
