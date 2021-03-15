@@ -23,3 +23,6 @@ export enum USERS {
 
 // Dispatchers interface. Actions to update the state
 export type IUserAction = { type: USERS.SET_USER; payload: IUser } | { type: USERS.IS_LOGGED };
+
+// Update user interface
+export type IUserUpdate = Partial<IUser> & { oldPassword?: string } & { newPassword?: string };
