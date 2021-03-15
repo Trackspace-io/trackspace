@@ -1,22 +1,21 @@
-import * as React from 'react';
 import { UserAPI } from 'api';
+import { useMessages } from 'controllers';
+import * as React from 'react';
 import { useGlobalStore } from 'store';
-import usersReducer from '../../store/users';
-import { IUserState, IUserUpdate, USERS } from 'store/users/types';
+import usersReducer from 'store/users';
+import { IUserUpdate, USERS } from 'store/users/types';
 
 const { actions } = usersReducer;
 
-type IUseUsers = IUserState & {
-  authCheck: (cookie: string) => void;
-  update: (payload: IUserUpdate) => Promise<any>;
-};
-
-const useUsers = (): IUseUsers => {
+const useUsers = () => {
   if (useGlobalStore === undefined) {
     throw new Error('useGlobalStore must be used within a Provider');
   }
 
   const { state, dispatch } = useGlobalStore();
+
+  // List of controllers
+  const Messages = useMessages();
 
   // List of states
   const { users } = state;
@@ -41,7 +40,10 @@ const useUsers = (): IUseUsers => {
       .catch((e) => {
         const { data } = e.response;
 
-        console.log('error', data);
+        Messages.add({
+          type: 'error',
+          text: `${data}`,
+        });
       });
   };
 
@@ -63,21 +65,20 @@ const useUsers = (): IUseUsers => {
         .then(() => {
           get();
 
-          // Messages.add({
-          //   type: 'success',
-          //   text: `Profile updated.`,
-          // });
+          Messages.add({
+            type: 'success',
+            text: `Profile updated.`,
+          });
 
           resolve(true);
         })
         .catch((e) => {
           const { msg } = e.response.data.errors[0];
 
-          // Messages.add({
-          //   type: 'error',
-          //   text: `${msg}`,
-          // });
-          console.log('error', msg);
+          Messages.add({
+            type: 'error',
+            text: `${msg}`,
+          });
         });
     });
   };

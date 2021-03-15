@@ -2,12 +2,11 @@ import Form from 'components/gui/Form';
 import { Input, useInput } from 'components/gui/Input';
 import LinkButton from 'components/gui/LinkButton';
 import Typography from 'components/gui/Typography';
+import { useAuths } from 'controllers';
 import * as React from 'react';
 
 import SignInSrc from '../../images/teacher.svg';
 import style from '../../styles/common/SignIn.module.css';
-import useUser from 'controllers/useUser';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 /**
  * Sign in page.
@@ -16,14 +15,9 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
  * @returns ReactNode
  */
 
-interface ISignInProps extends RouteComponentProps {
-  location: any | undefined;
-}
-
-const SignIn: React.FC<ISignInProps> = ({ location }) => {
+const SignIn: React.FC = () => {
   // Controllers
-  const User = useUser();
-  console.log('location', location);
+  const Auths = useAuths();
 
   // Inputs
   const Inputs = useInput({ username: '', password: '' });
@@ -31,7 +25,7 @@ const SignIn: React.FC<ISignInProps> = ({ location }) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    User.login(Inputs.values);
+    Auths.login(Inputs.values);
   };
 
   return (
@@ -81,4 +75,4 @@ const SignIn: React.FC<ISignInProps> = ({ location }) => {
   );
 };
 
-export default withRouter(SignIn);
+export default SignIn;

@@ -10,7 +10,7 @@ export interface IUserSignUp {
   email: string;
   lastName: string;
   firstName: string;
-  password: boolean;
+  password: string;
   confirmPassword: string;
   role: string;
 }

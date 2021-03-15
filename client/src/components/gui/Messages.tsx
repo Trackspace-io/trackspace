@@ -1,5 +1,4 @@
 import cx from 'classnames';
-import useMessages from 'controllers/useMessages';
 import * as React from 'react';
 import { IMessage } from 'types';
 
@@ -7,6 +6,7 @@ import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import style from '../../styles/gui/Messages.module.css';
+import { useMessages } from 'controllers';
 
 /**
  * Component that displays the global messages.
@@ -17,7 +17,7 @@ const Messages: React.FC = () => {
   return (
     <div className={style['container']}>
       {Messages.list.map((m, i) => (
-        <Message key={i} message={m} close={close} />
+        <Message key={i} message={m} close={Messages.close} />
       ))}
     </div>
   );

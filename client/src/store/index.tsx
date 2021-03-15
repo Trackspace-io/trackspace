@@ -1,12 +1,13 @@
 import * as React from 'react';
 
 import rootReducer, { initialState, IState } from 'store/reducers';
-import { ITeacherActions } from './teachers/types';
-import { IUserAction } from './users/types';
+// import { IMessageActions } from './messages/types';
+// import { ITeacherActions } from './teachers/types';
+// import { IUserAction } from './users/types';
 
 export interface IContextProps {
   state: IState;
-  dispatch: (action: ITeacherActions | IUserAction) => void;
+  dispatch: any;
 }
 
 const GlobalStore = React.createContext({} as IContextProps);
@@ -19,7 +20,6 @@ const Provider: React.FC = ({ children }) => {
   // const dispatch = React.useCallback(asyncer(dispatchBase, state), []);
   // pass in the returned value of useReducer
   const contextValue = React.useMemo(() => ({ state, dispatch }), [state, dispatch]);
-  console.log('contextValue', contextValue);
 
   return <GlobalStore.Provider value={contextValue}> {children} </GlobalStore.Provider>;
 };

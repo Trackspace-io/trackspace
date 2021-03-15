@@ -1,21 +1,22 @@
-import * as React from 'react';
 import { TeachersAPI } from 'api';
+import { useMessages, useUsers } from 'controllers';
+import * as React from 'react';
 import { useGlobalStore } from 'store';
+
 import teachersReducer from '../../store/teachers';
-import { ITeacherState } from 'store/teachers/types';
-import { useUsers } from 'controllers';
 
 const { actions } = teachersReducer;
 
-type IUseTeachers = ITeacherState;
-
-const useTeachers = (): IUseTeachers => {
+const useTeachers = () => {
   if (useGlobalStore === undefined) {
     throw new Error('useGlobalStore must be used within a Provider');
   }
 
   const { state, dispatch } = useGlobalStore();
+
+  // List of controllers
   const Users = useUsers();
+  const Messages = useMessages();
 
   // List of states
   const { teachers } = state;
@@ -42,7 +43,10 @@ const useTeachers = (): IUseTeachers => {
       .catch((e) => {
         const { data } = e.response;
 
-        console.log('error', data);
+        Messages.add({
+          type: 'error',
+          text: `${data}`,
+        });
       });
   };
 
