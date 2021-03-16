@@ -4,7 +4,7 @@ import Form from 'components/gui/Form';
 import { Input, useInput } from 'components/gui/Input';
 import Modal from 'components/gui/Modal';
 import Typography from 'components/gui/Typography';
-import useClassrooms from 'controllers/useClassrooms';
+import { useClassrooms } from 'controllers';
 import * as React from 'react';
 import { FiEdit2, FiTrash } from 'react-icons/fi';
 import { useParams } from 'react-router-dom';
@@ -19,7 +19,10 @@ interface RouteParams {
 const Subjects: React.FC = () => {
   const { id } = useParams<RouteParams>();
 
+  // Controllers
   const Classrooms = useClassrooms(id);
+
+  const { subjects } = Classrooms.current;
 
   // Internal hooks
   const [action, setAction] = React.useState('');
@@ -37,8 +40,8 @@ const Subjects: React.FC = () => {
       <div className={style['body']}>
         <Typography variant="info"> List of students </Typography>
         <div className={style['list']}>
-          {Classrooms.subjectsList.length !== 0 ? (
-            Classrooms.subjectsList.map((subject) => (
+          {subjects.list.length !== 0 ? (
+            subjects.list.map((subject) => (
               <div key={subject.id} className={style['item']}>
                 <div>
                   <Typography>{subject.name}</Typography>
@@ -72,7 +75,7 @@ const Subjects: React.FC = () => {
           isOpen={Boolean(action === 'add')}
           onClose={() => setAction('')}
           classroomId={id}
-          addSubject={Classrooms.addSubject}
+          addSubject={subjects.add}
         />
       )}
 
@@ -82,7 +85,7 @@ const Subjects: React.FC = () => {
           onClose={() => setAction('')}
           subject={subject}
           classroomId={id}
-          editSubject={Classrooms.editSubject}
+          editSubject={subjects.modify}
         />
       )}
 
@@ -92,7 +95,7 @@ const Subjects: React.FC = () => {
           onClose={() => setAction('')}
           subject={subject}
           classroomId={id}
-          removeSubject={Classrooms.removeSubject}
+          removeSubject={subjects.remove}
         />
       )}
     </div>

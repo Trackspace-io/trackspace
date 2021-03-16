@@ -1,5 +1,6 @@
 import { ClassroomAPI } from 'api';
 import { useMessages, useTeachers } from 'controllers';
+import useSubjects from 'controllers/subjects/useSubjects';
 import * as React from 'react';
 import { useGlobalStore } from 'store';
 import classroomsReducer from 'store/classrooms';
@@ -17,6 +18,9 @@ const useClassrooms = (classroomId?: string) => {
   // List of controllers
   const Messages = useMessages();
   const Teachers = useTeachers();
+  const Subjects = useSubjects(String(classroomId));
+
+  console.log('Subjects', Subjects);
 
   // List of states
   const { classrooms } = state;
@@ -155,7 +159,10 @@ const useClassrooms = (classroomId?: string) => {
   }, []);
 
   return {
-    ...classrooms,
+    current: {
+      ...classrooms.current,
+      subjects: Subjects,
+    },
 
     create,
     modify,

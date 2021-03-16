@@ -10,8 +10,8 @@ export const initialState = {
 /**
  * State management reducer pattern. Accepts an initial state, returns the current application state, then dispatches functions.
  *
- * @param {MessageState} state    Initial state.
- * @param {MessageAction} action  Dispatchers.
+ * @param {IClassroonState} state    Initial state.
+ * @param {IClassroomActions} action  Dispatchers.
  *
  * @returns The current state
  */
