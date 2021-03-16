@@ -33,7 +33,7 @@ const useTeachers = () => {
    *
    * @returns void
    */
-  const retrieveClassroom = () => {
+  const getClassrooms = () => {
     TeachersAPI.getClassrooms()
       .then((response) => {
         const { data } = response;
@@ -51,10 +51,10 @@ const useTeachers = () => {
   };
 
   React.useEffect(() => {
-    Users.isLogged && retrieveClassroom();
+    Users.isLogged && getClassrooms();
   }, [Users.isLogged]);
 
-  return { ...teachers };
+  return { ...teachers, getClassrooms };
 };
 
 export default useTeachers;

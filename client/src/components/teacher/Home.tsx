@@ -5,7 +5,7 @@ import { Input, useInput } from 'components/gui/Input';
 import Modal from 'components/gui/Modal';
 import { Sidebar, SidebarItem } from 'components/gui/Sidebar';
 import Typography from 'components/gui/Typography';
-import useClassrooms from 'controllers/useClassrooms';
+import { useClassrooms } from 'controllers';
 import useTeachers from 'controllers/useTeachers';
 import * as React from 'react';
 import { FiEdit2, FiTrash } from 'react-icons/fi';
@@ -65,7 +65,7 @@ const Classrooms: React.FC = () => {
                 <div className={style['classroom-actions']}>
                   <FiEdit2
                     onClick={() => {
-                      setAction('update');
+                      setAction('modify');
                       setClassroom(classroom);
                     }}
                   />
@@ -94,12 +94,12 @@ const Classrooms: React.FC = () => {
         />
       )}
 
-      {action === 'update' && (
+      {action === 'modify' && (
         <ClassroomUpdate
-          isOpen={Boolean(action === 'update')}
+          isOpen={Boolean(action === 'modify')}
           onClose={() => setAction('')}
           classroom={classroom}
-          update={Classrooms.update}
+          update={Classrooms.modify}
         />
       )}
 

@@ -3,7 +3,7 @@ import { Input, useInput } from 'components/gui/Input';
 import Modal from 'components/gui/Modal';
 import { Sidebar, SidebarItem } from 'components/gui/Sidebar';
 import Typography from 'components/gui/Typography';
-import useClassrooms from 'controllers/useClassrooms';
+import { useClassrooms } from 'controllers';
 import useTeachers from 'controllers/useTeachers';
 import * as React from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
@@ -22,6 +22,7 @@ interface RouteParams {
 
 const Classroom: React.FC = () => {
   const { id } = useParams<RouteParams>();
+
   const Classrooms = useClassrooms(id);
 
   // Internal state
