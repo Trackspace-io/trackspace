@@ -72,7 +72,6 @@ export class Progress extends Model {
   /**
    * Finds the progress values registered in a date interval.
    *
-   * @param termId    Term identifier.
    * @param studentId Student identifier.
    * @param start     Interval start date.
    * @param end       Interval end date.
@@ -125,6 +124,39 @@ export class Progress extends Model {
     }
 
     return true;
+  }
+
+  /**
+   * Returns the number of pages done by a student during a time period.
+   *
+   * @param student The student.
+   * @param term    Term.
+   * @param from    Start date of the time period.
+   * @param to      End date of the time period.
+   *
+   * @returns Number of pages done by the student.
+   */
+  public static async getNumberPagesDone(
+    student: User,
+    from: Date,
+    to: Date
+  ): Promise<number | null> {
+    try {
+      // Get the registered progress values.
+      const progress = await Progress.findByDateInterval(student.id, from, to);
+
+      // Compute the number of pages done by the student during the week.
+      let pagesDone = 0;
+      progress.forEach((p) => {
+        const pageFrom = p.pageFrom === null ? 0 : p.pageFrom;
+        const pageDone = p.pageDone === null ? 0 : p.pageDone;
+        pagesDone += pageDone - pageFrom;
+      });
+
+      return pagesDone;
+    } catch (e) {
+      return null;
+    }
   }
 
   /**

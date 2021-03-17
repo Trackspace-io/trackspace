@@ -98,6 +98,13 @@ export class User extends Model {
   }
 
   /**
+   * Full name of the user.
+   */
+  public get fullName(): string {
+    return `${this.firstName} ${this.lastName}`;
+  }
+
+  /**
    * (Hashed) password of the user.
    */
   public get passwordHash(): string {

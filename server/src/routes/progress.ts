@@ -1,10 +1,11 @@
 import { Request, Response, Router } from "express";
-import { body, param, validationResult } from "express-validator";
+import { body, param, query, validationResult } from "express-validator";
 import user from "../validators/user";
 import { Subject } from "../models/Subject";
 import { User } from "../models/User";
 import { Progress } from "../models/Progress";
 import { Term } from "../models/Term";
+import ProgressGraph from "../graphs/ProgressGraph";
 
 const progress = Router();
 
@@ -183,7 +184,7 @@ progress.post(
  * @param params.termId     Identifier of the term.
  * @param params.weekNumber Number of the week (1-n).
  *
- * @response
+ * @returns 200, 400, 401, 500
  */
 progress.get(
   "/terms/:termId/student/:studentId/weeks/:weekNumber",
@@ -276,6 +277,68 @@ progress.get(
           };
         }),
       });
+    } catch (e) {
+      return res.sendStatus(500);
+    }
+  }
+);
+
+/**
+ * egisters a progress.
+ *
+ * @method POST
+ * @url    /progress/terms/:id/students/:id/graph
+ *
+ * @param query.color Color of the line (Hex code).
+ * @param query.width Width of the line (Pixels).
+ *
+ * @returns 200, 400, 401, 500
+ */
+progress.get(
+  "/terms/:termId/student/:studentId/graph",
+  user().isA(["teacher", "student"]),
+
+  param("termId").custom(async (value, { req }) => {
+    const user = <User>req.user;
+    const term = await Term.findById(value);
+    const classroom = term ? await term.getClassroom() : null;
+
+    const invalid = !term || !classroom || !user.isInClassroom(classroom);
+    return invalid ? Promise.reject("Invalid term.") : true;
+  }),
+
+  param("studentId").custom(async (value) => {
+    const student = await User.findById(value);
+    const invalid = !student || student.role !== "student";
+    return invalid ? Promise.reject("Invalid student.") : true;
+  }),
+
+  query("color")
+    .optional()
+    .isHexColor()
+    .withMessage("The color must be a hex code."),
+
+  query("width").optional().isInt(),
+
+  async (req: Request, res: Response): Promise<Response> => {
+    // Check if the request is valid.
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const term = await Term.findById(req.params.termId);
+      const graph = new ProgressGraph(term);
+      const student = await User.findById(req.params.studentId);
+
+      graph.addStudent(
+        student,
+        `${req.query.color}`,
+        parseInt(`${req.query.width}`)
+      );
+
+      return res.status(200).json(await graph.config());
     } catch (e) {
       return res.sendStatus(500);
     }
