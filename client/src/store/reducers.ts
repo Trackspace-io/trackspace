@@ -1,23 +1,25 @@
+import classroomReducer from './classrooms';
 import { IClassroomState } from './classrooms/types';
 import messagesReducer from './messages';
 import { IMessageState } from './messages/types';
 import { logger } from './middlewares';
-import teachersReducer from './teachers';
-import { ITeacherState } from './teachers/types';
-import usersReducer from './users';
-import { IUserState } from './users/types';
-import classroomReducer from './classrooms';
 import subjectsReducer from './subjects';
 import { ISubjectState } from './subjects/types';
+import teachersReducer from './teachers';
+import { ITeacherState } from './teachers/types';
+import termsReducer from './terms';
+import { ITermState } from './terms/types';
+import usersReducer from './users';
+import { IUserState } from './users/types';
 
-type IClassroomStates = IClassroomState & {
-  subjects: ISubjectState;
-};
 export interface IState {
   teachers: ITeacherState;
   users: IUserState;
   messages: IMessageState;
-  classrooms: IClassroomStates;
+  classrooms: IClassroomState & {
+    subjects: ISubjectState;
+    terms: ITermState;
+  };
 }
 
 export const initialState: IState = {
@@ -27,6 +29,7 @@ export const initialState: IState = {
   classrooms: {
     ...classroomReducer.initialState,
     subjects: subjectsReducer.initialState,
+    terms: termsReducer.initialState,
   },
 };
 
@@ -37,7 +40,7 @@ const rootReducer = (state: IState, actions: any): IState => {
     users,
     messages,
     classrooms,
-    classrooms: { subjects },
+    classrooms: { subjects, terms },
   } = state;
 
   // Receiving current state here
@@ -48,6 +51,7 @@ const rootReducer = (state: IState, actions: any): IState => {
     classrooms: {
       ...classroomReducer.reducer(classrooms, actions),
       subjects: subjectsReducer.reducer(subjects, actions),
+      terms: termsReducer.reducer(terms, actions),
     },
   };
 

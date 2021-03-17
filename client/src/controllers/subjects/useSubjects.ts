@@ -7,7 +7,7 @@ import { ISubjectAdd, ISubjectModify, ISubjectRemove } from 'store/subjects/type
 
 const { actions } = subjectsReducer;
 
-const useSubjects = (classroomId: string) => {
+const useSubjects = (classroomId?: string) => {
   if (useGlobalStore === undefined) {
     throw new Error('useGlobalStore must be used within a Provider');
   }
@@ -159,7 +159,7 @@ const useSubjects = (classroomId: string) => {
 
   React.useEffect(() => {
     classroomId && get(classroomId);
-  }, []);
+  }, [classroomId]);
 
   return {
     ...subjects,
