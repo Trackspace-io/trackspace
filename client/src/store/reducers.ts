@@ -3,6 +3,8 @@ import { IClassroomState } from './classrooms/types';
 import messagesReducer from './messages';
 import { IMessageState } from './messages/types';
 import { logger } from './middlewares';
+import studentsReducer from './students';
+import { IStudentState } from './students/types';
 import subjectsReducer from './subjects';
 import { ISubjectState } from './subjects/types';
 import teachersReducer from './teachers';
@@ -14,6 +16,7 @@ import { IUserState } from './users/types';
 
 export interface IState {
   teachers: ITeacherState;
+  students: IStudentState;
   users: IUserState;
   messages: IMessageState;
   classrooms: IClassroomState & {
@@ -24,6 +27,7 @@ export interface IState {
 
 export const initialState: IState = {
   teachers: teachersReducer.initialState,
+  students: studentsReducer.initialState,
   users: usersReducer.initialState,
   messages: messagesReducer.initialState,
   classrooms: {
@@ -36,8 +40,9 @@ export const initialState: IState = {
 const rootReducer = (state: IState, actions: any): IState => {
   // Receiving previous state here
   const {
-    teachers,
     users,
+    teachers,
+    students,
     messages,
     classrooms,
     classrooms: { subjects, terms },
@@ -45,8 +50,9 @@ const rootReducer = (state: IState, actions: any): IState => {
 
   // Receiving current state here
   const currentState = {
-    teachers: teachersReducer.reducer(teachers, actions),
     users: usersReducer.reducer(users, actions),
+    teachers: teachersReducer.reducer(teachers, actions),
+    students: studentsReducer.reducer(students, actions),
     messages: messagesReducer.reducer(messages, actions),
     classrooms: {
       ...classroomReducer.reducer(classrooms, actions),

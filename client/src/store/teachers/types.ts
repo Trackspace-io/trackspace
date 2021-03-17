@@ -1,8 +1,4 @@
-export interface IClassroom {
-  id: string;
-  name: string;
-  teacherId: string;
-}
+import { IClassroom } from '../classrooms/types';
 
 /**
  * Reducer's state interface

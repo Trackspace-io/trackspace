@@ -2,18 +2,20 @@ import Button from 'components/gui/Button';
 import Form from 'components/gui/Form';
 import { Input, useInput } from 'components/gui/Input';
 import Typography from 'components/gui/Typography';
+import { useStudents } from 'controllers';
+import qs from 'query-string';
 import * as React from 'react';
 import { useHistory } from 'react-router-dom';
 
-import SignInSrc from '../../images/teacher.svg';
 import SignUpSrc from '../../images/student.svg';
+import SignInSrc from '../../images/teacher.svg';
 import style from '../../styles/student/Invitation.module.css';
-import useStudents from 'controllers/useStudents';
-import qs from 'query-string';
 
 const Invitations: React.FC = () => {
   const Students = useStudents();
   const history = useHistory();
+
+  console.log('Students', Students);
 
   const { t: token } = qs.parse(history.location.search);
 

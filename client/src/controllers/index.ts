@@ -1,7 +1,8 @@
 import useTeachers from './teachers/useTeachers';
+import useStudents from './students/useStudents';
 import useAuths from './users/useAuths';
 import useUsers from './users/useUsers';
 import useMessages from './messages/useMessages';
 import useClassrooms from './classrooms/useClassrooms';
 
-export { useAuths, useUsers, useMessages, useTeachers, useClassrooms };
+export { useAuths, useUsers, useMessages, useStudents, useTeachers, useClassrooms };

@@ -1,4 +1,5 @@
-import { TEACHERS, IClassroom } from './types';
+import { TEACHERS } from './types';
+import { IClassroom } from '../classrooms/types';
 
 export const setClassrooms = (payload: IClassroom[]) => {
   return {
