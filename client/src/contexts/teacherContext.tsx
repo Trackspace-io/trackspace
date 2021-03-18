@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IClassroom } from 'types';
+import { IClassroom } from 'store/classrooms/types';
 
 /* Interface */
 

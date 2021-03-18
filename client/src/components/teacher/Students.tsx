@@ -3,11 +3,12 @@ import Form from 'components/gui/Form';
 import { Input, useInput } from 'components/gui/Input';
 import Modal from 'components/gui/Modal';
 import Typography from 'components/gui/Typography';
-import useClassrooms from 'controllers/useClassrooms';
+import { useClassrooms } from 'controllers';
 import * as React from 'react';
 import { FiTrash } from 'react-icons/fi';
 import { useParams } from 'react-router-dom';
-import { IClassroomRemoveStudent, IStudent } from 'types';
+import { IStudentRemove } from 'store/students/types';
+import { IStudent } from 'store/students/types';
 
 import style from '../../styles/teacher/Students.module.css';
 
@@ -19,6 +20,10 @@ const Students: React.FC = () => {
   const { id } = useParams<RouteParams>();
 
   const Classrooms = useClassrooms(id);
+
+  const {
+    current: { students },
+  } = Classrooms;
 
   // Internal hooks
   const [action, setAction] = React.useState('');
@@ -33,8 +38,8 @@ const Students: React.FC = () => {
       <div className={style['body']}>
         <Typography variant="info"> List of students </Typography>
         <div className={style['list']}>
-          {Classrooms.studentsList.length !== 0 ? (
-            Classrooms.studentsList.map((student) => (
+          {students.list.length !== 0 ? (
+            students.list.map((student) => (
               <div key={student.id} className={style['item']}>
                 <div>
                   <Typography>
@@ -66,7 +71,7 @@ const Students: React.FC = () => {
           onClose={() => setAction('')}
           student={student}
           classroomId={id}
-          removeStudent={Classrooms.removeStudent}
+          removeStudent={students.remove}
         />
       )}
     </div>
@@ -78,7 +83,7 @@ interface IClassroomRemoveProps {
   onClose: () => void;
   student: IStudent | undefined;
   classroomId: string;
-  removeStudent: (input: IClassroomRemoveStudent) => Promise<any>;
+  removeStudent: (input: IStudentRemove) => Promise<any>;
 }
 
 const RemoveStudent: React.FC<IClassroomRemoveProps> = ({ isOpen, onClose, classroomId, student, removeStudent }) => {

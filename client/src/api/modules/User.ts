@@ -1,6 +1,12 @@
 import { _apiUrl } from 'api/api';
 import axios from 'axios';
-import { IUserConfirmResetPassword, IUserSendResetPassword, IUserSignIn, IUserSignUp, IUserUpdate } from 'types';
+import {
+  IUserSignIn,
+  IUserSignUp,
+  IUserUpdate,
+  IUserSendResetPassword,
+  IUserConfirmResetPassword,
+} from 'store/users/types';
 
 /**
  * Registers a user.

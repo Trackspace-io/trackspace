@@ -26,7 +26,7 @@ const Classroom: React.FC = () => {
   // Controllers
   const Classrooms = useClassrooms(id);
 
-  // console.log('Classrooms', Classrooms);
+  console.log('Classrooms', Classrooms);
 
   // Internal state
   const [shareModal, setShareModal] = React.useState(false);

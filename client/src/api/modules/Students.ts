@@ -1,11 +1,12 @@
 import { _apiUrl } from 'api/api';
 import axios from 'axios';
+
 import {
   IStudentInvitation,
   IStudentAcceptInvitation,
   IStudentInvitationBySignIn,
   IStudentInvitationBySignUp,
-} from 'types';
+} from 'store/students/types';
 
 /**
  * Get classrooms in which a student is enrolled.

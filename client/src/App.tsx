@@ -3,9 +3,10 @@ import './App.css';
 import Error from 'components/common/Error';
 import Profile from 'components/common/Profile';
 import Messages from 'components/gui/Messages';
-import TeacherDashboard from 'components/teacher/Dashboard';
 import StudentDashboard from 'components/student/Dashboard';
-import useUser from 'controllers/useUser';
+import Invitation from 'components/student/Invitation';
+import TeacherDashboard from 'components/teacher/Dashboard';
+import { useUsers } from 'controllers';
 import Cookies from 'js-cookie';
 import * as React from 'react';
 import { BrowserRouter as Router, Redirect, Route, RouteProps, Switch } from 'react-router-dom';
@@ -14,17 +15,13 @@ import { ResetPasswordConfirm, ResetPasswordSend } from './components/common/Res
 import SignIn from './components/common/SignIn';
 import SignUp from './components/common/SignUp';
 import { Navbar } from './components/gui/Navbar';
-import Invitation from 'components/student/Invitation';
-import { useUsers } from './controllers/index';
 
 const App: React.FC = () => {
   const cookie = Cookies.get('connect.sid') || '';
-  const User = useUser();
   const Users = useUsers();
 
   React.useEffect(() => {
     Users.authCheck(cookie);
-    User.authCheck(cookie);
   }, []);
 
   return (
@@ -32,7 +29,7 @@ const App: React.FC = () => {
       <Navbar />
       <Switch>
         {/* Public routes */}
-        <ProtectedRoute condition={!Boolean(cookie)} exact path="/" redirectPath={`/${User.current.role}`}>
+        <ProtectedRoute condition={!Boolean(cookie)} exact path="/" redirectPath={`/${Users.current.role}`}>
           <SignIn />
         </ProtectedRoute>
         <Route path="/sign-up" component={SignUp} />

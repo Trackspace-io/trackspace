@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IUser } from 'types';
+import { IUser } from 'store/users/types';
 
 export interface UserState {
   /* Current logged user */

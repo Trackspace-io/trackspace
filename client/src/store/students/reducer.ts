@@ -4,6 +4,7 @@ import { IStudentActions, IStudentState, STUDENTS } from './types';
  * Initial state.
  */
 export const initialState = {
+  list: [],
   classroomsList: [],
   invitationInfo: {
     classroomName: '',
@@ -22,6 +23,9 @@ export const initialState = {
  */
 const reducer = (state: IStudentState, action: IStudentActions): IStudentState => {
   switch (action.type) {
+    case STUDENTS.SET_STUDENTS:
+      return { ...state, list: action.payload };
+
     case STUDENTS.SET_CLASSROOMS:
       return { ...state, classroomsList: action.payload };
 

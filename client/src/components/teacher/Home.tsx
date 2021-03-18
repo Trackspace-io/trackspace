@@ -5,12 +5,11 @@ import { Input, useInput } from 'components/gui/Input';
 import Modal from 'components/gui/Modal';
 import { Sidebar, SidebarItem } from 'components/gui/Sidebar';
 import Typography from 'components/gui/Typography';
-import { useClassrooms } from 'controllers';
-import useTeachers from 'controllers/useTeachers';
+import { useClassrooms, useTeachers } from 'controllers';
 import * as React from 'react';
 import { FiEdit2, FiTrash } from 'react-icons/fi';
 import { Route, Switch } from 'react-router-dom';
-import { IClassroom, IClassroomCreate, IClassroomRemove, IClassroomUpdate } from 'types';
+import { IClassroom, IClassroomCreate, IClassroomModify, IClassroomRemove } from 'store/classrooms/types';
 
 import style from '../../styles/teacher/Home.module.css';
 
@@ -99,7 +98,7 @@ const Classrooms: React.FC = () => {
           isOpen={Boolean(action === 'modify')}
           onClose={() => setAction('')}
           classroom={classroom}
-          update={Classrooms.modify}
+          modify={Classrooms.modify}
         />
       )}
 
@@ -162,10 +161,10 @@ interface IClassroomUpdateProps {
   isOpen: boolean;
   onClose: () => void;
   classroom: IClassroom | undefined;
-  update: (input: IClassroomUpdate) => Promise<any>;
+  modify: (input: IClassroomModify) => Promise<any>;
 }
 
-const ClassroomUpdate: React.FC<IClassroomUpdateProps> = ({ isOpen, onClose, classroom, update }) => {
+const ClassroomUpdate: React.FC<IClassroomUpdateProps> = ({ isOpen, onClose, classroom, modify }) => {
   const Inputs = useInput({ name: '' });
 
   React.useEffect(() => {
@@ -180,7 +179,7 @@ const ClassroomUpdate: React.FC<IClassroomUpdateProps> = ({ isOpen, onClose, cla
       id: String(classroom?.id),
     };
 
-    update(payload).then(() => {
+    modify(payload).then(() => {
       Inputs.setValues({});
       onClose();
     });

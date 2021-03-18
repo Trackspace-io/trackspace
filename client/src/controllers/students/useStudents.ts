@@ -1,4 +1,4 @@
-import { StudentsAPI } from 'api';
+import { ClassroomAPI, StudentsAPI } from 'api';
 import { useMessages, useUsers } from 'controllers';
 import * as React from 'react';
 import { useGlobalStore } from 'store';
@@ -8,11 +8,12 @@ import {
   IStudentInvitation,
   IStudentInvitationBySignIn,
   IStudentInvitationBySignUp,
+  IStudentRemove,
 } from 'store/students/types';
 
 const { actions } = studentsReducer;
 
-const useStudents = () => {
+const useStudents = (classroomId?: string) => {
   if (useGlobalStore === undefined) {
     throw new Error('useGlobalStore must be used within a Provider');
   }
@@ -27,7 +28,7 @@ const useStudents = () => {
   const { students } = state;
 
   // List of actions
-  const { setClassrooms, setInvitationInfo } = actions;
+  const { setClassrooms, setStudents, setInvitationInfo } = actions;
 
   // List of thunks
 
@@ -53,6 +54,66 @@ const useStudents = () => {
           text: `${data}`,
         });
       });
+  };
+
+  /**
+   * Get the list of students enrolled in a classroom.
+   *
+   * @param   {string} id The id of the classroom.
+   *
+   * @returns void
+   */
+  const get = (classroomId: string) => {
+    ClassroomAPI.getStudents(classroomId)
+      .then((response) => {
+        const { data } = response;
+
+        dispatch(setStudents(data));
+      })
+      .catch((e) => {
+        const { data } = e.response;
+
+        Messages.add({
+          type: 'error',
+          text: `${data}`,
+        });
+      });
+  };
+
+  /**
+   * Removes a student from this classroom.
+   *
+   * @param   {string} payload.classroomId  The id of the classroom.
+   * @param   {string} payload.studentId    The id of the classroom.
+   *
+   * @returns void
+   */
+  const remove = (payload: IStudentRemove): Promise<any> => {
+    const { classroomId } = payload;
+
+    return new Promise((resolve) => {
+      ClassroomAPI.removeStudent(payload)
+        .then((response) => {
+          const { data } = response;
+
+          get(classroomId);
+
+          Messages.add({
+            type: 'success',
+            text: `Student removed.`,
+          });
+
+          resolve(data);
+        })
+        .catch((e) => {
+          const { data } = e.response;
+
+          Messages.add({
+            type: 'error',
+            text: `${data}`,
+          });
+        });
+    });
   };
 
   /**
@@ -173,12 +234,13 @@ const useStudents = () => {
   };
 
   React.useEffect(() => {
-    Users.isLogged && getClassrooms();
+    Users.current.role === 'student' && Users.isLogged && getClassrooms();
+    classroomId && get(classroomId);
   }, [Users.isLogged]);
 
   return {
     ...students,
-    getClassrooms,
+    remove,
 
     getInvitationInfo,
     acceptInvitation,

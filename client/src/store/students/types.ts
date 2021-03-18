@@ -1,6 +1,16 @@
 import { IClassroom } from '../classrooms/types';
 
 /**
+ * Student state interface
+ */
+export interface IStudent {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+}
+
+/**
  * Invitation interface
  */
 export interface IStudentInvitationInfo {
@@ -13,8 +23,13 @@ export interface IStudentInvitationInfo {
  * Reducer's state interface
  */
 export interface IStudentState {
-  /* List of classrooms */
+  // List of students
+  list: IStudent[];
+
+  // A student's list of classrooms.
   classroomsList: IClassroom[];
+
+  // Invitation information
   invitationInfo: IStudentInvitationInfo;
 }
 
@@ -22,6 +37,7 @@ export interface IStudentState {
  * Actions' type
  */
 export enum STUDENTS {
+  SET_STUDENTS = 'SET_STUDENTS',
   SET_CLASSROOMS = 'SET_CLASSROOMS',
   SET_INVITATION_INFO = 'SET_INVITATION_INFO',
 }
@@ -30,6 +46,7 @@ export enum STUDENTS {
  * Reducer's dispatchers interface
  */
 export type IStudentActions =
+  | { type: STUDENTS.SET_STUDENTS; payload: IStudent[] }
   | { type: STUDENTS.SET_CLASSROOMS; payload: IClassroom[] }
   | { type: STUDENTS.SET_INVITATION_INFO; payload: IStudentInvitationInfo };
 
@@ -57,4 +74,12 @@ export interface IStudentInvitationBySignUp {
   lastName: string;
   password: string;
   confirmPassword: string;
+}
+
+/**
+ * Remove student from classroom interface
+ */
+export interface IStudentRemove {
+  classroomId: string;
+  studentId: string;
 }

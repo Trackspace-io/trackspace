@@ -9,7 +9,7 @@ import { useClassrooms } from 'controllers';
 import * as React from 'react';
 import { FiEdit2, FiTrash } from 'react-icons/fi';
 import { useParams } from 'react-router-dom';
-import { ITerm, ITermCreate, ITermModify, ITermRemove } from 'types';
+import { ITerm, ITermCreate, ITermModify, ITermRemove } from 'store/terms/types';
 
 import { dateValue, today, WEEK_DAYS } from '../../helpers/calendar';
 import style from '../../styles/teacher/Terms.module.css';

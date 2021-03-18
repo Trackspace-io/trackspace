@@ -8,7 +8,7 @@ import { useClassrooms } from 'controllers';
 import * as React from 'react';
 import { FiEdit2, FiTrash } from 'react-icons/fi';
 import { useParams } from 'react-router-dom';
-import { ISubject, ISubjectAdd, ISubjectEdit, ISubjectRemove } from 'types';
+import { ISubject, ISubjectAdd, ISubjectModify, ISubjectRemove } from 'store/subjects/types';
 
 import style from '../../styles/teacher/Subjects.module.css';
 
@@ -49,7 +49,7 @@ const Subjects: React.FC = () => {
                 <div className={style['actions']}>
                   <FiEdit2
                     onClick={() => {
-                      setAction('edit');
+                      setAction('modify');
                       setSubject(subject);
                     }}
                   />
@@ -79,9 +79,9 @@ const Subjects: React.FC = () => {
         />
       )}
 
-      {action === 'edit' && (
+      {action === 'modify' && (
         <EditSubject
-          isOpen={Boolean(action === 'edit')}
+          isOpen={Boolean(action === 'modify')}
           onClose={() => setAction('')}
           subject={subject}
           classroomId={id}
@@ -152,7 +152,7 @@ interface ISubjectEditProps {
   subject: ISubject | undefined;
   classroomId: string;
 
-  editSubject: (input: ISubjectEdit) => Promise<any>;
+  editSubject: (input: ISubjectModify) => Promise<any>;
 }
 
 const EditSubject: React.FC<ISubjectEditProps> = ({ isOpen, onClose, classroomId, subject, editSubject }) => {

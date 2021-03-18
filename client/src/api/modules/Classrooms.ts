@@ -1,6 +1,7 @@
 import { _apiUrl } from 'api/api';
 import axios from 'axios';
-import { IClassroomCreate, IClassroomRemove, IClassroomRemoveStudent, IClassroomUpdate } from 'types';
+import { IClassroomCreate, IClassroomRemove, IClassroomModify } from 'store/classrooms/types';
+import { IStudentRemove } from 'store/students/types';
 
 /**
  * Get a classroom information
@@ -41,7 +42,7 @@ export const create = async (body: IClassroomCreate): Promise<any> => {
  *
  * @returns 200, 400, 500
  */
-export const update = async (body: IClassroomUpdate): Promise<any> => {
+export const update = async (body: IClassroomModify): Promise<any> => {
   return await axios.put(`${_apiUrl}/api/classrooms/${body.id}/modify`, body, { withCredentials: true });
 };
 
@@ -89,7 +90,7 @@ export const getStudents = async (classroomId: string): Promise<any> => {
  *
  * @returns 200, 400, 500
  */
-export const removeStudent = async (body: IClassroomRemoveStudent): Promise<any> => {
+export const removeStudent = async (body: IStudentRemove): Promise<any> => {
   return await axios.delete(`${_apiUrl}/api/classrooms/${body.classroomId}/students/${body.studentId}/remove`, {
     withCredentials: true,
   });

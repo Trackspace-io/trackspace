@@ -17,9 +17,7 @@ const useSubjects = (classroomId?: string) => {
   const Messages = useMessages();
 
   // List of states
-  const {
-    classrooms: { subjects },
-  } = state;
+  const { subjects } = state;
 
   // List of actions
   const { setSubjects } = actions;

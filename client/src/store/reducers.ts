@@ -19,10 +19,9 @@ export interface IState {
   students: IStudentState;
   users: IUserState;
   messages: IMessageState;
-  classrooms: IClassroomState & {
-    subjects: ISubjectState;
-    terms: ITermState;
-  };
+  classrooms: IClassroomState;
+  subjects: ISubjectState;
+  terms: ITermState;
 }
 
 export const initialState: IState = {
@@ -30,23 +29,14 @@ export const initialState: IState = {
   students: studentsReducer.initialState,
   users: usersReducer.initialState,
   messages: messagesReducer.initialState,
-  classrooms: {
-    ...classroomReducer.initialState,
-    subjects: subjectsReducer.initialState,
-    terms: termsReducer.initialState,
-  },
+  classrooms: classroomReducer.initialState,
+  subjects: subjectsReducer.initialState,
+  terms: termsReducer.initialState,
 };
 
 const rootReducer = (state: IState, actions: any): IState => {
   // Receiving previous state here
-  const {
-    users,
-    teachers,
-    students,
-    messages,
-    classrooms,
-    classrooms: { subjects, terms },
-  } = state;
+  const { users, teachers, students, messages, classrooms, subjects, terms } = state;
 
   // Receiving current state here
   const currentState = {
@@ -54,11 +44,9 @@ const rootReducer = (state: IState, actions: any): IState => {
     teachers: teachersReducer.reducer(teachers, actions),
     students: studentsReducer.reducer(students, actions),
     messages: messagesReducer.reducer(messages, actions),
-    classrooms: {
-      ...classroomReducer.reducer(classrooms, actions),
-      subjects: subjectsReducer.reducer(subjects, actions),
-      terms: termsReducer.reducer(terms, actions),
-    },
+    classrooms: classroomReducer.reducer(classrooms, actions),
+    terms: termsReducer.reducer(terms, actions),
+    subjects: subjectsReducer.reducer(subjects, actions),
   };
 
   // Middlewares

@@ -1,6 +1,6 @@
 import { _apiUrl } from 'api/api';
 import axios from 'axios';
-import { ISubjectAdd, ISubjectEdit, ISubjectRemove } from 'types';
+import { ISubjectAdd, ISubjectModify, ISubjectRemove } from 'store/subjects/types';
 
 /**
  * Adds a subject to a classroom.
@@ -31,7 +31,7 @@ export const add = async (body: ISubjectAdd): Promise<any> => {
  *
  * @returns 200, 400, 500
  */
-export const edit = async (body: ISubjectEdit): Promise<any> => {
+export const edit = async (body: ISubjectModify): Promise<any> => {
   return await axios.put(`${_apiUrl}/api/classrooms/${body.classroomId}/subjects/${body.subjectId}/edit`, body, {
     withCredentials: true,
   });

@@ -1,6 +1,6 @@
 import { _apiUrl } from 'api/api';
 import axios from 'axios';
-import { ITermCreate, ITermModify, ITermRemove } from 'types';
+import { ITermCreate, ITermModify, ITermRemove } from 'store/terms/types';
 
 /**
  * Get classrooms in which a student is enrolled.

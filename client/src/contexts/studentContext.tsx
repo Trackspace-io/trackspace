@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { IClassroom, IStudentInvitationInfo } from 'types';
+import { IStudentInvitationInfo } from 'store/students/types';
+import { IClassroom } from 'store/classrooms/types';
 
 /* Interface */
 

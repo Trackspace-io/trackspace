@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IMessage } from 'types';
+import { IMessage } from 'store/messages/types';
 
 /* Interface */
 
