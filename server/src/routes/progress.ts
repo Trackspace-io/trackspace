@@ -284,7 +284,7 @@ progress.get(
 );
 
 /**
- * egisters a progress.
+ * Gets the progress graph of a student.
  *
  * @method POST
  * @url    /progress/terms/:id/students/:id/graph
