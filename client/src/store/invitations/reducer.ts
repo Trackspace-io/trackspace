@@ -1,11 +1,14 @@
-import { IStudentActions, IStudentState, STUDENTS } from './types';
+import { INVITATIONS, IInvitationState, IInvitationActions } from './types';
 
 /**
  * Initial state.
  */
 export const initialState = {
-  list: [],
-  classroomsList: [],
+  info: {
+    classroomName: '',
+    teacherFirstName: '',
+    teacherLastName: '',
+  },
 };
 
 /**
@@ -16,13 +19,10 @@ export const initialState = {
  *
  * @returns The current state
  */
-const reducer = (state: IStudentState, action: IStudentActions): IStudentState => {
+const reducer = (state: IInvitationState, action: IInvitationActions): IInvitationState => {
   switch (action.type) {
-    case STUDENTS.SET_STUDENTS:
-      return { ...state, list: action.payload };
-
-    case STUDENTS.SET_CLASSROOMS:
-      return { ...state, classroomsList: action.payload };
+    case INVITATIONS.SET_INFO:
+      return { ...state, info: action.payload };
 
     default:
       return state;

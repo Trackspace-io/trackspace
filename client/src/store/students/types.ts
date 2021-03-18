@@ -11,15 +11,6 @@ export interface IStudent {
 }
 
 /**
- * Invitation interface
- */
-export interface IStudentInvitationInfo {
-  classroomName: string;
-  teacherFirstName: string;
-  teacherLastName: string;
-}
-
-/**
  * Reducer's state interface
  */
 export interface IStudentState {
@@ -28,9 +19,6 @@ export interface IStudentState {
 
   // A student's list of classrooms.
   classroomsList: IClassroom[];
-
-  // Invitation information
-  invitationInfo: IStudentInvitationInfo;
 }
 
 /**
@@ -39,7 +27,6 @@ export interface IStudentState {
 export enum STUDENTS {
   SET_STUDENTS = 'SET_STUDENTS',
   SET_CLASSROOMS = 'SET_CLASSROOMS',
-  SET_INVITATION_INFO = 'SET_INVITATION_INFO',
 }
 
 /**
@@ -47,15 +34,7 @@ export enum STUDENTS {
  */
 export type IStudentActions =
   | { type: STUDENTS.SET_STUDENTS; payload: IStudent[] }
-  | { type: STUDENTS.SET_CLASSROOMS; payload: IClassroom[] }
-  | { type: STUDENTS.SET_INVITATION_INFO; payload: IStudentInvitationInfo };
-
-/**
- * Student Invitation interface
- */
-export interface IStudentInvitation {
-  token: string;
-}
+  | { type: STUDENTS.SET_CLASSROOMS; payload: IClassroom[] };
 
 export interface IStudentAcceptInvitation {
   token: string;

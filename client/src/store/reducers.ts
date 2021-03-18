@@ -13,7 +13,8 @@ import termsReducer from './terms';
 import { ITermState } from './terms/types';
 import usersReducer from './users';
 import { IUserState } from './users/types';
-
+import invitationsReducer from './invitations';
+import { IInvitationState } from './invitations/types';
 export interface IState {
   teachers: ITeacherState;
   students: IStudentState;
@@ -22,6 +23,7 @@ export interface IState {
   classrooms: IClassroomState;
   subjects: ISubjectState;
   terms: ITermState;
+  invitations: IInvitationState;
 }
 
 export const initialState: IState = {
@@ -32,11 +34,12 @@ export const initialState: IState = {
   classrooms: classroomReducer.initialState,
   subjects: subjectsReducer.initialState,
   terms: termsReducer.initialState,
+  invitations: invitationsReducer.initialState,
 };
 
 const rootReducer = (state: IState, actions: any): IState => {
   // Receiving previous state here
-  const { users, teachers, students, messages, classrooms, subjects, terms } = state;
+  const { users, teachers, students, messages, classrooms, subjects, terms, invitations } = state;
 
   // Receiving current state here
   const currentState = {
@@ -47,6 +50,7 @@ const rootReducer = (state: IState, actions: any): IState => {
     classrooms: classroomReducer.reducer(classrooms, actions),
     terms: termsReducer.reducer(terms, actions),
     subjects: subjectsReducer.reducer(subjects, actions),
+    invitations: invitationsReducer.reducer(invitations, actions),
   };
 
   // Middlewares

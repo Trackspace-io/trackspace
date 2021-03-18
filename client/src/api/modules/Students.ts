@@ -1,12 +1,9 @@
 import { _apiUrl } from 'api/api';
 import axios from 'axios';
 
-import {
-  IStudentInvitation,
-  IStudentAcceptInvitation,
-  IStudentInvitationBySignIn,
-  IStudentInvitationBySignUp,
-} from 'store/students/types';
+import { IStudentAcceptInvitation, IStudentInvitationBySignIn, IStudentInvitationBySignUp } from 'store/students/types';
+
+import { IInvitationGet } from 'store/invitations/types';
 
 /**
  * Get classrooms in which a student is enrolled.
@@ -36,7 +33,7 @@ export const getClassrooms = async (): Promise<any> => {
  *  teacherId: string,
  * }[]>} response.data.
  */
-export const getInvitationInfo = async (body: IStudentInvitation): Promise<any> => {
+export const getInvitationInfo = async (body: IInvitationGet): Promise<any> => {
   return await axios.get(`${_apiUrl}/api/users/students/invitations/info?t=${body.token}`, { withCredentials: true });
 };
 

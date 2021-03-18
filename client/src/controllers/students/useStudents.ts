@@ -5,7 +5,6 @@ import { useGlobalStore } from 'store';
 import studentsReducer from 'store/students';
 import {
   IStudentAcceptInvitation,
-  IStudentInvitation,
   IStudentInvitationBySignIn,
   IStudentInvitationBySignUp,
   IStudentRemove,
@@ -28,7 +27,7 @@ const useStudents = (classroomId?: string) => {
   const { students } = state;
 
   // List of actions
-  const { setClassrooms, setStudents, setInvitationInfo } = actions;
+  const { setClassrooms, setStudents } = actions;
 
   // List of thunks
 
@@ -102,34 +101,6 @@ const useStudents = (classroomId?: string) => {
             type: 'success',
             text: `Student removed.`,
           });
-
-          resolve(data);
-        })
-        .catch((e) => {
-          const { data } = e.response;
-
-          Messages.add({
-            type: 'error',
-            text: `${data}`,
-          });
-        });
-    });
-  };
-
-  /**
-   * Get the invitation's information
-   *
-   * @param   {string} token  The invitation token
-   *
-   * @returns Promise
-   */
-  const getInvitationInfo = (payload: IStudentInvitation) => {
-    return new Promise((resolve) => {
-      StudentsAPI.getInvitationInfo(payload)
-        .then((response) => {
-          const { data } = response;
-
-          dispatch(setInvitationInfo(data));
 
           resolve(data);
         })
@@ -242,7 +213,6 @@ const useStudents = (classroomId?: string) => {
     ...students,
     remove,
 
-    getInvitationInfo,
     acceptInvitation,
     acceptInvitationBySignIn,
     acceptInvitationBySignUp,
