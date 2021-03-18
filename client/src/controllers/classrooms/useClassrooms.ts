@@ -159,12 +159,14 @@ const useClassrooms = (classroomId?: string) => {
     classroomId && getCurrent(classroomId);
   }, []);
 
+  const students = (({ list, remove }) => ({ list, remove }))(Students);
+
   return {
     current: {
       ...classrooms.current,
       subjects: Subjects,
       terms: Terms,
-      students: Students,
+      students: students,
     },
 
     create,
