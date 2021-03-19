@@ -98,6 +98,13 @@ export class User extends Model {
   }
 
   /**
+   * Full name of the user.
+   */
+  public get fullName(): string {
+    return `${this.firstName} ${this.lastName}`;
+  }
+
+  /**
    * (Hashed) password of the user.
    */
   public get passwordHash(): string {
@@ -152,6 +159,19 @@ export class User extends Model {
     }
 
     return [];
+  }
+
+  /**
+   * Checks if this user is associated to a classroom.
+   *
+   * @param classroom The classroom.
+   *
+   * @returns True if this user is associated to this classroom, false
+   * otherwise.
+   */
+  public async isInClassroom(classroom: Classroom): Promise<boolean> {
+    const classrooms = await this.getClassrooms();
+    return classrooms.find((c) => classroom.id === c.id) ? true : false;
   }
 
   /**

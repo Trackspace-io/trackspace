@@ -15,6 +15,33 @@ users.use("/teachers", teachers);
 users.use("/students", students);
 
 /**
+ * Get the current user.
+ *
+ * @method  GET
+ * @url     /users/current
+ *
+ * @returns 200, 400
+ */
+users.get(
+  "/current",
+
+  (req, res, next) => {
+    req.isAuthenticated && req.isAuthenticated();
+    next();
+  },
+
+  async (req: Request, res: Response): Promise<Response> => {
+    return res.status(200).json({
+      loggedIn: req.user ? true : false,
+      role: req.user ? (<User>req.user).role : null,
+      firstName: req.user ? (<User>req.user).firstName : null,
+      lastName: req.user ? (<User>req.user).lastName : null,
+      email: req.user ? (<User>req.user).email : null,
+    });
+  }
+);
+
+/**
  * Sign-up.
  *
  * @method  POST
