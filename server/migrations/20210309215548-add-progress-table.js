@@ -15,6 +15,7 @@ module.exports = {
           key: 'id'
         },
         allowNull: false,
+        onDelete: 'CASCADE'
       },
       StudentId: {
         type: Sequelize.DataTypes.STRING,
@@ -23,6 +24,7 @@ module.exports = {
           key: 'id'
         },
         allowNull: false,
+        onDelete: 'CASCADE'
       },
       date: {
         type: Sequelize.DataTypes.DATE,
