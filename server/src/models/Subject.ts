@@ -57,5 +57,5 @@ export function subjectSchema(sequelize: Sequelize): void {
 }
 
 export function subjectAssociations(): void {
-  Subject.belongsTo(Classroom);
+  Subject.belongsTo(Classroom, { onDelete: "CASCADE" });
 }
