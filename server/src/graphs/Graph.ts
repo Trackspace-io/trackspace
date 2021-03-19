@@ -1,3 +1,5 @@
+import { ChartConfiguration, ChartDataSets } from "chart.js";
+
 /**
  * Callback function returning the value of a point or null if this point isn't
  * defined.
@@ -7,31 +9,22 @@ export interface IGetPointCallback {
    * Get point callback.
    *
    * @param label Label of the point.
-   * @param index Index of the label in the list of labels of the x-axis.
    *
    * @returns The value of the point or null if this point isn't defined.
    */
-  (label: string, index: number): Promise<number | null>;
+  (label: string): Promise<number | null>;
 }
 
 /**
- * JSON representation of a graph.
+ * Graph options.
  */
-export interface IGraphJSON {
-  type: string;
-  data: {
-    labels: string[];
-    datasets: IDatasetJSON[];
-  };
+export interface IGraphOptions {
+  yAxis?: { min?: number; max?: number; stepSize?: number };
 }
 
-/**
- * JSON representation of a dataset.
- */
-export interface IDatasetJSON {
-  label: string;
-  data: number[];
-  fill: boolean;
+export interface IDatasetOptions {
+  color?: string;
+  width?: number;
 }
 
 /**
@@ -48,50 +41,78 @@ export class Graph {
    */
   private _labels: string[];
 
+  private _options: IGraphOptions;
+
   /**
-   * Builds a new graph.
+   * Initializaes the graph.
    *
-   * @param labels Labels of the x-axis.
+   * @param options Graph options.
    */
-  constructor(labels: string[]) {
+  constructor(options: IGraphOptions = {}) {
     this._datasets = [];
-    this._labels = labels;
+    this._labels = [];
+    this._options = options;
   }
 
   /**
-   * Returns the JSON representation of the graph.
+   * Returns the Chart.js configuration of this graph.
    *
-   * @returns JSON representation of this graph.
+   * @returns Chart.js configuration.
    */
-  public async toJSON(): Promise<IGraphJSON> {
+  public async config(): Promise<ChartConfiguration> {
     return {
       type: "line",
       data: {
         labels: this._labels,
         datasets: await Promise.all(
-          this._datasets.map((dataset) => dataset.toJSON(this._labels))
+          this._datasets.map((dataset) =>
+            dataset.getChartJsConfig(this._labels)
+          )
         ),
+      },
+      options: {
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                min: this._options.yAxis.min,
+                max: this._options.yAxis.max,
+                stepSize: this._options.yAxis.stepSize,
+              },
+            },
+          ],
+        },
       },
     };
   }
 
   /**
-   * Adds a bew dataset.
+   * Adds a new dataset.
    *
    * @param dataset Dataset to add.
-   *
-   * @returns This dataset.
    */
-  public dataset(dataset: Dataset): Graph {
-    this._datasets.push(dataset);
-    return this;
+  protected addDataset(
+    label: string,
+    getPoint: IGetPointCallback,
+    options: IDatasetOptions = {}
+  ): void {
+    this._datasets.push(new Dataset(label, getPoint, options));
+  }
+
+  /**
+   * Sets the labels of the x-axis.
+   *
+   * @param labels Labels of the x-axis.
+   */
+  protected setLabels(labels: string[]): void {
+    this._labels = labels;
   }
 }
 
 /**
  * Class representing a dataset.
  */
-export class Dataset {
+class Dataset {
   /**
    * Label of this dataset.
    */
@@ -103,28 +124,41 @@ export class Dataset {
   private _getPoint: IGetPointCallback;
 
   /**
+   * Dataset options.
+   */
+  private _options: IDatasetOptions;
+
+  /**
    * Builds a new dataset.
    *
    * @param label    Label of the dataset.
    * @param getPoint Callback function used to get the value of a point.
    */
-  constructor(label: string, getPoint: IGetPointCallback) {
+  constructor(
+    label: string,
+    getPoint: IGetPointCallback,
+    options: IDatasetOptions = {}
+  ) {
     this._label = label;
     this._getPoint = getPoint;
+    this._options = options;
   }
 
   /**
-   * Returns the JSON representation of this dataset.
+   * Returns the Chart.js representation of this dataset.
    *
    * @param labels Labels of the x-axis.
    *
-   * @returns JSON representation of the dataset.
+   * @returns Chart.js configuration.
    */
-  public async toJSON(labels: string[]): Promise<IDatasetJSON> {
+  public async getChartJsConfig(labels: string[]): Promise<ChartDataSets> {
     return {
       label: this._label,
       data: await this.getPoints(labels),
       fill: false,
+      borderColor: this._options.color,
+      backgroundColor: this._options.color,
+      borderWidth: this._options.width,
     };
   }
 
@@ -136,18 +170,20 @@ export class Dataset {
    * @returns The list of points.
    */
   private async getPoints(labels: string[]): Promise<(number | null)[]> {
-    return new Interpolator(
-      await Promise.all(
-        labels.map(async (label, i) => this._getPoint(label, i))
-      )
-    ).points;
+    const points: number[] = [];
+
+    for (let i = 0; i < labels.length; i++) {
+      points.push(await this._getPoint(labels[i]));
+    }
+
+    return new Interpolator(points).points;
   }
 }
 
 /**
  * Class used to interpolate the missing values of a graph.
  */
-export class Interpolator {
+class Interpolator {
   /**
    * List of initial points.
    */

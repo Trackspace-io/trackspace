@@ -60,16 +60,11 @@ export default (): IUserValidator => {
         return res.status(401).json({ redirect: `${process.env.CLIENT_URL}/` });
       }
 
-      // Get the classrooms associated to the user.
+      // Check if the user is in the classroom.
       const user = <User>req.user;
-      const associatedClassrooms = await user.getClassrooms();
+      const classroom = await Classroom.findById(req.params.classroomId);
 
-      // Check if the requested classroom is associated to the user.
-      const classroom = associatedClassrooms.find(
-        (c: Classroom) => c.id === req.params.classroomId
-      );
-
-      if (!classroom) {
+      if (!classroom || !(await user.isInClassroom(classroom))) {
         return res.sendStatus(401);
       }
 

@@ -1,4 +1,9 @@
-import { DataTypes, Model, Sequelize } from "sequelize";
+import {
+  BelongsToGetAssociationMixin,
+  DataTypes,
+  Model,
+  Sequelize,
+} from "sequelize";
 import { Classroom } from "./Classroom";
 
 export class Subject extends Model {
@@ -33,6 +38,11 @@ export class Subject extends Model {
   public get classroomId(): string {
     return this.getDataValue("ClassroomId");
   }
+
+  /**
+   * Gets the classroom associated to this subject.
+   */
+  public getClassroom!: BelongsToGetAssociationMixin<Classroom>;
 }
 
 export function subjectSchema(sequelize: Sequelize): void {

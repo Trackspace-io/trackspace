@@ -127,6 +127,7 @@ terms.get(
               start: term.start,
               end: term.end,
               days: term.days,
+              numberOfWeeks: term.numberOfWeeks,
             };
           }
         )
@@ -256,8 +257,6 @@ terms.delete(
       await Term.destroy({ where: { id: req.params.id } });
       return res.sendStatus(200);
     } catch (e) {
-      console.log('error', e);
-      
       return res.sendStatus(500);
     }
   }
