@@ -41,7 +41,7 @@ export class Classroom extends Model {
     teacherId: string,
     name: string
   ): Promise<Classroom> {
-    return this.findOne({ where: { teacherId, name } });
+    return this.findOne({ where: { TeacherId: teacherId, name } });
   }
 
   /**

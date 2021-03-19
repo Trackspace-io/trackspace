@@ -44,7 +44,7 @@ classrooms.post(
 
     // Generate an identifier and associated the classroom to the teacher.
     req.body.id = shortid.generate();
-    req.body.teacherId = (<User>req.user).id;
+    req.body.TeacherId = (<User>req.user).id;
 
     try {
       await Classroom.create(req.body);

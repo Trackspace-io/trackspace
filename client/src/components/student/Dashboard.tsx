@@ -1,11 +1,11 @@
 import Divider from 'components/gui/Divider';
 import { NavbarMini } from 'components/gui/Navbar';
-import useStudents from 'controllers/useStudents';
+import { useStudents } from 'controllers';
 import moment from 'moment';
 import { default as SimpleCalendar } from 'rc-calendar';
 import * as React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import { IClassroom } from 'types';
+import { IClassroom } from 'store/classrooms/types';
 
 import style from '../../styles/student/Dashboard.module.css';
 

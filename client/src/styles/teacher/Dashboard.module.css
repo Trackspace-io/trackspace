@@ -16,6 +16,18 @@
   padding: 64px 8px;
 }
 
+.home {
+  display: flex;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  margin: 24px 0;
+}
+
+.home svg {
+  transform: scale(2);
+}
+
 .bubble {
   display: flex;
   justify-content: center;
@@ -24,11 +36,12 @@
   height: 48px;
   border: 1px solid #bbb;
   border-radius: 2% 35%;
-  margin: 16px 0;
+  margin: 24px 0;
   text-decoration: none;
   color: var(--black);
   outline: none;
   transition: transform 0.5s;
+  box-sizing: border-box;
   /* transform-origin: right bottom; */
   /* transition: all 3.5s ease-in-out; */
   /* transition: 0.3s width ease-in-out; */
@@ -36,12 +49,8 @@
 
 .bubble:hover {
   cursor: pointer;
-  background: var(--green-dark);
+  background: var(--blue-dark);
   box-shadow: 0 1px 5px #ccc;
-  transform: scale(1.4);
-}
-
-.bubble svg {
   transform: scale(1.2);
 }
 

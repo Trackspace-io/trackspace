@@ -1,7 +1,7 @@
 import Form from 'components/gui/Form';
 import { Input, useInput } from 'components/gui/Input';
 import Typography from 'components/gui/Typography';
-import useUser from 'controllers/useUser';
+import { useAuths } from 'controllers';
 import qs from 'query-string';
 import * as React from 'react';
 import { useHistory } from 'react-router-dom';
@@ -17,7 +17,7 @@ import style from '../../styles/common/ResetPassword.module.css';
  * @returns ReactNode
  */
 export const ResetPasswordSend: React.FC = () => {
-  const User = useUser();
+  const Auths = useAuths();
 
   const Inputs = useInput({ email: '' });
   const [emailSent, setEmailSent] = React.useState(false);
@@ -25,7 +25,7 @@ export const ResetPasswordSend: React.FC = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    User.sendResetPassword(Inputs.values)
+    Auths.sendResetPassword(Inputs.values)
       .then((res) => {
         if (res) {
           setEmailSent(true);
@@ -77,7 +77,7 @@ export const ResetPasswordSend: React.FC = () => {
  * @returns ReactNode
  */
 export const ResetPasswordConfirm: React.FC = () => {
-  const User = useUser();
+  const Auths = useAuths();
   const history = useHistory();
 
   const { t: token } = qs.parse(history.location.search);
@@ -89,7 +89,7 @@ export const ResetPasswordConfirm: React.FC = () => {
 
     const { password, confirmPassword } = Inputs.values;
 
-    User.confirmResetPassword({
+    Auths.confirmResetPassword({
       token,
       password,
       confirmPassword,

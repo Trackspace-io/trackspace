@@ -1,6 +1,6 @@
 import { _apiUrl } from 'api/api';
 import axios from 'axios';
-import { ITeacherGenerateLink } from 'types';
+import { ITeacherGenerateLink } from 'store/teachers/types';
 
 /**
  * Get the list of classrooms taught by a teacher.

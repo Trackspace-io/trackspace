@@ -3,7 +3,7 @@ import { Input, useInput } from 'components/gui/Input';
 import LinkButton from 'components/gui/LinkButton';
 import { Select, useSelect } from 'components/gui/Select';
 import Typography from 'components/gui/Typography';
-import useUser from 'controllers/useUser';
+import { useAuths } from 'controllers';
 import * as React from 'react';
 
 import SignUpSrc from '../../images/sign-up.svg';
@@ -16,7 +16,7 @@ import style from '../../styles/common/SignUp.module.css';
  * @returns ReactNode
  */
 const SignUp: React.FC = () => {
-  const User = useUser();
+  const Auths = useAuths();
 
   const Inputs = useInput({
     email: '',
@@ -32,7 +32,7 @@ const SignUp: React.FC = () => {
     e.preventDefault();
 
     const fields = { ...Inputs.values, role: select.role };
-    User.register(fields);
+    Auths.register(fields);
   };
 
   return (

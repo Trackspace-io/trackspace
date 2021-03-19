@@ -1,8 +1,7 @@
-import useUser from 'controllers/useUser';
+import { useAuths, useUsers } from 'controllers';
 import Cookies from 'js-cookie';
 import * as React from 'react';
-
-import { faBell } from '@fortawesome/free-solid-svg-icons';
+import { FiInbox } from 'react-icons/fi';
 
 import logo from '../../images/logo.svg';
 import style from '../../styles/gui/Navbar.module.css';
@@ -30,43 +29,26 @@ const Navbar: React.FC = () => {
           </LinkButton>
         </div>
       )}
-
-      {/* <a href="/">
-        <img src={logo} className={style['logo']} />
-      </a>
-      {!isAuthenticated ? (
-        <LinkButton to="/sign-up" variant="primary">
-          Sign Up
-        </LinkButton>
-      ) : (
-        <Dropdown type="title" title={`${user?.firstName} ${user?.lastName}`}>
-          <DropdownItem type="link" to={`/user/${user?.firstName?.toLowerCase()}-${user?.lastName?.toLowerCase()}`}>
-            Profile
-          </DropdownItem>
-          <DropdownItem type="button" onClick={logout}>
-            Logout
-          </DropdownItem>
-        </Dropdown>
-      )} */}
     </div>
   );
 };
 
 const NavbarMini: React.FC = () => {
-  const User = useUser();
+  const Users = useUsers();
+  const Auths = useAuths();
 
   return (
     <div className={style['container-mini']}>
-      <Dropdown type="icon" icon={faBell}>
+      <Dropdown type="icon" icon={<FiInbox />}>
         <DropdownItem type="text">Notification</DropdownItem>
       </Dropdown>
-      <Dropdown type="title" title={`${User.current?.firstName} ${User.current?.lastName}`}>
+      <Dropdown type="title" title={`${Users.current?.firstName} ${Users.current?.lastName}`}>
         <DropdownItem
           type="link"
-          to={`/user/${User.current?.firstName?.toLowerCase()}-${User.current?.lastName?.toLowerCase()}`}>
+          to={`/user/${Users.current?.firstName?.toLowerCase()}-${Users.current?.lastName?.toLowerCase()}`}>
           Profile
         </DropdownItem>
-        <DropdownItem type="button" onClick={User.logout}>
+        <DropdownItem type="button" onClick={Auths.logout}>
           Logout
         </DropdownItem>
       </Dropdown>

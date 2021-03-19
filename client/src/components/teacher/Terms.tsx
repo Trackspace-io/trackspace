@@ -1,20 +1,18 @@
 import Button from 'components/gui/Button';
+import Checkbox from 'components/gui/Checkbox';
 import Divider from 'components/gui/Divider';
-import Typography from 'components/gui/Typography';
-import useClassrooms from 'controllers/useClassrooms';
-import * as React from 'react';
-import { useParams } from 'react-router-dom';
-
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-import style from '../../styles/teacher/Terms.module.css';
+import Form from 'components/gui/Form';
 import { Input, useInput } from 'components/gui/Input';
 import Modal from 'components/gui/Modal';
-import Form from 'components/gui/Form';
-import { ITermCreate, ITermRemove, ITerm, ITermModify } from 'types';
-import Checkbox from 'components/gui/Checkbox';
-import { WEEK_DAYS, today, dateValue } from '../../helpers/calendar';
+import Typography from 'components/gui/Typography';
+import { useClassrooms } from 'controllers';
+import * as React from 'react';
+import { FiEdit2, FiTrash } from 'react-icons/fi';
+import { useParams } from 'react-router-dom';
+import { ITerm, ITermCreate, ITermModify, ITermRemove } from 'store/terms/types';
+
+import { dateValue, today, WEEK_DAYS } from '../../helpers/calendar';
+import style from '../../styles/teacher/Terms.module.css';
 
 interface RouteParams {
   id: string;
@@ -23,7 +21,12 @@ interface RouteParams {
 const Terms: React.FC = () => {
   const { id } = useParams<RouteParams>();
 
+  // Controllers
   const Classrooms = useClassrooms(id);
+
+  const {
+    current: { terms },
+  } = Classrooms;
 
   // Internal hooks
   const [action, setAction] = React.useState('');
@@ -41,8 +44,8 @@ const Terms: React.FC = () => {
       <div className={style['body']}>
         <Typography variant="info"> List of terms </Typography>
         <div className={style['list']}>
-          {Classrooms.termsList.length !== 0 ? (
-            Classrooms.termsList.map((term, i) => (
+          {terms.list.length !== 0 ? (
+            terms.list.map((term, i) => (
               <TermItem key={term.id} term={term} index={i} setAction={setAction} setTerm={setTerm} />
             ))
           ) : (
@@ -58,7 +61,7 @@ const Terms: React.FC = () => {
           isOpen={Boolean(action === 'create')}
           onClose={() => setAction('')}
           classroomId={id}
-          addTerm={Classrooms.createTerm}
+          addTerm={terms.create}
         />
       )}
 
@@ -68,7 +71,7 @@ const Terms: React.FC = () => {
           onClose={() => setAction('')}
           term={term}
           classroomId={id}
-          modifyTerm={Classrooms.modifyTerm}
+          modifyTerm={terms.modify}
         />
       )}
 
@@ -78,7 +81,7 @@ const Terms: React.FC = () => {
           onClose={() => setAction('')}
           term={term}
           classroomId={id}
-          removeTerm={Classrooms.removeTerm}
+          removeTerm={terms.remove}
         />
       )}
     </div>
@@ -116,15 +119,13 @@ const TermItem: React.FC<ITermItem> = ({ term, index, setAction, setTerm }) => {
         </Typography>
       </div>
       <div className={style['actions']}>
-        <FontAwesomeIcon
-          icon={faEdit}
+        <FiEdit2
           onClick={() => {
             setAction('modify');
             setTerm(term);
           }}
         />
-        <FontAwesomeIcon
-          icon={faTrash}
+        <FiTrash
           onClick={() => {
             setAction('remove');
             setTerm(term);

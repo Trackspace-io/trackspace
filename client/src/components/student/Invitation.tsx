@@ -2,17 +2,18 @@ import Button from 'components/gui/Button';
 import Form from 'components/gui/Form';
 import { Input, useInput } from 'components/gui/Input';
 import Typography from 'components/gui/Typography';
+import { useInvitations, useStudents } from 'controllers';
+import qs from 'query-string';
 import * as React from 'react';
 import { useHistory } from 'react-router-dom';
 
-import SignInSrc from '../../images/teacher.svg';
 import SignUpSrc from '../../images/student.svg';
+import SignInSrc from '../../images/teacher.svg';
 import style from '../../styles/student/Invitation.module.css';
-import useStudents from 'controllers/useStudents';
-import qs from 'query-string';
 
-const Invitations: React.FC = () => {
-  const Students = useStudents();
+const Invitation: React.FC = () => {
+  const Invitations = useInvitations();
+
   const history = useHistory();
 
   const { t: token } = qs.parse(history.location.search);
@@ -20,7 +21,7 @@ const Invitations: React.FC = () => {
   const [toggle, setToggle] = React.useState(true);
 
   React.useEffect(() => {
-    Students.getInvitationInfo({ token: String(token) });
+    Invitations.get({ token: String(token) });
   }, []);
 
   return (
@@ -31,8 +32,8 @@ const Invitations: React.FC = () => {
             <img src={toggle ? SignInSrc : SignUpSrc} />
           </div>
           <Typography variant="subtitle1" align="center">
-            {Students.invitationInfo.teacherFirstName} {Students.invitationInfo.teacherLastName} has invited you to join{' '}
-            {Students.invitationInfo.classroomName}.
+            {Invitations.info.teacherFirstName} {Invitations.info.teacherLastName} has invited you to join{' '}
+            {Invitations.info.classroomName}.
           </Typography>
           <br />
         </div>
@@ -164,4 +165,4 @@ const SignUp: React.FC<ISignUpProps> = ({ token }) => {
     </div>
   );
 };
-export default Invitations;
+export default Invitation;

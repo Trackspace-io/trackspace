@@ -80,7 +80,8 @@
   outline: none;
 }
 
-.icon {
+.icon svg {
   cursor: pointer;
-  color: var(--green-dark);
+  transform: scale(1.2);
+  color: var(--blue-dark);
 }

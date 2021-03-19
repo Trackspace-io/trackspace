@@ -4,13 +4,11 @@ import Form from 'components/gui/Form';
 import { Input, useInput } from 'components/gui/Input';
 import Modal from 'components/gui/Modal';
 import Typography from 'components/gui/Typography';
-import useClassrooms from 'controllers/useClassrooms';
+import { useClassrooms } from 'controllers';
 import * as React from 'react';
+import { FiEdit2, FiTrash } from 'react-icons/fi';
 import { useParams } from 'react-router-dom';
-import { ISubject, ISubjectAdd, ISubjectEdit, ISubjectRemove } from 'types';
-
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ISubject, ISubjectAdd, ISubjectModify, ISubjectRemove } from 'store/subjects/types';
 
 import style from '../../styles/teacher/Subjects.module.css';
 
@@ -21,7 +19,10 @@ interface RouteParams {
 const Subjects: React.FC = () => {
   const { id } = useParams<RouteParams>();
 
+  // Controllers
   const Classrooms = useClassrooms(id);
+
+  const { subjects } = Classrooms.current;
 
   // Internal hooks
   const [action, setAction] = React.useState('');
@@ -39,22 +40,20 @@ const Subjects: React.FC = () => {
       <div className={style['body']}>
         <Typography variant="info"> List of students </Typography>
         <div className={style['list']}>
-          {Classrooms.subjectsList.length !== 0 ? (
-            Classrooms.subjectsList.map((subject) => (
+          {subjects.list.length !== 0 ? (
+            subjects.list.map((subject) => (
               <div key={subject.id} className={style['item']}>
                 <div>
                   <Typography>{subject.name}</Typography>
                 </div>
                 <div className={style['actions']}>
-                  <FontAwesomeIcon
-                    icon={faEdit}
+                  <FiEdit2
                     onClick={() => {
-                      setAction('edit');
+                      setAction('modify');
                       setSubject(subject);
                     }}
                   />
-                  <FontAwesomeIcon
-                    icon={faTrash}
+                  <FiTrash
                     onClick={() => {
                       setAction('remove');
                       setSubject(subject);
@@ -76,17 +75,17 @@ const Subjects: React.FC = () => {
           isOpen={Boolean(action === 'add')}
           onClose={() => setAction('')}
           classroomId={id}
-          addSubject={Classrooms.addSubject}
+          addSubject={subjects.add}
         />
       )}
 
-      {action === 'edit' && (
+      {action === 'modify' && (
         <EditSubject
-          isOpen={Boolean(action === 'edit')}
+          isOpen={Boolean(action === 'modify')}
           onClose={() => setAction('')}
           subject={subject}
           classroomId={id}
-          editSubject={Classrooms.editSubject}
+          editSubject={subjects.modify}
         />
       )}
 
@@ -96,7 +95,7 @@ const Subjects: React.FC = () => {
           onClose={() => setAction('')}
           subject={subject}
           classroomId={id}
-          removeSubject={Classrooms.removeSubject}
+          removeSubject={subjects.remove}
         />
       )}
     </div>
@@ -153,7 +152,7 @@ interface ISubjectEditProps {
   subject: ISubject | undefined;
   classroomId: string;
 
-  editSubject: (input: ISubjectEdit) => Promise<any>;
+  editSubject: (input: ISubjectModify) => Promise<any>;
 }
 
 const EditSubject: React.FC<ISubjectEditProps> = ({ isOpen, onClose, classroomId, subject, editSubject }) => {

@@ -2,14 +2,14 @@ import Divider from 'components/gui/Divider';
 import Form from 'components/gui/Form';
 import { Input, useInput } from 'components/gui/Input';
 import Typography from 'components/gui/Typography';
-import useUser from 'controllers/useUser';
+import { useUsers } from 'controllers';
 import * as React from 'react';
 
 import style from '../../styles/common/Profile.module.css';
 
 const Profile: React.FC = () => {
   // Get context
-  const User = useUser();
+  const Users = useUsers();
 
   // Internal state
   const [selectedTab, setSelectedTab] = React.useState('profile');
@@ -26,23 +26,24 @@ const Profile: React.FC = () => {
   });
 
   React.useEffect(() => {
+    const { email, firstName, lastName } = Users.current;
+
     Inputs.setValues({
-      email: User.current.email,
-      firstName: User.current.firstName,
-      lastName: User.current.lastName,
-      role: User.current.role,
+      email,
+      firstName,
+      lastName,
     });
-  }, [User.current]);
+  }, [Users.current]);
 
   const handleProfileSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    User.updateUser(Inputs.values);
+    Users.update(Inputs.values);
   };
 
   const handleSecuritySubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    User.updateUser(Inputs.values).then(() => {
+    Users.update(Inputs.values).then(() => {
       Inputs.setValues({
         password: '',
         oldPassword: '',
@@ -135,9 +136,9 @@ const Profile: React.FC = () => {
     <div className={style['container']}>
       <div className={style['header']}>
         <Typography variant="subtitle">
-          {User.current?.firstName} {User.current?.lastName}
+          {Users.current?.firstName} {Users.current?.lastName}
         </Typography>
-        <Typography variant="info">{User.current?.role}</Typography>
+        <Typography variant="info">{Users.current?.role}</Typography>
         <br />
         <div className={style['tab']} onClick={() => setSelectedTab('profile')}>
           Profile
