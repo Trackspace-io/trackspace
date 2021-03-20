@@ -106,8 +106,7 @@ export class Term extends Model {
   public get numberOfWeeks(): number {
     const timeDiff = this.end.getTime() - this.start.getTime();
     const daysDiff = timeDiff / (1000 * 3600 * 24);
-
-    return daysDiff > 0 ? 1 + Math.floor(daysDiff / 7) + 1 : 0;
+    return daysDiff > 0 ? Math.floor(daysDiff / 7) + 1 : 0;
   }
 
   /**
@@ -213,6 +212,24 @@ export class Term extends Model {
   }
 
   /**
+   * Returns the number of this term (1-n).
+   *
+   * @returns Number of this term.
+   */
+  public async getNumber(): Promise<number> {
+    const classroom = await this.getClassroom();
+    const terms = await classroom.getTerms({ order: [["start", "ASC"]] });
+
+    for (let i = 0; i < terms.length; i++) {
+      if (terms[i].id === this.id) {
+        return i + 1;
+      }
+    }
+
+    return -1;
+  }
+
+  /**
    * Computes the start and end date of a week.
    *
    * @param week Week number (1 → n).
@@ -239,6 +256,25 @@ export class Term extends Model {
       this.start > weekStartDate ? this.start : weekStartDate,
       this.end < weekEndDate ? this.end : weekEndDate,
     ];
+  }
+
+  /**
+   * Computes the number of the week at the given date.
+   *
+   * @param date Date to check.
+   *
+   * @returns The week number (1-n) or null if the date is out of bounds.
+   */
+  public getWeekNumber(date: Date): number | null {
+    if (date < this.start || date > this.end) {
+      return null;
+    }
+
+    const timeDiff = date.getTime() - this.start.getTime();
+    let daysDiff = timeDiff / (1000 * 3600 * 24);
+    daysDiff -= date.getDay() - 6;
+
+    return daysDiff <= 0 ? 1 : Math.floor(daysDiff / 7) + 2;
   }
 
   /**

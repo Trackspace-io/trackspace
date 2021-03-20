@@ -6,6 +6,7 @@ import { User } from "../models/User";
 import { Progress } from "../models/Progress";
 import { Term } from "../models/Term";
 import ProgressGraph from "../graphs/ProgressGraph";
+import { Classroom } from "../models/Classroom";
 
 const progress = Router();
 
@@ -237,7 +238,9 @@ progress.get(
       const student = await User.findById(req.params.studentId);
 
       // Get the list of subjects.
-      const subjects = await classroom.getSubjects();
+      const subjects = await classroom.getSubjects({
+        order: [["name", "ASC"]],
+      });
 
       // Get the progress values.
       const progress = await Progress.findByDateInterval(
@@ -295,7 +298,7 @@ progress.get(
  * @returns 200, 400, 401, 500
  */
 progress.get(
-  "/terms/:termId/student/:studentId/graph",
+  "/terms/:termId/students/:studentId/graph",
   user().isA(["teacher", "student"]),
 
   param("termId").custom(async (value, { req }) => {
@@ -339,6 +342,109 @@ progress.get(
       );
 
       return res.status(200).json(await graph.config());
+    } catch (e) {
+      return res.sendStatus(500);
+    }
+  }
+);
+
+/**
+ * Gets the progress of a student at a date.
+ *
+ * @method GET
+ * @url    /progress/classrooms/:id/students/:id?date={date}
+ *
+ * @param query.date The date.
+ *
+ * @returns 200, 400, 401, 500
+ */
+progress.get(
+  "/classrooms/:classroomId/students/:studentId",
+  user().isA(["teacher", "student"]).isInClassroom(),
+
+  param("studentId").custom(async (value, { req }) => {
+    const user = <User>req.user;
+    const allowed = user.role !== "student" || user.id === value;
+    if (!allowed) return Promise.reject();
+
+    const student = await User.findById(value);
+    if (
+      !student ||
+      student.role !== "student" ||
+      !student.isInClassroom(req.classroom)
+    ) {
+      return Promise.reject();
+    }
+
+    return true;
+  }),
+
+  query("date").custom(async (value, { req }) => {
+    if (!value) {
+      return Promise.reject("Missing value.");
+    }
+
+    const date = new Date(value);
+    if (isNaN(date.valueOf())) {
+      return Promise.reject("Invalid date.");
+    }
+
+    const classroom: Classroom = req.classroom;
+    const term = await classroom.getTermAtDate(date);
+
+    if (!term || !term.isDateAllowed(date)) {
+      return Promise.reject("Invalid date.");
+    }
+
+    return true;
+  }),
+
+  async (req: Request, res: Response): Promise<Response> => {
+    // Check if the request is valid.
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const date = new Date(`${req.query.date}`);
+
+      const progress = await Progress.findByStudentAndDate(
+        req.params.studentId,
+        date
+      );
+
+      const subjects = await req.classroom.getSubjects({
+        order: [["name", "ASC"]],
+      });
+
+      const term = await req.classroom.getTermAtDate(date);
+
+      return res.status(200).json({
+        termNumber: await term.getNumber(),
+        weekNumber: term.getWeekNumber(date),
+        subjects: subjects.map((subject) => {
+          const value = progress.find((p) => p.subjectId === subject.id);
+          return {
+            subject: {
+              id: subject.id,
+              name: subject.name,
+            },
+            progressKey: {
+              subjectId: subject.id,
+              studentId: req.params.studentId,
+              date,
+            },
+            values: {
+              pageFrom: value ? value.pageFrom : null,
+              pageSet: value ? value.pageSet : null,
+              pageDone: value ? value.pageDone : null,
+              homework: value ? value.homework : null,
+              homeworkDone: value ? value.homeworkDone : false,
+            },
+          };
+        }),
+      });
     } catch (e) {
       return res.sendStatus(500);
     }
