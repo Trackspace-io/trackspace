@@ -9,6 +9,7 @@ import {
   Model,
   Sequelize,
 } from "sequelize";
+import { Goal } from "./Goal";
 import { Notification } from "./Notification";
 import { ShortLink } from "./ShortLink";
 import { Subject } from "./Subject";

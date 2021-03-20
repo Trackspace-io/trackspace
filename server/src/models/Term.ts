@@ -6,6 +6,7 @@ import {
   Sequelize,
 } from "sequelize";
 import { Classroom } from "./Classroom";
+import { Goal } from "./Goal";
 
 export class Term extends Model {
   /**
@@ -242,6 +243,32 @@ export class Term extends Model {
   }
 
   /**
+   * Compute the week number of a term given the date.
+   *
+   * @param date  {Date}  Selected date.
+   *
+   * @returns the week number in the term.
+   */
+  public getWeekNumber(date: Date): number {
+    
+    // Check if date is in term?
+
+    const current = new Date(date);
+
+    // Get the time value in days.
+    const termStartDays = Math.floor(this.start.getTime() / (24 * 3600 * 1000));
+    const currentStartDays = Math.floor(current.getTime() / (24 * 3600 * 1000));
+
+    // Compute the number of days since the term started.
+    const daysSinceTermStart = Math.abs(currentStartDays - termStartDays);
+
+    // Compute the week number
+    const weekNumber = (daysSinceTermStart - (daysSinceTermStart % 7)) / 7;
+
+    return weekNumber;
+  }
+  
+  /**
    * Checks if a day is allowed.
    *
    * @param day Day of the week (0 = sunday, 1 = monday, etc.). Can also be the
@@ -401,4 +428,6 @@ export function termSchema(sequelize: Sequelize): void {
 
 export function termAssociations(): void {
   Term.belongsTo(Classroom);
+  
+  Term.hasMany(Goal);
 }
