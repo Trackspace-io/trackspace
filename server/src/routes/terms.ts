@@ -4,8 +4,11 @@ import user from "../validators/user";
 import { Term } from "../models/Term";
 import shortid from "shortid";
 import term from "../validators/term";
+import goals from "./goals";
 
 const terms = Router();
+
+terms.use("/:termId/goals", term().exists(), goals);
 
 /**
  * Validates if the elements of a list are valid days.
