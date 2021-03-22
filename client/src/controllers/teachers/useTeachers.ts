@@ -43,6 +43,7 @@ const useTeachers = () => {
       })
       .catch((e) => {
         const { data } = e.response;
+        console.log('getClassroom', data);
 
         Messages.add({
           type: 'error',
@@ -81,7 +82,8 @@ const useTeachers = () => {
   };
 
   React.useEffect(() => {
-    Users.isLogged && getClassrooms();
+    console.log('Teacher', Users);
+    Users.isLogged && Users.current.role === 'teacher' && getClassrooms();
   }, [Users.isLogged]);
 
   return {

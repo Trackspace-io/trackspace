@@ -8,6 +8,8 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import { IClassroom } from 'store/classrooms/types';
 
 import style from '../../styles/student/Dashboard.module.css';
+import Classroom from './Classroom';
+import Home from './Home/index';
 
 const now = moment();
 
@@ -23,11 +25,11 @@ const Dashboard: React.FC = () => {
         <div className={style['content']}>
           <Switch>
             <Route exact path="/student">
-              <Redirect to="/student" />
+              <Redirect to="/student/classrooms" />
             </Route>
-            <Route path="students/classrooms/invitations/accept" />
-            {/* <Route exact path="/teacher/classrooms" component={Home} />
-            <Route path="/teacher/classrooms/:id" component={Classroom} /> */}
+            <Route path="/students/classrooms/invitations/accept" />
+            <Route exact path="/student/classrooms" component={Home} />
+            <Route path="/student/classrooms/:id" component={Classroom} />
           </Switch>
         </div>
         <div className={style['menu']}>
