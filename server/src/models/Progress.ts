@@ -93,6 +93,21 @@ export class Progress extends Model {
   }
 
   /**
+   * Finds progress values by student and date.
+   *
+   * @param studentId Identifier of the student.
+   * @param date      Date of the progress.
+   *
+   * @returns List of registered progress.
+   */
+  public static async findByStudentAndDate(
+    studentId: string,
+    date: Date
+  ): Promise<Progress[]> {
+    return await this.findAll({ where: { StudentId: studentId, date } });
+  }
+
+  /**
    * Checks whether a user is allowed to access to a progress object or not.
    *
    * @param user      User who wants to access to the progress.
