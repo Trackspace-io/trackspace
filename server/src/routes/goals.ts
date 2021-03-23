@@ -1,7 +1,8 @@
 import { Request, Response, Router } from "express";
-import { body, validationResult } from "express-validator";
+import { body, query, validationResult } from "express-validator";
 import shortid from "shortid";
 import { Goal } from "../models/Goal";
+import GoalsGraph from "../graphs/GoalsGraph";
 import user from "../validators/user";
 
 const goals = Router();
@@ -117,6 +118,49 @@ goals.get(
           };
         })
       );
+    } catch (e) {
+      return res.sendStatus(500);
+    }
+  }
+);
+
+/**
+ * Gets the goal graph of a term.
+ *
+ * @method GET
+ * @url    /classrooms/:id/terms/:id/goals/graph
+ *
+ * @param query.color Color of the line (Hex code).
+ * @param query.width Width of the line (Pixels).
+ *
+ * @returns 200, 400, 401, 500
+ */
+goals.get(
+  "/graph",
+  user().isA("teacher"),
+
+  query("color")
+    .optional()
+    .isHexColor()
+    .withMessage("The color must be a hex code."),
+
+  query("width").optional().isInt(),
+
+  async (req: Request, res: Response): Promise<Response> => {
+    // Check if the request is valid.
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const graph = new GoalsGraph(
+        req.term,
+        `${req.query.color}`,
+        parseInt(`${req.query.width}`)
+      );
+
+      return res.status(200).json(await graph.config());
     } catch (e) {
       return res.sendStatus(500);
     }

@@ -1,7 +1,27 @@
-import { DataTypes, Model, Sequelize } from "sequelize";
+import { DataTypes, Model, Op, Sequelize } from "sequelize";
 import { Term } from "./Term";
 
 export class Goal extends Model {
+  /**
+   * Returns the number of pages that the student must do by the end of the
+   * given week.
+   *
+   * @param term       The term.
+   * @param weekNumber The week (1-n).
+   *
+   * @returns Number of pages.
+   */
+  public static async getTermPageGoal(
+    term: Term,
+    weekNumber: number
+  ): Promise<number> {
+    const goal = await this.findOne({
+      where: { TermId: term.id, weekNumber },
+    });
+
+    return goal ? goal.pages : null;
+  }
+
   /**
    * Week number in the term.
    */
