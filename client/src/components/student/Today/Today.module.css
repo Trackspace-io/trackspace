@@ -1,3 +1,33 @@
 .container {
   box-sizing: border-box;
 }
+
+.body {
+  display: flex;
+  flex-direction: row;
+}
+
+.table thead th {
+  padding: 8px 16px;
+}
+
+.table tbody td {
+  padding: 8px 16px;
+}
+
+.table input[type='text'],
+input[type='number'] {
+  width: 100px;
+  font-size: 16px;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  border-radius: 0px;
+  text-align: center;
+  -webkit-appearance: none;
+  margin: 0;
+  -moz-appearance: textfield;
+}
+
+.table tbody {
+  vertical-align: center;
+}

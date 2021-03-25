@@ -4,7 +4,14 @@ import { USERS, IUserState, IUserAction } from './types';
  * Initial state.
  */
 export const initialState = {
-  current: {},
+  current: {
+    loggedIn: false,
+    id: '',
+    email: '',
+    firstName: '',
+    lastName: '',
+    role: '',
+  },
 
   isLogged: false,
 };

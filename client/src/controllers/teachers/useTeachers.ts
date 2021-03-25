@@ -82,9 +82,8 @@ const useTeachers = () => {
   };
 
   React.useEffect(() => {
-    console.log('Teacher', Users);
-    Users.isLogged && Users.current.role === 'teacher' && getClassrooms();
-  }, [Users.isLogged]);
+    Users.current.loggedIn && getClassrooms();
+  }, [Users.current.loggedIn]);
 
   return {
     ...teachers,

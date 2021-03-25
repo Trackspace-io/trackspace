@@ -4,8 +4,10 @@ import * as React from 'react';
 import { useGlobalStore } from 'store';
 import usersReducer from 'store/users';
 import { IUserUpdate, USERS } from 'store/users/types';
+import Cookies from 'js-cookie';
 
 const { actions } = usersReducer;
+const cookie = Cookies.get('connect.sid') || '';
 
 const useUsers = () => {
   if (useGlobalStore === undefined) {
@@ -21,7 +23,7 @@ const useUsers = () => {
   const { users } = state;
 
   // List of actions
-  const { setUser } = actions;
+  const { setUser, setCurrentUser } = actions;
 
   // List of thunks
 
@@ -47,6 +49,22 @@ const useUsers = () => {
       });
   };
 
+  const getCurrent = () => {
+    UserAPI.getCurrent()
+      .then((response) => {
+        const { data } = response;
+
+        dispatch(setCurrentUser(data));
+      })
+      .catch((e) => {
+        const { data } = e.response;
+
+        Messages.add({
+          type: 'error',
+          text: `${data}`,
+        });
+      });
+  };
   /**
    * Update the user's information
    *
@@ -97,8 +115,8 @@ const useUsers = () => {
   };
 
   React.useEffect(() => {
-    users.isLogged && get();
-  }, [users.isLogged]);
+    getCurrent();
+  }, [cookie]);
 
   return { ...users, update, authCheck };
 };

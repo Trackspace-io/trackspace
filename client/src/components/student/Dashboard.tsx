@@ -1,8 +1,7 @@
+import Menu from 'components/common/Menu';
 import Divider from 'components/gui/Divider';
-import { NavbarMini } from 'components/gui/Navbar';
 import { useStudents } from 'controllers';
-import moment from 'moment';
-import { default as SimpleCalendar } from 'rc-calendar';
+
 import * as React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { IClassroom } from 'store/classrooms/types';
@@ -10,8 +9,6 @@ import { IClassroom } from 'store/classrooms/types';
 import style from '../../styles/student/Dashboard.module.css';
 import Classroom from './Classroom';
 import Home from './Home/index';
-
-const now = moment();
 
 const Dashboard: React.FC = () => {
   const Students = useStudents();
@@ -63,30 +60,6 @@ const Sidebar: React.FC<ISidebarProps> = ({ classrooms }) => {
           {classroom.name[0]}
         </a>
       ))}
-    </div>
-  );
-};
-
-/**
- * Dashboard's menu. It contains components used across different pages.
- *
- * @param none
- *
- * @returns ReactNode
- */
-const Menu: React.FC = () => {
-  return (
-    <div>
-      <NavbarMini />
-      <br />
-      <br />
-      <SimpleCalendar
-        style={{ margin: '0 auto' }}
-        showDateInput={false}
-        dateInputPlaceholder="please input"
-        format={'YYYY-MM-DD'}
-        defaultValue={now}
-      />
     </div>
   );
 };

@@ -33,6 +33,7 @@ users.get(
   async (req: Request, res: Response): Promise<Response> => {
     return res.status(200).json({
       loggedIn: req.user ? true : false,
+      id: req.user? (<User>req.user).id : null,
       role: req.user ? (<User>req.user).role : null,
       firstName: req.user ? (<User>req.user).firstName : null,
       lastName: req.user ? (<User>req.user).lastName : null,

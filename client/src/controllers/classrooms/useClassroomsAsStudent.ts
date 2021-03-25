@@ -3,6 +3,7 @@ import React from 'react';
 import { ClassroomAPI } from 'api';
 import classroomsReducer from 'store/classrooms';
 import { useMessages } from 'controllers';
+import useProgresses from 'controllers/progresses/useProgresses';
 
 const { actions } = classroomsReducer;
 
@@ -21,6 +22,8 @@ const useClassroomsAsStudent = (classroomId?: string) => {
 
   // List of controllers.
   const Messages = useMessages();
+
+  const Progresses = useProgresses(classroomId);
 
   /**
    * Get the classroom information
@@ -55,6 +58,7 @@ const useClassroomsAsStudent = (classroomId?: string) => {
   return {
     current: {
       ...classrooms.current,
+      progress: Progresses,
     },
   };
 };
