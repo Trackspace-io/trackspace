@@ -1,11 +1,13 @@
 import {
   BelongsToGetAssociationMixin,
   DataTypes,
+  HasManyGetAssociationsMixin,
   Model,
   Op,
   Sequelize,
 } from "sequelize";
 import { Classroom } from "./Classroom";
+import { Goal } from "./Goal";
 
 export class Term extends Model {
   /**
@@ -197,6 +199,11 @@ export class Term extends Model {
    * Gets the classroom associated to this term.
    */
   public getClassroom!: BelongsToGetAssociationMixin<Classroom>;
+
+  /**
+   * Gets the goals associated to this term.
+   */
+  public getGoals!: HasManyGetAssociationsMixin<Goal>;
 
   /**
    * Checks if a date is allowed in this term.
@@ -437,4 +444,5 @@ export function termSchema(sequelize: Sequelize): void {
 
 export function termAssociations(): void {
   Term.belongsTo(Classroom);
+  Term.hasMany(Goal);
 }
