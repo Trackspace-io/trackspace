@@ -13,9 +13,9 @@ const goals = Router();
  * @method POST
  * @url /classrooms/:id/terms/:id/goals/create
  *
- * @param req.date    {string}  Date of the goal (yyyy-mm-dd)
- * @param req.pages   {number}  Set number of pages for the week
- * @param req.classroomId {string} The identifier of the classroom
+ * @param req.weekNumber {number} Week number.
+ * @param req.pages      {number} Cumulated number of pages that must be com-
+ *                                pleted in total at the end of the week.
  *
  * @returns 200, 400, 401, 500
  */
@@ -68,8 +68,8 @@ goals.post(
 /**
  * Unsets a goal.
  *
- * @method GET
- * @url    /classrooms/:id/terms/:id/goals/weeks/:number/destroy
+ * @method DELETE
+ * @url    /classrooms/:id/terms/:id/goals/weeks/:number/remove
  *
  * @returns 200, 400, 401, 500
  */
