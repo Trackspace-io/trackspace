@@ -253,7 +253,10 @@ progress.get(
       // Build the response.
       return res.status(200).json({
         days: term.days,
-        dates: [weekStart, weekEnd],
+        dates: [
+          date.format(weekStart, "YYYY-MM-DD"),
+          date.format(weekEnd, "YYYY-MM-DD"),
+        ],
         progress: subjects.map((subject) => {
           return {
             subject: {
