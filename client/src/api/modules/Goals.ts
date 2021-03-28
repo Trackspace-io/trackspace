@@ -20,7 +20,7 @@ export const setGoal = async (body: IGoalRegister): Promise<any> => {
  * Unsets a goal.
  *
  * @method DELETE
- * @url    /classrooms/:id/terms/:id/goals/weeks/:number/remove
+ * @url    /classrooms/:id/terms/:id/goals/weeks/:number/unset
  */
 export const unsetGoal = async (body: IGoalRemove): Promise<any> => {
   return await axios.delete(
