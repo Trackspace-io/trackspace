@@ -1,5 +1,6 @@
 import { Request, Response, Router } from "express";
 import { body, validationResult } from "express-validator";
+import date from "date-and-time";
 import user from "../validators/user";
 import { Term } from "../models/Term";
 import shortid from "shortid";
@@ -147,8 +148,8 @@ terms.get(
  * @method  POST
  * @url     /classrooms/:id/terms/:id/modify
  *
- * @param req.start {Date}     Start date (yyyy-mm-dd).
- * @param req.end   {Date}     End date (yyyy-mm-dd)..
+ * @param req.start {Date}     Start date (YYYY-MM-DD).
+ * @param req.end   {Date}     End date (YYYY-MM-DD).
  * @param req.days  {string[]} List of allowed days of the week in lower-case
  *                             (e.g. sunday, monday, etc.)
  *
@@ -162,12 +163,12 @@ terms.put(
   body("start")
     .optional()
     .custom((value) => {
-      return isNaN(new Date(value).valueOf())
+      return !date.isValid(value, "YYYY-MM-DD")
         ? Promise.reject("Invalid date.")
         : true;
     })
     .custom((value, { req }) => {
-      return value && new Date(value) > req.term.end
+      return value && date.parse(value, "YYYY-MM-DD") > req.term.end
         ? Promise.reject("The start date must be before the end date")
         : true;
     }),
@@ -175,12 +176,12 @@ terms.put(
   body("end")
     .optional()
     .custom((value) => {
-      return isNaN(new Date(value).valueOf())
+      return !date.isValid(value, "YYYY-MM-DD")
         ? Promise.reject("Invalid date.")
         : true;
     })
     .custom((value, { req }) => {
-      return value && new Date(value) < req.term.start
+      return value && date.parse(value, "YYYY-MM-DD") < req.term.start
         ? Promise.reject("The end date must be after the start date")
         : true;
     }),
@@ -196,7 +197,10 @@ terms.put(
 
     try {
       if (req.body.start) {
-        const success = await req.term.setStart(new Date(req.body.start));
+        const success = await req.term.setStart(
+          date.parse(req.body.start, "YYYY-MM-DD")
+        );
+
         if (!success) {
           return res.status(400).json({
             errors: [
@@ -210,8 +214,12 @@ terms.put(
           });
         }
       }
+
       if (req.body.end) {
-        const success = await req.term.setEnd(new Date(req.body.end));
+        const success = await req.term.setEnd(
+          date.parse(req.body.end, "YYYY-MM-DD")
+        );
+
         if (!success) {
           return res.status(400).json({
             errors: [
@@ -225,6 +233,7 @@ terms.put(
           });
         }
       }
+
       if (req.body.days || req.body.days === []) {
         req.term.setAllowedDays(req.body.days);
       }

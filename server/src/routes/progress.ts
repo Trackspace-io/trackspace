@@ -1,5 +1,6 @@
 import { Request, Response, Router } from "express";
 import { body, param, query, validationResult } from "express-validator";
+import date from "date-and-time";
 import user from "../validators/user";
 import { Subject } from "../models/Subject";
 import { User } from "../models/User";
@@ -64,8 +65,8 @@ progress.post(
       return Promise.reject("Missing value.");
     }
 
-    const date = new Date(value);
-    if (isNaN(date.valueOf())) {
+    const dateObj = date.parse(value, "YYYY-MM-DD");
+    if (isNaN(dateObj.valueOf())) {
       return Promise.reject("Invalid date.");
     }
 
@@ -97,7 +98,7 @@ progress.post(
       const { progress, error } = await Progress.findOrCreateByKey(
         req.body.subjectId,
         req.body.studentId,
-        new Date(req.body.date)
+        date.parse(req.body.date, "YYYY-MM-DD")
       );
 
       // Progress.findOrCreateByKey returns undefined if the parameters are in-
@@ -354,7 +355,7 @@ progress.get(
  * @method GET
  * @url    /progress/classrooms/:id/students/:id?date={date}
  *
- * @param query.date The date.
+ * @param query.date The date (YYY-MM-DD).
  *
  * @returns 200, 400, 401, 500
  */
@@ -384,16 +385,16 @@ progress.get(
       return Promise.reject("Missing value.");
     }
 
-    const date = new Date(value);
-    if (isNaN(date.valueOf())) {
-      return Promise.reject("Invalid date.");
+    const dateObj = date.parse(value, "YYYY-MM-DD");
+    if (isNaN(dateObj.valueOf())) {
+      return Promise.reject("Invalid date format.");
     }
 
     const classroom: Classroom = req.classroom;
-    const term = await classroom.getTermAtDate(date);
+    const term = await classroom.getTermAtDate(dateObj);
 
-    if (!term || !term.isDateAllowed(date)) {
-      return Promise.reject("Invalid date.");
+    if (!term || !term.isDateAllowed(dateObj)) {
+      return Promise.reject("There are no courses on this date.");
     }
 
     return true;
@@ -407,22 +408,22 @@ progress.get(
     }
 
     try {
-      const date = new Date(`${req.query.date}`);
+      const dateObj = date.parse(`${req.query.date}`, "YYYY-MM-DD");
 
       const progress = await Progress.findByStudentAndDate(
         req.params.studentId,
-        date
+        dateObj
       );
 
       const subjects = await req.classroom.getSubjects({
         order: [["name", "ASC"]],
       });
 
-      const term = await req.classroom.getTermAtDate(date);
+      const term = await req.classroom.getTermAtDate(dateObj);
 
       return res.status(200).json({
         termNumber: await term.getNumber(),
-        weekNumber: term.getWeekNumber(date),
+        weekNumber: term.getWeekNumber(dateObj),
         subjects: subjects.map((subject) => {
           const value = progress.find((p) => p.subjectId === subject.id);
           return {
