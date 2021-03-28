@@ -269,7 +269,10 @@ progress.get(
                 progressKey: {
                   subjectId: subject.id,
                   studentId: student.id,
-                  date: term.getDate(weekNumber, day),
+                  date: date.format(
+                    term.getDate(weekNumber, day),
+                    "YYYY-MM-DD"
+                  ),
                 },
                 pageFrom: value ? value.pageFrom : null,
                 pageSet: value ? value.pageSet : null,
@@ -434,7 +437,7 @@ progress.get(
             progressKey: {
               subjectId: subject.id,
               studentId: req.params.studentId,
-              date,
+              date: date.format(dateObj, "YYYY-MM-DD"),
             },
             values: {
               pageFrom: value ? value.pageFrom : null,

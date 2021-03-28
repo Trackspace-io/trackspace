@@ -128,8 +128,8 @@ terms.get(
           (term) => {
             return {
               id: term.id,
-              start: term.start,
-              end: term.end,
+              start: date.format(term.start, "YYYY-MM-DD"),
+              end: date.format(term.end, "YYYY-MM-DD"),
               days: term.days,
               numberOfWeeks: term.numberOfWeeks,
             };

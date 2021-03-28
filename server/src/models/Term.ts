@@ -279,9 +279,9 @@ export class Term extends Model {
 
     const timeDiff = date.getTime() - this.start.getTime();
     let daysDiff = timeDiff / (1000 * 3600 * 24);
-    daysDiff -= date.getDay() - 6;
+    daysDiff -= date.getDay();
 
-    return daysDiff <= 0 ? 1 : Math.floor(daysDiff / 7) + 2;
+    return daysDiff <= 0 ? 1 : Math.floor(daysDiff / 7);
   }
 
   /**
