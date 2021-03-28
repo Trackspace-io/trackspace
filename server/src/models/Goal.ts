@@ -1,4 +1,4 @@
-import { DataTypes, Model, Op, Sequelize } from "sequelize";
+import { DataTypes, Model, Sequelize } from "sequelize";
 import { Term } from "./Term";
 
 export class Goal extends Model {
