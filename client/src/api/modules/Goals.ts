@@ -22,7 +22,7 @@ export const setGoal = async (body: IGoalRegister): Promise<any> => {
  * @method DELETE
  * @url    /classrooms/:id/terms/:id/goals/weeks/:number/remove
  */
-export const removeGoal = async (body: IGoalRemove): Promise<any> => {
+export const unsetGoal = async (body: IGoalRemove): Promise<any> => {
   return await axios.delete(
     `${_apiUrl}/api/classrooms/${body.classroomId}/terms/${body.termId}/goals/weeks/${body.weekNumber}/unset`,
     { withCredentials: true },
