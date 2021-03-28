@@ -1,29 +1,29 @@
 import { Request, Response, Router } from "express";
-import { body, query, validationResult } from "express-validator";
+import { body, param, query, validationResult } from "express-validator";
 import shortid from "shortid";
 import { Goal } from "../models/Goal";
 import GoalsGraph from "../graphs/GoalsGraph";
 import user from "../validators/user";
+import { Op } from "sequelize";
 
 const goals = Router();
 
 /**
- * Registers a goal.
+ * Sets a goal.
  *
  * @method POST
- * @url /classrooms/:id/terms/:id/goals/create
+ * @url /classrooms/:id/terms/:id/goals/weeks/:number/set
  *
- * @param req.weekNumber {number} Week number.
- * @param req.pages      {number} Cumulated number of pages that must be com-
- *                                pleted in total at the end of the week.
+ * @param req.pages {number} Cumulated number of pages that must be completed
+ *                           in total at the end of the week.
  *
  * @returns 200, 400, 401, 500
  */
 goals.post(
-  "/create",
+  "/weeks/:weekNumber/set",
   user().isA("teacher"),
 
-  body("weekNumber")
+  param("weekNumber")
     .isInt()
     .custom((value, { req }) => {
       return !value || value <= 0 || value > req.term.numberOfWeeks
@@ -36,6 +36,24 @@ goals.post(
     .custom((value) => {
       return value < 0
         ? Promise.reject("The number of pages must be grater than 0.")
+        : true;
+    })
+    .custom(async (value, { req }) => {
+      if (!value && value !== 0) return true;
+
+      const prevGoal = await Goal.findOne({
+        where: {
+          TermId: req.term.id,
+          weekNumber: { [Op.lt]: req.params.weekNumber },
+        },
+        order: [["weekNumber", "DESC"]],
+      });
+
+      return prevGoal && prevGoal.pages > value
+        ? Promise.reject(
+            "The number of pages must be equal or greater than the " +
+              "previous goal set for this term."
+          )
         : true;
     }),
 
@@ -50,7 +68,7 @@ goals.post(
       const [goal] = await Goal.findOrCreate({
         where: {
           TermId: req.term.id,
-          weekNumber: req.body.weekNumber,
+          weekNumber: req.params.weekNumber,
         },
         defaults: { id: shortid.generate(), pages: 0 },
       });
@@ -69,13 +87,21 @@ goals.post(
  * Unsets a goal.
  *
  * @method DELETE
- * @url    /classrooms/:id/terms/:id/goals/weeks/:number/remove
+ * @url    /classrooms/:id/terms/:id/goals/weeks/:number/unset
  *
  * @returns 200, 400, 401, 500
  */
 goals.delete(
-  "/weeks/:weekNumber/remove",
+  "/weeks/:weekNumber/unset",
   user().isA("teacher"),
+
+  param("weekNumber")
+    .isInt()
+    .custom((value) => {
+      return value === 1
+        ? Promise.reject("You cannot unset the goal of the first week.")
+        : true;
+    }),
 
   async (req: Request, res: Response): Promise<Response> => {
     try {
@@ -110,11 +136,37 @@ goals.get(
   async (req: Request, res: Response): Promise<Response> => {
     try {
       const goals = await req.term.getGoals({ order: [["weekNumber", "ASC"]] });
+      const nbGoals = goals.length;
+
       return res.status(200).json(
-        goals.map((goal) => {
+        goals.map((goal, i) => {
+          const goalWeekNb = goal.weekNumber;
+
+          // Get the list of weeks between this week and the next for which a
+          // goal was set.
+          let nextGoalWeek = goalWeekNb;
+          if (i < nbGoals - 1) nextGoalWeek = goals[i + 1].weekNumber;
+
+          const nextWeeks = [];
+          for (let weekNb = goalWeekNb + 1; weekNb < nextGoalWeek; weekNb++) {
+            nextWeeks.push(weekNb);
+          }
+
+          // Get the list of weeks between this week and the previous for which
+          // a goal was set.
+          let prevGoalWeek = goalWeekNb;
+          if (i > 0) prevGoalWeek = goals[i - 1].weekNumber;
+
+          const prevWeeks = [];
+          for (let weekNb = goalWeekNb - 1; weekNb > prevGoalWeek; weekNb--) {
+            prevWeeks.push(weekNb);
+          }
+
           return {
             weekNumber: goal.weekNumber,
             pages: goal.pages,
+            prevWeeks: prevWeeks,
+            nextWeeks: nextWeeks,
           };
         })
       );

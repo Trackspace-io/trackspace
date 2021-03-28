@@ -3,15 +3,17 @@ import axios from 'axios';
 import { IGoalGet, IGoalGetGraph, IGoalRegister, IGoalRemove } from 'store/goals/types';
 
 /**
- * Registers a goal.
+ * Sets a goal.
  *
  * @method POST
- * @url /classrooms/:id/terms/:id/goals/create
+ * @url /classrooms/:id/terms/:id/goals/weeks/:number/set
  */
-export const registerGoal = async (body: IGoalRegister): Promise<any> => {
-  return await axios.post(`${_apiUrl}/api/classrooms/${body.classroomId}/terms/${body.termId}/goals/create`, body, {
-    withCredentials: true,
-  });
+export const setGoal = async (body: IGoalRegister): Promise<any> => {
+  return await axios.post(
+    `${_apiUrl}/api/classrooms/${body.classroomId}/terms/${body.termId}/goals/weeks/${body.weekNumber}/set`,
+    body,
+    { withCredentials: true },
+  );
 };
 
 /**
@@ -22,7 +24,7 @@ export const registerGoal = async (body: IGoalRegister): Promise<any> => {
  */
 export const removeGoal = async (body: IGoalRemove): Promise<any> => {
   return await axios.delete(
-    `${_apiUrl}/api/classrooms/${body.classroomId}/terms/${body.termId}/goals/weeks/${body.weekNumber}/remove`,
+    `${_apiUrl}/api/classrooms/${body.classroomId}/terms/${body.termId}/goals/weeks/${body.weekNumber}/unset`,
     { withCredentials: true },
   );
 };
