@@ -9,6 +9,27 @@ interface IProgressValues {
   homeworkDone: number;
 }
 
+export interface IProgressByWeekValues {
+  dates: string[];
+  days: string[];
+  progress: {
+    subject: ISubject;
+    values: {
+      day: string;
+      homework: number;
+      homeworkDone: boolean;
+      pageDone: number;
+      pageFrom: number;
+      pageSet: number;
+      progressKey: {
+        date: Date;
+        studentId: Pick<IStudent, 'id'>;
+        subjectId: Pick<ISubject, 'id'>;
+      };
+    }[];
+  }[];
+}
+
 /**
  * Progress state interface
  */
@@ -32,19 +53,25 @@ export interface IProgress {
 export interface IProgressState {
   // List of progress of a student
   byDate: Partial<IProgress>;
+  byWeek: IProgressByWeekValues[];
 }
 
 /**
  * Actions' type
  */
 export enum PROGRESSES {
-  SET_PROGRESSES = 'SET_PROGRESSES',
+  SET_PROGRESSES_BY_DATE = 'SET_PROGRESSES_BY_DATE',
+  SET_PROGRESSES_BY_WEEK = 'SET_PROGRESSES_BY_WEEK',
+  CLEAR_PROGRESSES_BY_WEEK = 'CLEAR_PROGRESSES_BY_WEEK',
 }
 
 /**
  * Reducer's dispatchers interface
  */
-export type IProgressesActions = { type: PROGRESSES.SET_PROGRESSES; payload: IProgress };
+export type IProgressesActions =
+  | { type: PROGRESSES.SET_PROGRESSES_BY_DATE; payload: IProgress }
+  | { type: PROGRESSES.SET_PROGRESSES_BY_WEEK; payload: IProgressByWeekValues }
+  | { type: PROGRESSES.CLEAR_PROGRESSES_BY_WEEK };
 
 /**
  * Progress (of a student) by date interface
@@ -53,6 +80,15 @@ export interface IProgressByDate {
   classroomId?: string;
   studentId?: string;
   date: string;
+}
+
+/**
+ * Weekly progress interface
+ */
+export interface IProgressByWeek {
+  studentId: string;
+  termId: string;
+  weekNumber: number;
 }
 
 /**

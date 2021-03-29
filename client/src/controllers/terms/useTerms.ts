@@ -3,7 +3,7 @@ import { useMessages } from 'controllers';
 import * as React from 'react';
 import { useGlobalStore } from 'store';
 import termsReducer from 'store/terms';
-import { ITermCreate, ITermModify, ITermRemove } from 'store/terms/types';
+import { ITerm, ITermCreate, ITermModify, ITermRemove } from 'store/terms/types';
 
 const { actions } = termsReducer;
 
@@ -25,7 +25,7 @@ const useTerms = (classroomId?: string) => {
   // List of thunks
 
   /**
-   * Get the list of subjects of a classroom.
+   * Get the list of terms of a classroom.
    *
    * @param   {string} id The id of the classroom.
    *
@@ -163,9 +163,35 @@ const useTerms = (classroomId?: string) => {
     });
   };
 
+  /**
+   * Get current term
+   *
+   * @return void
+   */
+  const getCurrentTerm = () => {
+    const today = new Date(Date.now());
+    const currentTerm = terms.list.find((term) => today >= new Date(term.start) && today <= new Date(term.end));
+
+    dispatch(actions.setCurrentTerm(<ITerm>currentTerm));
+  };
+
+  /**
+   *
+   * @param {String}  termId  The term identifier
+   */
+  const setCurrentTerm = (termId: string) => {
+    const currentTerm = terms.list.find((term) => term.id === termId);
+
+    dispatch(actions.setCurrentTerm(<ITerm>currentTerm));
+  };
+
   React.useEffect(() => {
     classroomId && get(classroomId);
   }, [classroomId]);
+
+  React.useEffect(() => {
+    terms.list.length !== 0 && getCurrentTerm();
+  }, [terms.list]);
 
   return {
     ...terms,
@@ -174,6 +200,8 @@ const useTerms = (classroomId?: string) => {
     create,
     modify,
     remove,
+
+    setCurrentTerm,
   };
 };
 

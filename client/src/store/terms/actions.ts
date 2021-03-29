@@ -6,3 +6,10 @@ export const setTerms = (payload: ITerm[]) => {
     payload,
   };
 };
+
+export const setCurrentTerm = (payload: ITerm) => {
+  return {
+    type: TERMS.SET_CURRENT_TERM,
+    payload,
+  };
+};

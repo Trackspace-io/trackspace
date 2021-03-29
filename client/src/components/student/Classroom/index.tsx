@@ -5,6 +5,7 @@ import React from 'react';
 import { FcComboChart, FcInspection } from 'react-icons/fc';
 import { Redirect, Route, Switch, useParams } from 'react-router-dom';
 import Today from '../Today';
+import Weekly from '../Weekly';
 
 import style from './Classroom.module.css';
 
@@ -42,6 +43,7 @@ const Classroom: React.FC = () => {
                 <Redirect to={`/student/classrooms/${id}/progress/today`} />
               </Route>
               <Route path="/student/classrooms/:id/progress/today" component={Today} />
+              <Route path="/student/classrooms/:id/progress/weekly" component={Weekly} />
             </Switch>
           </div>
         </div>

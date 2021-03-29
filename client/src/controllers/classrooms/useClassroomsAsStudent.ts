@@ -4,6 +4,7 @@ import { ClassroomAPI } from 'api';
 import classroomsReducer from 'store/classrooms';
 import { useMessages } from 'controllers';
 import useProgresses from 'controllers/progresses/useProgresses';
+import useTerms from 'controllers/terms/useTerms';
 
 const { actions } = classroomsReducer;
 
@@ -23,6 +24,7 @@ const useClassroomsAsStudent = (classroomId?: string) => {
   // List of controllers.
   const Messages = useMessages();
 
+  const Terms = useTerms(classroomId);
   const Progresses = useProgresses(classroomId);
 
   /**
@@ -53,13 +55,13 @@ const useClassroomsAsStudent = (classroomId?: string) => {
 
   React.useEffect(() => {
     classroomId && getCurrent(classroomId);
+    // classroomId && Terms.get(classroomId);
   }, [classroomId]);
 
   return {
-    current: {
-      ...classrooms.current,
-      progress: Progresses,
-    },
+    current: { ...classrooms.current },
+    terms: Terms,
+    progresses: Progresses,
   };
 };
 

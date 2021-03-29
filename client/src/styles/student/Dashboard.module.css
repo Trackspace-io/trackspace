@@ -9,7 +9,7 @@
 
 .sidebar {
   flex: none;
-  align-self: center;
+  align-self: flex-start;
   min-height: 100vh;
   box-sizing: border-box;
   margin: 0 8px;

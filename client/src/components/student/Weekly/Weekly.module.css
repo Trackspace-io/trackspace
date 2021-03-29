@@ -1,0 +1,66 @@
+.container {
+  box-sizing: border-box;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0 0 0 32px;
+}
+
+.body {
+  display: flex;
+  flex-direction: row;
+}
+
+.content {
+  flex: 1;
+  padding: 32px 0;
+}
+
+.terms-dropdown {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.progress-header {
+  margin: 48px 0 0;
+  text-align: center;
+}
+
+.progress-table {
+  margin: 16px 0;
+}
+
+.progress-table .subject {
+  margin: 32px 0;
+}
+
+.progress-table .body {
+  display: flex;
+  flex-direction: column;
+}
+
+.progress-table .row {
+  display: flex;
+}
+
+.progress-table .data {
+  width: 100px;
+  padding: 2px;
+  text-align: center;
+  font-weight: 300;
+}
+
+.progress-table .data.title {
+  font-weight: 600;
+  margin: 16px auto 8px;
+}
+
+.progress-table .data.day {
+  text-transform: capitalize;
+  text-align: left;
+  font-weight: 600;
+}

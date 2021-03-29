@@ -3,7 +3,7 @@ import { useMessages } from 'controllers';
 import * as React from 'react';
 import { IMessage } from 'store/messages/types';
 
-import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faSadTear, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import style from '../../styles/gui/Messages.module.css';
@@ -59,6 +59,9 @@ const Message: React.FC<IMessageProps> = ({ message, close }) => {
       break;
     case 'success':
       icon = <FontAwesomeIcon icon={faCheck} />;
+      break;
+    case 'warning':
+      icon = <FontAwesomeIcon icon={faSadTear} />;
       break;
     default:
       break;

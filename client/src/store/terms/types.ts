@@ -7,6 +7,7 @@ export interface ITerm {
   end: Date;
   days: string[];
   classroomId: string;
+  numberOfWeeks?: number;
 }
 
 /**
@@ -15,6 +16,7 @@ export interface ITerm {
 export interface ITermState {
   // Subjects list
   list: ITerm[];
+  currentTerm: Partial<ITerm>;
 }
 
 /**
@@ -22,12 +24,15 @@ export interface ITermState {
  */
 export enum TERMS {
   SET_TERMS = 'SET_TERMS',
+  SET_CURRENT_TERM = 'SET_CURRENT_TERM',
 }
 
 /**
  * Reducer's dispatchers interface
  */
-export type ITermActions = { type: TERMS.SET_TERMS; payload: ITerm[] };
+export type ITermActions =
+  | { type: TERMS.SET_TERMS; payload: ITerm[] }
+  | { type: TERMS.SET_CURRENT_TERM; payload: ITerm };
 
 /**
  * Create term interface

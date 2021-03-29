@@ -3,7 +3,7 @@ import { useMenu, useMessages, useUsers } from 'controllers';
 import React from 'react';
 import { useGlobalStore } from 'store';
 import progressesReducer from 'store/progresses';
-import { IProgressByDate, IProgressSetOrUpdate } from 'store/progresses/types';
+import { IProgress, IProgressByDate, IProgressByWeek, IProgressSetOrUpdate } from 'store/progresses/types';
 
 const { actions } = progressesReducer;
 
@@ -23,7 +23,7 @@ const useProgresses = (classroomId?: string) => {
   const { progresses, menu } = state;
 
   // List of actions
-  const { setProgressByDate } = actions;
+  const { setProgressByDate, setProgressByWeek, clearProgressByWeek } = actions;
 
   /**
    * Get the progress of a student by date.
@@ -42,12 +42,52 @@ const useProgresses = (classroomId?: string) => {
           resolve(data);
         })
         .catch((e) => {
+          // const { param, msg, value } = e.response.data.errors[0];
+
+          // if (param === 'date') {
+          //   Messages.add({
+          //     type: 'warning',
+          //     text: `There is no class on ${value}.`,
+          //   });
+          // } else {
+          //   Messages.add({
+          //     type: 'error',
+          //     text: `${msg}`,
+          //   });
+          // }
+          dispatch(setProgressByDate(<IProgress>{}));
+
+          console.log('e', e);
+        });
+    });
+  };
+
+  /**
+   * Get the progress of a student by week.
+   *
+   * @param {string}  payload.studentId
+   * @param {string}  payload.termId
+   * @param {number}  payload.weekNumber
+   */
+  const getByWeek = (payload: IProgressByWeek) => {
+    return new Promise((resolve, reject) => {
+      ProgressesAPI.getProgressByWeek(payload)
+        .then((response) => {
+          const { data } = response;
+
+          dispatch(setProgressByWeek(data));
+
+          resolve(data);
+        })
+        .catch((e) => {
           const { msg } = e.response.data.errors[0];
 
           Messages.add({
             type: 'error',
             text: `${msg}`,
           });
+
+          reject();
         });
     });
   };
@@ -91,14 +131,9 @@ const useProgresses = (classroomId?: string) => {
     });
   };
 
-  React.useEffect(() => {
-    Users.current.id &&
-      getByDate({
-        classroomId,
-        studentId: Users.current.id,
-        date: Menu.date.format('YYYY/MM/DD'),
-      });
-  }, [Users.current.id]);
+  const clearByWeek = () => {
+    dispatch(clearProgressByWeek());
+  };
 
   React.useEffect(() => {
     Users.current.id &&
@@ -108,10 +143,13 @@ const useProgresses = (classroomId?: string) => {
         date: Menu.date.format('YYYY/MM/DD'),
       });
   }, [menu.date]);
+
   return {
     ...progresses,
 
     getByDate,
+    getByWeek,
+    clearByWeek,
     setOrUpdate,
   };
 };
