@@ -1,5 +1,6 @@
 import { Sequelize } from "sequelize/types";
 import { classroomAssociations, classroomSchema } from "./Classroom";
+import { goalAssociations, goalSchema } from "./Goal";
 import { notificationAssociations, notificationSchema } from "./Notification";
 import { progressAssociations, progressSchema } from "./Progress";
 import { shortLinkSchema } from "./ShortLink";
@@ -10,6 +11,7 @@ import { userAssociations, userSchema } from "./User";
 export function registerModels(sequelize: Sequelize): void {
   // Register the schemas.
   classroomSchema(sequelize);
+  goalSchema(sequelize);
   notificationSchema(sequelize);
   progressSchema(sequelize);
   shortLinkSchema(sequelize);
@@ -19,6 +21,7 @@ export function registerModels(sequelize: Sequelize): void {
 
   // Initialize the associations.
   classroomAssociations();
+  goalAssociations();
   notificationAssociations();
   progressAssociations();
   subjectAssociations();

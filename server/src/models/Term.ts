@@ -1,11 +1,13 @@
 import {
   BelongsToGetAssociationMixin,
   DataTypes,
+  HasManyGetAssociationsMixin,
   Model,
   Op,
   Sequelize,
 } from "sequelize";
 import { Classroom } from "./Classroom";
+import { Goal } from "./Goal";
 
 export class Term extends Model {
   /**
@@ -199,6 +201,11 @@ export class Term extends Model {
   public getClassroom!: BelongsToGetAssociationMixin<Classroom>;
 
   /**
+   * Gets the goals associated to this term.
+   */
+  public getGoals!: HasManyGetAssociationsMixin<Goal>;
+
+  /**
    * Checks if a date is allowed in this term.
    *
    * @param date The date to check.
@@ -249,7 +256,7 @@ export class Term extends Model {
     const weekStartDate = new Date(weekStartDays * (24 * 3600 * 1000));
 
     // Compute the week end date.
-    const weekEndDays = weekStartDays + 7;
+    const weekEndDays = weekStartDays + 6;
     const weekEndDate = new Date(weekEndDays * (24 * 3600 * 1000));
 
     return [
@@ -271,10 +278,9 @@ export class Term extends Model {
     }
 
     const timeDiff = date.getTime() - this.start.getTime();
-    let daysDiff = timeDiff / (1000 * 3600 * 24);
-    daysDiff -= date.getDay() - 6;
+    const daysDiff = Math.floor(timeDiff / (1000 * 3600 * 24));
 
-    return daysDiff <= 0 ? 1 : Math.floor(daysDiff / 7) + 2;
+    return Math.ceil((daysDiff - date.getDay()) / 7) + 1;
   }
 
   /**
@@ -437,4 +443,5 @@ export function termSchema(sequelize: Sequelize): void {
 
 export function termAssociations(): void {
   Term.belongsTo(Classroom);
+  Term.hasMany(Goal);
 }

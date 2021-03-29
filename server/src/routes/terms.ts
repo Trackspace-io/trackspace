@@ -1,11 +1,15 @@
 import { Request, Response, Router } from "express";
-import { body, validationResult } from "express-validator";
+import { body, query, validationResult } from "express-validator";
+import date from "date-and-time";
 import user from "../validators/user";
 import { Term } from "../models/Term";
 import shortid from "shortid";
 import term from "../validators/term";
+import goals from "./goals";
 
 const terms = Router();
+
+terms.use("/:termId/goals", term().exists(), goals);
 
 /**
  * Validates if the elements of a list are valid days.
@@ -52,11 +56,11 @@ terms.post(
   user().isA("teacher"),
 
   body(["from", "to"]).custom(async (value, { req }) => {
-    const start = new Date(req.body.start);
-    const end = new Date(req.body.end);
+    const start = date.parse(req.body.start, "YYYY-MM-DD");
+    const end = date.parse(req.body.end, "YYYY-MM-DD");
 
     if (isNaN(start.valueOf()) || isNaN(end.valueOf())) {
-      return Promise.reject("Invalid date.");
+      return Promise.reject("Invalid date format.");
     }
 
     if (start > end) {
@@ -83,8 +87,8 @@ terms.post(
     try {
       await Term.create({
         id: shortid.generate(),
-        start: req.body.start,
-        end: req.body.end,
+        start: date.parse(req.body.start, "YYYY-MM-DD"),
+        end: date.parse(req.body.end, "YYYY-MM-DD"),
         sunday: req.body.days.includes("sunday"),
         monday: req.body.days.includes("monday"),
         tuesday: req.body.days.includes("tuesday"),
@@ -124,8 +128,8 @@ terms.get(
           (term) => {
             return {
               id: term.id,
-              start: term.start,
-              end: term.end,
+              start: date.format(term.start, "YYYY-MM-DD"),
+              end: date.format(term.end, "YYYY-MM-DD"),
               days: term.days,
               numberOfWeeks: term.numberOfWeeks,
             };
@@ -139,13 +143,85 @@ terms.get(
 );
 
 /**
+ * Get the term at a given date.
+ *
+ * @method  GET
+ * @url     /classrooms/:id/terms/get-at-date?date={date}
+ *
+ * @param query.date {Date} The date (YYYY-MM-DD).
+ *
+ * @returns 200, 400, 401, 500
+ */
+terms.get(
+  "/get-at-date",
+  user().isA(["teacher", "student", "parent"]),
+
+  query("date").custom((value) => {
+    return !value || !date.isValid(value, "YYYY-MM-DD")
+      ? Promise.reject("Invalid date format")
+      : true;
+  }),
+
+  async (req: Request, res: Response): Promise<Response> => {
+    // Check if the request is valid.
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const dateObj = date.parse(`${req.query.date}`, "YYYY-MM-DD");
+      const term = await req.classroom.getTermAtDate(dateObj);
+
+      if (!term) return res.status(200).json(null);
+
+      return res.status(200).json({
+        id: term.id,
+        start: date.format(term.start, "YYYY-MM-DD"),
+        end: date.format(term.end, "YYYY-MM-DD"),
+        days: term.days,
+        numberOfWeeks: term.numberOfWeeks,
+      });
+    } catch (e) {
+      return res.sendStatus(500);
+    }
+  }
+);
+
+/**
+ * Get a specific term.
+ *
+ * @method  GET
+ * @url     /classrooms/:id/terms/:id
+ *
+ * @param query.date {Date} The date (YYYY-MM-DD).
+ *
+ * @returns 200, 400, 401, 500
+ */
+terms.get(
+  "/:termId",
+  user().isA(["teacher", "student", "parent"]),
+  term().exists(),
+
+  async (req: Request, res: Response): Promise<Response> => {
+    return res.status(200).json({
+      id: req.term.id,
+      start: date.format(req.term.start, "YYYY-MM-DD"),
+      end: date.format(req.term.end, "YYYY-MM-DD"),
+      days: req.term.days,
+      numberOfWeeks: req.term.numberOfWeeks,
+    });
+  }
+);
+
+/**
  * Modifies a term
  *
  * @method  POST
  * @url     /classrooms/:id/terms/:id/modify
  *
- * @param req.start {Date}     Start date (yyyy-mm-dd).
- * @param req.end   {Date}     End date (yyyy-mm-dd)..
+ * @param req.start {Date}     Start date (YYYY-MM-DD).
+ * @param req.end   {Date}     End date (YYYY-MM-DD).
  * @param req.days  {string[]} List of allowed days of the week in lower-case
  *                             (e.g. sunday, monday, etc.)
  *
@@ -159,12 +235,12 @@ terms.put(
   body("start")
     .optional()
     .custom((value) => {
-      return isNaN(new Date(value).valueOf())
+      return !date.isValid(value, "YYYY-MM-DD")
         ? Promise.reject("Invalid date.")
         : true;
     })
     .custom((value, { req }) => {
-      return value && new Date(value) > req.term.end
+      return value && date.parse(value, "YYYY-MM-DD") > req.term.end
         ? Promise.reject("The start date must be before the end date")
         : true;
     }),
@@ -172,12 +248,12 @@ terms.put(
   body("end")
     .optional()
     .custom((value) => {
-      return isNaN(new Date(value).valueOf())
+      return !date.isValid(value, "YYYY-MM-DD")
         ? Promise.reject("Invalid date.")
         : true;
     })
     .custom((value, { req }) => {
-      return value && new Date(value) < req.term.start
+      return value && date.parse(value, "YYYY-MM-DD") < req.term.start
         ? Promise.reject("The end date must be after the start date")
         : true;
     }),
@@ -193,7 +269,10 @@ terms.put(
 
     try {
       if (req.body.start) {
-        const success = await req.term.setStart(new Date(req.body.start));
+        const success = await req.term.setStart(
+          date.parse(req.body.start, "YYYY-MM-DD")
+        );
+
         if (!success) {
           return res.status(400).json({
             errors: [
@@ -207,8 +286,12 @@ terms.put(
           });
         }
       }
+
       if (req.body.end) {
-        const success = await req.term.setEnd(new Date(req.body.end));
+        const success = await req.term.setEnd(
+          date.parse(req.body.end, "YYYY-MM-DD")
+        );
+
         if (!success) {
           return res.status(400).json({
             errors: [
@@ -222,6 +305,7 @@ terms.put(
           });
         }
       }
+
       if (req.body.days || req.body.days === []) {
         req.term.setAllowedDays(req.body.days);
       }

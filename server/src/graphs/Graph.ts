@@ -226,10 +226,13 @@ class Interpolator {
 
     // Get the previous defined value.
     const x1 = this.getPrevDefinedPointX(index);
-    const y1 = this.isDefined(x1) ? this._interpolatedPts[x1] : 0;
+    if (x1 < 0) return null;
 
     // Get the next defined value.
     const x2 = this.getNextDefinedPointX(index);
+    if (x2 < 0) return null;
+
+    const y1 = this.isDefined(x1) ? this._interpolatedPts[x1] : 0;
     const y2 = this.isDefined(x2) ? this._interpolatedPts[x2] : 0;
 
     // Interpolate the value.
@@ -251,7 +254,7 @@ class Interpolator {
         return i;
       }
     }
-    return 0;
+    return -1;
   }
 
   /**
@@ -267,7 +270,7 @@ class Interpolator {
         return i;
       }
     }
-    return this._initialPts.length - 1;
+    return -1;
   }
 
   /**

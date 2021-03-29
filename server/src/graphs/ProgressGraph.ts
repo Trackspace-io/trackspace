@@ -2,6 +2,7 @@ import { User } from "../models/User";
 import { Term } from "../models/Term";
 import { Graph } from "./Graph";
 import { Progress } from "../models/Progress";
+import { Goal } from "../models/Goal";
 
 /**
  * Progress graph.
@@ -22,12 +23,21 @@ class ProgressGraph extends Graph {
 
     this._term = term;
 
+    // Set the week labels.
     const labels = [];
     for (let i = 1; i <= term.numberOfWeeks; i++) {
       labels.push(`Week ${i}`);
     }
 
     this.setLabels(labels);
+
+    // Add the goal line.
+    this.addDataset("Goals", (label) => {
+      const weekNumber = this.parseWeekLabel(label);
+      if (weekNumber < 0) return null;
+
+      return Goal.getTermPageGoal(term, weekNumber);
+    });
   }
 
   /**
@@ -41,19 +51,28 @@ class ProgressGraph extends Graph {
     this.addDataset(
       student.fullName,
       (label) => {
-        const matches = label.match("Week ([1-9][0-9]*)");
-        if (matches === null) return null;
+        const weekNumber = this.parseWeekLabel(label);
+        if (weekNumber < 0) return null;
 
-        const [weekStart, weekEnd] = this._term.getWeekDates(
-          parseInt(matches[1])
-        );
-
+        const [weekStart, weekEnd] = this._term.getWeekDates(weekNumber);
         return weekStart !== null && weekEnd !== null
           ? Progress.getNumberPagesDone(student, this._term.start, weekEnd)
           : null;
       },
       { color, width }
     );
+  }
+
+  /**
+   * Parses a week label.
+   *
+   * @param label Week label.
+   *
+   * @returns Week number.
+   */
+  private parseWeekLabel(label: string): number {
+    const matches = label.match("Week ([1-9][0-9]*)");
+    return matches === null ? -1 : parseInt(matches[1]);
   }
 }
 
