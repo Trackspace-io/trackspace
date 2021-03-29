@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { body, validationResult } from "express-validator";
+import { body, query, validationResult } from "express-validator";
 import date from "date-and-time";
 import user from "../validators/user";
 import { Term } from "../models/Term";
@@ -56,11 +56,11 @@ terms.post(
   user().isA("teacher"),
 
   body(["from", "to"]).custom(async (value, { req }) => {
-    const start = new Date(req.body.start);
-    const end = new Date(req.body.end);
+    const start = date.parse(req.body.start, "YYYY-MM-DD");
+    const end = date.parse(req.body.end, "YYYY-MM-DD");
 
     if (isNaN(start.valueOf()) || isNaN(end.valueOf())) {
-      return Promise.reject("Invalid date.");
+      return Promise.reject("Invalid date format.");
     }
 
     if (start > end) {
@@ -87,8 +87,8 @@ terms.post(
     try {
       await Term.create({
         id: shortid.generate(),
-        start: req.body.start,
-        end: req.body.end,
+        start: date.parse(req.body.start, "YYYY-MM-DD"),
+        end: date.parse(req.body.end, "YYYY-MM-DD"),
         sunday: req.body.days.includes("sunday"),
         monday: req.body.days.includes("monday"),
         tuesday: req.body.days.includes("tuesday"),
@@ -139,6 +139,78 @@ terms.get(
     } catch (e) {
       return res.sendStatus(500);
     }
+  }
+);
+
+/**
+ * Get the term at a given date.
+ *
+ * @method  GET
+ * @url     /classrooms/:id/terms/get-at-date?date={date}
+ *
+ * @param query.date {Date} The date (YYYY-MM-DD).
+ *
+ * @returns 200, 400, 401, 500
+ */
+terms.get(
+  "/get-at-date",
+  user().isA(["teacher", "student", "parent"]),
+
+  query("date").custom((value) => {
+    return !value || !date.isValid(value, "YYYY-MM-DD")
+      ? Promise.reject("Invalid date format")
+      : true;
+  }),
+
+  async (req: Request, res: Response): Promise<Response> => {
+    // Check if the request is valid.
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const dateObj = date.parse(`${req.query.date}`, "YYYY-MM-DD");
+      const term = await req.classroom.getTermAtDate(dateObj);
+
+      if (!term) return res.status(200).json(null);
+
+      return res.status(200).json({
+        id: term.id,
+        start: date.format(term.start, "YYYY-MM-DD"),
+        end: date.format(term.end, "YYYY-MM-DD"),
+        days: term.days,
+        numberOfWeeks: term.numberOfWeeks,
+      });
+    } catch (e) {
+      return res.sendStatus(500);
+    }
+  }
+);
+
+/**
+ * Get a specific term.
+ *
+ * @method  GET
+ * @url     /classrooms/:id/terms/:id
+ *
+ * @param query.date {Date} The date (YYYY-MM-DD).
+ *
+ * @returns 200, 400, 401, 500
+ */
+terms.get(
+  "/:termId",
+  user().isA(["teacher", "student", "parent"]),
+  term().exists(),
+
+  async (req: Request, res: Response): Promise<Response> => {
+    return res.status(200).json({
+      id: req.term.id,
+      start: date.format(req.term.start, "YYYY-MM-DD"),
+      end: date.format(req.term.end, "YYYY-MM-DD"),
+      days: req.term.days,
+      numberOfWeeks: req.term.numberOfWeeks,
+    });
   }
 );
 
