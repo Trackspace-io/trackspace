@@ -35,6 +35,19 @@ export type ITermActions =
   | { type: TERMS.SET_CURRENT_TERM; payload: ITerm };
 
 /**
+ * Get term by id interface
+ */
+export type ITermGetById = Pick<ITerm, 'id' | 'classroomId'>;
+
+/**
+ * Get term by date interface
+ */
+export interface ITermGetByDate {
+  classroomId: string;
+  date: string;
+}
+
+/**
  * Create term interface
  */
 export type ITermCreate = Omit<ITerm, 'id'>;

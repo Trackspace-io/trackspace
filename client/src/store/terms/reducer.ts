@@ -5,7 +5,7 @@ import { ITermState, ITermActions, TERMS } from './types';
  */
 export const initialState = {
   list: [],
-  currentTerm: {},
+  currentTerm: null,
 };
 
 /**

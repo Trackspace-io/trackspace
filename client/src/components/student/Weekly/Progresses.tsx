@@ -1,7 +1,9 @@
+import Typography from 'components/gui/Typography';
 import { useClassroomsAsStudent, useUsers } from 'controllers';
 import React from 'react';
 
 import ProgressItem from './ProgressItem';
+import style from './Weekly.module.css';
 
 interface IProgressesProps {
   classroomId: string;
@@ -23,7 +25,15 @@ const Progresses: React.FC<IProgressesProps> = ({ classroomId }) => {
         weekNumber: i + 1,
       });
     }
-  }, [terms.currentTerm.id]);
+  }, [terms.currentTerm && terms.currentTerm.id]);
+
+  if (!terms.currentTerm) {
+    return (
+      <div className={style['container']}>
+        <Typography variant="subtitle" align="center">{`There's no class this week.`}</Typography>
+      </div>
+    );
+  }
 
   return (
     <React.Fragment>

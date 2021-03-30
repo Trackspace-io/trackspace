@@ -1,5 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
+
 import Progresses from './Progresses';
 import Terms from './Terms';
 import style from './Weekly.module.css';

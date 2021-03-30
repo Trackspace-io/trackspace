@@ -11,12 +11,8 @@
 
 .body {
   display: flex;
-  flex-direction: row;
-}
-
-.content {
-  flex: 1;
-  padding: 32px 0;
+  justify-content: center;
+  margin: 32px 0;
 }
 
 .terms-dropdown {

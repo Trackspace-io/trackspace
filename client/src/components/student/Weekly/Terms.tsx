@@ -17,14 +17,17 @@ const Terms: React.FC<ITermsProps> = ({ classroomId }) => {
 
   const handleClick = (termId: string) => {
     progresses.clearByWeek();
-    terms.setCurrentTerm(termId);
+    terms.getById({
+      classroomId,
+      id: termId,
+    });
   };
 
   return (
     <React.Fragment>
       <div>
         <Typography variant="subtitle">
-          {Object.entries(terms.currentTerm).length !== 0 &&
+          {terms.currentTerm &&
             `${dateString(terms.currentTerm.start)}
             - ${dateString(terms.currentTerm.end)}`}
         </Typography>
@@ -48,4 +51,5 @@ const Terms: React.FC<ITermsProps> = ({ classroomId }) => {
     </React.Fragment>
   );
 };
+
 export default Terms;
