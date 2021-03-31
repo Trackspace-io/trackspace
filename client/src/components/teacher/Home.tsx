@@ -5,7 +5,7 @@ import { Input, useInput } from 'components/gui/Input';
 import Modal from 'components/gui/Modal';
 import { Sidebar, SidebarItem } from 'components/gui/Sidebar';
 import Typography from 'components/gui/Typography';
-import { useClassrooms, useTeachers } from 'controllers';
+import { useClassroomsAsTeacher, useTeachers } from 'controllers';
 import * as React from 'react';
 import { FiEdit2, FiTrash } from 'react-icons/fi';
 import { Route, Switch } from 'react-router-dom';
@@ -39,7 +39,7 @@ const Home: React.FC = () => {
 };
 
 const Classrooms: React.FC = () => {
-  const Classrooms = useClassrooms();
+  const Classrooms = useClassroomsAsTeacher();
   const Teachers = useTeachers();
 
   const [action, setAction] = React.useState('');

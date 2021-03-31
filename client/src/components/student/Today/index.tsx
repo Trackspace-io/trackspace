@@ -27,7 +27,7 @@ const Today: React.FC = () => {
       progresses.getByDate({
         classroomId: id,
         studentId: Users.current.id,
-        date: Menu.date.format('YYYY/MM/DD'),
+        date: Menu.date.format('YYYY-MM-DD'),
       });
   }, [Users.current.id]);
 

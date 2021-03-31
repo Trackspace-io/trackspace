@@ -16,7 +16,7 @@ export interface ITerm {
 export interface ITermState {
   // Subjects list
   list: ITerm[];
-  currentTerm: Partial<ITerm>;
+  currentTerm: ITerm | null;
 }
 
 /**

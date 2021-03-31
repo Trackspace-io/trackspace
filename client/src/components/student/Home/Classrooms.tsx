@@ -20,7 +20,7 @@ const Classrooms: React.FC = () => {
           {Students.classroomsList.length !== 0 ? (
             Students.classroomsList.map((classroom) => (
               <div key={classroom.id} className={style['classroom-item']}>
-                <a href={`/teacher/classrooms/${classroom.id}`}>{classroom.name}</a>
+                <a href={`/student/classrooms/${classroom.id}`}>{classroom.name}</a>
               </div>
             ))
           ) : (

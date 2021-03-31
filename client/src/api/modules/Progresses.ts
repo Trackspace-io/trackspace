@@ -17,7 +17,7 @@ import { IProgressByDate, IProgressByWeek, IProgressSetOrUpdate } from 'store/pr
  */
 export const getProgressByDate = async (body: IProgressByDate) => {
   return await axios.get(
-    `${_apiUrl}/api/progress/classrooms/${body.classroomId}/students/${body.studentId}?date=${String(body.date)}`,
+    `${_apiUrl}/api/progress/classrooms/${body.classroomId}/students/${body.studentId}?date=${body.date}`,
     { withCredentials: true },
   );
 };
@@ -57,6 +57,8 @@ export const setOrUpdateProgress = async (body: IProgressSetOrUpdate) => {
  * @returns 200, 400, 401, 500
  */
 export const getProgressByWeek = async (body: IProgressByWeek) => {
+  console.log('body', body);
+
   return await axios.get(
     `${_apiUrl}/api/progress/terms/${body.termId}/student/${body.studentId}/weeks/${body.weekNumber}`,
     { withCredentials: true },

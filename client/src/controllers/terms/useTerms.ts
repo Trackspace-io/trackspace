@@ -210,12 +210,13 @@ const useTerms = (classroomId?: string) => {
           resolve(data);
         })
         .catch((e) => {
-          const { msg } = e.response.data.errors[0];
+          // const { msg } = e.response.data.errors[0];
 
-          Messages.add({
-            type: 'error',
-            text: `${msg}`,
-          });
+          // Messages.add({
+          //   type: 'error',
+          //   text: `${msg}`,
+          // });
+          console.log('e', e.response);
         });
     });
   };
@@ -226,7 +227,7 @@ const useTerms = (classroomId?: string) => {
    * @return void
    */
   const getCurrentTerm = () => {
-    const today = moment().format('YYYY-MM-DD');
+    const today = moment().add(1, 'days').format('YYYY-MM-DD');
 
     getByDate({
       classroomId: String(classroomId),

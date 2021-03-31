@@ -13,10 +13,9 @@ interface ITermsProps {
 const Terms: React.FC<ITermsProps> = ({ classroomId }) => {
   // Controllers.
   const Classrooms = useClassroomsAsStudent(classroomId);
-  const { terms, progresses } = Classrooms;
+  const { terms } = Classrooms;
 
   const handleClick = (termId: string) => {
-    progresses.clearByWeek();
     terms.getById({
       classroomId,
       id: termId,

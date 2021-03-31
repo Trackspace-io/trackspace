@@ -1,7 +1,7 @@
 import Typography from 'components/gui/Typography';
 import { useClassroomsAsStudent, useUsers } from 'controllers';
 import React from 'react';
-
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import ProgressItem from './ProgressItem';
 import style from './Weekly.module.css';
 
@@ -16,15 +16,12 @@ const Progresses: React.FC<IProgressesProps> = ({ classroomId }) => {
   const { terms, progresses } = Classrooms;
 
   React.useEffect(() => {
-    const numberOfWeeks = Number(terms.currentTerm && terms.currentTerm.numberOfWeeks);
-
-    for (let i = 0; i <= numberOfWeeks - 1; i++) {
+    Users.current.id &&
       progresses.getByWeek({
         studentId: Users.current.id,
-        termId: String(terms.currentTerm.id),
-        weekNumber: i + 1,
+        termId: String(terms.currentTerm?.id),
+        weekNumber: 3,
       });
-    }
   }, [terms.currentTerm && terms.currentTerm.id]);
 
   if (!terms.currentTerm) {
@@ -37,10 +34,10 @@ const Progresses: React.FC<IProgressesProps> = ({ classroomId }) => {
 
   return (
     <React.Fragment>
-      <div>
-        {progresses.byWeek.map((week, i) => {
-          return <ProgressItem key={i} index={i} week={week} />;
-        })}
+      <div className={style['progresses-container']}>
+        <FiChevronLeft />
+        <ProgressItem week={progresses.byWeek} />
+        <FiChevronRight />
       </div>
     </React.Fragment>
   );

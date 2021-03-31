@@ -13,9 +13,3 @@ export const setProgressByWeek = (payload: IProgressByWeekValues) => {
     payload,
   };
 };
-
-export const clearProgressByWeek = () => {
-  return {
-    type: PROGRESSES.CLEAR_PROGRESSES_BY_WEEK,
-  };
-};

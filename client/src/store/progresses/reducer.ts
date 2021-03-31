@@ -1,11 +1,11 @@
-import { IProgressesActions, IProgressState, PROGRESSES } from './types';
+import { IProgressByWeekValues, IProgressesActions, IProgressState, PROGRESSES } from './types';
 
 /**
  * Initial state.
  */
 export const initialState = {
   byDate: {},
-  byWeek: [],
+  byWeek: {} as IProgressByWeekValues,
 };
 
 /**
@@ -22,10 +22,7 @@ const reducer = (state: IProgressState, action: IProgressesActions): IProgressSt
       return { ...state, byDate: action.payload };
 
     case PROGRESSES.SET_PROGRESSES_BY_WEEK:
-      return { ...state, byWeek: [...state.byWeek, action.payload] };
-
-    case PROGRESSES.CLEAR_PROGRESSES_BY_WEEK:
-      return { ...state, byWeek: [] };
+      return { ...state, byWeek: action.payload };
 
     default:
       return state;

@@ -23,7 +23,7 @@ const useProgresses = (classroomId?: string) => {
   const { progresses, menu } = state;
 
   // List of actions
-  const { setProgressByDate, setProgressByWeek, clearProgressByWeek } = actions;
+  const { setProgressByDate, setProgressByWeek } = actions;
 
   /**
    * Get the progress of a student by date.
@@ -74,6 +74,7 @@ const useProgresses = (classroomId?: string) => {
       ProgressesAPI.getProgressByWeek(payload)
         .then((response) => {
           const { data } = response;
+          console.log('data', data);
 
           dispatch(setProgressByWeek(data));
 
@@ -132,16 +133,12 @@ const useProgresses = (classroomId?: string) => {
     });
   };
 
-  const clearByWeek = () => {
-    dispatch(clearProgressByWeek());
-  };
-
   React.useEffect(() => {
     Users.current.id &&
       getByDate({
         classroomId,
         studentId: Users.current.id,
-        date: Menu.date.format('YYYY/MM/DD'),
+        date: Menu.date.format('YYYY-MM-DD'),
       });
   }, [menu.date]);
 
@@ -150,7 +147,6 @@ const useProgresses = (classroomId?: string) => {
 
     getByDate,
     getByWeek,
-    clearByWeek,
     setOrUpdate,
   };
 };

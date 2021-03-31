@@ -21,6 +21,11 @@
   padding: 8px;
 }
 
+.progresses-container {
+  display: flex;
+  align-items: center;
+}
+
 .progress-header {
   margin: 48px 0 0;
   text-align: center;

@@ -3,7 +3,7 @@ import { Input, useInput } from 'components/gui/Input';
 import Modal from 'components/gui/Modal';
 import { Sidebar, SidebarItem } from 'components/gui/Sidebar';
 import Typography from 'components/gui/Typography';
-import { useClassrooms, useTeachers } from 'controllers';
+import { useClassroomsAsTeacher, useTeachers } from 'controllers';
 import * as React from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { FcCheckmark, FcCollaboration, FcComboChart, FcOvertime, FcTimeline } from 'react-icons/fc';
@@ -24,7 +24,7 @@ const Classroom: React.FC = () => {
   const { id } = useParams<RouteParams>();
 
   // Controllers
-  const Classrooms = useClassrooms(id);
+  const Classrooms = useClassroomsAsTeacher(id);
 
   // Internal state
   const [shareModal, setShareModal] = React.useState(false);

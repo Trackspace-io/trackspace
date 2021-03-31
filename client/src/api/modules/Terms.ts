@@ -109,11 +109,13 @@ export const update = async (term: ITermModify): Promise<any> => {
  * @url     /api/classrooms/:id/terms/:id/remove
  *
  * @param   {string}    term.id           Id of the term.
- * @param   {string}    term.classroomID  End date of the term.
+ * @param   {string}    term.classroomId  End date of the term.
  *
  * @returns 200, 400, 500
  */
 export const remove = async (term: ITermRemove): Promise<any> => {
+  console.log('term', term);
+
   return await axios.delete(`${_apiUrl}/api/classrooms/${term.classroomId}/terms/${term.id}/remove`, {
     withCredentials: true,
   });

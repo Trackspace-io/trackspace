@@ -68,7 +68,7 @@ const Progress: React.FC<IProgressProps> = ({ classroomId }) => {
     );
   }
 
-  if (!terms.currentTerm.days?.includes(String(Menu.date.format('dddd').toLowerCase()))) {
+  if (!terms.currentTerm?.days?.includes(String(Menu.date.format('dddd').toLowerCase()))) {
     return (
       <div className={style['container']}>
         <Typography variant="subtitle" align="center">{`There's no class today.`}</Typography>

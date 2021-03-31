@@ -53,7 +53,7 @@ export interface IProgress {
 export interface IProgressState {
   // List of progress of a student
   byDate: Partial<IProgress>;
-  byWeek: IProgressByWeekValues[];
+  byWeek: Partial<IProgressByWeekValues>;
 }
 
 /**
@@ -62,7 +62,6 @@ export interface IProgressState {
 export enum PROGRESSES {
   SET_PROGRESSES_BY_DATE = 'SET_PROGRESSES_BY_DATE',
   SET_PROGRESSES_BY_WEEK = 'SET_PROGRESSES_BY_WEEK',
-  CLEAR_PROGRESSES_BY_WEEK = 'CLEAR_PROGRESSES_BY_WEEK',
 }
 
 /**
@@ -70,8 +69,7 @@ export enum PROGRESSES {
  */
 export type IProgressesActions =
   | { type: PROGRESSES.SET_PROGRESSES_BY_DATE; payload: IProgress }
-  | { type: PROGRESSES.SET_PROGRESSES_BY_WEEK; payload: IProgressByWeekValues }
-  | { type: PROGRESSES.CLEAR_PROGRESSES_BY_WEEK };
+  | { type: PROGRESSES.SET_PROGRESSES_BY_WEEK; payload: IProgressByWeekValues };
 
 /**
  * Progress (of a student) by date interface
