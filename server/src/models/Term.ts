@@ -24,14 +24,23 @@ export class Term extends Model {
   /**
    * Find the terms between two dates.
    *
-   * @param from Period start date.
-   * @param to   Period end date.
+   * @param classroomId Identifier of the classroom.
+   * @param from        Period start date.
+   * @param to          Period end date.
    *
    * @returns The list of terms overlapping the given period.
    */
-  public static async findTermsBetween(from: Date, to: Date): Promise<Term[]> {
+  public static async findTermsBetween(
+    classroomId: string,
+    from: Date,
+    to: Date
+  ): Promise<Term[]> {
     return await this.findAll({
-      where: { [Op.and]: { start: { [Op.lte]: to }, end: { [Op.gte]: from } } },
+      where: {
+        ClassroomId: classroomId,
+        start: { [Op.lte]: to },
+        end: { [Op.gte]: from },
+      },
     });
   }
 
@@ -169,7 +178,7 @@ export class Term extends Model {
     const [weekStart] = this.getWeekDates(week);
 
     const dateDays =
-      Math.floor(weekStart.getTime() / (24 * 3600 * 1000)) -
+      Math.ceil(weekStart.getTime() / (24 * 3600 * 1000)) -
       weekStart.getDay() +
       dayInt;
 
@@ -249,7 +258,7 @@ export class Term extends Model {
     }
 
     // Get the time value in days.
-    const termStartDays = Math.floor(this.start.getTime() / (24 * 3600 * 1000));
+    const termStartDays = Math.ceil(this.start.getTime() / (24 * 3600 * 1000));
 
     // Compute the week start date.
     const weekStartDays = termStartDays - this.start.getDay() + 7 * (week - 1);

@@ -67,7 +67,11 @@ terms.post(
       return Promise.reject("The start date must be before the end date.");
     }
 
-    const overlappingTerms = await Term.findTermsBetween(start, end);
+    const overlappingTerms = await Term.findTermsBetween(
+      req.classroom.id,
+      start,
+      end
+    );
     if (overlappingTerms.length > 0) {
       return Promise.reject("There is at least one overlapping term.");
     }
@@ -338,7 +342,7 @@ terms.delete(
     }
 
     try {
-      await Term.destroy({ where: { id: req.params.id } });
+      await Term.destroy({ where: { id: req.params.termId } });
       return res.sendStatus(200);
     } catch (e) {
       return res.sendStatus(500);
