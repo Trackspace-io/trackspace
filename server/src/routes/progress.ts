@@ -264,6 +264,9 @@ progress.get(
               name: subject.name,
             },
             values: term.days.map((day) => {
+              const currentDate = term.getDate(weekNumber, day);
+              if (currentDate === null) return undefined;
+
               const value = progress.find(
                 (p) => p.weekDay === day && p.subjectId === subject.id
               );
@@ -272,10 +275,7 @@ progress.get(
                 progressKey: {
                   subjectId: subject.id,
                   studentId: student.id,
-                  date: date.format(
-                    term.getDate(weekNumber, day),
-                    "YYYY-MM-DD"
-                  ),
+                  date: date.format(currentDate, "YYYY-MM-DD"),
                 },
                 pageFrom: value ? value.pageFrom : null,
                 pageSet: value ? value.pageSet : null,

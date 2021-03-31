@@ -178,7 +178,7 @@ export class Term extends Model {
     const [weekStart] = this.getWeekDates(week);
 
     const dateDays =
-      Math.floor(weekStart.getTime() / (24 * 3600 * 1000)) -
+      Math.ceil(weekStart.getTime() / (24 * 3600 * 1000)) -
       weekStart.getDay() +
       dayInt;
 
@@ -258,7 +258,7 @@ export class Term extends Model {
     }
 
     // Get the time value in days.
-    const termStartDays = Math.floor(this.start.getTime() / (24 * 3600 * 1000));
+    const termStartDays = Math.ceil(this.start.getTime() / (24 * 3600 * 1000));
 
     // Compute the week start date.
     const weekStartDays = termStartDays - this.start.getDay() + 7 * (week - 1);

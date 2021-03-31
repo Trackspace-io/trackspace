@@ -342,7 +342,7 @@ terms.delete(
     }
 
     try {
-      await Term.destroy({ where: { id: req.params.id } });
+      await Term.destroy({ where: { id: req.params.termId } });
       return res.sendStatus(200);
     } catch (e) {
       return res.sendStatus(500);
