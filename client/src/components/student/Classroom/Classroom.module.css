@@ -2,11 +2,8 @@
   box-sizing: border-box;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 0 0 32px;
+.title {
+  padding-left: 30px;
 }
 
 .body {

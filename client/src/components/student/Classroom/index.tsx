@@ -23,11 +23,12 @@ const Classroom: React.FC = () => {
   return (
     <div>
       <div className={style['container']}>
-        <div className={style['header']}>
-          <Typography variant="subtitle">{Classrooms.current.name}</Typography>
-        </div>
         <div className={style['body']}>
           <div className={style['sidebar']}>
+            <div className={style['title']}>
+              <Typography variant="subtitle">{Classrooms.current.name}</Typography>
+            </div>
+            <br />
             <Sidebar>
               <SidebarItem to={`/student/classrooms/${id}/progress/today`} icon={<FcInspection />}>
                 Today
