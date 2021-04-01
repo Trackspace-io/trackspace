@@ -6,6 +6,7 @@ import { ITermState, ITermActions, TERMS } from './types';
 export const initialState = {
   list: [],
   currentTerm: null,
+  selectedTerm: null,
 };
 
 /**
@@ -23,6 +24,9 @@ const reducer = (state: ITermState, action: ITermActions): ITermState => {
 
     case TERMS.SET_CURRENT_TERM:
       return { ...state, currentTerm: action.payload };
+
+    case TERMS.SET_SELECTED_TERM:
+      return { ...state, selectedTerm: action.payload };
 
     default:
       return state;

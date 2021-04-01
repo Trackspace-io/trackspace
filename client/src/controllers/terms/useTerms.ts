@@ -3,7 +3,7 @@ import { useMessages } from 'controllers';
 import * as React from 'react';
 import { useGlobalStore } from 'store';
 import termsReducer from 'store/terms';
-import { ITermCreate, ITermGetByDate, ITermGetById, ITermModify, ITermRemove } from 'store/terms/types';
+import { ITerm, ITermCreate, ITermGetByDate, ITermGetById, ITermModify, ITermRemove } from 'store/terms/types';
 import moment from 'moment';
 
 const { actions } = termsReducer;
@@ -91,7 +91,6 @@ const useTerms = (classroomId?: string) => {
         .then((response) => {
           const { data } = response;
 
-          dispatch(setCurrentTerm(data));
           resolve(data);
         })
         .catch((e) => {
@@ -210,13 +209,12 @@ const useTerms = (classroomId?: string) => {
           resolve(data);
         })
         .catch((e) => {
-          // const { msg } = e.response.data.errors[0];
+          const { msg } = e.response.data.errors[0];
 
-          // Messages.add({
-          //   type: 'error',
-          //   text: `${msg}`,
-          // });
-          console.log('e', e.response);
+          Messages.add({
+            type: 'error',
+            text: `${msg}`,
+          });
         });
     });
   };
@@ -232,7 +230,13 @@ const useTerms = (classroomId?: string) => {
     getByDate({
       classroomId: String(classroomId),
       date: today,
+    }).then((data) => {
+      dispatch(setCurrentTerm(data));
     });
+  };
+
+  const setSelectedTerm = (payload: ITerm) => {
+    dispatch(actions.setSelectedTerm(payload));
   };
 
   React.useEffect(() => {
@@ -252,6 +256,8 @@ const useTerms = (classroomId?: string) => {
     create,
     modify,
     remove,
+
+    setSelectedTerm,
   };
 };
 

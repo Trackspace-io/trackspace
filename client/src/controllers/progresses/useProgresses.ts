@@ -1,6 +1,5 @@
 import { ProgressesAPI } from 'api';
-import { useMenu, useMessages, useUsers } from 'controllers';
-import React from 'react';
+import { useMessages } from 'controllers';
 import { useGlobalStore } from 'store';
 import progressesReducer from 'store/progresses';
 import { IProgress, IProgressByDate, IProgressByWeek, IProgressSetOrUpdate } from 'store/progresses/types';
@@ -16,11 +15,9 @@ const useProgresses = (classroomId?: string) => {
 
   // List of controllers
   const Messages = useMessages();
-  const Users = useUsers();
-  const Menu = useMenu();
 
   // List of states
-  const { progresses, menu } = state;
+  const { progresses } = state;
 
   // List of actions
   const { setProgressByDate, setProgressByWeek } = actions;
@@ -132,15 +129,6 @@ const useProgresses = (classroomId?: string) => {
         });
     });
   };
-
-  React.useEffect(() => {
-    Users.current.id &&
-      getByDate({
-        classroomId,
-        studentId: Users.current.id,
-        date: Menu.date.format('YYYY-MM-DD'),
-      });
-  }, [menu.date]);
 
   return {
     ...progresses,

@@ -1,9 +1,11 @@
 import Checkbox from 'components/gui/Checkbox';
 import { Input, useInput } from 'components/gui/Input';
+import Tooltip from 'components/gui/Tooltip';
 import Typography from 'components/gui/Typography';
 import { useClassroomsAsStudent, useMenu } from 'controllers';
-import React from 'react';
 import moment from 'moment';
+import React from 'react';
+
 import style from './Today.module.css';
 
 interface IProgressProps {
@@ -60,17 +62,13 @@ const Progress: React.FC<IProgressProps> = ({ classroomId }) => {
       });
   };
 
-  if (Menu.date <= moment(terms.currentTerm?.start) || Menu.date >= moment(terms.currentTerm?.end)) {
-    return (
-      <div className={style['container']}>
-        <Typography variant="subtitle" align="center">{`No term.`}</Typography>
-      </div>
-    );
+  if (Menu.date <= moment(terms.selectedTerm?.start) || Menu.date >= moment(terms.selectedTerm?.end)) {
+    return <div />;
   }
 
-  if (!terms.currentTerm?.days?.includes(String(Menu.date.format('dddd').toLowerCase()))) {
+  if (!terms.selectedTerm?.days?.includes(String(Menu.date.format('dddd').toLowerCase()))) {
     return (
-      <div className={style['container']}>
+      <div>
         <Typography variant="subtitle" align="center">{`There's no class today.`}</Typography>
       </div>
     );
@@ -83,24 +81,32 @@ const Progress: React.FC<IProgressProps> = ({ classroomId }) => {
           <tr>
             <th></th>
             <th>
-              <Typography variant="info" weight="light">
-                Page from
-              </Typography>
+              <Tooltip text="I would like to start from page _." position="top">
+                <Typography variant="info" weight="light">
+                  Page from
+                </Typography>
+              </Tooltip>
             </th>
             <th>
-              <Typography variant="info" weight="light">
-                Page set
-              </Typography>
+              <Tooltip text="I would like to do _ pages" position="top">
+                <Typography variant="info" weight="light">
+                  Page set
+                </Typography>
+              </Tooltip>
             </th>
             <th>
-              <Typography variant="info" weight="light">
-                Page done
-              </Typography>
+              <Tooltip text="I did _ number of pages" position="top">
+                <Typography variant="info" weight="light">
+                  Page done
+                </Typography>
+              </Tooltip>
             </th>
             <th>
-              <Typography variant="info" weight="light">
-                Homework
-              </Typography>
+              <Tooltip text="Number of pages left" position="top">
+                <Typography variant="info" weight="light">
+                  Homework
+                </Typography>
+              </Tooltip>
             </th>
             <th>
               <Typography variant="info" weight="light">

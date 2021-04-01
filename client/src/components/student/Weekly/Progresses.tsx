@@ -25,7 +25,7 @@ const Progresses: React.FC<IProgressesProps> = ({ classroomId }) => {
       termId: String(terms.currentTerm?.id),
       weekNumber: weekNumber,
     });
-  }, [terms.currentTerm?.id]);
+  }, [Users.current.id]);
 
   React.useEffect(() => {
     progresses.getByWeek({
@@ -34,6 +34,14 @@ const Progresses: React.FC<IProgressesProps> = ({ classroomId }) => {
       weekNumber: weekNumber,
     });
   }, [weekNumber]);
+
+  React.useEffect(() => {
+    progresses.getByWeek({
+      studentId: Users.current.id,
+      termId: String(terms.currentTerm?.id),
+      weekNumber: weekNumber,
+    });
+  }, [terms.currentTerm]);
 
   const handlePrevious = () => {
     if (weekNumber > 1) {

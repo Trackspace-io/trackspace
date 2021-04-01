@@ -13,3 +13,10 @@ export const setCurrentTerm = (payload: ITerm) => {
     payload,
   };
 };
+
+export const setSelectedTerm = (payload: ITerm) => {
+  return {
+    type: TERMS.SET_SELECTED_TERM,
+    payload,
+  };
+};

@@ -17,6 +17,7 @@ export interface ITermState {
   // Subjects list
   list: ITerm[];
   currentTerm: ITerm | null;
+  selectedTerm: ITerm | null;
 }
 
 /**
@@ -25,6 +26,7 @@ export interface ITermState {
 export enum TERMS {
   SET_TERMS = 'SET_TERMS',
   SET_CURRENT_TERM = 'SET_CURRENT_TERM',
+  SET_SELECTED_TERM = 'SET_SELECTED_TERM',
 }
 
 /**
@@ -32,7 +34,8 @@ export enum TERMS {
  */
 export type ITermActions =
   | { type: TERMS.SET_TERMS; payload: ITerm[] }
-  | { type: TERMS.SET_CURRENT_TERM; payload: ITerm };
+  | { type: TERMS.SET_CURRENT_TERM; payload: ITerm }
+  | { type: TERMS.SET_SELECTED_TERM; payload: ITerm };
 
 /**
  * Get term by id interface

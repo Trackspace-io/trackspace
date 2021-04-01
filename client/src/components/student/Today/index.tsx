@@ -1,11 +1,13 @@
+import Tooltip from 'components/gui/Tooltip';
 import Typography from 'components/gui/Typography';
 import { useClassroomsAsStudent, useMenu, useUsers } from 'controllers';
 import { dateString } from 'helpers/calendar';
 import React from 'react';
+import { FcInfo } from 'react-icons/fc';
 import { useParams } from 'react-router-dom';
+
 import Progress from './Progress';
 import Terms from './Terms';
-
 import style from './Today.module.css';
 
 interface RouteParams {
@@ -20,36 +22,51 @@ const Today: React.FC = () => {
   const Users = useUsers();
   const Menu = useMenu();
 
-  const { progresses } = Classrooms;
+  const { progresses, terms } = Classrooms;
 
   React.useEffect(() => {
-    Users.current.id &&
-      progresses.getByDate({
-        classroomId: id,
-        studentId: Users.current.id,
-        date: Menu.date.format('YYYY-MM-DD'),
-      });
+    progresses.getByDate({
+      classroomId: id,
+      studentId: Users.current.id,
+      date: Menu.date.format('YYYY-MM-DD'),
+    });
   }, [Users.current.id]);
 
-  if (Object.entries(progresses.byDate).length === 0) {
-    return (
-      <div className={style['container']}>
-        <Typography variant="subtitle" align="center">{`There's no class today.`}</Typography>
-      </div>
-    );
-  }
+  React.useEffect(() => {
+    progresses.getByDate({
+      classroomId: id,
+      studentId: Users.current.id,
+      date: Menu.date.format('YYYY-MM-DD'),
+    });
+
+    terms
+      .getByDate({
+        classroomId: id,
+        date: Menu.date.format('YYYY-MM-DD'),
+      })
+      .then((data) => {
+        terms.setSelectedTerm(data);
+      });
+  }, [Menu.date]);
 
   return (
     <div className={style['container']}>
-      <div className={style['body']}>
-        <Typography variant="title" weight="light">
-          {dateString(Menu.date.toLocaleString())}
-        </Typography>
-        <br />
+      <div className={style['header']}>
         <div>
-          <Terms classroomId={id} />
-          <Progress classroomId={id} />
+          <Typography variant="title" weight="light">
+            {dateString(Menu.date.toLocaleString())}
+          </Typography>
+          <br />
+          <Terms classroomId={id} selectedDate={Menu.date} />
         </div>
+        <div className={style['helper']}>
+          <Tooltip text="Select a date from the calendar on the right." position="left">
+            <FcInfo />
+          </Tooltip>
+        </div>
+      </div>
+      <div className={style['body']}>
+        <Progress classroomId={id} />
       </div>
     </div>
   );

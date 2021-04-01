@@ -1,8 +1,30 @@
 .container {
   box-sizing: border-box;
+  padding: 0 2vw;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0 2vw;
+}
+
+.helper svg {
+  transform: scale(1.5);
+  cursor: pointer;
 }
 
 .body {
+  display: flex;
+  justify-content: center;
+  margin: 56px 0;
+}
+
+.table {
+  border: 1px solid #ccc;
+  border-radius: 16px;
+  padding: 32px;
 }
 
 .table thead th {
@@ -15,7 +37,7 @@
 
 .table input[type='text'],
 input[type='number'] {
-  width: 100px;
+  width: 7vw;
   font-size: 16px;
   border: none;
   border-bottom: 1px solid #ccc;

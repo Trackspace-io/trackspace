@@ -1,12 +1,14 @@
 .container {
   box-sizing: border-box;
   min-height: 100vh;
+  padding: 0 2vw;
 }
 
 .header {
   display: flex;
-  justify-content: space-evenly;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 2vw;
 }
 
 .body {
@@ -14,9 +16,11 @@
 }
 
 .terms-dropdown {
+  align-self: flex-end;
   border: 1px solid #ccc;
   border-radius: 8px;
   padding: 8px;
+  margin-bottom: 24px;
 }
 
 .progresses {
@@ -33,10 +37,6 @@
   border-radius: 8px;
   transform: scale(1.5);
   cursor: pointer;
-}
-
-.progresses svg:hover {
-  box-shadow: 0 1px 5px #ccc;
 }
 
 .progress-header {
@@ -61,7 +61,7 @@
 }
 
 .progress-table .data {
-  width: 100px;
+  width: 7vw;
   padding: 2px;
   text-align: center;
   font-weight: 300;
