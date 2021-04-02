@@ -3,8 +3,8 @@ import Typography from 'components/gui/Typography';
 import { useClassroomsAsStudent, useUsers } from 'controllers';
 import React from 'react';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
-import Graph from './Graph';
 
+import Graph from './Graph';
 import ProgressItem from './ProgressItem';
 import style from './Weekly.module.css';
 
@@ -20,38 +20,25 @@ const Progresses: React.FC<IProgressesProps> = ({ classroomId }) => {
 
   const [weekNumber, setWeekNumber] = React.useState<number>(1);
 
+  // Fetch the progress by week when the component mounts, on week, and on term changed.
   React.useEffect(() => {
     Users.current.id &&
+      terms.currentTerm?.id &&
       progresses.getByWeek({
         studentId: Users.current.id,
         termId: String(terms.currentTerm?.id),
         weekNumber: weekNumber,
       });
-  }, [Users.current.id]);
+  }, [Users.current.id, terms.currentTerm?.id, weekNumber]);
 
-  React.useEffect(() => {
-    progresses.getByWeek({
-      studentId: Users.current.id,
-      termId: String(terms.currentTerm?.id),
-      weekNumber: weekNumber,
-    });
-  }, [weekNumber]);
-
-  React.useEffect(() => {
-    terms.currentTerm?.id &&
-      progresses.getByWeek({
-        studentId: Users.current.id,
-        termId: String(terms.currentTerm?.id),
-        weekNumber: weekNumber,
-      });
-  }, [terms.currentTerm?.id]);
-
+  // Previous week onClick handler
   const handlePrevious = () => {
     if (weekNumber > 1) {
       setWeekNumber(weekNumber - 1);
     }
   };
 
+  // Next week onClick handler
   const handleNext = () => {
     const numberOfWeeks = terms.currentTerm?.numberOfWeeks;
 
