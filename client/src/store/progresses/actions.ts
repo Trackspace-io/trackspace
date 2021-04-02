@@ -13,3 +13,10 @@ export const setProgressByWeek = (payload: IProgressByWeekValues) => {
     payload,
   };
 };
+
+export const setProgressGraph = (payload: any) => {
+  return {
+    type: PROGRESSES.SET_PROGRESSES_GRAPH,
+    payload: payload,
+  };
+};

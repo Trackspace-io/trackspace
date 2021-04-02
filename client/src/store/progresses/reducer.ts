@@ -6,6 +6,7 @@ import { IProgressByWeekValues, IProgressesActions, IProgressState, PROGRESSES }
 export const initialState = {
   byDate: {},
   byWeek: {} as IProgressByWeekValues,
+  graph: {} as any,
 };
 
 /**
@@ -23,6 +24,9 @@ const reducer = (state: IProgressState, action: IProgressesActions): IProgressSt
 
     case PROGRESSES.SET_PROGRESSES_BY_WEEK:
       return { ...state, byWeek: action.payload };
+
+    case PROGRESSES.SET_PROGRESSES_GRAPH:
+      return { ...state, graph: action.payload };
 
     default:
       return state;

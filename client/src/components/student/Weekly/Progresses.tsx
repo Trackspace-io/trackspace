@@ -3,6 +3,7 @@ import Typography from 'components/gui/Typography';
 import { useClassroomsAsStudent, useUsers } from 'controllers';
 import React from 'react';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import Graph from './Graph';
 
 import ProgressItem from './ProgressItem';
 import style from './Weekly.module.css';
@@ -20,11 +21,12 @@ const Progresses: React.FC<IProgressesProps> = ({ classroomId }) => {
   const [weekNumber, setWeekNumber] = React.useState<number>(1);
 
   React.useEffect(() => {
-    progresses.getByWeek({
-      studentId: Users.current.id,
-      termId: String(terms.currentTerm?.id),
-      weekNumber: weekNumber,
-    });
+    Users.current.id &&
+      progresses.getByWeek({
+        studentId: Users.current.id,
+        termId: String(terms.currentTerm?.id),
+        weekNumber: weekNumber,
+      });
   }, [Users.current.id]);
 
   React.useEffect(() => {
@@ -36,12 +38,13 @@ const Progresses: React.FC<IProgressesProps> = ({ classroomId }) => {
   }, [weekNumber]);
 
   React.useEffect(() => {
-    progresses.getByWeek({
-      studentId: Users.current.id,
-      termId: String(terms.currentTerm?.id),
-      weekNumber: weekNumber,
-    });
-  }, [terms.currentTerm]);
+    terms.currentTerm?.id &&
+      progresses.getByWeek({
+        studentId: Users.current.id,
+        termId: String(terms.currentTerm?.id),
+        weekNumber: weekNumber,
+      });
+  }, [terms.currentTerm?.id]);
 
   const handlePrevious = () => {
     if (weekNumber > 1) {
@@ -67,6 +70,9 @@ const Progresses: React.FC<IProgressesProps> = ({ classroomId }) => {
 
   return (
     <React.Fragment>
+      <div className={style['graph-container']}>
+        <Graph studentId={Users.current && Users.current.id} termId={terms.currentTerm?.id} />
+      </div>
       <div className={style['progresses']}>
         <Button variant="secondary" onClick={handlePrevious} disabled={weekNumber === 1}>
           <FiChevronLeft />

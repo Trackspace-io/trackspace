@@ -7,7 +7,7 @@ import { IUserUpdate, USERS } from 'store/users/types';
 import Cookies from 'js-cookie';
 
 const { actions } = usersReducer;
-const cookie = Cookies.get('connect.sid') || '';
+const cookie = Cookies.get('connect.sid');
 
 const useUsers = () => {
   if (useGlobalStore === undefined) {

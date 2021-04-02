@@ -2,7 +2,13 @@ import { ProgressesAPI } from 'api';
 import { useMessages } from 'controllers';
 import { useGlobalStore } from 'store';
 import progressesReducer from 'store/progresses';
-import { IProgress, IProgressByDate, IProgressByWeek, IProgressSetOrUpdate } from 'store/progresses/types';
+import {
+  IProgress,
+  IProgressByDate,
+  IProgressByWeek,
+  IProgressGetGraph,
+  IProgressSetOrUpdate,
+} from 'store/progresses/types';
 
 const { actions } = progressesReducer;
 
@@ -20,7 +26,7 @@ const useProgresses = (classroomId?: string) => {
   const { progresses } = state;
 
   // List of actions
-  const { setProgressByDate, setProgressByWeek } = actions;
+  const { setProgressByDate, setProgressByWeek, setProgressGraph } = actions;
 
   /**
    * Get the progress of a student by date.
@@ -39,22 +45,14 @@ const useProgresses = (classroomId?: string) => {
           resolve(data);
         })
         .catch((e) => {
-          // const { param, msg, value } = e.response.data.errors[0];
+          const { msg } = e.response.data.errors[0];
 
-          // if (param === 'date') {
-          //   Messages.add({
-          //     type: 'warning',
-          //     text: `There is no class on ${value}.`,
-          //   });
-          // } else {
-          //   Messages.add({
-          //     type: 'error',
-          //     text: `${msg}`,
-          //   });
-          // }
           dispatch(setProgressByDate(<IProgress>{}));
 
-          console.log('e', e);
+          Messages.add({
+            type: 'error',
+            text: `${msg}`,
+          });
         });
     });
   };
@@ -71,26 +69,53 @@ const useProgresses = (classroomId?: string) => {
       ProgressesAPI.getProgressByWeek(payload)
         .then((response) => {
           const { data } = response;
-          console.log('data', data);
 
           dispatch(setProgressByWeek(data));
 
           resolve(data);
         })
         .catch((e) => {
-          // const { msg } = e.response.data.errors[0];
+          const { msg } = e.response.data.errors[0];
 
-          // Messages.add({
-          //   type: 'error',
-          //   text: `${msg}`,
-          // });
-          console.log('e', e);
+          Messages.add({
+            type: 'error',
+            text: `${msg}`,
+          });
 
-          reject();
+          reject(e);
         });
     });
   };
 
+  /**
+   * Get the weekly progress' graph values.
+   *
+   * @param {string}  payload.studentId
+   * @param {string}  payload.termId
+   * @param {number}  payload.weekNumber
+   */
+  const getProgressGraph = (payload: IProgressGetGraph) => {
+    return new Promise((resolve, reject) => {
+      ProgressesAPI.getProgressGraph(payload)
+        .then((response) => {
+          const { data } = response;
+          console.log('data', data);
+
+          dispatch(setProgressGraph(data));
+          resolve(data);
+        })
+        .catch((e) => {
+          const { msg } = e.response.data.errors[0];
+
+          Messages.add({
+            type: 'error',
+            text: `${msg}`,
+          });
+
+          reject(e);
+        });
+    });
+  };
   /**
    * Set or update a progress
    *
@@ -135,6 +160,7 @@ const useProgresses = (classroomId?: string) => {
 
     getByDate,
     getByWeek,
+    getProgressGraph,
     setOrUpdate,
   };
 };

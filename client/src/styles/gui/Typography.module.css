@@ -6,6 +6,7 @@
   font-size: 200%;
   font-weight: 700;
   padding-bottom: 4px;
+  color: var(--blue-dark);
 }
 
 .subtitle {
