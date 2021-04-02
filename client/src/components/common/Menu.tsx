@@ -17,7 +17,7 @@ const Menu: React.FC = () => {
   const Menu = useMenu();
 
   function handleChange(date: moment.Moment | null) {
-    Menu.setDate(date);
+    Menu.setDate(moment(date).startOf('day'));
   }
 
   return (

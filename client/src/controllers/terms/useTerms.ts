@@ -1,10 +1,10 @@
 import { TermsAPI } from 'api';
 import { useMessages } from 'controllers';
+import moment from 'moment';
 import * as React from 'react';
 import { useGlobalStore } from 'store';
 import termsReducer from 'store/terms';
 import { ITerm, ITermCreate, ITermGetByDate, ITermGetById, ITermModify, ITermRemove } from 'store/terms/types';
-import moment from 'moment';
 
 const { actions } = termsReducer;
 

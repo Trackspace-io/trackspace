@@ -4,10 +4,8 @@ import * as React from 'react';
 import { useGlobalStore } from 'store';
 import usersReducer from 'store/users';
 import { IUserUpdate, USERS } from 'store/users/types';
-import Cookies from 'js-cookie';
 
 const { actions } = usersReducer;
-const cookie = Cookies.get('connect.sid');
 
 const useUsers = () => {
   if (useGlobalStore === undefined) {
@@ -116,9 +114,9 @@ const useUsers = () => {
 
   React.useEffect(() => {
     getCurrent();
-  }, [cookie]);
+  }, []);
 
-  return { ...users, update, authCheck };
+  return { ...users, update, getCurrent, authCheck };
 };
 
 export default useUsers;

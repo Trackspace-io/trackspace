@@ -24,20 +24,7 @@ const Today: React.FC = () => {
 
   const { progresses, terms } = Classrooms;
 
-  // Fetch the progress by date when the components mounts.
-  React.useEffect(() => {
-    console.log('classroomId', id);
-    console.log('user', Users.current.id);
-    console.log('date', Menu.date.format('YYYY-MM-DD'));
-
-    progresses.getByDate({
-      classroomId: id,
-      studentId: Users.current.id,
-      date: Menu.date.format('YYYY-MM-DD'),
-    });
-  }, [Users.current.id]);
-
-  // Fetch the progress by date when a date is selected from the menu.
+  // Fetch the progress by date when the components mounts, and when a date is selected from the menu.
   React.useEffect(() => {
     progresses.getByDate({
       classroomId: id,
@@ -53,7 +40,7 @@ const Today: React.FC = () => {
       .then((data) => {
         terms.setSelectedTerm(data);
       });
-  }, [Menu.date]);
+  }, [Users.current.id, Menu.date]);
 
   return (
     <div className={style['container']}>
@@ -72,7 +59,7 @@ const Today: React.FC = () => {
         </div>
       </div>
       <div className={style['body']}>
-        <Progress classroomId={id} />
+        <Progress classroomId={id} selectedDate={Menu.date} />
       </div>
     </div>
   );

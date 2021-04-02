@@ -16,7 +16,7 @@ const Terms: React.FC<ITermsProps> = ({ classroomId, selectedDate }) => {
   //  States
   const { terms, progresses } = Classrooms;
 
-  if (selectedDate <= moment(terms.selectedTerm?.start) || selectedDate >= moment(terms.selectedTerm?.end)) {
+  if (selectedDate < moment(terms.selectedTerm?.start) || selectedDate > moment(terms.selectedTerm?.end)) {
     return (
       <div>
         <Typography variant="subtitle" align="center">{`The selected date is outside of a term.`}</Typography>

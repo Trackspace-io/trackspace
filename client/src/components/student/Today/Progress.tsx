@@ -2,7 +2,7 @@ import Checkbox from 'components/gui/Checkbox';
 import { Input, useInput } from 'components/gui/Input';
 import Tooltip from 'components/gui/Tooltip';
 import Typography from 'components/gui/Typography';
-import { useClassroomsAsStudent, useMenu } from 'controllers';
+import { useClassroomsAsStudent } from 'controllers';
 import moment from 'moment';
 import React from 'react';
 
@@ -10,12 +10,12 @@ import style from './Today.module.css';
 
 interface IProgressProps {
   classroomId: string;
+  selectedDate: moment.Moment;
 }
 
-const Progress: React.FC<IProgressProps> = ({ classroomId }) => {
+const Progress: React.FC<IProgressProps> = ({ classroomId, selectedDate }) => {
   // Controllers
   const Classrooms = useClassroomsAsStudent(classroomId);
-  const Menu = useMenu();
   const Inputs = useInput();
 
   const { terms, progresses } = Classrooms;
@@ -62,14 +62,14 @@ const Progress: React.FC<IProgressProps> = ({ classroomId }) => {
       });
   };
 
-  if (Menu.date <= moment(terms.selectedTerm?.start) || Menu.date >= moment(terms.selectedTerm?.end)) {
+  if (selectedDate < moment(terms.selectedTerm?.start) || selectedDate > moment(terms.selectedTerm?.end)) {
     return <div />;
   }
 
-  if (!terms.selectedTerm?.days?.includes(String(Menu.date.format('dddd').toLowerCase()))) {
+  if (!terms.selectedTerm?.days?.includes(selectedDate.format('dddd').toLowerCase())) {
     return (
       <div>
-        <Typography variant="subtitle" align="center">{`There's no class today.`}</Typography>
+        <Typography variant="subtitle" align="center">{`There're no courses on this date.`}</Typography>
       </div>
     );
   }
