@@ -47,7 +47,7 @@
 .main {
   display: flex;
   flex-direction: row;
-  flex: 1;
+  flex: 1 1 0;
   margin: 16px 16px 16px 0;
   border-radius: 16px;
   background: var(--white);
@@ -64,4 +64,5 @@
 .menu {
   flex: 0 0 300px;
   padding: 32px;
+  margin-top: 24px;
 }

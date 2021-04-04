@@ -6,6 +6,7 @@
 
 .header {
   position: relative;
+  margin-top: 24px;
 }
 
 .body {
@@ -27,41 +28,45 @@
   margin-bottom: 24px;
 }
 
+.search-item input {
+  width: 100%;
+  margin: 0;
+  font-size: 120%;
+}
+
+.search-item {
+  cursor: pointer;
+  padding: 15px 20px;
+}
+
+.search-item:hover {
+  background-color: rgb(241, 241, 241);
+}
+
+.search-item-name {
+  text-transform: capitalize;
+}
+
+.search-item-email {
+  font-size: 12px;
+}
+
 .graph-container {
   position: relative;
 }
 
-.toggle {
-  position: absolute;
-  top: 16px;
-  right: 24px;
-  z-index: 999;
-}
-
-.toggle svg {
-  transform: scale(1.6);
-  color: var(--blue-dark);
-  cursor: pointer;
-}
-
-.graph {
-  position: relative;
-  padding: 56px 16px 32px;
-  border-radius: 8px;
-  box-shadow: 0 1px 5px #ccc;
-}
-
 .progresses {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: flex-start;
   width: 100%;
   padding: 36px 0px;
 }
 
 .progresses svg {
-  margin: 24px 8px 0;
+  margin-top: 40px;
   padding: 8px;
+  border-radius: 8px;
   transform: scale(1.5);
   cursor: pointer;
 }

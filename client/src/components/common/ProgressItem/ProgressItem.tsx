@@ -5,7 +5,7 @@ import { dateString } from 'helpers/calendar';
 import React from 'react';
 import { IProgressByWeekValues } from 'store/progresses/types';
 
-import style from './Weekly.module.css';
+import style from './ProgressItem.module.css';
 
 interface IProgressItemProps {
   weekNumber: number;

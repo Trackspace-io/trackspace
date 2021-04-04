@@ -48,6 +48,7 @@ const Input: React.FC<IInputProps> = ({
   placeholder,
   value,
   onChange,
+  onFocus,
   onBlur,
 }) => {
   return (
@@ -61,6 +62,7 @@ const Input: React.FC<IInputProps> = ({
         value={type === 'number' ? Number.parseInt(String(value)) : value}
         onChange={onChange}
         onBlur={onBlur}
+        onFocus={onFocus}
         className={style['input']}
         checked={checked}
       />
@@ -85,8 +87,6 @@ const useInput = (initialState?: any) => {
   const [errors, setErrors] = React.useState(initialState);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('target', e.target.value);
-
     setValues({
       ...values,
       [e.target.name]: e.target.value,

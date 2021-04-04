@@ -5,7 +5,7 @@ import React from 'react';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
 import Graph from './Graph';
-import ProgressItem from './ProgressItem';
+import ProgressItem from '../../common/ProgressItem/ProgressItem';
 import style from './Weekly.module.css';
 
 interface IProgressesProps {
