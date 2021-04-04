@@ -40,12 +40,12 @@ const Graph: React.FC<IGraphProps> = ({ termId, studentId }) => {
         <div className={style['graph']}>
           <Line
             data={{
-              labels: graph.data.labels.map((label: string) => `${label}`),
+              labels: graph.data.labels.map((label: string) => `  ${label}`),
               datasets: graph.data.datasets.map((set: any) => {
                 return {
                   label: set.label,
-                  backgroundColor: set.backgroundColor || '',
-                  borderColor: set.borderColor || '',
+                  backgroundColor: `#${set.backgroundColor}`,
+                  borderColor: `#${set.borderColor}`,
                   data: set.data.map((point: any) => point),
                   fill: set.fill,
                   borderWidth: set.borderWidth,
