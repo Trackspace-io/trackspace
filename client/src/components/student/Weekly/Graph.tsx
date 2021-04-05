@@ -25,7 +25,7 @@ const Graph: React.FC<IGraphProps> = ({ termId, studentId }) => {
         termId,
         studentId,
       });
-  }, [studentId && terms.currentTerm?.id]);
+  }, [studentId, terms.currentTerm?.id]);
 
   return (
     <React.Fragment>

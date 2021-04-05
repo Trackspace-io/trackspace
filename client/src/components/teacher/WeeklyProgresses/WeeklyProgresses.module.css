@@ -1,7 +1,6 @@
 .container {
   box-sizing: border-box;
   min-height: 100vh;
-  padding: 0 2vw;
 }
 
 .header {

@@ -56,8 +56,8 @@ export const getProgressByWeek = async (body: IProgressByWeek) => {
  */
 
 export const getProgressGraph = async (body: IProgressGetGraph) => {
-  const color = `${'FF0000'}`;
-  const width = '6';
+  const color = `${'9ab986'}`;
+  const width = '4';
 
   return await axios.get(
     `${_apiUrl}/api/progress/terms/${body.termId}/students/${body.studentId}/graph?color=${color}&width=${width}`,

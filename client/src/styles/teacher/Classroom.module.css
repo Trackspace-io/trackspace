@@ -1,12 +1,13 @@
 .container {
   box-sizing: border-box;
+  padding: 0 2vw;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 32px;
+  padding-left: 32px;
 }
 
 .share {
