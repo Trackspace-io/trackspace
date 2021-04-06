@@ -23,10 +23,10 @@ const WeeklyProgresses: React.FC = () => {
   return (
     <div className={style['container']}>
       <div className={style['header']}>
+        <Terms classroomId={id} />
         <StudentsSearchBar studentsList={students.list} setStudentId={(studentId) => setStudentId(studentId)} />
       </div>
       <div className={style['body']}>
-        <Terms classroomId={id} studentId={studentId} />
         <Progresses classroomId={id} studentId={studentId} />
       </div>
     </div>

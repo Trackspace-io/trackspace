@@ -1,18 +1,18 @@
 .container {
   box-sizing: border-box;
-  padding: 0 2vw;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
-  padding: 0 2vw;
+  align-items: flex-start;
+  padding: 0;
 }
 
 .helper svg {
   transform: scale(1.5);
   cursor: pointer;
+  margin: 8px 16px;
 }
 
 .body {
@@ -37,7 +37,7 @@
 
 .table input[type='text'],
 input[type='number'] {
-  width: 7vw;
+  width: 8vw;
   font-size: 16px;
   border: none;
   border-bottom: 1px solid #ccc;

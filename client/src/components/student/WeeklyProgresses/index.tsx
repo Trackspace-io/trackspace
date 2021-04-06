@@ -9,7 +9,7 @@ interface RouteParams {
   id: string;
 }
 
-const Weekly: React.FC = () => {
+const WeeklyProgresses: React.FC = () => {
   // Retrieve id
   const { id } = useParams<RouteParams>();
 
@@ -24,4 +24,4 @@ const Weekly: React.FC = () => {
     </div>
   );
 };
-export default Weekly;
+export default WeeklyProgresses;

@@ -19,10 +19,8 @@ const ProgressItem: React.FC<IProgressItemProps> = ({ weekNumber, week }) => {
     <div>
       {dates && days && (
         <div className={style['progress-header']}>
-          <Typography variant="info">{`Week ${weekNumber}`}</Typography>
-          <Typography variant="caption" weight="bold">
-            {`${dateString(dates[0])} - ${dateString(dates[1])}`}
-          </Typography>
+          <Typography variant="subtitle">{`Week ${weekNumber}`}</Typography>
+          <Typography variant="subtitle1">{`${dateString(dates[0])} - ${dateString(dates[1])}`}</Typography>
           {days.map((day) => (
             <Typography key={day} variant="caption" display="inline">{` ${day.slice(0, 3)} `}</Typography>
           ))}

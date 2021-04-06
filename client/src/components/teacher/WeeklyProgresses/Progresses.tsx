@@ -1,10 +1,10 @@
 import ProgressItem from 'components/common/ProgressItem/ProgressItem';
 import Button from 'components/gui/Button';
-import Graph from 'components/student/Weekly/Graph';
 import { useClassroomsAsTeacher } from 'controllers';
 import React from 'react';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
+import ProgressGraph from './ProgressGraph';
 import style from './WeeklyProgresses.module.css';
 
 interface IProgressesProps {
@@ -47,12 +47,10 @@ const Progresses: React.FC<IProgressesProps> = ({ classroomId, studentId }) => {
   };
 
   return (
-    <React.Fragment>
+    <div className={style['progresses-container']}>
       {studentId && (
-        <div>
-          <div className={style['graph-container']}>
-            <Graph studentId={studentId} termId={String(terms.currentTerm?.id)} />
-          </div>
+        <React.Fragment>
+          <ProgressGraph studentId={studentId} termId={String(terms.currentTerm?.id)} />
           <div className={style['progresses']}>
             <Button variant="secondary" onClick={handlePrevious} disabled={weekNumber === 1}>
               <FiChevronLeft />
@@ -65,9 +63,9 @@ const Progresses: React.FC<IProgressesProps> = ({ classroomId, studentId }) => {
               <FiChevronRight />
             </Button>
           </div>
-        </div>
+        </React.Fragment>
       )}
-    </React.Fragment>
+    </div>
   );
 };
 
