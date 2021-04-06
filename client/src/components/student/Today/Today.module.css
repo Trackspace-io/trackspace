@@ -1,0 +1,53 @@
+.container {
+  box-sizing: border-box;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0;
+}
+
+.helper svg {
+  transform: scale(1.5);
+  cursor: pointer;
+  margin: 8px 16px;
+}
+
+.body {
+  display: flex;
+  justify-content: center;
+  margin: 56px 0;
+}
+
+.table {
+  border: 1px solid #ccc;
+  border-radius: 16px;
+  padding: 32px;
+}
+
+.table thead th {
+  padding: 8px 16px;
+}
+
+.table tbody td {
+  padding: 8px 16px;
+}
+
+.table input[type='text'],
+input[type='number'] {
+  width: 8vw;
+  font-size: 16px;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  border-radius: 0px;
+  text-align: center;
+  -webkit-appearance: none;
+  margin: 0;
+  -moz-appearance: textfield;
+}
+
+.table tbody {
+  vertical-align: center;
+}

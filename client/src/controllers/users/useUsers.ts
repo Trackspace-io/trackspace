@@ -21,7 +21,7 @@ const useUsers = () => {
   const { users } = state;
 
   // List of actions
-  const { setUser } = actions;
+  const { setUser, setCurrentUser } = actions;
 
   // List of thunks
 
@@ -47,6 +47,22 @@ const useUsers = () => {
       });
   };
 
+  const getCurrent = () => {
+    UserAPI.getCurrent()
+      .then((response) => {
+        const { data } = response;
+
+        dispatch(setCurrentUser(data));
+      })
+      .catch((e) => {
+        const { data } = e.response;
+
+        Messages.add({
+          type: 'error',
+          text: `${data}`,
+        });
+      });
+  };
   /**
    * Update the user's information
    *
@@ -97,10 +113,10 @@ const useUsers = () => {
   };
 
   React.useEffect(() => {
-    users.isLogged && get();
-  }, [users.isLogged]);
+    getCurrent();
+  }, []);
 
-  return { ...users, update, authCheck };
+  return { ...users, update, getCurrent, authCheck };
 };
 
 export default useUsers;

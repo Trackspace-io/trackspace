@@ -1,5 +1,7 @@
 // User interface
 export interface IUser {
+  loggedIn: boolean;
+  id: string;
   email: string;
   firstName: string;
   lastName: string;

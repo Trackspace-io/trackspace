@@ -22,6 +22,7 @@ interface IButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   fullWidth?: boolean;
   type?: 'submit' | 'reset' | 'button';
   align?: 'start' | 'center' | 'end';
+  disabled?: boolean;
   onClick?: () => void;
 }
 
@@ -31,6 +32,7 @@ const Button: React.FC<IButtonProps> = ({
   type = 'submit',
   align = 'start',
   fullWidth = false,
+  disabled = false,
   onClick,
 }) => {
   return (
@@ -38,6 +40,7 @@ const Button: React.FC<IButtonProps> = ({
       <button
         className={cx(style[variant], style['button'], style[`fullWidth-${fullWidth}`])}
         type={type}
+        disabled={disabled}
         onClick={onClick}>
         {children}
       </button>

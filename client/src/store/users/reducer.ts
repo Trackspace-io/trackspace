@@ -5,6 +5,8 @@ import { USERS, IUserState, IUserAction } from './types';
  */
 export const initialState = {
   current: {
+    loggedIn: false,
+    id: '',
     email: '',
     firstName: '',
     lastName: '',

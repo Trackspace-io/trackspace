@@ -1,9 +1,10 @@
 import { TermsAPI } from 'api';
 import { useMessages } from 'controllers';
+import moment from 'moment';
 import * as React from 'react';
 import { useGlobalStore } from 'store';
 import termsReducer from 'store/terms';
-import { ITermCreate, ITermModify, ITermRemove } from 'store/terms/types';
+import { ITerm, ITermCreate, ITermGetByDate, ITermGetById, ITermModify, ITermRemove } from 'store/terms/types';
 
 const { actions } = termsReducer;
 
@@ -20,14 +21,14 @@ const useTerms = (classroomId?: string) => {
   const { terms } = state;
 
   // List of actions
-  const { setTerms } = actions;
+  const { setTerms, setCurrentTerm } = actions;
 
   // List of thunks
 
   /**
-   * Get the list of subjects of a classroom.
+   * Get the list of terms of a classroom.
    *
-   * @param   {string} id The id of the classroom.
+   * @param   {string} classroomId  The id of the classroom.
    *
    * @returns void
    */
@@ -49,13 +50,68 @@ const useTerms = (classroomId?: string) => {
   };
 
   /**
+   * Get the term by its id.
+   *
+   * @param {String} payload.id           The identifier of the term.
+   * @param {String} payload.classroomId  The identifier of the term.
+   *
+   * @returns Promise
+   */
+  const getById = (payload: ITermGetById): Promise<any> => {
+    return new Promise((resolve) => {
+      TermsAPI.getById(payload)
+        .then((response) => {
+          const { data } = response;
+
+          dispatch(setCurrentTerm(data));
+          resolve(data);
+        })
+        .catch((e) => {
+          const { msg } = e.response.data.errors[0];
+
+          Messages.add({
+            type: 'error',
+            text: `${msg}`,
+          });
+        });
+    });
+  };
+
+  /**
+   * Get the term by its id.
+   *
+   * @param {String}  payload.classroomId The identifier of the classroom.
+   * @param {Date}    payload.date        The identifier of the term.
+   *
+   * @returns Promise
+   */
+  const getByDate = (payload: ITermGetByDate): Promise<any> => {
+    return new Promise((resolve) => {
+      TermsAPI.getByDate(payload)
+        .then((response) => {
+          const { data } = response;
+
+          resolve(data);
+        })
+        .catch((e) => {
+          const { msg } = e.response.data.errors[0];
+
+          Messages.add({
+            type: 'error',
+            text: `${msg}`,
+          });
+        });
+    });
+  };
+
+  /**
    * Creates a new term for the classroom.
    *
-   * @param   {Date}      term.start        Start date of the term.
-   * @param   {Date}      term.end          End date of the term.
-   * @param   {string[]}  term.days         List of allowed days of the week in lower-case
+   * @param   {Date}      payload.start        Start date of the term.
+   * @param   {Date}      payload.end          End date of the term.
+   * @param   {string[]}  payload.days         List of allowed days of the week in lower-case
    *                                        (e.g. sunday, monday, etc.).
-   * @param   {string}    term.classroomID  End date of the term.
+   * @param   {string}    payload.classroomID  End date of the term.
    *
    * @returns Promise
    */
@@ -99,11 +155,11 @@ const useTerms = (classroomId?: string) => {
    *
    * @returns Promise
    */
-  const modify = (payload: ITermModify): Promise<any> => {
-    const { classroomId } = payload;
+  const modify = (term: ITermModify): Promise<any> => {
+    const { classroomId } = term;
 
     return new Promise((resolve) => {
-      TermsAPI.update(payload)
+      TermsAPI.update(term)
         .then((response) => {
           const { data } = response;
 
@@ -135,11 +191,11 @@ const useTerms = (classroomId?: string) => {
    *
    * @returns Promise
    */
-  const remove = (payload: ITermRemove): Promise<any> => {
-    const { classroomId } = payload;
+  const remove = (term: ITermRemove): Promise<any> => {
+    const { classroomId } = term;
 
     return new Promise((resolve) => {
-      TermsAPI.remove(payload)
+      TermsAPI.remove(term)
         .then((response) => {
           const { data } = response;
 
@@ -163,17 +219,45 @@ const useTerms = (classroomId?: string) => {
     });
   };
 
+  /**
+   * Get current term
+   *
+   * @return void
+   */
+  const getCurrentTerm = () => {
+    const today = moment().add(1, 'days').format('YYYY-MM-DD');
+
+    getByDate({
+      classroomId: String(classroomId),
+      date: today,
+    }).then((data) => {
+      dispatch(setCurrentTerm(data));
+    });
+  };
+
+  const setSelectedTerm = (payload: ITerm) => {
+    dispatch(actions.setSelectedTerm(payload));
+  };
+
   React.useEffect(() => {
     classroomId && get(classroomId);
+  }, [classroomId]);
+
+  React.useEffect(() => {
+    classroomId && getCurrentTerm();
   }, [classroomId]);
 
   return {
     ...terms,
 
     get,
+    getById,
+    getByDate,
     create,
     modify,
     remove,
+
+    setSelectedTerm,
   };
 };
 

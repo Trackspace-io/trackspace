@@ -9,7 +9,7 @@
 
 .sidebar {
   flex: none;
-  align-self: center;
+  align-self: flex-start;
   min-height: 100vh;
   box-sizing: border-box;
   margin: 0 8px;
@@ -35,7 +35,7 @@
   width: 48px;
   height: 48px;
   border: 1px solid #bbb;
-  border-radius: 2% 35%;
+  border-radius: 16px;
   margin: 24px 0;
   text-decoration: none;
   color: var(--black);
@@ -64,7 +64,7 @@
 .main {
   display: flex;
   flex-direction: row;
-  flex: 1;
+  flex: 1 1 0;
   margin: 16px 16px 16px 0;
   border-radius: 16px;
   background: var(--white);
@@ -73,7 +73,7 @@
 
 .content {
   flex: 2 1 auto;
-  padding: 48px 64px 48px 48px;
+  padding: 56px 48px;
   border-radius: 16px;
   background: #fafafa;
 }
@@ -81,4 +81,5 @@
 .menu {
   flex: 0 0 300px;
   padding: 32px;
+  margin-top: 24px;
 }

@@ -1,0 +1,49 @@
+.container {
+  box-sizing: border-box;
+  min-height: 100vh;
+}
+
+.header {
+  position: relative;
+}
+
+.body {
+  margin: 32px 0;
+}
+
+.terms-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.terms-dropdown {
+  position: relative;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 8px;
+  margin-bottom: 24px;
+}
+
+.graph-container {
+  position: relative;
+}
+
+.progresses-container {
+}
+
+.progresses {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  padding: 36px 0px;
+}
+
+.progresses svg {
+  margin: 24px 8px 0;
+  padding: 8px;
+  transform: scale(1.5);
+  cursor: pointer;
+}

@@ -1,5 +1,7 @@
-import useClassrooms from './classrooms/useClassrooms';
+import useClassroomsAsStudent from './classrooms/useClassroomsAsStudent';
+import useClassroomsAsTeacher from './classrooms/useClassroomsAsTeacher';
 import useInvitations from './invitations/useInvitations';
+import useMenu from './menu/useMenu';
 import useMessages from './messages/useMessages';
 import useStudents from './students/useStudents';
 import useSubjects from './subjects/useSubjects';
@@ -7,4 +9,15 @@ import useTeachers from './teachers/useTeachers';
 import useAuths from './users/useAuths';
 import useUsers from './users/useUsers';
 
-export { useAuths, useUsers, useMessages, useStudents, useTeachers, useClassrooms, useSubjects, useInvitations };
+export {
+  useAuths,
+  useUsers,
+  useClassroomsAsTeacher,
+  useClassroomsAsStudent,
+  useMessages,
+  useStudents,
+  useTeachers,
+  useSubjects,
+  useInvitations,
+  useMenu,
+};

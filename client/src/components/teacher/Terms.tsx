@@ -5,7 +5,7 @@ import Form from 'components/gui/Form';
 import { Input, useInput } from 'components/gui/Input';
 import Modal from 'components/gui/Modal';
 import Typography from 'components/gui/Typography';
-import { useClassrooms } from 'controllers';
+import { useClassroomsAsTeacher } from 'controllers';
 import * as React from 'react';
 import { FiEdit2, FiTrash } from 'react-icons/fi';
 import { useParams } from 'react-router-dom';
@@ -22,7 +22,7 @@ const Terms: React.FC = () => {
   const { id } = useParams<RouteParams>();
 
   // Controllers
-  const Classrooms = useClassrooms(id);
+  const Classrooms = useClassroomsAsTeacher(id);
 
   const {
     current: { terms },

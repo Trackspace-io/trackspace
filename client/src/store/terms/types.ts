@@ -7,6 +7,7 @@ export interface ITerm {
   end: Date;
   days: string[];
   classroomId: string;
+  numberOfWeeks?: number;
 }
 
 /**
@@ -15,6 +16,8 @@ export interface ITerm {
 export interface ITermState {
   // Subjects list
   list: ITerm[];
+  currentTerm: ITerm | null;
+  selectedTerm: ITerm | null;
 }
 
 /**
@@ -22,12 +25,30 @@ export interface ITermState {
  */
 export enum TERMS {
   SET_TERMS = 'SET_TERMS',
+  SET_CURRENT_TERM = 'SET_CURRENT_TERM',
+  SET_SELECTED_TERM = 'SET_SELECTED_TERM',
 }
 
 /**
  * Reducer's dispatchers interface
  */
-export type ITermActions = { type: TERMS.SET_TERMS; payload: ITerm[] };
+export type ITermActions =
+  | { type: TERMS.SET_TERMS; payload: ITerm[] }
+  | { type: TERMS.SET_CURRENT_TERM; payload: ITerm }
+  | { type: TERMS.SET_SELECTED_TERM; payload: ITerm };
+
+/**
+ * Get term by id interface
+ */
+export type ITermGetById = Pick<ITerm, 'id' | 'classroomId'>;
+
+/**
+ * Get term by date interface
+ */
+export interface ITermGetByDate {
+  classroomId: string;
+  date: string;
+}
 
 /**
  * Create term interface

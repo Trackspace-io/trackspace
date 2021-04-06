@@ -46,3 +46,7 @@
 .error {
   background: #ff6969;
 }
+
+.warning {
+  background: rgb(251, 183, 94);
+}

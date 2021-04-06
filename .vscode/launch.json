@@ -2,11 +2,18 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Launch Chrome",
+      "request": "launch",
+      "type": "pwa-chrome",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}/client/src"
+    },
+    {
       "type": "pwa-node",
       "request": "attach",
       "name": "Server",
       "processId": "${command:PickProcess}",
       "restart": true
-    }
+    },
   ]
 }

@@ -1,0 +1,55 @@
+.container {
+  box-sizing: border-box;
+}
+
+.header {
+  padding: 0 32px;
+}
+
+.body {
+  display: flex;
+  flex-direction: row;
+}
+
+.sidebar {
+  flex: 0;
+  margin: 32px 0;
+}
+
+.content {
+  flex: 1;
+  padding: 32px 0;
+}
+
+.classrooms-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.classrooms-list {
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.classroom-item {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #ddd;
+  padding: 16px;
+}
+
+.classroom-item a {
+  text-decoration: none;
+  color: var(--black);
+  outline: none;
+}
+
+.classroom-item:hover {
+  box-shadow: 0 1px 5px #ccc;
+}
+
+.classroom-item:last-child {
+  border: none;
+}

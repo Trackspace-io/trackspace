@@ -74,6 +74,24 @@ export const get = async (): Promise<any> => {
 };
 
 /**
+ * Get the current user information
+ *
+ * @method GET
+ *
+ * @returns {Promise<{
+ *  firstName: string,
+ *  lastName: string,
+ *  email: string,
+ *  role: string
+ * }>} data.
+ */
+export const getCurrent = async (): Promise<any> => {
+  const response = await axios.get(`${_apiUrl}/api/users/current`, { withCredentials: true });
+
+  return response;
+};
+
+/**
  * Update the profile of a user
  *
  * @method  PUT
@@ -120,6 +138,6 @@ export const sendResetPassword = async (body: IUserSendResetPassword): Promise<a
  */
 export const confirmResetPassword = async (body: IUserConfirmResetPassword): Promise<any> => {
   const response = await axios.post(`${_apiUrl}/api/users/reset/confirm`, body, { withCredentials: true });
-  console.log('response', response);
+
   return response;
 };

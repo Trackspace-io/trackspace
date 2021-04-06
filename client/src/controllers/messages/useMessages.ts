@@ -18,6 +18,7 @@ const useMessages = () => {
   const { addMessage, closeMessage } = actions;
 
   // List of thunks
+
   /**
    * Update the list of messages
    *

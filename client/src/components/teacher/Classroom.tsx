@@ -3,7 +3,7 @@ import { Input, useInput } from 'components/gui/Input';
 import Modal from 'components/gui/Modal';
 import { Sidebar, SidebarItem } from 'components/gui/Sidebar';
 import Typography from 'components/gui/Typography';
-import { useClassrooms, useTeachers } from 'controllers';
+import { useClassroomsAsTeacher, useTeachers } from 'controllers';
 import * as React from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { FcCheckmark, FcCollaboration, FcComboChart, FcOvertime, FcTimeline } from 'react-icons/fc';
@@ -14,6 +14,7 @@ import style from '../../styles/teacher/Classroom.module.css';
 import Students from './Students';
 import Subjects from './Subjects';
 import Terms from './Terms';
+import WeeklyProgresses from './WeeklyProgresses';
 
 interface RouteParams {
   id: string;
@@ -24,7 +25,7 @@ const Classroom: React.FC = () => {
   const { id } = useParams<RouteParams>();
 
   // Controllers
-  const Classrooms = useClassrooms(id);
+  const Classrooms = useClassroomsAsTeacher(id);
 
   // Internal state
   const [shareModal, setShareModal] = React.useState(false);
@@ -53,7 +54,7 @@ const Classroom: React.FC = () => {
             <SidebarItem to={`/teacher/classrooms/${id}/goals`} icon={<FcCheckmark />}>
               Goals
             </SidebarItem>
-            <SidebarItem to={`/teacher/classrooms/${id}/progress`} icon={<FcComboChart />}>
+            <SidebarItem to={`/teacher/classrooms/${id}/progresses`} icon={<FcComboChart />}>
               Progress
             </SidebarItem>
           </Sidebar>
@@ -66,6 +67,7 @@ const Classroom: React.FC = () => {
             <Route path="/teacher/classrooms/:id/students" component={Students} />
             <Route path="/teacher/classrooms/:id/subjects" component={Subjects} />
             <Route path="/teacher/classrooms/:id/terms" component={Terms} />
+            <Route path="/teacher/classrooms/:id/progresses" component={WeeklyProgresses} />
           </Switch>
         </div>
       </div>
