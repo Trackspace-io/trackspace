@@ -7,6 +7,7 @@ import { shortLinkSchema } from "./ShortLink";
 import { subjectAssociations, subjectSchema } from "./Subject";
 import { termAssociations, termSchema } from "./Term";
 import { userAssociations, userSchema } from "./User";
+import { userRelationAssociations, userRelationSchema } from "./UserRelation";
 
 export function registerModels(sequelize: Sequelize): void {
   // Register the schemas.
@@ -18,6 +19,7 @@ export function registerModels(sequelize: Sequelize): void {
   subjectSchema(sequelize);
   termSchema(sequelize);
   userSchema(sequelize);
+  userRelationSchema(sequelize);
 
   // Initialize the associations.
   classroomAssociations();
@@ -27,4 +29,5 @@ export function registerModels(sequelize: Sequelize): void {
   subjectAssociations();
   termAssociations();
   userAssociations();
+  userRelationAssociations();
 }

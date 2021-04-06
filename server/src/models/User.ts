@@ -10,6 +10,7 @@ import {
 import Server from "../Server";
 import { Classroom, IClassroomInvitation } from "./Classroom";
 import { Notification } from "./Notification";
+import { UserRelation } from "./UserRelation";
 
 export interface IResetPasswordToken {
   userId: string;
@@ -159,6 +160,50 @@ export class User extends Model {
     }
 
     return [];
+  }
+
+  /**
+   * Adds a related user.
+   *
+   * @param user The related user.
+   *
+   * @returns The relation or null if the user wasn't added.
+   */
+  public async addRelatedUser(user: User): Promise<UserRelation> {
+    return !UserRelation.areRelated(this, user)
+      ? await UserRelation.create({
+          User1Id: this.id,
+          User2Id: user.id,
+          confirmed: false,
+        })
+      : null;
+  }
+
+  /**
+   * Returns the list of related users.
+   *
+   * @param roles If not empty, only returns the related users with the given
+   *              roles.
+   *
+   * @returns List of related users.
+   */
+  public async getRelatedUsers(
+    roles: ("teacher" | "student" | "parent")[] = []
+  ): Promise<[User, boolean][]> {
+    return await UserRelation.findRelatedUsers(this, false, roles);
+  }
+
+  /**
+   * Confirms the relation with a user.
+   *
+   * @param user Related user.
+   */
+  public async confirmRelationWith(user: User): Promise<void> {
+    const relation = await UserRelation.findByUsers(this, user);
+    if (!relation) return;
+
+    relation.setDataValue("confirmed", true);
+    await relation.save();
   }
 
   /**
