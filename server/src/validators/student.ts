@@ -66,7 +66,7 @@ export default (): IStudentValidator => {
         case "parent": {
           const children = await sender.getRelatedUsers(["student"]);
           const isParent = children.find(
-            ({ user, confirmed }) => confirmed && user.id === student.id
+            ([user, relation]) => relation.confirmed && user.id === student.id
           );
 
           if (isParent) return next();

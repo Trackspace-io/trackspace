@@ -214,6 +214,14 @@ students.get(
   }
 );
 
+/**
+ * Get the list of parents of a student.
+ *
+ * @method  GET
+ * @url     /users/students/:id/parents
+ *
+ * @returns 200, 401, 500
+ */
 students.get(
   "/:studentId/parents/",
   user().isA(["teacher", "student", "parent"]),
@@ -223,15 +231,20 @@ students.get(
     try {
       const parents = await req.student.getRelatedUsers(["parent"]);
       return res.status(200).json(
-        parents.map(({ user, confirmed, createdAt }) => {
+        parents.map(([user, relation]) => {
+          const pendingDate = relation.pendingSince;
+          const isConfirmed = relation.confirmed;
+          const isInitiator = req.student.id === relation.user1Id;
+
           return {
             id: user.id,
             email: user.email,
             firstName: user.firstName,
             lastName: user.lastName,
-            invitationPendingSince: !confirmed
-              ? date.format(createdAt, "YYYY-MM-DD")
+            invitationPendingSince: pendingDate
+              ? date.format(pendingDate, "YYYY-MM-DD")
               : null,
+            mustConfirm: !isConfirmed && !isInitiator,
           };
         })
       );

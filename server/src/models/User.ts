@@ -192,7 +192,7 @@ export class User extends Model {
    */
   public async getRelatedUsers(
     roles: ("teacher" | "student" | "parent")[] = []
-  ): Promise<{ user: User; confirmed: boolean; createdAt: Date }[]> {
+  ): Promise<[User, UserRelation][]> {
     return await UserRelation.findRelatedUsers(this, false, roles);
   }
 

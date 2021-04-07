@@ -8,11 +8,13 @@ import passport from "passport";
 import teachers from "./teachers";
 import user from "../validators/user";
 import students from "./students";
+import parents from "./parents";
 
 const users = Router();
 
 users.use("/teachers", teachers);
 users.use("/students", students);
+users.use("/parents", parents);
 
 /**
  * Get the current user.

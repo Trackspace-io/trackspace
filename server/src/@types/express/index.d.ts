@@ -8,6 +8,7 @@ declare global {
       classroom: Classroom;
       term: Term;
       student: TrackspaceUser;
+      parent: TrackspaceUser;
     }
   }
 }
