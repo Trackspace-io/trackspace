@@ -7,6 +7,7 @@ import {
   Model,
   Sequelize,
 } from "sequelize";
+import shortid from "shortid";
 import Server from "../Server";
 import { Classroom, IClassroomInvitation } from "./Classroom";
 import { Notification } from "./Notification";
@@ -170,13 +171,15 @@ export class User extends Model {
    * @returns The relation or null if the user wasn't added.
    */
   public async addRelatedUser(user: User): Promise<UserRelation> {
-    return !UserRelation.areRelated(this, user)
-      ? await UserRelation.create({
-          User1Id: this.id,
-          User2Id: user.id,
-          confirmed: false,
-        })
-      : null;
+    const isRelated = await UserRelation.areRelated(this, user);
+    if (isRelated) return null;
+
+    await UserRelation.create({
+      id: shortid.generate(),
+      User1Id: this.id,
+      User2Id: user.id,
+      confirmed: false,
+    });
   }
 
   /**
@@ -189,7 +192,7 @@ export class User extends Model {
    */
   public async getRelatedUsers(
     roles: ("teacher" | "student" | "parent")[] = []
-  ): Promise<[User, boolean][]> {
+  ): Promise<{ user: User; confirmed: boolean; createdAt: Date }[]> {
     return await UserRelation.findRelatedUsers(this, false, roles);
   }
 

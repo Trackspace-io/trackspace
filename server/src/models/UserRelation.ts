@@ -58,14 +58,14 @@ export class UserRelation extends Model {
     user: User,
     confirmedOnly = false,
     roles: ("teacher" | "student" | "parent")[] = []
-  ): Promise<[User, boolean][]> {
+  ): Promise<{ user: User; confirmed: boolean; createdAt: Date }[]> {
     // Find the relations.
     const relations = await this.findAll({
       where: { [Op.or]: [{ User1Id: user.id }, { User2Id: user.id }] },
     });
 
     // Build the result.
-    const result: [User, boolean][] = [];
+    const result: { user: User; confirmed: boolean; createdAt: Date }[] = [];
     for (let i = 0; i < relations.length; i++) {
       if (confirmedOnly && !relations[i].confirmed) {
         continue;
@@ -77,17 +77,18 @@ export class UserRelation extends Model {
           : await relations[i].getUser2();
 
       if (roles.length == 0 || roles.includes(relatedUser.role)) {
-        result.push([relatedUser, relations[i].confirmed]);
+        result.push({
+          user: relatedUser,
+          confirmed: relations[i].confirmed,
+          createdAt: relations[i].getDataValue("createdAt"),
+        });
       }
     }
 
     // Sort related users by name.
     return result.sort((a, b) => {
-      const [user1] = a;
-      const [user2] = b;
-
-      if (user1.lastName < user2.lastName) return -1;
-      return user1.firstName < user2.firstName ? -1 : 1;
+      if (a.user.lastName < b.user.lastName) return -1;
+      return a.user.firstName < b.user.firstName ? -1 : 1;
     });
   }
 

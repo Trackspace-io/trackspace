@@ -3,6 +3,11 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('UserRelation', {
+      id: {
+        type: Sequelize.DataTypes.STRING,
+        primaryKey: true,
+        allowNull: false,
+      },
       User1Id: {
         type: Sequelize.DataTypes.STRING,
         references: {

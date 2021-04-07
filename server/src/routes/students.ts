@@ -1,6 +1,7 @@
 import { Request, Response, Router } from "express";
 import { body, query, validationResult } from "express-validator";
 import bcrypt from "bcrypt";
+import date from "date-and-time";
 import jwt from "jsonwebtoken";
 import passport from "passport";
 import shortid from "shortid";
@@ -8,6 +9,7 @@ import { User } from "../models/User";
 import user from "../validators/user";
 import { IClassroomInvitation } from "../models/Classroom";
 import { Classroom } from "../models/Classroom";
+import student from "../validators/student";
 
 const students = Router();
 
@@ -206,6 +208,85 @@ students.get(
           return { id: classroom.id, name: classroom.name };
         })
       );
+    } catch (e) {
+      return res.sendStatus(500);
+    }
+  }
+);
+
+students.get(
+  "/:studentId/parents/",
+  user().isA(["teacher", "student", "parent"]),
+  student().senderIsAuthorized(),
+
+  async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const parents = await req.student.getRelatedUsers(["parent"]);
+      return res.status(200).json(
+        parents.map(({ user, confirmed, createdAt }) => {
+          return {
+            id: user.id,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            invitationPendingSince: !confirmed
+              ? date.format(createdAt, "YYYY-MM-DD")
+              : null,
+          };
+        })
+      );
+    } catch (e) {
+      return res.sendStatus(500);
+    }
+  }
+);
+
+/**
+ * Add a parent to the student.
+ *
+ * @method  POST
+ * @url     /users/students/:id/parent/add
+ *
+ * @param req.email {string} The parent's email address.
+ *
+ * @returns 200, 500
+ */
+students.post(
+  "/:studentId/parents/add",
+  user().isA("student"),
+  student().senderIsAuthorized(),
+
+  body("email")
+    .not()
+    .isEmpty()
+    .isEmail()
+    .custom(async (value) => {
+      if (!value) return true;
+
+      const user = await User.findByEmail(value);
+      if (!user) {
+        return Promise.reject("No account with this email address was found.");
+      }
+
+      return user.role !== "parent"
+        ? Promise.reject(
+            "An student or teacher account is already associated with this " +
+              "email address."
+          )
+        : true;
+    }),
+
+  async (req: Request, res: Response): Promise<Response> => {
+    // Check if the request is valid.
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const parent = await User.findByEmail(req.body.email);
+      await req.student.addRelatedUser(parent);
+      return res.sendStatus(200);
     } catch (e) {
       return res.sendStatus(500);
     }
