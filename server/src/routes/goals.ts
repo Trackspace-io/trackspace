@@ -144,7 +144,7 @@ goals.get(
 
           // Get the list of weeks between this week and the next for which a
           // goal was set.
-          let nextGoalWeek = goalWeekNb;
+          let nextGoalWeek = req.term.numberOfWeeks + 1;
           if (i < nbGoals - 1) nextGoalWeek = goals[i + 1].weekNumber;
 
           const nextWeeks = [];
@@ -154,7 +154,7 @@ goals.get(
 
           // Get the list of weeks between this week and the previous for which
           // a goal was set.
-          let prevGoalWeek = goalWeekNb;
+          let prevGoalWeek = 0;
           if (i > 0) prevGoalWeek = goals[i - 1].weekNumber;
 
           const prevWeeks = [];
