@@ -1,5 +1,5 @@
 import { ClassroomAPI } from 'api';
-import { useMessages, useStudents, useTeachers, useSubjects } from 'controllers';
+import { useMessages, useStudents, useTeachers, useSubjects, useGoals } from 'controllers';
 import useProgresses from 'controllers/progresses/useProgresses';
 import useTerms from 'controllers/terms/useTerms';
 import * as React from 'react';
@@ -24,6 +24,7 @@ const useClassrooms = (classroomId?: string) => {
   const Subjects = useSubjects(classroomId);
   const Terms = useTerms(classroomId);
   const Progresses = useProgresses(classroomId);
+  const Goals = useGoals();
 
   // List of states
   const { classrooms } = state;
@@ -170,6 +171,7 @@ const useClassrooms = (classroomId?: string) => {
       terms: Terms,
       students: students,
       progresses: Progresses,
+      goals: Goals,
     },
 
     create,

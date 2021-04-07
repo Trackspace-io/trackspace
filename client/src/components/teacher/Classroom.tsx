@@ -11,6 +11,7 @@ import { FiShare2 } from 'react-icons/fi';
 import { Redirect, Route, Switch, useParams } from 'react-router-dom';
 
 import style from '../../styles/teacher/Classroom.module.css';
+import Goals from './Goals';
 import Students from './Students';
 import Subjects from './Subjects';
 import Terms from './Terms';
@@ -67,6 +68,7 @@ const Classroom: React.FC = () => {
             <Route path="/teacher/classrooms/:id/students" component={Students} />
             <Route path="/teacher/classrooms/:id/subjects" component={Subjects} />
             <Route path="/teacher/classrooms/:id/terms" component={Terms} />
+            <Route path="/teacher/classrooms/:id/goals" component={Goals} />
             <Route path="/teacher/classrooms/:id/progresses" component={WeeklyProgresses} />
           </Switch>
         </div>

@@ -8,6 +8,7 @@ import useSubjects from './subjects/useSubjects';
 import useTeachers from './teachers/useTeachers';
 import useAuths from './users/useAuths';
 import useUsers from './users/useUsers';
+import useGoals from './goals/useGoals';
 
 export {
   useAuths,
@@ -20,4 +21,5 @@ export {
   useSubjects,
   useInvitations,
   useMenu,
+  useGoals,
 };

@@ -1,3 +1,33 @@
+/**
+ * Goal interface
+ */
+export interface IGoal {
+  nextWeeks: [];
+  prevWeeks: [];
+  pages: number;
+  weekNumber: 1;
+}
+
+/**
+ * Reducer's state interface
+ */
+export interface IGoalState {
+  // List of goals
+  list: IGoal[];
+}
+
+/**
+ * Actions' type
+ */
+export enum GOALS {
+  SET_GOALS = 'SET_GOALS',
+}
+
+/**
+ * Reducer's dispatchers interface
+ */
+export type IGoalActions = { type: GOALS.SET_GOALS; payload: IGoal[] };
+
 export interface IGoalGet {
   classroomId: string;
   termId: string;

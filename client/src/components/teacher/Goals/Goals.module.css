@@ -1,0 +1,46 @@
+.goal-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.goal-item {
+  position: relative;
+  text-align: center;
+  padding: 24px;
+  margin: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  width: 120px;
+}
+
+.action {
+  background: #fff;
+  padding: 5px 8px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  visibility: hidden;
+  transform: scale(1.1);
+}
+
+.goal-item:hover .action {
+  cursor: pointer;
+  visibility: visible;
+}
+
+.terms-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 24px;
+}
+
+.terms-dropdown {
+  position: relative;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 8px;
+  margin-bottom: 24px;
+}
