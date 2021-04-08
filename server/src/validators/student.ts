@@ -20,6 +20,8 @@ export default (): IStudentValidator => {
 
   validator.exists = () => {
     validator._add(async (req, res, next) => {
+      if (req.student) return next();
+
       const student = await User.findById(req.params.studentId);
       if (!student || student.role !== "student") {
         return res.sendStatus(404);

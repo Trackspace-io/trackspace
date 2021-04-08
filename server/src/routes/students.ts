@@ -337,4 +337,34 @@ students.post(
   }
 );
 
+/**
+ * Remove a parent.
+ *
+ * @method DELETE
+ * @url    /users/students/:id/parents/:id/remove
+ *
+ * @returns 200, 400, 401, 404, 500
+ */
+students.delete(
+  "/:studentId/parents/:parentId/remove",
+  user().isA("student"),
+  student().senderIsAuthorized(),
+
+  student().exists(),
+  parent().exists(),
+
+  async (req: Request, res: Response): Promise<Response> => {
+    try {
+      // There must be a relation between the parent and the student.
+      const areRelated = await UserRelation.areRelated(req.parent, req.student);
+      if (!areRelated) return res.sendStatus(404);
+
+      const success = await req.student.removeRelatedUser(req.parent);
+      return res.sendStatus(success ? 200 : 400);
+    } catch (e) {
+      return res.sendStatus(500);
+    }
+  }
+);
+
 export default students;

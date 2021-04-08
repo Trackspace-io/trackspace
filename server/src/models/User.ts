@@ -174,12 +174,25 @@ export class User extends Model {
     const isRelated = await UserRelation.areRelated(this, user);
     if (isRelated) return null;
 
-    await UserRelation.create({
+    return await UserRelation.create({
       id: shortid.generate(),
       User1Id: this.id,
       User2Id: user.id,
       confirmed: false,
     });
+  }
+
+  /**
+   * Removes a related user. Does not work if the relation was confirmed.
+   *
+   * @param user The related user.
+   */
+  public async removeRelatedUser(user: User): Promise<boolean> {
+    const relation = await UserRelation.findByUsers(this, user);
+    if (!relation || relation.confirmed) return false;
+
+    await relation.destroy();
+    return true;
   }
 
   /**

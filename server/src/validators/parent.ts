@@ -14,6 +14,8 @@ export default (): IParentValidator => {
 
   validator.exists = () => {
     validator._add(async (req, res, next) => {
+      if (req.parent) return next();
+
       const parent = await User.findById(req.params.parentId);
       if (!parent || parent.role !== "parent") {
         return res.sendStatus(404);
