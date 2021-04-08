@@ -3,7 +3,7 @@ import Form from 'components/gui/Form';
 import { Input, useInput } from 'components/gui/Input';
 import Modal from 'components/gui/Modal';
 import Typography from 'components/gui/Typography';
-import { useClassrooms } from 'controllers';
+import { useClassroomsAsTeacher } from 'controllers';
 import * as React from 'react';
 import { FiTrash } from 'react-icons/fi';
 import { useParams } from 'react-router-dom';
@@ -19,7 +19,7 @@ interface RouteParams {
 const Students: React.FC = () => {
   const { id } = useParams<RouteParams>();
 
-  const Classrooms = useClassrooms(id);
+  const Classrooms = useClassroomsAsTeacher(id);
 
   const {
     current: { students },

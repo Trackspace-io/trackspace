@@ -1,8 +1,12 @@
 import classroomReducer from './classrooms';
 import { IClassroomState } from './classrooms/types';
+import invitationsReducer from './invitations';
+import { IInvitationState } from './invitations/types';
 import messagesReducer from './messages';
 import { IMessageState } from './messages/types';
 import { logger } from './middlewares';
+import progressesReducer from './progresses';
+import { IProgressState } from './progresses/types';
 import studentsReducer from './students';
 import { IStudentState } from './students/types';
 import subjectsReducer from './subjects';
@@ -13,8 +17,9 @@ import termsReducer from './terms';
 import { ITermState } from './terms/types';
 import usersReducer from './users';
 import { IUserState } from './users/types';
-import invitationsReducer from './invitations';
-import { IInvitationState } from './invitations/types';
+import menuReducer from './menu';
+import { IMenuState } from './menu/types';
+
 export interface IState {
   teachers: ITeacherState;
   students: IStudentState;
@@ -24,6 +29,8 @@ export interface IState {
   subjects: ISubjectState;
   terms: ITermState;
   invitations: IInvitationState;
+  progresses: IProgressState;
+  menu: IMenuState;
 }
 
 export const initialState: IState = {
@@ -35,11 +42,13 @@ export const initialState: IState = {
   subjects: subjectsReducer.initialState,
   terms: termsReducer.initialState,
   invitations: invitationsReducer.initialState,
+  progresses: progressesReducer.initialState,
+  menu: menuReducer.initialState,
 };
 
 const rootReducer = (state: IState, actions: any): IState => {
   // Receiving previous state here
-  const { users, teachers, students, messages, classrooms, subjects, terms, invitations } = state;
+  const { users, teachers, students, messages, classrooms, subjects, terms, invitations, progresses, menu } = state;
 
   // Receiving current state here
   const currentState = {
@@ -51,6 +60,8 @@ const rootReducer = (state: IState, actions: any): IState => {
     terms: termsReducer.reducer(terms, actions),
     subjects: subjectsReducer.reducer(subjects, actions),
     invitations: invitationsReducer.reducer(invitations, actions),
+    progresses: progressesReducer.reducer(progresses, actions),
+    menu: menuReducer.reducer(menu, actions),
   };
 
   // Middlewares

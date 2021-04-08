@@ -43,6 +43,7 @@ const useTeachers = () => {
       })
       .catch((e) => {
         const { data } = e.response;
+        console.log('getClassroom', data);
 
         Messages.add({
           type: 'error',
@@ -81,8 +82,8 @@ const useTeachers = () => {
   };
 
   React.useEffect(() => {
-    Users.isLogged && getClassrooms();
-  }, [Users.isLogged]);
+    Users.current.loggedIn && getClassrooms();
+  }, [Users.current.loggedIn]);
 
   return {
     ...teachers,

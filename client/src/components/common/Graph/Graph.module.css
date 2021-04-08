@@ -1,0 +1,19 @@
+.graph {
+  position: relative;
+  padding: 56px 16px 32px;
+  border-radius: 8px;
+  box-shadow: 0 1px 5px #ccc;
+}
+
+.toggle {
+  position: absolute;
+  top: 16px;
+  right: 24px;
+  z-index: 995;
+}
+
+.toggle svg {
+  transform: scale(1.6);
+  color: var(--blue-dark);
+  cursor: pointer;
+}

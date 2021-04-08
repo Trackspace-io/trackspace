@@ -70,6 +70,7 @@
   border: none;
   vertical-align: middle;
   transition: box-shadow 0.4s ease;
+  outline: none;
 }
 
 .trigger span {

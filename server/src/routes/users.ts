@@ -36,6 +36,7 @@ users.get(
     return res.status(200).json({
       id: req.user ? (<User>req.user).id : null,
       loggedIn: req.user ? true : false,
+      id: req.user? (<User>req.user).id : null,
       role: req.user ? (<User>req.user).role : null,
       firstName: req.user ? (<User>req.user).firstName : null,
       lastName: req.user ? (<User>req.user).lastName : null,

@@ -1,5 +1,6 @@
 import { ClassroomAPI } from 'api';
 import { useMessages, useStudents, useTeachers, useSubjects } from 'controllers';
+import useProgresses from 'controllers/progresses/useProgresses';
 import useTerms from 'controllers/terms/useTerms';
 import * as React from 'react';
 import { useGlobalStore } from 'store';
@@ -19,9 +20,10 @@ const useClassrooms = (classroomId?: string) => {
   const Messages = useMessages();
   const Teachers = useTeachers();
 
+  const Students = useStudents(classroomId);
   const Subjects = useSubjects(classroomId);
   const Terms = useTerms(classroomId);
-  const Students = useStudents(classroomId);
+  const Progresses = useProgresses(classroomId);
 
   // List of states
   const { classrooms } = state;
@@ -167,6 +169,7 @@ const useClassrooms = (classroomId?: string) => {
       subjects: Subjects,
       terms: Terms,
       students: students,
+      progresses: Progresses,
     },
 
     create,

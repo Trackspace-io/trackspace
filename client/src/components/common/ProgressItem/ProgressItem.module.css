@@ -1,0 +1,38 @@
+.progress-header {
+  text-align: center;
+}
+
+.progress-table {
+  margin: 16px 0;
+}
+
+.progress-table .subject {
+  margin: 32px 0;
+}
+
+.progress-table .body {
+  display: flex;
+  flex-direction: column;
+}
+
+.progress-table .row {
+  display: flex;
+}
+
+.progress-table .data {
+  width: 7vw;
+  padding: 2px;
+  text-align: center;
+  font-weight: 300;
+}
+
+.progress-table .data.title {
+  font-weight: 600;
+  margin: 16px auto 8px;
+}
+
+.progress-table .data.day {
+  text-transform: capitalize;
+  text-align: left;
+  font-weight: 600;
+}
