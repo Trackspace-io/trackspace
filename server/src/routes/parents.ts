@@ -115,16 +115,12 @@ parents.post(
   async (req: Request, res: Response): Promise<Response> => {
     // The sender must be the parent himself.
     const user = <User>req.user;
-    if (user.id !== req.parent.id) {
-      return res.sendStatus(401);
-    }
+    if (user.id !== req.parent.id) return res.sendStatus(401);
 
     try {
       // There must be a relation between the parent and the student.
       const areRelated = await UserRelation.areRelated(req.parent, req.student);
-      if (!areRelated) {
-        return res.sendStatus(404);
-      }
+      if (!areRelated) return res.sendStatus(404);
 
       await req.parent.confirmRelationWith(req.student);
       return res.sendStatus(200);

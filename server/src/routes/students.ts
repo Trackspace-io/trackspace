@@ -10,6 +10,8 @@ import user from "../validators/user";
 import { IClassroomInvitation } from "../models/Classroom";
 import { Classroom } from "../models/Classroom";
 import student from "../validators/student";
+import parent from "../validators/parent";
+import { UserRelation } from "../models/UserRelation";
 
 const students = Router();
 
@@ -248,6 +250,35 @@ students.get(
           };
         })
       );
+    } catch (e) {
+      return res.sendStatus(500);
+    }
+  }
+);
+
+/**
+ * Confirms the relation between a student and a parent.
+ *
+ * @method POST
+ * @url    /users/students/:id/parents/:id/confirm
+ *
+ * @returns 200, 400, 401, 404, 500
+ */
+students.post(
+  "/:studentId/parents/:parentId/confirm",
+  user().isA("student"),
+  student().senderIsAuthorized(),
+
+  parent().exists(),
+
+  async (req: Request, res: Response): Promise<Response> => {
+    try {
+      // There must be a relation between the student and the parent.
+      const areRelated = await UserRelation.areRelated(req.parent, req.student);
+      if (!areRelated) return res.sendStatus(404);
+
+      await req.student.confirmRelationWith(req.parent);
+      return res.sendStatus(200);
     } catch (e) {
       return res.sendStatus(500);
     }
