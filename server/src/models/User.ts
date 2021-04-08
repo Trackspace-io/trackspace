@@ -202,9 +202,12 @@ export class User extends Model {
    * @param user Related user.
    */
   public async confirmRelationWith(user: User): Promise<void> {
+    // Nothing to do if there is no relation with the other user, or if this
+    // user is the initiator of the relation.
     const relation = await UserRelation.findByUsers(this, user);
-    if (!relation) return;
+    if (!relation || relation.user1Id === this.id) return;
 
+    // Confirm the relation.
     relation.setDataValue("confirmed", true);
     await relation.save();
   }

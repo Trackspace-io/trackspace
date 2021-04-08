@@ -5,6 +5,7 @@ import student from "../validators/student";
 import { User } from "../models/User";
 import parent from "../validators/parent";
 import user from "../validators/user";
+import { body, validationResult } from "express-validator";
 
 const parents = Router();
 
@@ -42,6 +43,54 @@ parents.get(
           };
         })
       );
+    } catch (e) {
+      return res.sendStatus(500);
+    }
+  }
+);
+
+parents.post(
+  "/:parentId/children/add",
+  user().isA("parent"),
+  parent().exists(),
+
+  body("email")
+    .not()
+    .isEmpty()
+    .isEmail()
+    .custom(async (value) => {
+      if (!value) return true;
+
+      const user = await User.findByEmail(value);
+      if (!user) {
+        return Promise.reject("No account with this email address was found.");
+      }
+
+      return user.role !== "student"
+        ? Promise.reject(
+            "An parent or teacher account is already associated with this " +
+              "email address."
+          )
+        : true;
+    }),
+
+  async (req: Request, res: Response): Promise<Response> => {
+    // Check if the request is valid.
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    // The sender must be the parent himself.
+    const user = <User>req.user;
+    if (user.id !== req.parent.id) {
+      return res.sendStatus(401);
+    }
+
+    try {
+      const student = await User.findByEmail(req.body.email);
+      await req.parent.addRelatedUser(student);
+      return res.sendStatus(200);
     } catch (e) {
       return res.sendStatus(500);
     }
