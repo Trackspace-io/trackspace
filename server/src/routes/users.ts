@@ -34,6 +34,7 @@ users.get(
 
   async (req: Request, res: Response): Promise<Response> => {
     return res.status(200).json({
+      id: req.user ? (<User>req.user).id : null,
       loggedIn: req.user ? true : false,
       role: req.user ? (<User>req.user).role : null,
       firstName: req.user ? (<User>req.user).firstName : null,
