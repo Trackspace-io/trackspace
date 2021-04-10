@@ -7,9 +7,11 @@ import {
   Model,
   Sequelize,
 } from "sequelize";
+import shortid from "shortid";
 import Server from "../Server";
 import { Classroom, IClassroomInvitation } from "./Classroom";
 import { Notification } from "./Notification";
+import { UserRelation } from "./UserRelation";
 
 export interface IResetPasswordToken {
   userId: string;
@@ -159,6 +161,68 @@ export class User extends Model {
     }
 
     return [];
+  }
+
+  /**
+   * Adds a related user.
+   *
+   * @param user The related user.
+   *
+   * @returns The relation or null if the user wasn't added.
+   */
+  public async addRelatedUser(user: User): Promise<UserRelation> {
+    const isRelated = await UserRelation.areRelated(this, user);
+    if (isRelated) return null;
+
+    return await UserRelation.create({
+      id: shortid.generate(),
+      User1Id: this.id,
+      User2Id: user.id,
+      confirmed: false,
+    });
+  }
+
+  /**
+   * Removes a related user. Does not work if the relation was confirmed.
+   *
+   * @param user The related user.
+   */
+  public async removeRelatedUser(user: User): Promise<boolean> {
+    const relation = await UserRelation.findByUsers(this, user);
+    if (!relation || relation.confirmed) return false;
+
+    await relation.destroy();
+    return true;
+  }
+
+  /**
+   * Returns the list of related users.
+   *
+   * @param roles If not empty, only returns the related users with the given
+   *              roles.
+   *
+   * @returns List of related users.
+   */
+  public async getRelatedUsers(
+    roles: ("teacher" | "student" | "parent")[] = []
+  ): Promise<[User, UserRelation][]> {
+    return await UserRelation.findRelatedUsers(this, false, roles);
+  }
+
+  /**
+   * Confirms the relation with a user.
+   *
+   * @param user Related user.
+   */
+  public async confirmRelationWith(user: User): Promise<void> {
+    // Nothing to do if there is no relation with the other user, or if this
+    // user is the initiator of the relation.
+    const relation = await UserRelation.findByUsers(this, user);
+    if (!relation || relation.user1Id === this.id) return;
+
+    // Confirm the relation.
+    relation.setDataValue("confirmed", true);
+    await relation.save();
   }
 
   /**
