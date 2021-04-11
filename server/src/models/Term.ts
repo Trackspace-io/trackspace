@@ -183,6 +183,8 @@ export class Term extends Model {
       dayInt;
 
     const date = new Date(dateDays * (24 * 3600 * 1000));
+    date.setHours(0, 0, 0, 0);
+
     return this.isDateAllowed(date) ? date : null;
   }
 
