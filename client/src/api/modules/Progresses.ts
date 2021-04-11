@@ -16,8 +16,6 @@ import { IProgressByDate, IProgressByWeek, IProgressGetGraph, IProgressSetOrUpda
  *
  */
 export const getProgressByDate = async (body: IProgressByDate) => {
-  console.log('body', body);
-
   return await axios.get(
     `${_apiUrl}/api/progress/classrooms/${body.classroomId}/students/${body.studentId}?date=${body.date}`,
     { withCredentials: true },

@@ -26,12 +26,12 @@ const SignUp: React.FC = () => {
     confirmPassword: '',
   });
 
-  const { select, handleSelectChange } = useSelect({ role: 'teacher' });
+  const Selects = useSelect({ role: 'teacher' });
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const fields = { ...Inputs.values, role: select.role };
+    const fields = { ...Inputs.values, role: Selects.values.role };
     Auths.register(fields);
   };
 
@@ -56,8 +56,8 @@ const SignUp: React.FC = () => {
                 <Select
                   name="role"
                   options={['teacher', 'student', 'parent']}
-                  value={select.role}
-                  onChange={handleSelectChange}
+                  value={Selects.values.role}
+                  onChange={Selects.handleSelectChange}
                   align="center"
                 />
                 <br />

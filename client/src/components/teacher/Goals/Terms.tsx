@@ -1,23 +1,24 @@
 import { Dropdown, DropdownItem } from 'components/gui/Dropdown';
 import Typography from 'components/gui/Typography';
-import { useClassroomsAsStudent } from 'controllers';
+import { useClassroomsAsTeacher } from 'controllers';
 import { dateString, today, WEEK_DAYS } from 'helpers/calendar';
+import { useParams } from 'helpers/params';
 import React from 'react';
+import style from './Goals.module.css';
 
-import style from './WeeklyProgresses.module.css';
+const Terms: React.FC = () => {
+  // Retrieve classroom id
+  const id = useParams();
 
-interface ITermsProps {
-  classroomId: string;
-}
+  // Controllers
+  const Classrooms = useClassroomsAsTeacher();
 
-const Terms: React.FC<ITermsProps> = ({ classroomId }) => {
-  // Controllers.
-  const Classrooms = useClassroomsAsStudent(classroomId);
-  const { terms } = Classrooms;
+  // States
+  const { terms } = Classrooms.current;
 
   const handleClick = (termId: string) => {
     terms.getById({
-      classroomId,
+      classroomId: id,
       id: termId,
     });
   };
