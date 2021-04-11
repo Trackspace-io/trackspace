@@ -16,7 +16,7 @@ const WeeklyProgresses: React.FC = () => {
   const { id } = useParams<RouteParams>();
 
   const Classrooms = useClassroomsAsTeacher(id);
-  const { students } = Classrooms.current;
+  const { students, terms } = Classrooms.current;
 
   const [studentId, setStudentId] = React.useState<string>('');
 
@@ -24,7 +24,9 @@ const WeeklyProgresses: React.FC = () => {
     <div className={style['container']}>
       <div className={style['header']}>
         <Terms classroomId={id} />
-        <StudentsSearchBar studentsList={students.list} setStudentId={(studentId) => setStudentId(studentId)} />
+        {terms.currentTerm && (
+          <StudentsSearchBar studentsList={students.list} setStudentId={(studentId) => setStudentId(studentId)} />
+        )}
       </div>
       <div className={style['body']}>
         <Progresses classroomId={id} studentId={studentId} />

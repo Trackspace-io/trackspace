@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
+
 import style from '../../styles/gui/Sidebar.module.css';
 
 const Sidebar: React.FC = ({ children }) => {
@@ -12,10 +14,10 @@ interface ISidebarItemProps {
 
 const SidebarItem: React.FC<ISidebarItemProps> = ({ children, icon, to }) => {
   return (
-    <a href={to} className={style['sidebar-item']}>
+    <Link to={to} className={style['sidebar-item']}>
       <span className={style['icon']}>{icon}</span>
       <span className={style['text']}>{children}</span>
-    </a>
+    </Link>
   );
 };
 

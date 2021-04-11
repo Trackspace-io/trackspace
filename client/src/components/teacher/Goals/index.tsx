@@ -35,8 +35,12 @@ const Goals: React.FC = () => {
   return (
     <div className={style['goal-container']}>
       <Terms />
-      <GoalGraph graph={goals.graph} />
-      <GoalList list={goals.list} numberOfWeeks={Number(terms.currentTerm?.numberOfWeeks)} />
+      {terms.currentTerm && (
+        <React.Fragment>
+          <GoalGraph graph={goals.graph} />
+          <GoalList list={goals.list} numberOfWeeks={Number(terms.currentTerm?.numberOfWeeks)} />
+        </React.Fragment>
+      )}
     </div>
   );
 };

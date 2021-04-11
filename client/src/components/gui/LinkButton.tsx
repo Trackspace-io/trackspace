@@ -1,5 +1,6 @@
 import cx from 'classnames';
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 
 import style from '../../styles/gui/LinkButton.module.css';
 
@@ -24,9 +25,9 @@ interface ILinkButtonProps {
 
 const LinkButton: React.FC<ILinkButtonProps> = ({ children, to, variant = 'default', align = 'start', ...rest }) => {
   return (
-    <a href={to} className={cx(style['link-button'], style[variant], style[`align-${align}`])} {...rest}>
+    <Link to={to} className={cx(style['link-button'], style[variant], style[`align-${align}`])} {...rest}>
       {children}
-    </a>
+    </Link>
   );
 };
 

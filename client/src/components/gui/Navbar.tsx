@@ -2,6 +2,7 @@ import { useAuths, useUsers } from 'controllers';
 import Cookies from 'js-cookie';
 import * as React from 'react';
 import { FiInbox } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 
 import logo from '../../images/logo.svg';
 import style from '../../styles/gui/Navbar.module.css';
@@ -21,9 +22,9 @@ const Navbar: React.FC = () => {
     <div>
       {!cookie && (
         <div className={style['container']}>
-          <a href="/">
+          <Link to="/">
             <img src={logo} className={style['logo']} />
-          </a>
+          </Link>
           <LinkButton to="/sign-up" variant="primary">
             Sign Up
           </LinkButton>

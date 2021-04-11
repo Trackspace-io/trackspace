@@ -1,5 +1,6 @@
 import cx from 'classnames';
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 
 import style from '../../styles/gui/Dropdown.module.css';
 import ClickHandler from './ClickHandler';
@@ -58,7 +59,7 @@ const DropdownItem: React.FC<IDropdownMenuProps> = ({ children, type, to = '', o
   const renderItem = () => {
     switch (type) {
       case 'link':
-        return <a href={to}> {children} </a>;
+        return <Link to={to}> {children} </Link>;
       case 'button':
         return <button onClick={onClick}> {children}</button>;
       case 'text':
