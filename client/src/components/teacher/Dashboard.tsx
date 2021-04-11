@@ -7,7 +7,7 @@ import moment from 'moment';
 import { default as SimpleCalendar } from 'rc-calendar';
 import * as React from 'react';
 import { FcHome } from 'react-icons/fc';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Link, Redirect, Route, Switch } from 'react-router-dom';
 import { IClassroom } from 'store/classrooms/types';
 
 import style from '../../styles/teacher/Dashboard.module.css';
@@ -65,16 +65,16 @@ const Sidebar: React.FC<ISidebarProps> = ({ classrooms }) => {
   return (
     <div>
       <Tooltip text="Home" position="right">
-        <a href="/teacher" className={style['home']}>
+        <Link to="/teacher" className={style['home']}>
           <FcHome />
-        </a>
+        </Link>
       </Tooltip>
       <Divider />
       {classrooms.map((classroom) => (
         <Tooltip key={classroom.id} text={classroom.name} position="right">
-          <a href={`/teacher/classrooms/${classroom.id}`} className={style['bubble']}>
+          <Link to={`/teacher/classrooms/${classroom.id}`} className={style['bubble']}>
             {classroom.name[0]}
-          </a>
+          </Link>
         </Tooltip>
       ))}
     </div>

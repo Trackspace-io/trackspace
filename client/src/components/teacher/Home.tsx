@@ -8,7 +8,7 @@ import Typography from 'components/gui/Typography';
 import { useClassroomsAsTeacher, useTeachers } from 'controllers';
 import * as React from 'react';
 import { FiEdit2, FiTrash } from 'react-icons/fi';
-import { Route, Switch } from 'react-router-dom';
+import { Link, Route, Switch } from 'react-router-dom';
 import { IClassroom, IClassroomCreate, IClassroomModify, IClassroomRemove } from 'store/classrooms/types';
 
 import style from '../../styles/teacher/Home.module.css';
@@ -60,7 +60,7 @@ const Classrooms: React.FC = () => {
           {Teachers.classroomsList.length !== 0 ? (
             Teachers.classroomsList.map((classroom) => (
               <div key={classroom.id} className={style['classroom-item']}>
-                <a href={`/teacher/classrooms/${classroom.id}`}>{classroom.name}</a>
+                <Link to={`/teacher/classrooms/${classroom.id}`}>{classroom.name}</Link>
                 <div className={style['classroom-actions']}>
                   <FiEdit2
                     onClick={() => {

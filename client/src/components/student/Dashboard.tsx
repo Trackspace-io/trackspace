@@ -2,10 +2,9 @@ import Menu from 'components/common/Menu';
 import Divider from 'components/gui/Divider';
 import Tooltip from 'components/gui/Tooltip';
 import { useStudents } from 'controllers';
-
 import * as React from 'react';
 import { FcHome } from 'react-icons/fc';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Link, Redirect, Route, Switch } from 'react-router-dom';
 import { IClassroom } from 'store/classrooms/types';
 
 import style from '../../styles/student/Dashboard.module.css';
@@ -54,16 +53,16 @@ const Sidebar: React.FC<ISidebarProps> = ({ classrooms }) => {
   return (
     <div>
       <Tooltip text="Home" position="right">
-        <a href="/student" className={style['home']}>
+        <Link to="/student" className={style['home']}>
           <FcHome />
-        </a>
+        </Link>
       </Tooltip>
       <Divider />
       {classrooms.map((classroom) => (
         <Tooltip key={classroom.id} text={classroom.name} position="right">
-          <a href={`/student/classrooms/${classroom.id}`} className={style['bubble']}>
+          <Link to={`/student/classrooms/${classroom.id}`} className={style['bubble']}>
             {classroom.name[0]}
-          </a>
+          </Link>
         </Tooltip>
       ))}
     </div>

@@ -1,6 +1,6 @@
 .container {
   box-sizing: border-box;
-  min-height: 100vh;
+  margin: 24px 0;
 }
 
 .header {
@@ -15,7 +15,7 @@
 .terms-container {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: flex-start;
   margin-bottom: 24px;
 }
 

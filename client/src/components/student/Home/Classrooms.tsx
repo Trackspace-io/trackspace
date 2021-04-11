@@ -2,6 +2,7 @@ import Divider from 'components/gui/Divider';
 import Typography from 'components/gui/Typography';
 import { useStudents } from 'controllers';
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import style from './Home.module.css';
 
@@ -20,7 +21,7 @@ const Classrooms: React.FC = () => {
           {Students.classroomsList.length !== 0 ? (
             Students.classroomsList.map((classroom) => (
               <div key={classroom.id} className={style['classroom-item']}>
-                <a href={`/student/classrooms/${classroom.id}`}>{classroom.name}</a>
+                <Link to={`/student/classrooms/${classroom.id}`}>{classroom.name}</Link>
               </div>
             ))
           ) : (
