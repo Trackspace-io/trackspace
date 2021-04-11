@@ -212,6 +212,7 @@ terms.get(
   async (req: Request, res: Response): Promise<Response> => {
     return res.status(200).json({
       id: req.term.id,
+      number: await req.term.getNumber(),
       start: date.format(req.term.start, "YYYY-MM-DD"),
       end: date.format(req.term.end, "YYYY-MM-DD"),
       days: req.term.days,

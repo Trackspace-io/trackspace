@@ -14,7 +14,7 @@ const Terms: React.FC<ITermsProps> = ({ classroomId, selectedDate }) => {
   const Classrooms = useClassroomsAsStudent(classroomId);
 
   //  States
-  const { terms, progresses } = Classrooms;
+  const { terms } = Classrooms;
 
   if (selectedDate < moment(terms.selectedTerm?.start) || selectedDate > moment(terms.selectedTerm?.end)) {
     return (
@@ -27,7 +27,7 @@ const Terms: React.FC<ITermsProps> = ({ classroomId, selectedDate }) => {
   return (
     <div>
       <Typography variant="subtitle1">
-        {`Term ${progresses.byDate.termNumber} | Week ${progresses.byDate.weekNumber} | ${dateString(
+        {`Term ${terms.selectedTerm?.number} | Week ${terms.selectedTerm?.currentWeek} | ${dateString(
           terms.selectedTerm?.start,
         )} - ${dateString(terms.selectedTerm?.end)}`}
       </Typography>

@@ -7,7 +7,9 @@ export interface ITerm {
   end: Date;
   days: string[];
   classroomId: string;
+  number?: number;
   numberOfWeeks?: number;
+  currentWeek?: number;
 }
 
 /**

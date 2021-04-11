@@ -27,7 +27,7 @@ const Terms: React.FC<ITermsProps> = ({ classroomId }) => {
       <div className={style['terms']}>
         <Typography variant="title" weight="light">
           {terms.currentTerm &&
-            `${dateString(terms.currentTerm.start)}
+            `Term ${terms.currentTerm.number}: ${dateString(terms.currentTerm.start)}
               - ${dateString(terms.currentTerm.end)}`}
         </Typography>
         {terms.currentTerm?.days?.map((day) => (
