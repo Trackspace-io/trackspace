@@ -7,7 +7,7 @@ import cx from 'classnames';
  * @param {{
  * 	name: string,
  * 	label?: string,
- *  options: string[],
+ *  options: any[],
  *  value?: string | number,
  *  defaultValue? string | number
  * }} props The props of the component.
@@ -17,7 +17,7 @@ import cx from 'classnames';
 interface ISelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   name: string;
   label?: string;
-  options: string[];
+  options: any[];
   value?: string | number;
   align?: 'start' | 'center' | 'end';
 }
@@ -50,16 +50,16 @@ const Select: React.FC<ISelectProps> = ({ name, label, options, value, align, on
  * }} The use helpers.
  */
 const useSelect = (initialValues: any) => {
-  const [select, setSelect] = React.useState(initialValues);
+  const [values, setValues] = React.useState(initialValues);
 
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelect({
-      ...select,
+    setValues({
+      ...values,
       [e.target.name]: e.target.value,
     });
   };
 
-  return { select, setSelect, handleSelectChange };
+  return { values, setValues, handleSelectChange };
 };
 
 export { Select, useSelect };

@@ -1,12 +1,85 @@
+.goal-container {
+  margin: 24px 0;
+}
+
+.graph-container {
+  position: relative;
+  margin: 32px 0;
+}
+
 .goal-list {
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-wrap: wrap;
+  padding: 36px 0;
+}
+
+.linked {
+  margin: 0;
+}
+
+.linked::after {
+  content: ' ';
+  display: block;
+  width: 16px;
+  border-bottom: 1px solid #ccc;
+}
+
+.goal-set-button {
+  padding: 8px;
+  margin: 0 8px;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  background: var(--white);
+  cursor: pointer;
+  transform: scale(1.2);
+}
+
+.goal-set-button:hover {
+  box-shadow: 0 1px 5px #ccc;
+}
+
+.goal-set {
+  padding: 16px;
+}
+
+.goal-set-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.goal-set-header select {
+  width: 100px;
+  margin-left: 16px;
+}
+
+.goal-set-body {
+  width: 100%;
+  padding: 16px 0;
+}
+
+.goal-set-body input {
+  width: 100%;
+}
+
+.goal-set-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.goal-set-footer svg {
+  transform: scale(1.2);
+  color: var(--blue-dark);
+  cursor: pointer;
+  margin: 8px;
 }
 
 .goal-item {
   position: relative;
   text-align: center;
-  padding: 24px;
+  padding: 32px;
   margin: 16px;
   border: 1px solid #ccc;
   border-radius: 8px;

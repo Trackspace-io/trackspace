@@ -14,6 +14,7 @@ export interface IGoal {
 export interface IGoalState {
   // List of goals
   list: IGoal[];
+  graph: any;
 }
 
 /**
@@ -21,12 +22,13 @@ export interface IGoalState {
  */
 export enum GOALS {
   SET_GOALS = 'SET_GOALS',
+  SET_GOALS_GRAPH = 'SET_GOALS_GRAPH',
 }
 
 /**
  * Reducer's dispatchers interface
  */
-export type IGoalActions = { type: GOALS.SET_GOALS; payload: IGoal[] };
+export type IGoalActions = { type: GOALS.SET_GOALS; payload: IGoal[] } | { type: GOALS.SET_GOALS_GRAPH; payload: any };
 
 export interface IGoalGet {
   classroomId: string;

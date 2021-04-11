@@ -49,7 +49,7 @@ export const getGoals = async (body: IGoalGet): Promise<any> => {
  */
 export const getGraph = async (body: IGoalGetGraph): Promise<any> => {
   return await axios.get(
-    `${_apiUrl}/api/classrooms/${body.classroomId}/terms/${body.termId}/graph?color=${body.color}&width=${body.color}`,
+    `${_apiUrl}/api/classrooms/${body.classroomId}/terms/${body.termId}/goals/graph?color=${body.color}&width=${body.width}`,
     { withCredentials: true },
   );
 };

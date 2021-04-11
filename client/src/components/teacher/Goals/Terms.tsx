@@ -10,8 +10,10 @@ const Terms: React.FC = () => {
   // Retrieve classroom id
   const id = useParams();
 
+  // Controllers
   const Classrooms = useClassroomsAsTeacher();
 
+  // States
   const { terms } = Classrooms.current;
 
   const handleClick = (termId: string) => {

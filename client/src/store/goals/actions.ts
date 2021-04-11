@@ -6,3 +6,10 @@ export const setGoals = (payload: IGoal[]) => {
     payload,
   };
 };
+
+export const setGoalsGraph = (payload: any) => {
+  return {
+    type: GOALS.SET_GOALS_GRAPH,
+    payload,
+  };
+};

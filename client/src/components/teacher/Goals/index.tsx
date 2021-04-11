@@ -1,8 +1,10 @@
 import { useClassroomsAsTeacher } from 'controllers';
 import { useParams } from 'helpers/params';
 import React from 'react';
+
+import GoalGraph from './GoalGraph';
 import GoalList from './GoalList';
-import SetGoal from './SetGoal';
+import style from './Goals.module.css';
 import Terms from './Terms';
 
 const Goals: React.FC = () => {
@@ -20,13 +22,21 @@ const Goals: React.FC = () => {
       });
   }, [terms.currentTerm?.id]);
 
-  console.log('goals', goals.list);
+  React.useEffect(() => {
+    terms.currentTerm?.id &&
+      goals.getGraph({
+        classroomId: id,
+        termId: terms.currentTerm?.id,
+        color: `${'9ab986'}`,
+        width: 3,
+      });
+  }, [terms.currentTerm?.id, goals.list]);
 
   return (
-    <div>
+    <div className={style['goal-container']}>
       <Terms />
-      <GoalList list={goals.list} />
-      <SetGoal />
+      <GoalGraph graph={goals.graph} />
+      <GoalList list={goals.list} numberOfWeeks={Number(terms.currentTerm?.numberOfWeeks)} />
     </div>
   );
 };

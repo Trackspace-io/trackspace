@@ -5,6 +5,7 @@ import { GOALS, IGoalState, IGoalActions } from './types';
  */
 export const initialState = {
   list: [],
+  graph: {},
 };
 
 /**
@@ -19,6 +20,9 @@ const reducer = (state: IGoalState, action: IGoalActions): IGoalState => {
   switch (action.type) {
     case GOALS.SET_GOALS:
       return { ...state, list: action.payload };
+
+    case GOALS.SET_GOALS_GRAPH:
+      return { ...state, graph: action.payload };
 
     default:
       return state;
