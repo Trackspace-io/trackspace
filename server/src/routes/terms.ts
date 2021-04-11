@@ -181,10 +181,12 @@ terms.get(
 
       return res.status(200).json({
         id: term.id,
+        number: await term.getNumber(),
         start: date.format(term.start, "YYYY-MM-DD"),
         end: date.format(term.end, "YYYY-MM-DD"),
         days: term.days,
         numberOfWeeks: term.numberOfWeeks,
+        currentWeek: term.getWeekNumber(dateObj),
       });
     } catch (e) {
       return res.sendStatus(500);

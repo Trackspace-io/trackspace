@@ -1,6 +1,7 @@
 import { Request, Response, Router } from "express";
 import { body, query, validationResult } from "express-validator";
 import bcrypt from "bcrypt";
+import date from "date-and-time";
 import jwt from "jsonwebtoken";
 import passport from "passport";
 import shortid from "shortid";
@@ -8,6 +9,9 @@ import { User } from "../models/User";
 import user from "../validators/user";
 import { IClassroomInvitation } from "../models/Classroom";
 import { Classroom } from "../models/Classroom";
+import student from "../validators/student";
+import parent from "../validators/parent";
+import { UserRelation } from "../models/UserRelation";
 
 const students = Router();
 
@@ -206,6 +210,157 @@ students.get(
           return { id: classroom.id, name: classroom.name };
         })
       );
+    } catch (e) {
+      return res.sendStatus(500);
+    }
+  }
+);
+
+/**
+ * Get the list of parents of a student.
+ *
+ * @method  GET
+ * @url     /users/students/:id/parents
+ *
+ * @returns 200, 401, 500
+ */
+students.get(
+  "/:studentId/parents/",
+  user().isA(["teacher", "student", "parent"]),
+  student().senderIsAuthorized(),
+
+  async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const parents = await req.student.getRelatedUsers(["parent"]);
+      return res.status(200).json(
+        parents.map(([user, relation]) => {
+          const pendingDate = relation.pendingSince;
+          const isConfirmed = relation.confirmed;
+          const isInitiator = req.student.id === relation.user1Id;
+
+          return {
+            id: user.id,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            invitationPendingSince: pendingDate
+              ? date.format(pendingDate, "YYYY-MM-DD")
+              : null,
+            mustConfirm: !isConfirmed && !isInitiator,
+          };
+        })
+      );
+    } catch (e) {
+      return res.sendStatus(500);
+    }
+  }
+);
+
+/**
+ * Confirms the relation between a student and a parent.
+ *
+ * @method POST
+ * @url    /users/students/:id/parents/:id/confirm
+ *
+ * @returns 200, 400, 401, 404, 500
+ */
+students.post(
+  "/:studentId/parents/:parentId/confirm",
+  user().isA("student"),
+  student().senderIsAuthorized(),
+
+  parent().exists(),
+
+  async (req: Request, res: Response): Promise<Response> => {
+    try {
+      // There must be a relation between the student and the parent.
+      const areRelated = await UserRelation.areRelated(req.parent, req.student);
+      if (!areRelated) return res.sendStatus(404);
+
+      await req.student.confirmRelationWith(req.parent);
+      return res.sendStatus(200);
+    } catch (e) {
+      return res.sendStatus(500);
+    }
+  }
+);
+
+/**
+ * Add a parent to the student.
+ *
+ * @method  POST
+ * @url     /users/students/:id/parent/add
+ *
+ * @param req.email {string} The parent's email address.
+ *
+ * @returns 200, 500
+ */
+students.post(
+  "/:studentId/parents/add",
+  user().isA("student"),
+  student().senderIsAuthorized(),
+
+  body("email")
+    .not()
+    .isEmpty()
+    .isEmail()
+    .custom(async (value) => {
+      if (!value) return true;
+
+      const user = await User.findByEmail(value);
+      if (!user) {
+        return Promise.reject("No account with this email address was found.");
+      }
+
+      return user.role !== "parent"
+        ? Promise.reject(
+            "An student or teacher account is already associated with this " +
+              "email address."
+          )
+        : true;
+    }),
+
+  async (req: Request, res: Response): Promise<Response> => {
+    // Check if the request is valid.
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const parent = await User.findByEmail(req.body.email);
+      await req.student.addRelatedUser(parent);
+      return res.sendStatus(200);
+    } catch (e) {
+      return res.sendStatus(500);
+    }
+  }
+);
+
+/**
+ * Remove a parent.
+ *
+ * @method DELETE
+ * @url    /users/students/:id/parents/:id/remove
+ *
+ * @returns 200, 400, 401, 404, 500
+ */
+students.delete(
+  "/:studentId/parents/:parentId/remove",
+  user().isA("student"),
+  student().senderIsAuthorized(),
+
+  student().exists(),
+  parent().exists(),
+
+  async (req: Request, res: Response): Promise<Response> => {
+    try {
+      // There must be a relation between the parent and the student.
+      const areRelated = await UserRelation.areRelated(req.parent, req.student);
+      if (!areRelated) return res.sendStatus(404);
+
+      const success = await req.student.removeRelatedUser(req.parent);
+      return res.sendStatus(success ? 200 : 400);
     } catch (e) {
       return res.sendStatus(500);
     }

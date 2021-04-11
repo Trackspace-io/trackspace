@@ -8,11 +8,13 @@ import passport from "passport";
 import teachers from "./teachers";
 import user from "../validators/user";
 import students from "./students";
+import parents from "./parents";
 
 const users = Router();
 
 users.use("/teachers", teachers);
 users.use("/students", students);
+users.use("/parents", parents);
 
 /**
  * Get the current user.
@@ -33,7 +35,7 @@ users.get(
   async (req: Request, res: Response): Promise<Response> => {
     return res.status(200).json({
       loggedIn: req.user ? true : false,
-      id: req.user? (<User>req.user).id : null,
+      id: req.user ? (<User>req.user).id : null,
       role: req.user ? (<User>req.user).role : null,
       firstName: req.user ? (<User>req.user).firstName : null,
       lastName: req.user ? (<User>req.user).lastName : null,
