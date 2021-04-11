@@ -86,7 +86,7 @@
   width: 120px;
 }
 
-.action {
+.actions {
   background: #fff;
   padding: 5px 8px;
   border: 1px solid #ccc;
@@ -98,7 +98,11 @@
   transform: scale(1.1);
 }
 
-.goal-item:hover .action {
+.actions svg {
+  padding: 4px;
+}
+
+.goal-item:hover .actions {
   cursor: pointer;
   visibility: visible;
 }

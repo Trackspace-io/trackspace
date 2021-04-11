@@ -13,9 +13,10 @@ interface ISetGoalProps {
   isOpen: boolean;
   onClose: () => void;
   weeks: number[];
+  pages?: number;
 }
 
-const SetGoal: React.FC<ISetGoalProps> = ({ isOpen, onClose, weeks }) => {
+const SetGoal: React.FC<ISetGoalProps> = ({ isOpen, onClose, weeks, pages }) => {
   // Retrieve classroom id
   const id = useParams();
 
@@ -26,6 +27,14 @@ const SetGoal: React.FC<ISetGoalProps> = ({ isOpen, onClose, weeks }) => {
 
   // States
   const { goals, terms } = Classrooms.current;
+
+  React.useEffect(() => {
+    pages &&
+      Inputs.setValues({
+        ...Inputs.values,
+        pages,
+      });
+  }, []);
 
   // Handle form submit
   const handleSubmit = () => {
