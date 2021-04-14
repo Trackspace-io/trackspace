@@ -3,6 +3,7 @@ import { Router } from "express";
 import jsonfile from "jsonfile";
 import { Sequelize } from "sequelize";
 import { registerModels } from "./models";
+import { registerNotifTypes } from "./notifications";
 import router from "./routes";
 
 class Server {
@@ -85,6 +86,9 @@ class Server {
 
     // Register the routes.
     this._router.use("/", router);
+
+    // Register the notification types.
+    registerNotifTypes();
   }
 
   /**
