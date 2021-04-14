@@ -1,5 +1,6 @@
 import { User } from "../models/User";
 import { INotificationInfo, INotificationType } from "../models/Notification";
+import { UserRelation } from "../models/UserRelation";
 
 interface INotifParams {
   senderId: string;
@@ -26,6 +27,19 @@ async function info(params: INotifParams): Promise<INotificationInfo> {
   return { text, actions: ["Confirm", "Delete"] };
 }
 
+async function isValid(params: INotifParams): Promise<boolean> {
+  const recipient = await User.findById(params.recipientId);
+  if (!recipient) return false;
+
+  const sender = await User.findById(params.senderId);
+  if (!sender) return false;
+
+  const relation = await UserRelation.findByUsers(sender, recipient);
+  if (!recipient) return false;
+
+  return !relation.confirmed;
+}
+
 async function process(action: string, params: INotifParams): Promise<void> {
   const sender = await User.findById(params.senderId);
   const recipient = await User.findById(params.recipientId);
@@ -46,6 +60,7 @@ async function process(action: string, params: INotifParams): Promise<void> {
 const relationConfirmation: INotificationType<INotifParams> = {
   info,
   process,
+  isValid,
   serializeParams: JSON.stringify,
   deserializeParams: JSON.parse,
 };

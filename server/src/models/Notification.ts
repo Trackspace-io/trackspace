@@ -32,6 +32,11 @@ export interface INotificationType<P> {
     | ((action: string, params: P, notif: Notification) => Promise<void>);
 
   /**
+   * Checks if a notification is still valid.
+   */
+  isValid: ((params: P) => boolean) | ((params: P) => Promise<boolean>);
+
+  /**
    * Serializes the parameters of a notification of this type.
    */
   serializeParams: (params: P) => string;
@@ -82,10 +87,19 @@ export class Notification extends Model {
   public static async findByRecipient(
     recipient: User
   ): Promise<Notification[]> {
-    return await this.findAll({
+    const notifs = await this.findAll({
       where: { RecipientId: recipient.id },
       order: [["createdAt", "DESC"]],
     });
+
+    const validNotifs = [];
+
+    for (let i = 0; i < notifs.length; i++) {
+      const isValid = await notifs[i].isValid();
+      isValid ? validNotifs.push(notifs[i]) : await notifs[i].destroy();
+    }
+
+    return validNotifs;
   }
 
   /**
@@ -185,6 +199,17 @@ export class Notification extends Model {
     return this.typeObj
       ? this.typeObj.deserializeParams(this.getDataValue("params"))
       : null;
+  }
+
+  /**
+   * Checks if this notification is still valid.
+   *
+   * @returns True if the notification is valid, false otherwise.
+   */
+  private async isValid(): Promise<boolean> {
+    return this.typeObj
+      ? await this.typeObj.isValid(this.deserializedParams)
+      : false;
   }
 }
 

@@ -23,6 +23,16 @@ async function info(params: INotifParams): Promise<INotificationInfo> {
   return { text, actions: ["Accept", "Refuse"] };
 }
 
+async function isValid(params: INotifParams): Promise<boolean> {
+  const classroom = await Classroom.findById(params.classroomId);
+  if (!classroom) return false;
+
+  const student = await User.findById(params.studentId);
+  if (!student) return false;
+
+  return !(await student.isInClassroom(classroom));
+}
+
 async function process(action: string, params: INotifParams): Promise<void> {
   const classroom = await Classroom.findById(params.classroomId);
   if (!classroom) return;
@@ -45,6 +55,7 @@ async function process(action: string, params: INotifParams): Promise<void> {
 const notificationType: INotificationType<INotifParams> = {
   info,
   process,
+  isValid,
   serializeParams: JSON.stringify,
   deserializeParams: JSON.parse,
 };
