@@ -9,12 +9,15 @@ import teachers from "./teachers";
 import user from "../validators/user";
 import students from "./students";
 import parents from "./parents";
+import notifications from "./notifications";
 
 const users = Router();
 
 users.use("/teachers", teachers);
 users.use("/students", students);
 users.use("/parents", parents);
+
+users.use("/notifications", user().isAuthenticated(), notifications);
 
 /**
  * Get the current user.

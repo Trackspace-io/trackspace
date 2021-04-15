@@ -171,15 +171,26 @@ export class User extends Model {
    * @returns The relation or null if the user wasn't added.
    */
   public async addRelatedUser(user: User): Promise<UserRelation> {
+    if (this.id === user.id) return null;
+
     const isRelated = await UserRelation.areRelated(this, user);
     if (isRelated) return null;
 
-    return await UserRelation.create({
+    // Create the relation with the given user.
+    const relation = await UserRelation.create({
       id: shortid.generate(),
       User1Id: this.id,
       User2Id: user.id,
       confirmed: false,
     });
+
+    // Send a notification to the user.
+    await Notification.sendNotification(user, "relationConfirmation", {
+      senderId: this.id,
+      recipientId: user.id,
+    });
+
+    return relation;
   }
 
   /**
@@ -189,7 +200,7 @@ export class User extends Model {
    */
   public async removeRelatedUser(user: User): Promise<boolean> {
     const relation = await UserRelation.findByUsers(this, user);
-    if (!relation || relation.confirmed) return false;
+    if (!relation) return false;
 
     await relation.destroy();
     return true;
