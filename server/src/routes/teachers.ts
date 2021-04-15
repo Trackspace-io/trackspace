@@ -1,5 +1,6 @@
 import { Request, Response, Router } from "express";
 import { body, query, validationResult } from "express-validator";
+import { Notification } from "../models/Notification";
 import { User } from "../models/User";
 import user from "../validators/user";
 
@@ -110,7 +111,12 @@ teachers.post(
     // Send the invitation.
     try {
       const student = await User.findByEmail(req.body.studentEmail);
-      await req.classroom.inviteStudent(student);
+
+      await Notification.sendNotification(student, "studentInvitation", {
+        clasroomId: req.classroom.id,
+        studentId: student.id,
+      });
+
       return res.sendStatus(200);
     } catch (e) {
       return res.sendStatus(500);

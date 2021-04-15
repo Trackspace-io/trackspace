@@ -9,7 +9,6 @@ import {
   Model,
   Sequelize,
 } from "sequelize";
-import { Notification } from "./Notification";
 import { ShortLink } from "./ShortLink";
 import { Subject } from "./Subject";
 import { Term } from "./Term";
@@ -129,15 +128,6 @@ export class Classroom extends Model {
     }
 
     return link;
-  }
-
-  /**
-   * Invites a student.
-   *
-   * @param student The student.
-   */
-  public async inviteStudent(student: User): Promise<void> {
-    await Notification.createStudentInvitation(this, student);
   }
 }
 

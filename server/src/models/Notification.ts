@@ -1,70 +1,215 @@
-import { DataTypes, Model, Sequelize } from "sequelize";
+import {
+  BelongsToGetAssociationMixin,
+  DataTypes,
+  Model,
+  Sequelize,
+} from "sequelize";
 import shortid from "shortid";
-import { Classroom } from "./Classroom";
 import { User } from "./User";
 
-interface INotificationAction {
-  name: string | ((params: string[]) => string);
-  url: string | ((params: string[]) => string);
+export interface INotificationInfo {
+  text: string;
+  actions: string[];
 }
 
-interface INotificationType {
-  text?: string | ((params: string[]) => string);
-  actions?: INotificationAction[];
+/**
+ * Notification type. P is the interface that must be supported by the parame-
+ * ters of this type of notification.
+ */
+export interface INotificationType<P> {
+  /**
+   * Text to display with the notification.
+   */
+  info:
+    | ((params: P) => INotificationInfo)
+    | ((params: P) => Promise<INotificationInfo>);
+
+  /**
+   * Function called when the user selects an action.
+   */
+  process:
+    | ((action: string, params: P, notif: Notification) => void)
+    | ((action: string, params: P, notif: Notification) => Promise<void>);
+
+  /**
+   * Checks if a notification is still valid.
+   */
+  isValid: ((params: P) => boolean) | ((params: P) => Promise<boolean>);
+
+  /**
+   * Serializes the parameters of a notification of this type.
+   */
+  serializeParams: (params: P) => string;
+
+  /**
+   * Deserializes the parameters of a notification of this type.
+   */
+  deserializeParams: (params: string) => P;
 }
 
 export class Notification extends Model {
   /**
-   * Notification types.
+   * Map of registered notification types.
    */
-  private static readonly TYPES: Record<string, INotificationType> = {
-    studentInvitation: {
-      text: (params: string[]): string =>
-        `You have received an invitation to join ${params[0]} ${params[1]}'s classroom.`,
-      actions: [
-        { name: "Accept", url: (params: string[]): string => params[2] },
-      ],
-    },
-  };
+  private static types: { [name: string]: INotificationType<unknown> } = {};
 
   /**
-   * Creates a new student invitation notification.
+   * Registers a notification type.
    *
-   * @param classroom The classroom.
-   * @param student   The student.
-   *
-   * @returns The created notification.
+   * @param name Name of the type of notification.
+   * @param type Notification type object.
    */
-  public static async createStudentInvitation(
-    classroom: Classroom,
-    student: User
-  ): Promise<Notification | null> {
-    if (student.role !== "student") return null;
+  public static registerType(
+    name: string,
+    type: INotificationType<unknown>
+  ): void {
+    Notification.types[name] = type;
+  }
 
-    // Check if the notification already exists.
-    const notif = await this.findOne({
-      where: {
-        type: "studentInvitation",
-        senderId: classroom.teacherId,
-        recipientId: student.id,
-      },
+  /**
+   * Finds a notification using its identifier.
+   *
+   * @param id The identifier.
+   *
+   * @returns The notification.
+   */
+  public static async findById(id: string): Promise<Notification> {
+    return this.findOne({ where: { id } });
+  }
+
+  /**
+   * Finds the notifications addressed to the given user.
+   *
+   * @param recipient  The recipient.
+   *
+   * @returns List of notifications.
+   */
+  public static async findByRecipient(
+    recipient: User
+  ): Promise<Notification[]> {
+    const notifs = await this.findAll({
+      where: { RecipientId: recipient.id },
+      order: [["createdAt", "DESC"]],
     });
 
-    if (notif) return null;
+    const validNotifs = [];
 
-    // Get the teacher.
-    const teacher: User = await classroom.getTeacher();
-    if (!teacher) return null;
+    for (let i = 0; i < notifs.length; i++) {
+      const isValid = await notifs[i].isValid();
+      isValid ? validNotifs.push(notifs[i]) : await notifs[i].destroy();
+    }
 
-    // Create the notification.
+    return validNotifs;
+  }
+
+  /**
+   * Sends a notification to a user.
+   *
+   * @param recipient Recipient of the notification.
+   * @param type      Notification type.
+   * @param params    Parameters of notification.
+   *
+   * @returns The sent notification or null if the notification wasn't sent.
+   */
+  public static async sendNotification(
+    recipient: User,
+    type: string,
+    params: unknown
+  ): Promise<Notification | null> {
+    if (!Notification.types[type]) {
+      throw new Error("Unknown notification type.");
+    }
+
     return await this.create({
       id: shortid.generate(),
-      type: "studentInvitation",
-      senderId: classroom.teacherId,
-      recipientId: student.id,
-      params: JSON.stringify([teacher.firstName, teacher.lastName]),
-      read: false,
+      RecipientId: recipient.id,
+      type: type,
+      params: Notification.types[type].serializeParams(params),
     });
+  }
+
+  /**
+   * Identifier of the notification.
+   */
+  public get id(): string {
+    return this.getDataValue("id");
+  }
+
+  /**
+   * Date at which this notification was sent.
+   */
+  public get date(): Date {
+    return this.getDataValue("createdAt");
+  }
+
+  /**
+   * Returns the recipient of this notification.
+   */
+  public getRecipient!: BelongsToGetAssociationMixin<User>;
+
+  /**
+   * Processes this notification.
+   *
+   * @param action Selected action.
+   */
+  public async process(action: string): Promise<void> {
+    if (!this.typeObj) return;
+
+    try {
+      await this.typeObj.process(action, this.deserializedParams, this);
+    } finally {
+      await this.destroy();
+    }
+  }
+
+  /**
+   * Returns the actions of the notification.
+   *
+   * @returns Text of the notification.
+   */
+  public async getActions(): Promise<string[]> {
+    if (!this.typeObj) return [];
+    const { actions } = await this.typeObj.info(this.deserializedParams);
+    return actions;
+  }
+
+  /**
+   * Returns the text of the notification.
+   *
+   * @returns Text of the notification.
+   */
+  public async getText(): Promise<string> {
+    if (!this.typeObj) return "";
+    const { text } = await this.typeObj.info(this.deserializedParams);
+    return text;
+  }
+
+  /**
+   * Notification type object.
+   */
+  private get typeObj(): INotificationType<unknown> | null {
+    const name = this.getDataValue("type");
+    return Notification.types[name] ? Notification.types[name] : null;
+  }
+
+  /**
+   * The parameters of this notification.
+   */
+  private get deserializedParams(): unknown {
+    return this.typeObj
+      ? this.typeObj.deserializeParams(this.getDataValue("params"))
+      : null;
+  }
+
+  /**
+   * Checks if this notification is still valid.
+   *
+   * @returns True if the notification is valid, false otherwise.
+   */
+  private async isValid(): Promise<boolean> {
+    return this.typeObj
+      ? await this.typeObj.isValid(this.deserializedParams)
+      : false;
   }
 }
 
@@ -79,15 +224,10 @@ export function notificationSchema(sequelize: Sequelize): void {
       type: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
       },
       params: {
         type: DataTypes.STRING,
         allowNull: true,
-      },
-      read: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
       },
     },
     {
@@ -102,9 +242,5 @@ export function notificationSchema(sequelize: Sequelize): void {
 export function notificationAssociations(): void {
   Notification.belongsTo(User, {
     as: "Recipient",
-  });
-
-  Notification.belongsTo(User, {
-    as: "Sender",
   });
 }
