@@ -24,6 +24,7 @@ const App: React.FC = () => {
     Users.authCheck(cookie);
   }, []);
 
+  // Test comment.
   return (
     <Router>
       <Navbar />
