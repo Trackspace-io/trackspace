@@ -23,6 +23,7 @@ const App: React.FC = () => {
   React.useEffect(() => {
     Users.authCheck(cookie);
   }, []);
+  console.log('test');
 
   return (
     <Router>
