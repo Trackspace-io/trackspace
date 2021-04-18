@@ -27,6 +27,7 @@ const Dashboard: React.FC = () => {
             </Route>
             <Route path="/students/classrooms/invitations/accept" />
             <Route exact path="/student/classrooms" component={Home} />
+            <Route path="/student/parents/" component={Home} />
             <Route path="/student/classrooms/:id" component={Classroom} />
           </Switch>
         </div>

@@ -32,7 +32,7 @@ const useParents = () => {
   // List of thunks
 
   /**
-   * Get the classrooms list of the student.
+   * Get a parent's children
    *
    * @param {String} payload.parentId The identifier of the parent
    *
@@ -128,7 +128,7 @@ const useParents = () => {
   };
 
   /**
-   * Remove a child
+   * Confirm the relationship between a parent and his/her child
    *
    * @param   {string} payload.parentId  The identifier of the parent.
    * @param   {string} payload.studentId The identifier of the child.
@@ -147,7 +147,7 @@ const useParents = () => {
 
           Messages.add({
             type: 'success',
-            text: `Confirm`,
+            text: `Confirmed`,
           });
 
           resolve(data);

@@ -8,6 +8,8 @@ export interface IParent {
   email: string;
   firstName: string;
   lastName: string;
+  invitationPendingSince?: string;
+  mustConfirm?: boolean;
 }
 
 /**

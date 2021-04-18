@@ -5,9 +5,13 @@ import { useGlobalStore } from 'store';
 import studentsReducer from 'store/students';
 import {
   IStudentAcceptInvitation,
+  IStudentAddParent,
+  IStudentConfirmRelationship,
+  IStudentGetParents,
   IStudentInvitationBySignIn,
   IStudentInvitationBySignUp,
   IStudentRemove,
+  IStudentRemoveParent,
 } from 'store/students/types';
 
 const { actions } = studentsReducer;
@@ -27,7 +31,7 @@ const useStudents = (classroomId?: string) => {
   const { students } = state;
 
   // List of actions
-  const { setClassrooms, setStudents } = actions;
+  const { setClassrooms, setStudents, setParents } = actions;
 
   // List of thunks
 
@@ -203,9 +207,142 @@ const useStudents = (classroomId?: string) => {
     });
   };
 
+  /**
+   * Get a student's parents
+   *
+   * @param {String} payload.studentId The identifier of the student
+   *
+   * @returns void
+   */
+  const getParents = (payload: IStudentGetParents) => {
+    StudentsAPI.getParents(payload)
+      .then((response) => {
+        const { data } = response;
+
+        dispatch(setParents(data));
+      })
+      .catch((e) => {
+        const { msg } = e.response.data.errors[0];
+
+        Messages.add({
+          type: 'error',
+          text: `${msg}`,
+        });
+      });
+  };
+
+  /**
+   * Add a parent.
+   *
+   * @param   {string} payload.studentId  The identifier of the student.
+   * @param   {string} payload.email      The email of the parent.
+   *
+   * @returns Promise
+   */
+  const addParent = (payload: IStudentAddParent): Promise<any> => {
+    const { studentId } = payload;
+
+    return new Promise((resolve) => {
+      StudentsAPI.addParent(payload)
+        .then((response) => {
+          const { data } = response;
+
+          getParents({ studentId });
+
+          Messages.add({
+            type: 'success',
+            text: `Parent added.`,
+          });
+
+          resolve(data);
+        })
+        .catch((e) => {
+          const { msg } = e.response.data.errors[0];
+
+          Messages.add({
+            type: 'error',
+            text: `${msg}`,
+          });
+        });
+    });
+  };
+
+  /**
+   * Remove a child
+   *
+   * @param   {string} payload.studentId The identifier of the student.
+   * @param   {string} payload.parentId  The identifier of the parent.
+   *
+   * @returns Promise
+   */
+  const removeParent = (payload: IStudentRemoveParent): Promise<any> => {
+    const { studentId } = payload;
+
+    return new Promise((resolve) => {
+      StudentsAPI.removeParent(payload)
+        .then((response) => {
+          const { data } = response;
+
+          getParents({ studentId });
+
+          Messages.add({
+            type: 'success',
+            text: `Parent removed.`,
+          });
+
+          resolve(data);
+        })
+        .catch((e) => {
+          const { msg } = e.response.data.errors[0];
+
+          Messages.add({
+            type: 'error',
+            text: `${msg}`,
+          });
+        });
+    });
+  };
+
+  /**
+   * Confirm the relationship between a student and his/her parent
+   *
+   * @param   {string} payload.studentId The identifier of the student.
+   * @param   {string} payload.parentId  The identifier of the parent.
+   *
+   * @returns Promise
+   */
+  const confirmRelationship = (payload: IStudentConfirmRelationship): Promise<any> => {
+    const { studentId } = payload;
+
+    return new Promise((resolve) => {
+      StudentsAPI.confirmRelationship(payload)
+        .then((response) => {
+          const { data } = response;
+
+          getParents({ studentId });
+
+          Messages.add({
+            type: 'success',
+            text: `Confirmed`,
+          });
+
+          resolve(data);
+        })
+        .catch((e) => {
+          const { msg } = e.response.data.errors[0];
+
+          Messages.add({
+            type: 'error',
+            text: `${msg}`,
+          });
+        });
+    });
+  };
+
   React.useEffect(() => {
     Users.current.role === 'student' && Users.isLogged && getClassrooms();
-  }, [Users.current]);
+    Users.current.id && getParents({ studentId: Users.current.id });
+  }, [Users.current.id]);
 
   React.useEffect(() => {
     classroomId && get(classroomId);
@@ -218,6 +355,11 @@ const useStudents = (classroomId?: string) => {
     acceptInvitation,
     acceptInvitationBySignIn,
     acceptInvitationBySignUp,
+
+    getParents,
+    addParent,
+    removeParent,
+    confirmRelationship,
   };
 };
 

@@ -2,29 +2,30 @@ import Button from 'components/gui/Button';
 import Typography from 'components/gui/Typography';
 import React from 'react';
 import { FiUserPlus } from 'react-icons/fi';
-import AddChild from './AddChild';
-import style from './Children.module.css';
-import ChildrenList from './ChildrenList';
 
-const Children: React.FC = () => {
+import AddParent from './AddParent';
+import style from './Parents.module.css';
+import ParentsList from './ParentsList';
+
+const Parents: React.FC = () => {
   // States
   const [addModal, setAddModal] = React.useState<boolean>(false);
 
   return (
     <div className={style['container']}>
       <div className={style['header']}>
-        <Typography variant="title">Children</Typography>
+        <Typography variant="title">My parents</Typography>
         <Button variant="primary" onClick={() => setAddModal(true)}>
           <FiUserPlus />
           Add
         </Button>
       </div>
       <div className={style['content']}>
-        <ChildrenList />
+        <ParentsList />
       </div>
-      {addModal && <AddChild isOpen={addModal} onClose={() => setAddModal(false)} />}
+      {addModal && <AddParent isOpen={addModal} onClose={() => setAddModal(false)} />}
     </div>
   );
 };
 
-export default Children;
+export default Parents;

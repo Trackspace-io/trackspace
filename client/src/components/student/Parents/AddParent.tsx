@@ -2,18 +2,18 @@ import Form from 'components/gui/Form';
 import { Input, useInput } from 'components/gui/Input';
 import Modal from 'components/gui/Modal';
 import Typography from 'components/gui/Typography';
-import { useParents, useUsers } from 'controllers';
+import { useStudents, useUsers } from 'controllers';
 import React from 'react';
 
-interface IAddChildProps {
+interface IAddParentProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const AddChild: React.FC<IAddChildProps> = ({ isOpen, onClose }) => {
+const AddParent: React.FC<IAddParentProps> = ({ isOpen, onClose }) => {
   // Controllers
   const Inputs = useInput({ email: '' });
-  const Parents = useParents();
+  const Students = useStudents();
   const Users = useUsers();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -21,10 +21,10 @@ const AddChild: React.FC<IAddChildProps> = ({ isOpen, onClose }) => {
 
     const payload = {
       ...Inputs.values,
-      parentId: Users.current.id,
+      studentId: Users.current.id,
     };
 
-    Parents.addChild(payload).then(() => {
+    Students.addParent(payload).then(() => {
       Inputs.setValues({ email: '' });
       onClose();
     });
@@ -33,7 +33,7 @@ const AddChild: React.FC<IAddChildProps> = ({ isOpen, onClose }) => {
   return (
     <div>
       <Modal isOpen={isOpen} onClose={onClose}>
-        <Typography variant="info"> Add a child. </Typography>
+        <Typography variant="info"> Add a parent. </Typography>
         <br />
         <Form
           action="Add"
@@ -55,4 +55,4 @@ const AddChild: React.FC<IAddChildProps> = ({ isOpen, onClose }) => {
   );
 };
 
-export default AddChild;
+export default AddParent;

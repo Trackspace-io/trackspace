@@ -3,7 +3,7 @@ import Divider from 'components/gui/Divider';
 import Typography from 'components/gui/Typography';
 import { useParents, useUsers } from 'controllers';
 import React from 'react';
-import { FiUserMinus, FiUserPlus } from 'react-icons/fi';
+import { FiUserMinus } from 'react-icons/fi';
 import { IStudent } from 'store/students/types';
 import Child from './Child';
 import style from './Children.module.css';
@@ -35,23 +35,19 @@ const ChildrenList: React.FC = () => {
 
   return (
     <div className={style['children-container']}>
-      <div className={style['children-list']}>
-        {Parents.children.length !== 0 ? (
-          Parents.children.map((student, i) => (
+      {Parents.children.length !== 0 ? (
+        <div className={style['children-list']}>
+          {Parents.children.map((student, i) => (
             <div key={i} onClick={handleToggle.bind(this, student)}>
               <Child student={student} selected={selectedStudents.findIndex((s) => s.id === student.id)} />
             </div>
-          ))
-        ) : (
-          <div className={style['list-empty']}>
-            <Typography variant="subtitle1">You have not add any child yet.</Typography>
-            <Button variant="primary">
-              <FiUserPlus />
-              Add
-            </Button>
-          </div>
-        )}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <div className={style['list-empty']}>
+          <Typography variant="subtitle1">You have not add any child yet.</Typography>
+        </div>
+      )}
       <div className={style['children-actions']}>
         <br />
         <Divider />
