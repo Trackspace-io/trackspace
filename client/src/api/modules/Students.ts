@@ -15,7 +15,7 @@ import {
  * Get classrooms in which a student is enrolled.
  *
  * @method  GET
- * @url     /api/users/students/classrooms
+ * @url     /api/users/students/:id/classrooms
  *
  * @returns {Promise<{
  *  id: string,
@@ -23,8 +23,8 @@ import {
  *  teacherId: string,
  * }[]>} response.data.
  */
-export const getClassrooms = async (): Promise<any> => {
-  return await axios.get(`${_apiUrl}/api/users/students/classrooms`, { withCredentials: true });
+export const getClassrooms = async (studentId: string): Promise<any> => {
+  return await axios.get(`${_apiUrl}/api/users/students/${studentId}/classrooms`, { withCredentials: true });
 };
 
 /**

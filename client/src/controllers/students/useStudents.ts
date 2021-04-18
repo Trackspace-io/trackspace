@@ -42,8 +42,8 @@ const useStudents = (classroomId?: string) => {
    *
    * @returns void
    */
-  const getClassrooms = () => {
-    StudentsAPI.getClassrooms()
+  const getClassrooms = (studentId: string) => {
+    StudentsAPI.getClassrooms(studentId)
       .then((response) => {
         const { data } = response;
         dispatch(setClassrooms(data));
@@ -340,7 +340,7 @@ const useStudents = (classroomId?: string) => {
   };
 
   React.useEffect(() => {
-    Users.current.role === 'student' && Users.isLogged && getClassrooms();
+    Users.current.role === 'student' && Users.isLogged && getClassrooms(Users.current.id);
     Users.current.id && getParents({ studentId: Users.current.id });
   }, [Users.current.id]);
 

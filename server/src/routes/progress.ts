@@ -288,8 +288,6 @@ progress.get(
         }),
       });
     } catch (e) {
-      console.log('e', e);
-      
       return res.sendStatus(500);
     }
   }
