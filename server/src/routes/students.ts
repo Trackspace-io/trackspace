@@ -195,18 +195,19 @@ students.post(
  * Get classrooms in which a student is enrolled.
  *
  * @method  GET
- * @url     /users/students/classrooms
+ * @url     /users/students/:id/classrooms
  *
  * @returns 200, 500
  */
 students.get(
-  "/classrooms",
-  user().isA("student"),
+  "/:studentId/classrooms",
+  user().isA(["student", "parent"]),
+  student().senderIsAuthorized(),
 
   async (req: Request, res: Response): Promise<Response> => {
     try {
       return res.status(200).json(
-        (await (<User>req.user).getClassrooms()).map((classroom) => {
+        (await req.student.getClassrooms()).map((classroom) => {
           return { id: classroom.id, name: classroom.name };
         })
       );
