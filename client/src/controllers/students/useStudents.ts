@@ -350,6 +350,7 @@ const useStudents = (classroomId?: string) => {
 
   return {
     ...students,
+    getClassrooms,
     remove,
 
     acceptInvitation,

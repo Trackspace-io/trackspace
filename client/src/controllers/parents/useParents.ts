@@ -165,7 +165,7 @@ const useParents = () => {
 
   React.useEffect(() => {
     Users.current.id && getChildren({ parentId: Users.current.id });
-  }, [Users.current]);
+  }, [Users.current.id]);
 
   return {
     ...parents,

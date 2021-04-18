@@ -1,7 +1,7 @@
 import { Sidebar, SidebarItem } from 'components/gui/Sidebar';
 import Typography from 'components/gui/Typography';
 import React from 'react';
-import { Route, Switch } from 'react-router';
+import { Redirect, Route, Switch } from 'react-router';
 import Children from '../Children';
 
 import style from './Home.module.css';
@@ -21,6 +21,9 @@ const Home: React.FC = () => {
         </div>
         <div className={style['content']}>
           <Switch>
+            <Route exact path="/parent/dashboard">
+              <Redirect to="/parent/dashboard/children" />
+            </Route>
             <Route path="/parent/dashboard/children" component={Children} />
           </Switch>
         </div>

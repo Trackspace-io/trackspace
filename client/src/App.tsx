@@ -101,6 +101,9 @@ const App: React.FC = () => {
         <ProtectedRoute condition={Boolean(cookie)} exact path="/parent/dashboard/children" redirectPath="/">
           <ParentDashboard />
         </ProtectedRoute>
+        <ProtectedRoute condition={Boolean(cookie)} exact path="/parent/children/:id" redirectPath="/">
+          <ParentDashboard />
+        </ProtectedRoute>
 
         <Route path="*" component={Error} />
       </Switch>

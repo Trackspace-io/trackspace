@@ -26,7 +26,7 @@ const Child: React.FC<IChildProps> = ({ student, selected }) => {
         </div>
       </div>
       <div className={style['item-pending']}>
-        {!student.mustConfirm ? <FiUserX onClick={() => setConfirmModal(true)} /> : <FiUsers />}
+        {student.mustConfirm ? <FiUserX onClick={() => setConfirmModal(true)} /> : <FiUsers />}
       </div>
       {confirmModal && (
         <ConfirmRelationship isOpen={confirmModal} onClose={() => setConfirmModal(false)} studentId={student.id} />
