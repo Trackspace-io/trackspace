@@ -9,6 +9,7 @@ import useTeachers from './teachers/useTeachers';
 import useAuths from './users/useAuths';
 import useUsers from './users/useUsers';
 import useGoals from './goals/useGoals';
+import useParents from './parents/useParents';
 
 export {
   useAuths,
@@ -22,4 +23,5 @@ export {
   useInvitations,
   useMenu,
   useGoals,
+  useParents,
 };

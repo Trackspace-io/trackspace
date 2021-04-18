@@ -1,9 +1,15 @@
 import { _apiUrl } from 'api/api';
 import axios from 'axios';
-
-import { IStudentAcceptInvitation, IStudentInvitationBySignIn, IStudentInvitationBySignUp } from 'store/students/types';
-
 import { IInvitationGet } from 'store/invitations/types';
+import {
+  IStudentAcceptInvitation,
+  IStudentAddParent,
+  IStudentConfirmRelationship,
+  IStudentGetParents,
+  IStudentInvitationBySignIn,
+  IStudentInvitationBySignUp,
+  IStudentRemoveParent,
+} from 'store/students/types';
 
 /**
  * Get classrooms in which a student is enrolled.
@@ -87,6 +93,74 @@ export const acceptInvitationBySignIn = async (body: IStudentInvitationBySignIn)
  */
 export const acceptInvitationBySignUp = async (body: IStudentInvitationBySignUp): Promise<any> => {
   return await axios.post(`${_apiUrl}/api/users/students/invitations/accept/sign-up?t=${body.token}`, body, {
+    withCredentials: true,
+  });
+};
+
+/**
+ * Get the list of parents of a student.
+ *
+ * @method  GET
+ * @url     /users/students/:id/parents
+ *
+ * @param   {string} body.studentId The identifier of the student.
+ *
+ * @returns 200, 400, 401, 404, 500
+ */
+export const getParents = async (body: IStudentGetParents): Promise<any> => {
+  return await axios.get(`${_apiUrl}/api/users/students/${body.studentId}/parents`, {
+    withCredentials: true,
+  });
+};
+
+/**
+ * Confirms the relation between a student and a parent.
+ *
+ * @method POST
+ * @url    /users/students/:id/parents/:id/confirm
+ *
+ * @param   {string}  body.studentId  The identifier of the child.
+ * @param   {string}  body.parentId   The identifier of the parent.
+ *
+ * @returns 200, 400, 401, 404, 500
+ */
+export const confirmRelationship = async (body: IStudentConfirmRelationship): Promise<any> => {
+  return await axios.post(`${_apiUrl}/api/users/students/${body.studentId}/parents/${body.parentId}/confirm`, {
+    withCredentials: true,
+  });
+};
+
+/**
+ * Add a parent to the student.
+ *
+ * @method  POST
+ * @url     /users/students/:id/parent/add
+ *
+ * @param   {string}  body.studentId  The identifier of the child.
+ * @param   {string}  req.email       The parent's email address.
+ *
+ *
+ * @returns 200, 500
+ */
+export const addParent = async (body: IStudentAddParent): Promise<any> => {
+  return await axios.post(`${_apiUrl}/api/users/students/${body.studentId}/parents/add`, body, {
+    withCredentials: true,
+  });
+};
+
+/**
+ * Remove a parent.
+ *
+ * @method DELETE
+ * @url    /users/students/:id/parents/:id/remove
+ *
+ * @param   {string}  body.studentId  The identifier of the child.
+ * @param   {string}  body.parentId   The identifier of the parent.
+ *
+ * @returns 200, 400, 401, 404, 500
+ */
+export const removeParent = async (body: IStudentRemoveParent): Promise<any> => {
+  return await axios.post(`${_apiUrl}/api/users/students/${body.studentId}/parents/${body.parentId}/remove`, body, {
     withCredentials: true,
   });
 };

@@ -6,6 +6,7 @@ import { IStudentActions, IStudentState, STUDENTS } from './types';
 export const initialState = {
   list: [],
   classroomsList: [],
+  parents: [],
 };
 
 /**
@@ -23,6 +24,9 @@ const reducer = (state: IStudentState, action: IStudentActions): IStudentState =
 
     case STUDENTS.SET_CLASSROOMS:
       return { ...state, classroomsList: action.payload };
+
+    case STUDENTS.SET_PARENTS:
+      return { ...state, parents: action.payload };
 
     default:
       return state;

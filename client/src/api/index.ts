@@ -6,5 +6,6 @@ import * as SubjectsAPI from './modules/Subjects';
 import * as TermsAPI from './modules/Terms';
 import * as ProgressesAPI from './modules/Progresses';
 import * as GoalsAPI from './modules/Goals';
+import * as ParentsAPI from './modules/Parents';
 
-export { UserAPI, ClassroomAPI, TeachersAPI, StudentsAPI, SubjectsAPI, TermsAPI, ProgressesAPI, GoalsAPI };
+export { UserAPI, ClassroomAPI, TeachersAPI, StudentsAPI, SubjectsAPI, TermsAPI, ProgressesAPI, GoalsAPI, ParentsAPI };

@@ -6,7 +6,7 @@ import Messages from 'components/gui/Messages';
 import StudentDashboard from 'components/student/Dashboard';
 import Invitation from 'components/student/Invitation';
 import TeacherDashboard from 'components/teacher/Dashboard';
-import ParentDashboard from 'components/parent/Dashboard/Dashboard';
+import ParentDashboard from 'components/parent/Dashboard';
 import { useUsers } from 'controllers';
 import Cookies from 'js-cookie';
 import * as React from 'react';
@@ -90,6 +90,12 @@ const App: React.FC = () => {
 
         {/* Parents */}
         <ProtectedRoute condition={Boolean(cookie)} exact path="/parent" redirectPath="/">
+          <ParentDashboard />
+        </ProtectedRoute>
+        <ProtectedRoute condition={Boolean(cookie)} exact path="/parent/dashboard" redirectPath="/">
+          <ParentDashboard />
+        </ProtectedRoute>
+        <ProtectedRoute condition={Boolean(cookie)} exact path="/parent/dashboard/children" redirectPath="/">
           <ParentDashboard />
         </ProtectedRoute>
 

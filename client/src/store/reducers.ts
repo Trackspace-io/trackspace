@@ -21,6 +21,8 @@ import menuReducer from './menu';
 import { IMenuState } from './menu/types';
 import { IGoalState } from './goals/types';
 import goalsReducer from './goals';
+import parentsReducer from './parents';
+import { IParentState } from './parents/types';
 
 export interface IState {
   teachers: ITeacherState;
@@ -34,6 +36,7 @@ export interface IState {
   progresses: IProgressState;
   menu: IMenuState;
   goals: IGoalState;
+  parents: IParentState;
 }
 
 export const initialState: IState = {
@@ -48,6 +51,7 @@ export const initialState: IState = {
   progresses: progressesReducer.initialState,
   menu: menuReducer.initialState,
   goals: goalsReducer.initialState,
+  parents: parentsReducer.initialState,
 };
 
 const rootReducer = (state: IState, actions: any): IState => {
@@ -64,6 +68,7 @@ const rootReducer = (state: IState, actions: any): IState => {
     progresses,
     menu,
     goals,
+    parents,
   } = state;
 
   // Receiving current state here
@@ -79,6 +84,7 @@ const rootReducer = (state: IState, actions: any): IState => {
     progresses: progressesReducer.reducer(progresses, actions),
     menu: menuReducer.reducer(menu, actions),
     goals: goalsReducer.reducer(goals, actions),
+    parents: parentsReducer.reducer(parents, actions),
   };
 
   // Middlewares

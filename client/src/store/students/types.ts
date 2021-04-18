@@ -1,3 +1,4 @@
+import { IParent } from 'store/parents/types';
 import { IClassroom } from '../classrooms/types';
 
 /**
@@ -8,17 +9,22 @@ export interface IStudent {
   email: string;
   firstName: string;
   lastName: string;
+  invitationPendingSince?: string;
+  mustConfirm?: boolean;
 }
 
 /**
  * Reducer's state interface
  */
 export interface IStudentState {
-  // List of students
+  // List of students.
   list: IStudent[];
 
   // A student's list of classrooms.
   classroomsList: IClassroom[];
+
+  // List of parents.
+  parents: IParent[];
 }
 
 /**
@@ -27,6 +33,7 @@ export interface IStudentState {
 export enum STUDENTS {
   SET_STUDENTS = 'SET_STUDENTS',
   SET_CLASSROOMS = 'SET_CLASSROOMS',
+  SET_PARENTS = 'SET_PARENTS',
 }
 
 /**
@@ -34,7 +41,8 @@ export enum STUDENTS {
  */
 export type IStudentActions =
   | { type: STUDENTS.SET_STUDENTS; payload: IStudent[] }
-  | { type: STUDENTS.SET_CLASSROOMS; payload: IClassroom[] };
+  | { type: STUDENTS.SET_CLASSROOMS; payload: IClassroom[] }
+  | { type: STUDENTS.SET_PARENTS; payload: IParent[] };
 
 export interface IStudentAcceptInvitation {
   token: string;
@@ -61,4 +69,22 @@ export interface IStudentInvitationBySignUp {
 export interface IStudentRemove {
   classroomId: string;
   studentId: string;
+}
+
+export interface IStudentGetParents {
+  studentId: string;
+}
+
+export interface IStudentConfirmRelationship {
+  studentId: string;
+  parentId: string;
+}
+
+export interface IStudentAddParent {
+  studentId: string;
+}
+
+export interface IStudentRemoveParent {
+  studentId: string;
+  parentId: string;
 }
