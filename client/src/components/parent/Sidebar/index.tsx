@@ -20,7 +20,7 @@ const Sidebar: React.FC = () => {
   return (
     <div>
       <Tooltip text="Home" position="right">
-        <Link to="/student" className={style['home']}>
+        <Link to="/parent" className={style['home']}>
           <FcHome />
         </Link>
       </Tooltip>

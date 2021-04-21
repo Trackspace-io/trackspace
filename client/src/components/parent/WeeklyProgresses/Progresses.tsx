@@ -3,16 +3,16 @@ import Button from 'components/gui/Button';
 import { useClassroomsAsParent } from 'controllers';
 import React from 'react';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
-import ProgressGraph from './ProgressGraph';
 
+import ProgressGraph from './ProgressGraph';
 import style from './WeeklyProgresses.module.css';
 
-interface IProgressesProps {
+interface IProps {
   classroomId: string;
   studentId: string;
 }
 
-const Progresses: React.FC<IProgressesProps> = ({ classroomId, studentId }) => {
+const Progresses: React.FC<IProps> = ({ classroomId, studentId }) => {
   // Controllers
   const Classrooms = useClassroomsAsParent(classroomId);
 
@@ -45,6 +45,10 @@ const Progresses: React.FC<IProgressesProps> = ({ classroomId, studentId }) => {
       setWeekNumber(weekNumber + 1);
     }
   };
+
+  if (!terms.currentTerm) {
+    return <div />;
+  }
 
   return (
     <div className={style['progresses-container']}>

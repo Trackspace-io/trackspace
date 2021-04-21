@@ -14,6 +14,8 @@ const useMenu = () => {
   const { menu } = state;
 
   const setDate = (date: moment.Moment | null) => {
+    console.log('date', date);
+
     dispatch(actions.setDate(date));
   };
 

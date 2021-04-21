@@ -65,7 +65,7 @@ classrooms.post(
  */
 classrooms.get(
   "/:classroomId",
-  user().isA(["teacher", "student"]).isInClassroom(),
+  user().isA(["teacher", "student", "parent"]).isInClassroom(),
 
   async (req: Request, res: Response): Promise<Response> => {
     return res.status(200).json({ name: req.classroom.name });

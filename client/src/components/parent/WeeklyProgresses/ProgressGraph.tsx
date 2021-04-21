@@ -4,25 +4,26 @@ import React from 'react';
 
 import style from './WeeklyProgresses.module.css';
 
-interface IGraphProps {
+interface IProps {
   studentId: string;
   termId: string;
 }
 
-const ProgressGraph: React.FC<IGraphProps> = ({ termId, studentId }) => {
+const ProgressGraph: React.FC<IProps> = ({ termId, studentId }) => {
   // Controllers
   const Classrooms = useClassroomsAsParent();
 
   // States
-  const { progresses, terms } = Classrooms;
+  const { progresses } = Classrooms;
 
   React.useEffect(() => {
     studentId &&
+      termId &&
       progresses.getProgressGraph({
         termId,
         studentId,
       });
-  }, [studentId, terms.currentTerm?.id]);
+  }, [studentId && termId]);
 
   return <div className={style['graph-container']}>{progresses.graph && <Graph graph={progresses.graph} />}</div>;
 };

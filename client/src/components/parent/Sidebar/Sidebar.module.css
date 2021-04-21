@@ -46,8 +46,9 @@
   margin: 24px 0;
   box-sizing: border-box;
   text-decoration: none;
+  transition: all 2s ease;
 }
 
-.sub-bubble {
+.sub-bubble:hover {
   cursor: pointer;
 }

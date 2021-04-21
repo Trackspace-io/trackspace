@@ -3,20 +3,19 @@ import Typography from 'components/gui/Typography';
 import { useClassroomsAsParent } from 'controllers';
 import React from 'react';
 import { FcComboChart } from 'react-icons/fc';
-import { Route, Switch, useParams } from 'react-router';
-import style from './Classrooms.module.css';
+import { Redirect, Route, Switch, useParams } from 'react-router';
+
 import WeeklyProgresses from '../WeeklyProgresses';
+import style from './Classroom.module.css';
 
 interface RouteParams {
   classroomId: string;
   studentId: string;
 }
 
-const Classrooms: React.FC = () => {
+const Classroom: React.FC = () => {
   // URL param :id
   const { classroomId, studentId } = useParams<RouteParams>();
-  console.log('classroomId', classroomId);
-  console.log('studentId', studentId);
 
   // Controllers
   const Classrooms = useClassroomsAsParent(classroomId);
@@ -40,6 +39,9 @@ const Classrooms: React.FC = () => {
           </div>
           <div className={style['content']}>
             <Switch>
+              <Route exact path="/parent/children/:studentId/classrooms/:classroomId">
+                <Redirect to={`/parent/children/${studentId}/classrooms/${classroomId}/progress`} />
+              </Route>
               <Route path="/parent/children/:studentId/classrooms/:classroomId/progress" component={WeeklyProgresses} />
             </Switch>
           </div>
@@ -49,4 +51,4 @@ const Classrooms: React.FC = () => {
   );
 };
 
-export default Classrooms;
+export default Classroom;
