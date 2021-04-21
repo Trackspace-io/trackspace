@@ -67,11 +67,11 @@ const useTerms = (classroomId?: string) => {
           resolve(data);
         })
         .catch((e) => {
-          const { msg } = e.response.data.errors[0];
+          const { data } = e.response;
 
           Messages.add({
             type: 'error',
-            text: `${msg}`,
+            text: `${data}`,
           });
         });
     });
@@ -94,11 +94,11 @@ const useTerms = (classroomId?: string) => {
           resolve(data);
         })
         .catch((e) => {
-          const { msg } = e.response.data.errors[0];
+          const { data } = e.response;
 
           Messages.add({
             type: 'error',
-            text: `${msg}`,
+            text: `${data}`,
           });
         });
     });

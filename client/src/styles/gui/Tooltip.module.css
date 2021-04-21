@@ -6,7 +6,7 @@
 .tooltip .text {
   visibility: hidden;
   font-size: 16px;
-  width: 160px;
+  min-width: 160px;
   background: #555;
   color: var(--white);
   text-align: center;

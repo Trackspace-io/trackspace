@@ -10,12 +10,16 @@ import useAuths from './users/useAuths';
 import useUsers from './users/useUsers';
 import useGoals from './goals/useGoals';
 import useParents from './parents/useParents';
+import useClassroomsAsParent from './classrooms/useClassroomsAsParent';
+import useTerms from './terms/useTerms';
+import useProgresses from './progresses/useProgresses';
 
 export {
   useAuths,
   useUsers,
   useClassroomsAsTeacher,
   useClassroomsAsStudent,
+  useClassroomsAsParent,
   useMessages,
   useStudents,
   useTeachers,
@@ -24,4 +28,6 @@ export {
   useMenu,
   useGoals,
   useParents,
+  useTerms,
+  useProgresses,
 };

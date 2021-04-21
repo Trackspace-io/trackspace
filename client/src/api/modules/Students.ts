@@ -125,7 +125,10 @@ export const getParents = async (body: IStudentGetParents): Promise<any> => {
  * @returns 200, 400, 401, 404, 500
  */
 export const confirmRelationship = async (body: IStudentConfirmRelationship): Promise<any> => {
-  return await axios.post(`${_apiUrl}/api/users/students/${body.studentId}/parents/${body.parentId}/confirm`, {
+  console.log('studentId', body.studentId);
+  console.log('parentId', body.parentId);
+
+  return await axios.post(`${_apiUrl}/api/users/students/${body.studentId}/parents/${body.parentId}/confirm`, body, {
     withCredentials: true,
   });
 };

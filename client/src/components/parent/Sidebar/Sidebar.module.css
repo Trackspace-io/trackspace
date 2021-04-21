@@ -32,3 +32,22 @@
   box-shadow: 0 1px 5px #ccc;
   transform: scale(1.2);
 }
+
+.sub-bubble {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid #bbb;
+  border-radius: 50%;
+  background: var(--blue-dark);
+  color: #fff;
+  margin: 24px 0;
+  box-sizing: border-box;
+  text-decoration: none;
+}
+
+.sub-bubble {
+  cursor: pointer;
+}

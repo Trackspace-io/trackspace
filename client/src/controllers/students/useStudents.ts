@@ -43,19 +43,23 @@ const useStudents = (classroomId?: string) => {
    * @returns void
    */
   const getClassrooms = (studentId: string) => {
-    StudentsAPI.getClassrooms(studentId)
-      .then((response) => {
-        const { data } = response;
-        dispatch(setClassrooms(data));
-      })
-      .catch((e) => {
-        const { data } = e.response;
+    return new Promise((resolve) => {
+      StudentsAPI.getClassrooms(studentId)
+        .then((response) => {
+          const { data } = response;
 
-        Messages.add({
-          type: 'error',
-          text: `${data}`,
+          dispatch(setClassrooms(data));
+          resolve(data);
+        })
+        .catch((e) => {
+          const { data } = e.response;
+
+          Messages.add({
+            type: 'error',
+            text: `${data}`,
+          });
         });
-      });
+    });
   };
 
   /**
@@ -341,7 +345,7 @@ const useStudents = (classroomId?: string) => {
 
   React.useEffect(() => {
     Users.current.role === 'student' && Users.isLogged && getClassrooms(Users.current.id);
-    Users.current.id && getParents({ studentId: Users.current.id });
+    Users.current.role === 'student' && getParents({ studentId: Users.current.id });
   }, [Users.current.id]);
 
   React.useEffect(() => {
