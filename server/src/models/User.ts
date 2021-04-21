@@ -160,6 +160,18 @@ export class User extends Model {
       return await this.getStudentClassrooms();
     }
 
+    if (this.role === "parent") {
+      const children = await this.getRelatedUsers(["student"]);
+      const classrooms: Set<Classroom> = new Set();
+
+      for (let i = 0; i < children.length; i++) {
+        const childClassrooms = await children[i][0].getClassrooms();
+        childClassrooms.forEach((c) => classrooms.add(c));
+      }
+
+      return Array.from(classrooms);
+    }
+
     return [];
   }
 
