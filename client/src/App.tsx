@@ -79,13 +79,19 @@ const App: React.FC = () => {
         <ProtectedRoute condition={Boolean(cookie)} exact path="/student/parents" redirectPath="/">
           <StudentDashboard />
         </ProtectedRoute>
-        <ProtectedRoute condition={Boolean(cookie)} path="/student/classrooms/:id" redirectPath="/">
+        <ProtectedRoute condition={Boolean(cookie)} path="/student/classrooms/:classroomId" redirectPath="/">
           <StudentDashboard />
         </ProtectedRoute>
-        <ProtectedRoute condition={Boolean(cookie)} path="/student/classrooms/:id/progress/today" redirectPath="/">
+        <ProtectedRoute
+          condition={Boolean(cookie)}
+          path="/student/classrooms/:classroomId/progress/today"
+          redirectPath="/">
           <StudentDashboard />
         </ProtectedRoute>
-        <ProtectedRoute condition={Boolean(cookie)} path="/student/classrooms/:id/progress/weekly" redirectPath="/">
+        <ProtectedRoute
+          condition={Boolean(cookie)}
+          path="/student/classrooms/:classroomId/progress/weekly"
+          redirectPath="/">
           <StudentDashboard />
         </ProtectedRoute>
 

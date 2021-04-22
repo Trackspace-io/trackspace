@@ -28,7 +28,7 @@ const Dashboard: React.FC = () => {
             <Route path="/students/classrooms/invitations/accept" />
             <Route exact path="/student/classrooms" component={Home} />
             <Route path="/student/parents/" component={Home} />
-            <Route path="/student/classrooms/:id" component={Classroom} />
+            <Route path="/student/classrooms/:classroomId" component={Classroom} />
           </Switch>
         </div>
         <div className={style['menu']}>

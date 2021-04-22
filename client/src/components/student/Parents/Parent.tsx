@@ -23,7 +23,9 @@ const Parent: React.FC<IParentProps> = ({ parent, selected }) => {
           <Typography variant="caption">{parent.email}</Typography>
         </div>
         <div>
-          <Typography variant="caption">{`Pending since ${parent.invitationPendingSince}`}</Typography>
+          <Typography variant="caption">
+            {parent.invitationPendingSince ? `Pending since ${parent.invitationPendingSince}` : 'Confirmed'}
+          </Typography>
         </div>
       </div>
       <div className={style['item-pending']}>

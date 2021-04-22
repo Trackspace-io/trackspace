@@ -1,5 +1,6 @@
 import ProgressItem from 'components/common/ProgressItem/ProgressItem';
 import Button from 'components/gui/Button';
+import Typography from 'components/gui/Typography';
 import { useClassroomsAsParent } from 'controllers';
 import React from 'react';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
@@ -47,7 +48,12 @@ const Progresses: React.FC<IProps> = ({ classroomId, studentId }) => {
   };
 
   if (!terms.currentTerm) {
-    return <div />;
+    return (
+      <div className={style['progresses-empty']}>
+        <Typography variant="subtitle">No term is associated to the current date.</Typography>
+        <Typography variant="subtitle1"> Please add a term, or select a previous term.</Typography>
+      </div>
+    );
   }
 
   return (

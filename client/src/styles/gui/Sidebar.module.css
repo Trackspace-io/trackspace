@@ -2,8 +2,9 @@
   background: transparent;
   width: 232px;
   max-height: 100vh;
-  padding: 16px 8px 16px;
+  padding: 16px 0px;
   margin-right: 24px;
+  margin-top: 16px;
 }
 
 .sidebar-item {

@@ -12,7 +12,9 @@ const Classrooms: React.FC = () => {
   return (
     <div>
       <div className={style['classrooms-header']}>
-        <Typography variant="subtitle"> My classrooms </Typography>
+        <Typography variant="subtitle" weight="light">
+          My classrooms
+        </Typography>
       </div>
       <Divider />
       <div className={style['classrooms-body']}>

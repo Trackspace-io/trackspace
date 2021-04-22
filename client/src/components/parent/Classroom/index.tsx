@@ -23,28 +23,25 @@ const Classroom: React.FC = () => {
   return (
     <div>
       <div className={style['container']}>
-        <div className={style['body']}>
-          <div className={style['sidebar']}>
-            <div className={style['title']}>
-              <Typography variant="subtitle">{Classrooms.current.name}</Typography>
-            </div>
-            <br />
-            <Sidebar>
-              <SidebarItem
-                to={`/parent/children/${studentId}/classrooms/${classroomId}/progress`}
-                icon={<FcComboChart />}>
-                Weekly progress
-              </SidebarItem>
-            </Sidebar>
+        <div className={style['sidebar']}>
+          <div className={style['title']}>
+            <Typography variant="subtitle">{Classrooms.current.name}</Typography>
           </div>
-          <div className={style['content']}>
-            <Switch>
-              <Route exact path="/parent/children/:studentId/classrooms/:classroomId">
-                <Redirect to={`/parent/children/${studentId}/classrooms/${classroomId}/progress`} />
-              </Route>
-              <Route path="/parent/children/:studentId/classrooms/:classroomId/progress" component={WeeklyProgresses} />
-            </Switch>
-          </div>
+          <Sidebar>
+            <SidebarItem
+              to={`/parent/children/${studentId}/classrooms/${classroomId}/progress`}
+              icon={<FcComboChart />}>
+              Weekly progress
+            </SidebarItem>
+          </Sidebar>
+        </div>
+        <div className={style['content']}>
+          <Switch>
+            <Route exact path="/parent/children/:studentId/classrooms/:classroomId">
+              <Redirect to={`/parent/children/${studentId}/classrooms/${classroomId}/progress`} />
+            </Route>
+            <Route path="/parent/children/:studentId/classrooms/:classroomId/progress" component={WeeklyProgresses} />
+          </Switch>
         </div>
       </div>
     </div>

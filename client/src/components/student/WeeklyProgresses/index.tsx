@@ -6,20 +6,20 @@ import Terms from './Terms';
 import style from './Weekly.module.css';
 
 interface RouteParams {
-  id: string;
+  classroomId: string;
 }
 
 const WeeklyProgresses: React.FC = () => {
   // Retrieve id
-  const { id } = useParams<RouteParams>();
+  const { classroomId } = useParams<RouteParams>();
 
   return (
     <div className={style['container']}>
       <div className={style['header']}>
-        <Terms classroomId={id} />
+        <Terms classroomId={classroomId} />
       </div>
       <div className={style['body']}>
-        <Progresses classroomId={id} />
+        <Progresses classroomId={classroomId} />
       </div>
     </div>
   );

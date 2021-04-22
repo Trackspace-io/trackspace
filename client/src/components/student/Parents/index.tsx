@@ -14,13 +14,15 @@ const Parents: React.FC = () => {
   return (
     <div className={style['container']}>
       <div className={style['header']}>
-        <Typography variant="title">My parents</Typography>
+        <Typography variant="subtitle" weight="light">
+          My parents
+        </Typography>
         <Button variant="primary" onClick={() => setAddModal(true)}>
           <FiUserPlus />
           Add
         </Button>
       </div>
-      <div className={style['content']}>
+      <div className={style['body']}>
         <ParentsList />
       </div>
       {addModal && <AddParent isOpen={addModal} onClose={() => setAddModal(false)} />}

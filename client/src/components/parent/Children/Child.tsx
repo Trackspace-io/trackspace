@@ -22,7 +22,9 @@ const Child: React.FC<IChildProps> = ({ student, selected }) => {
           <Typography variant="caption">{student.email}</Typography>
         </div>
         <div>
-          <Typography variant="caption">{`Pending since ${student.invitationPendingSince}`}</Typography>
+          <Typography variant="caption">
+            {student.invitationPendingSince ? `Pending since ${student.invitationPendingSince}` : 'Confirmed'}
+          </Typography>
         </div>
       </div>
       <div className={style['item-pending']}>

@@ -10,15 +10,15 @@ import WeeklyProgresses from '../WeeklyProgresses';
 import style from './Classroom.module.css';
 
 interface RouteParams {
-  id: string;
+  classroomId: string;
 }
 
 const Classroom: React.FC = () => {
   // URL param :id
-  const { id } = useParams<RouteParams>();
+  const { classroomId } = useParams<RouteParams>();
 
   // Controllers
-  const Classrooms = useClassroomsAsStudent(id);
+  const Classrooms = useClassroomsAsStudent(classroomId);
 
   return (
     <div>
@@ -30,21 +30,21 @@ const Classroom: React.FC = () => {
             </div>
             <br />
             <Sidebar>
-              <SidebarItem to={`/student/classrooms/${id}/progress/today`} icon={<FcInspection />}>
+              <SidebarItem to={`/student/classrooms/${classroomId}/progress/today`} icon={<FcInspection />}>
                 Today
               </SidebarItem>
-              <SidebarItem to={`/student/classrooms/${id}/progress/weekly`} icon={<FcComboChart />}>
+              <SidebarItem to={`/student/classrooms/${classroomId}/progress/weekly`} icon={<FcComboChart />}>
                 Weekly progress
               </SidebarItem>
             </Sidebar>
           </div>
           <div className={style['content']}>
             <Switch>
-              <Route exact path="/student/classrooms/:id">
-                <Redirect to={`/student/classrooms/${id}/progress/today`} />
+              <Route exact path="/student/classrooms/:classroomId">
+                <Redirect to={`/student/classrooms/${classroomId}/progress/today`} />
               </Route>
-              <Route path="/student/classrooms/:id/progress/today" component={Today} />
-              <Route path="/student/classrooms/:id/progress/weekly" component={WeeklyProgresses} />
+              <Route path="/student/classrooms/:classroomId/progress/today" component={Today} />
+              <Route path="/student/classrooms/:classroomId/progress/weekly" component={WeeklyProgresses} />
             </Switch>
           </div>
         </div>

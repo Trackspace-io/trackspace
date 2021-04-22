@@ -6,10 +6,11 @@
 .header {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
   width: 100%;
 }
 
-.content {
+.body {
   height: 100%;
 }
 
@@ -21,8 +22,6 @@
 }
 
 .parents-container {
-  display: grid;
-  grid-template-rows: auto 1fr;
   border: 1px solid #ccc;
   border-radius: 8px;
   margin: 16px 0 0;
@@ -31,12 +30,12 @@
 
 .parents-list {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   grid-template-rows: auto;
   place-content: start;
   gap: 16px;
   width: 100%;
-  height: 50vh;
+  height: 55vh;
 }
 
 .list-empty {
