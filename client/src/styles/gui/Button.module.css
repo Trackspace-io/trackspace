@@ -3,7 +3,9 @@
 }
 
 .button {
-  font-family: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 16px;
   font-weight: 400;
   padding: 8px 32px;
@@ -11,7 +13,10 @@
   cursor: pointer;
   letter-spacing: 1px;
   box-shadow: none;
-  display: inline;
+}
+
+.button svg {
+  padding-right: 8px;
 }
 
 .button:focus {
@@ -21,13 +26,14 @@
 .button[disabled] {
   cursor: not-allowed;
   pointer-events: none;
+  color: #ccc;
 }
 
 .primary {
   border: 1px solid #ccc;
-  border-radius: 24px;
+  border-radius: 8px;
   color: var(--black-light);
-  background: linear-gradient(to right, var(--green-light) 50%, #fff 50%);
+  background: linear-gradient(to right, var(--blue-dark) 50%, #fff 50%);
   background-size: 200% 100%;
   background-position: right bottom;
   transition: all 0.2s ease-out;

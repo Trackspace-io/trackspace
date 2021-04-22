@@ -1,0 +1,54 @@
+.home {
+  display: flex;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  margin: 24px 0;
+}
+
+.home svg {
+  transform: scale(2);
+}
+
+.bubble {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid #bbb;
+  border-radius: 16px;
+  margin: 24px 0;
+  text-decoration: none;
+  color: var(--black);
+  outline: none;
+  transition: transform 0.5s;
+  box-sizing: border-box;
+}
+
+.bubble:hover {
+  cursor: pointer;
+  background: var(--blue-dark);
+  box-shadow: 0 1px 5px #ccc;
+  transform: scale(1.2);
+}
+
+.sub-bubble {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid #bbb;
+  border-radius: 50%;
+  background: var(--blue-dark);
+  color: #fff;
+  margin: 24px 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  transition: all 2s ease;
+}
+
+.sub-bubble:hover {
+  cursor: pointer;
+}

@@ -6,6 +6,7 @@ import Messages from 'components/gui/Messages';
 import StudentDashboard from 'components/student/Dashboard';
 import Invitation from 'components/student/Invitation';
 import TeacherDashboard from 'components/teacher/Dashboard';
+import ParentDashboard from 'components/parent/Dashboard';
 import { useUsers } from 'controllers';
 import Cookies from 'js-cookie';
 import * as React from 'react';
@@ -24,6 +25,7 @@ const App: React.FC = () => {
     Users.authCheck(cookie);
   }, []);
 
+  // Test comment.
   return (
     <Router>
       <Navbar />
@@ -74,17 +76,51 @@ const App: React.FC = () => {
         <ProtectedRoute condition={Boolean(cookie)} exact path="/student/classrooms" redirectPath="/">
           <StudentDashboard />
         </ProtectedRoute>
-        <ProtectedRoute condition={Boolean(cookie)} path="/student/classrooms/:id" redirectPath="/">
+        <ProtectedRoute condition={Boolean(cookie)} exact path="/student/parents" redirectPath="/">
           <StudentDashboard />
         </ProtectedRoute>
-        <ProtectedRoute condition={Boolean(cookie)} path="/student/classrooms/:id/progress/today" redirectPath="/">
+        <ProtectedRoute condition={Boolean(cookie)} path="/student/classrooms/:classroomId" redirectPath="/">
           <StudentDashboard />
         </ProtectedRoute>
-        <ProtectedRoute condition={Boolean(cookie)} path="/student/classrooms/:id/progress/weekly" redirectPath="/">
+        <ProtectedRoute
+          condition={Boolean(cookie)}
+          path="/student/classrooms/:classroomId/progress/today"
+          redirectPath="/">
+          <StudentDashboard />
+        </ProtectedRoute>
+        <ProtectedRoute
+          condition={Boolean(cookie)}
+          path="/student/classrooms/:classroomId/progress/weekly"
+          redirectPath="/">
           <StudentDashboard />
         </ProtectedRoute>
 
         <Route path="/students/classrooms/invitations/accept" component={Invitation} />
+
+        {/* Parents */}
+        <ProtectedRoute condition={Boolean(cookie)} exact path="/parent" redirectPath="/">
+          <ParentDashboard />
+        </ProtectedRoute>
+        <ProtectedRoute condition={Boolean(cookie)} exact path="/parent/dashboard" redirectPath="/">
+          <ParentDashboard />
+        </ProtectedRoute>
+        <ProtectedRoute condition={Boolean(cookie)} exact path="/parent/dashboard/children" redirectPath="/">
+          <ParentDashboard />
+        </ProtectedRoute>
+        <ProtectedRoute
+          condition={Boolean(cookie)}
+          exact
+          path="/parent/children/:studentId/classrooms/:classroomId"
+          redirectPath="/">
+          <ParentDashboard />
+        </ProtectedRoute>
+        <ProtectedRoute
+          condition={Boolean(cookie)}
+          exact
+          path="/parent/children/:studentId/classrooms/:classroomId/progress"
+          redirectPath="/">
+          <ParentDashboard />
+        </ProtectedRoute>
 
         <Route path="*" component={Error} />
       </Switch>

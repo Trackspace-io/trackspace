@@ -30,7 +30,7 @@ const progress = Router();
  */
 progress.post(
   "/",
-  user().isA(["teacher", "student"]),
+  user().isA(["teacher", "student", "parent"]),
 
   body(["subjectId", "studentId"])
     .isString()
@@ -190,7 +190,7 @@ progress.post(
  */
 progress.get(
   "/terms/:termId/student/:studentId/weeks/:weekNumber",
-  user().isA(["teacher", "student"]),
+  user().isA(["teacher", "student", "parent"]),
 
   param("studentId").custom(async (value) => {
     const student = await User.findById(value);
@@ -306,7 +306,7 @@ progress.get(
  */
 progress.get(
   "/terms/:termId/students/:studentId/graph",
-  user().isA(["teacher", "student"]),
+  user().isA(["teacher", "student", "parent"]),
 
   param("termId").custom(async (value, { req }) => {
     const user = <User>req.user;
@@ -367,7 +367,7 @@ progress.get(
  */
 progress.get(
   "/classrooms/:classroomId/students/:studentId",
-  user().isA(["teacher", "student"]).isInClassroom(),
+  user().isA(["teacher", "student", "parent"]).isInClassroom(),
 
   param("studentId").custom(async (value, { req }) => {
     const user = <User>req.user;

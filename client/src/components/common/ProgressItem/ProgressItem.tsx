@@ -6,6 +6,7 @@ import React from 'react';
 import { IProgressByWeekValues } from 'store/progresses/types';
 
 import style from './ProgressItem.module.css';
+import ProgressUpdate from './ProgressUpdate';
 
 interface IProgressItemProps {
   weekNumber: number;
@@ -14,6 +15,13 @@ interface IProgressItemProps {
 
 const ProgressItem: React.FC<IProgressItemProps> = ({ weekNumber, week }) => {
   const { dates, days, progress } = week;
+  const [updateModal, setUpdateModal] = React.useState<boolean>(false);
+  const [values, setValues] = React.useState<any>();
+
+  const handleClick = (values: any) => {
+    setValues(values);
+    setUpdateModal(!updateModal);
+  };
 
   return (
     <div>
@@ -44,12 +52,12 @@ const ProgressItem: React.FC<IProgressItemProps> = ({ weekNumber, week }) => {
                     <div className={cx(style['data'], style['title'])}>Pages set</div>
                     <div className={cx(style['data'], style['title'])}>Pages done</div>
                     <div className={cx(style['data'], style['title'])}>Homework</div>
-                    <div className={cx(style['data'], style['title'])}>Homework done</div>
+                    <div className={cx(style['data'], style['title'])}>Done</div>
                   </div>
                   {values.map((v) => {
                     return (
                       v && (
-                        <div key={v.day} className={style['row']}>
+                        <div key={v.day} className={style['row-data']} onClick={handleClick.bind(this, v)}>
                           <div className={cx(style['data'], style['day'])}>{v.day.slice(0, 3)}</div>
                           <div className={style['data']}>{v.pageFrom || 0}</div>
                           <div className={style['data']}>{v.pageSet || 0}</div>
@@ -66,6 +74,13 @@ const ProgressItem: React.FC<IProgressItemProps> = ({ weekNumber, week }) => {
           })}
         </div>
       )}
+
+      <ProgressUpdate
+        isOpen={updateModal}
+        onClose={() => setUpdateModal(false)}
+        values={values}
+        weekNumber={weekNumber}
+      />
     </div>
   );
 };

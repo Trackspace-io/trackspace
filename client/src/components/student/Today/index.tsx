@@ -11,14 +11,14 @@ import Terms from './Terms';
 import style from './Today.module.css';
 
 interface RouteParams {
-  id: string;
+  classroomId: string;
 }
 
 const Today: React.FC = () => {
   // Retrieve id
-  const { id } = useParams<RouteParams>();
+  const { classroomId } = useParams<RouteParams>();
 
-  const Classrooms = useClassroomsAsStudent(id);
+  const Classrooms = useClassroomsAsStudent(classroomId);
   const Users = useUsers();
   const Menu = useMenu();
 
@@ -27,14 +27,14 @@ const Today: React.FC = () => {
   // Fetch the progress by date when the components mounts, and when a date is selected from the menu.
   React.useEffect(() => {
     progresses.getByDate({
-      classroomId: id,
+      classroomId,
       studentId: Users.current.id,
       date: Menu.date.format('YYYY-MM-DD'),
     });
 
     terms
       .getByDate({
-        classroomId: id,
+        classroomId,
         date: Menu.date.format('YYYY-MM-DD'),
       })
       .then((data) => {
@@ -50,7 +50,7 @@ const Today: React.FC = () => {
             {dateString(Menu.date.toLocaleString())}
           </Typography>
           <br />
-          <Terms classroomId={id} selectedDate={Menu.date} />
+          <Terms classroomId={classroomId} selectedDate={Menu.date} />
         </div>
         <div className={style['helper']}>
           <Tooltip text="Select a date from the calendar on the right." position="left">
@@ -59,7 +59,7 @@ const Today: React.FC = () => {
         </div>
       </div>
       <div className={style['body']}>
-        <Progress classroomId={id} selectedDate={Menu.date} />
+        <Progress classroomId={classroomId} selectedDate={Menu.date} />
       </div>
     </div>
   );
