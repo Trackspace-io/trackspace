@@ -15,8 +15,17 @@
   flex-direction: column;
 }
 
-.progress-table .row {
+.progress-table .row,
+.row-data {
   display: flex;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.progress-table .row-data:hover {
+  background: var(--blue-dark);
+  color: var(--white);
+  border-radius: 4px;
 }
 
 .progress-table .data {
@@ -35,4 +44,20 @@
   text-transform: capitalize;
   text-align: left;
   font-weight: 600;
+}
+
+.form {
+  padding: 8px;
+}
+
+.inputs {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.inputs .checkbox {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
 }

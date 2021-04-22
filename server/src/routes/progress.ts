@@ -30,7 +30,7 @@ const progress = Router();
  */
 progress.post(
   "/",
-  user().isA(["teacher", "student"]),
+  user().isA(["teacher", "student", "parent"]),
 
   body(["subjectId", "studentId"])
     .isString()
@@ -367,7 +367,7 @@ progress.get(
  */
 progress.get(
   "/classrooms/:classroomId/students/:studentId",
-  user().isA(["teacher", "student"]).isInClassroom(),
+  user().isA(["teacher", "student", "parent"]).isInClassroom(),
 
   param("studentId").custom(async (value, { req }) => {
     const user = <User>req.user;
