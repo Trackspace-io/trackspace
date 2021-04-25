@@ -8,23 +8,32 @@ interface INotifParams {
 }
 
 async function info(params: INotifParams): Promise<INotificationInfo> {
-  const recipient = await User.findById(params.recipientId);
+  let text = "";
+  const sender = await User.findById(params.senderId);
 
-  let text =
-    "You received an invitation from a user who doesn't exist anymore.";
-
-  if (recipient) {
-    if (recipient.role === "student") {
-      const studentInfo = `${recipient.fullName} (${recipient.email})`;
+  switch (sender.role) {
+    case "student": {
+      const studentInfo = `${sender.fullName} (${sender.email})`;
       text = `${studentInfo} wants to add you as tutor/parent.`;
-    } else if (recipient.role === "teacher") {
-      const parentInfo = `${recipient.fullName} (${recipient.email})`;
-      text = `${parentInfo} indicated that he/she is your tutor/parent.`;
+      break;
     }
+    case "parent": {
+      const parentInfo = `${sender.fullName} (${sender.email})`;
+      text = `${parentInfo} indicated that he/she is your tutor/parent.`;
+      break;
+    }
+    default:
+      break;
   }
 
   // Return notification object.
-  return { text, actions: ["Confirm", "Delete"] };
+  return {
+    text,
+    actions: [
+      { id: "confirm", text: "Confirm" },
+      { id: "delete", text: "Delete" },
+    ],
+  };
 }
 
 async function isValid(params: INotifParams): Promise<boolean> {
@@ -47,11 +56,14 @@ async function process(action: string, params: INotifParams): Promise<void> {
   if (!sender || !recipient) return;
 
   switch (action) {
-    case "Confirm":
+    case "confirm": {
       await recipient.confirmRelationWith(sender);
       return;
-
-    case "Delete":
+    }
+    case "delete": {
+      await recipient.removeRelatedUser(sender);
+      return;
+    }
     default:
       return;
   }

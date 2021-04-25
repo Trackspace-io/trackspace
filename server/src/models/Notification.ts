@@ -7,9 +7,14 @@ import {
 import shortid from "shortid";
 import { User } from "./User";
 
+export interface INotificationAction {
+  id: string;
+  text: string;
+}
+
 export interface INotificationInfo {
   text: string;
-  actions: string[];
+  actions: INotificationAction[];
 }
 
 /**
@@ -143,6 +148,13 @@ export class Notification extends Model {
   }
 
   /**
+   * Type of the notification.
+   */
+  public get type(): string {
+    return this.getDataValue("type");
+  }
+
+  /**
    * Returns the recipient of this notification.
    */
   public getRecipient!: BelongsToGetAssociationMixin<User>;
@@ -165,10 +177,11 @@ export class Notification extends Model {
   /**
    * Returns the actions of the notification.
    *
-   * @returns Text of the notification.
+   * @returns List of actions.
    */
-  public async getActions(): Promise<string[]> {
+  public async getActions(): Promise<INotificationAction[]> {
     if (!this.typeObj) return [];
+
     const { actions } = await this.typeObj.info(this.deserializedParams);
     return actions;
   }

@@ -1,7 +1,7 @@
 import date from "date-and-time";
 import { Request, Response, Router } from "express";
 import { User } from "../models/User";
-import { Notification } from "../models/Notification";
+import { INotificationAction, Notification } from "../models/Notification";
 import notification from "../validators/notification";
 import { query, validationResult } from "express-validator";
 
@@ -28,6 +28,7 @@ notifications.get(
           notifications.map(async (notif) => {
             return {
               id: notif.id,
+              type: notif.type,
               text: await notif.getText(),
               actions: await notif.getActions(),
               date: date.format(notif.date, "YYYY-MM-DD"),
@@ -61,8 +62,10 @@ notifications.post(
     .custom(async (value, { req }) => {
       if (!req.notification) return true;
 
-      const actions: string[] = await req.notification.getActions();
-      return !actions.includes(value)
+      const notif: Notification = req.notification;
+      const actions = await notif.getActions();
+
+      return !actions.find((a) => a.id === value)
         ? Promise.reject("Invalid action.")
         : true;
     }),

@@ -20,7 +20,13 @@ async function info(params: INotifParams): Promise<INotificationInfo> {
       "exist anymore.";
 
   // Return notification object.
-  return { text, actions: ["Accept", "Refuse"] };
+  return {
+    text,
+    actions: [
+      { id: "accept", text: "Accept" },
+      { id: "refuse", text: "Refuse" },
+    ],
+  };
 }
 
 async function isValid(params: INotifParams): Promise<boolean> {
@@ -41,12 +47,12 @@ async function process(action: string, params: INotifParams): Promise<void> {
   if (!student) return;
 
   switch (action) {
-    case "Accept":
+    case "accept":
       await classroom.addStudent(student);
       await classroom.save();
       return;
 
-    case "Refuse":
+    case "refuse":
     default:
       return;
   }
