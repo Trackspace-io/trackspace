@@ -1,7 +1,7 @@
 import date from "date-and-time";
 import { Request, Response, Router } from "express";
 import { User } from "../models/User";
-import { INotificationAction, Notification } from "../models/Notification";
+import { Notification } from "../models/Notification";
 import notification from "../validators/notification";
 import { query, validationResult } from "express-validator";
 
