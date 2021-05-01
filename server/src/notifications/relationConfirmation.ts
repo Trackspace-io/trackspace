@@ -37,6 +37,8 @@ async function info(params: INotifParams): Promise<INotificationInfo> {
 }
 
 async function isValid(params: INotifParams): Promise<boolean> {
+  if (!params.recipientId || !params.senderId) return false;
+
   const recipient = await User.findById(params.recipientId);
   if (!recipient) return false;
 
