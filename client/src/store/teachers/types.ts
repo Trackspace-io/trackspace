@@ -24,3 +24,8 @@ export interface ITeacherGenerateLink {
   classroomId: string;
   expiresIn: number;
 }
+
+export interface ITeacherSendInvitation {
+  classroomId: string;
+  studentEmail: string;
+}

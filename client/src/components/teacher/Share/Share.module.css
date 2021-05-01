@@ -1,0 +1,9 @@
+.input-control {
+  position: relative;
+}
+
+.input-control button {
+  position: absolute;
+  right: 16px;
+  top: 1px;
+}

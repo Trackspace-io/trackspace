@@ -1,7 +1,6 @@
 import { useAuths, useUsers } from 'controllers';
 import Cookies from 'js-cookie';
 import * as React from 'react';
-import { FiInbox } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 
 import logo from '../../images/logo.svg';
@@ -40,9 +39,6 @@ const NavbarMini: React.FC = () => {
 
   return (
     <div className={style['container-mini']}>
-      <Dropdown type="icon" icon={<FiInbox />}>
-        <DropdownItem type="text">Notification</DropdownItem>
-      </Dropdown>
       <Dropdown type="title" title={`${Users.current?.firstName} ${Users.current?.lastName}`}>
         <DropdownItem
           type="link"

@@ -23,6 +23,8 @@ import { IGoalState } from './goals/types';
 import goalsReducer from './goals';
 import parentsReducer from './parents';
 import { IParentState } from './parents/types';
+import notificationsReducer from './notifications';
+import { INotificationState } from './notifications/types';
 
 export interface IState {
   teachers: ITeacherState;
@@ -37,6 +39,7 @@ export interface IState {
   menu: IMenuState;
   goals: IGoalState;
   parents: IParentState;
+  notifications: INotificationState;
 }
 
 export const initialState: IState = {
@@ -52,6 +55,7 @@ export const initialState: IState = {
   menu: menuReducer.initialState,
   goals: goalsReducer.initialState,
   parents: parentsReducer.initialState,
+  notifications: notificationsReducer.initialState,
 };
 
 const rootReducer = (state: IState, actions: any): IState => {
@@ -69,6 +73,7 @@ const rootReducer = (state: IState, actions: any): IState => {
     menu,
     goals,
     parents,
+    notifications,
   } = state;
 
   // Receiving current state here
@@ -85,6 +90,7 @@ const rootReducer = (state: IState, actions: any): IState => {
     menu: menuReducer.reducer(menu, actions),
     goals: goalsReducer.reducer(goals, actions),
     parents: parentsReducer.reducer(parents, actions),
+    notifications: notificationsReducer.reducer(notifications, actions),
   };
 
   // Middlewares

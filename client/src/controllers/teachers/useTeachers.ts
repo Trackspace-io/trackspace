@@ -2,7 +2,7 @@ import { TeachersAPI } from 'api';
 import { useMessages, useUsers } from 'controllers';
 import * as React from 'react';
 import { useGlobalStore } from 'store';
-import { ITeacherGenerateLink } from 'store/teachers/types';
+import { ITeacherGenerateLink, ITeacherSendInvitation } from 'store/teachers/types';
 
 import teachersReducer from '../../store/teachers';
 
@@ -81,14 +81,49 @@ const useTeachers = () => {
     });
   };
 
+  /**
+   * Generate an invitation link to add students to a classroom.
+   *
+   * @param   {number} payload.classroomId  The identifier of the classroom.
+   *
+   * @param   {string} payload.studentEmail The email of the student to be invited.
+   *
+   * @returns Promise
+   */
+  const sendInvitation = async (payload: ITeacherSendInvitation): Promise<any> => {
+    return new Promise((resolve) => {
+      TeachersAPI.sendInvitation(payload)
+        .then((response) => {
+          const { data } = response;
+
+          Messages.add({
+            type: 'success',
+            text: 'Invitation sent.',
+          });
+
+          resolve(data);
+        })
+        .catch((e) => {
+          const { msg } = e.response.data.errors[0];
+
+          Messages.add({
+            type: 'error',
+            text: `${msg}`,
+          });
+        });
+    });
+  };
+
   React.useEffect(() => {
     Users.current.loggedIn && getClassrooms();
   }, [Users.current.loggedIn]);
 
   return {
     ...teachers,
+
     getClassrooms,
     generateLink,
+    sendInvitation,
   };
 };
 
