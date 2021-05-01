@@ -1,21 +1,17 @@
 import 'rc-calendar/assets/index.css';
 
+import Menu from 'components/common/Menu';
 import Divider from 'components/gui/Divider';
 import Tooltip from 'components/gui/Tooltip';
 import { useTeachers } from 'controllers';
-import moment from 'moment';
-import { default as SimpleCalendar } from 'rc-calendar';
 import * as React from 'react';
 import { FcHome } from 'react-icons/fc';
 import { Link, Redirect, Route, Switch } from 'react-router-dom';
 import { IClassroom } from 'store/classrooms/types';
 
 import style from '../../styles/teacher/Dashboard.module.css';
-import { NavbarMini } from '../gui/Navbar';
 import Classroom from './Classroom';
 import Home from './Home';
-
-const now = moment();
 
 /**
  * Component representing the Teacher's home page, and access to their classrooms.
@@ -77,30 +73,6 @@ const Sidebar: React.FC<ISidebarProps> = ({ classrooms }) => {
           </Link>
         </Tooltip>
       ))}
-    </div>
-  );
-};
-
-/**
- * Dashboard's menu. It contains components used across different pages.
- *
- * @param none
- *
- * @returns ReactNode
- */
-const Menu: React.FC = () => {
-  return (
-    <div>
-      <NavbarMini />
-      <br />
-      <br />
-      <SimpleCalendar
-        style={{ margin: '0 auto' }}
-        showDateInput={false}
-        dateInputPlaceholder="please input"
-        format={'YYYY-MM-DD'}
-        defaultValue={now}
-      />
     </div>
   );
 };

@@ -13,6 +13,7 @@ import useParents from './parents/useParents';
 import useClassroomsAsParent from './classrooms/useClassroomsAsParent';
 import useTerms from './terms/useTerms';
 import useProgresses from './progresses/useProgresses';
+import useNotifications from './notifications/useNotifications';
 
 export {
   useAuths,
@@ -30,4 +31,5 @@ export {
   useParents,
   useTerms,
   useProgresses,
+  useNotifications,
 };

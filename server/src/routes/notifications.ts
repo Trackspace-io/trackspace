@@ -36,7 +36,7 @@ notifications.get(
           })
         )
       );
-    } catch (e) {
+    } catch (e) {     
       return res.sendStatus(500);
     }
   }

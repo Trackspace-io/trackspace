@@ -7,5 +7,17 @@ import * as TermsAPI from './modules/Terms';
 import * as ProgressesAPI from './modules/Progresses';
 import * as GoalsAPI from './modules/Goals';
 import * as ParentsAPI from './modules/Parents';
+import * as NotificationsAPI from './modules/Notifications';
 
-export { UserAPI, ClassroomAPI, TeachersAPI, StudentsAPI, SubjectsAPI, TermsAPI, ProgressesAPI, GoalsAPI, ParentsAPI };
+export {
+  UserAPI,
+  ClassroomAPI,
+  TeachersAPI,
+  StudentsAPI,
+  SubjectsAPI,
+  TermsAPI,
+  ProgressesAPI,
+  GoalsAPI,
+  ParentsAPI,
+  NotificationsAPI,
+};

@@ -3,35 +3,7 @@
 }
 
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-left: 40px;
-  padding-right: 16px;
-}
-
-.share {
-  display: flex;
-  align-items: center;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 8px 16px;
-  cursor: pointer;
-}
-
-.share:hover {
-  box-shadow: 0 1px 5px #ccc;
-}
-
-.share svg {
-  color: var(--blue-dark);
-  padding-left: 4px;
-  padding-right: 12px;
-  transform: scale(1.2);
-}
-
-.share .text {
-  font-weight: 300;
+  padding: 0 24px;
 }
 
 .body {
@@ -56,17 +28,4 @@
   box-shadow: 0 1px 5px #ccc;
   padding: 8px;
   margin-bottom: 16px;
-}
-
-.link-container {
-  display: flex;
-}
-
-.link {
-  flex: 1;
-}
-
-.button {
-  flex: 0 0 120px;
-  margin-top: 8px;
 }

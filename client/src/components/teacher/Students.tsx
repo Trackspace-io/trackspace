@@ -5,12 +5,13 @@ import Modal from 'components/gui/Modal';
 import Typography from 'components/gui/Typography';
 import { useClassroomsAsTeacher } from 'controllers';
 import * as React from 'react';
-import { FiTrash } from 'react-icons/fi';
+import { FiShare2, FiTrash } from 'react-icons/fi';
 import { useParams } from 'react-router-dom';
 import { IStudentRemove } from 'store/students/types';
 import { IStudent } from 'store/students/types';
 
 import style from '../../styles/teacher/Students.module.css';
+import Share from './Share';
 
 interface RouteParams {
   id: string;
@@ -28,11 +29,16 @@ const Students: React.FC = () => {
   // Internal hooks
   const [action, setAction] = React.useState('');
   const [student, setStudent] = React.useState<IStudent | undefined>(undefined);
+  const [shareModal, setShareModal] = React.useState<boolean>(false);
 
   return (
     <div>
       <div className={style['header']}>
         <Typography variant="subtitle"> Manage students </Typography>
+        <div className={style['share']} onClick={() => setShareModal(true)}>
+          <FiShare2 />
+          <span className={style['text']}>Share</span>
+        </div>
       </div>
       <Divider />
       <div className={style['body']}>
@@ -74,6 +80,8 @@ const Students: React.FC = () => {
           removeStudent={students.remove}
         />
       )}
+
+      {shareModal && <Share isOpen={shareModal} onClose={() => setShareModal(false)} classroomId={id} />}
     </div>
   );
 };
