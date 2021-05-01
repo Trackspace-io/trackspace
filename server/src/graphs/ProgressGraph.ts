@@ -16,9 +16,11 @@ class ProgressGraph extends Graph {
   /**
    * Builds a new progress graph.
    *
-   * @param term Term to represent.
+   * @param term  Term to represent.
+   * @param color Color of the goals line.
+   * @param width Width of the goals line.
    */
-  constructor(term: Term) {
+  constructor(term: Term, goalsColor?: string, goalsWidth?: number) {
     super({ yAxis: { min: 0, stepSize: 1 } });
 
     this._term = term;
@@ -32,12 +34,14 @@ class ProgressGraph extends Graph {
     this.setLabels(labels);
 
     // Add the goal line.
-    this.addDataset("Goals", (label) => {
-      const weekNumber = this.parseWeekLabel(label);
-      if (weekNumber < 0) return null;
-
-      return Goal.getTermPageGoal(term, weekNumber);
-    });
+    this.addDataset(
+      "Goals",
+      (label) => {
+        const weekNumber = this.parseWeekLabel(label);
+        return weekNumber < 0 ? null : Goal.getTermPageGoal(term, weekNumber);
+      },
+      { color: goalsColor, width: goalsWidth }
+    );
   }
 
   /**

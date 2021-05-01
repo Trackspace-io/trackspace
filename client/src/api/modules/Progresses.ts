@@ -54,14 +54,15 @@ export const getProgressByWeek = async (body: IProgressByWeek) => {
  */
 
 export const getProgressGraph = async (body: IProgressGetGraph) => {
-  const color = `${'9ab986'}`;
-  const width = '4';
+  const progressColor = `${'9ab986'}`;
+  const progressWidth = '4';
+
+  const goalsColor = `${'c8be92'}`;
+  const goalsWidth = '4';
 
   return await axios.get(
-    `${_apiUrl}/api/progress/terms/${body.termId}/students/${body.studentId}/graph?color=${color}&width=${width}`,
-    {
-      withCredentials: true,
-    },
+    `${_apiUrl}/api/progress/terms/${body.termId}/students/${body.studentId}/graph?progressColor=${progressColor}&progressWidth=${progressWidth}&goalsColor=${goalsColor}&goalsWidth=${goalsWidth}`,
+    { withCredentials: true },
   );
 };
 

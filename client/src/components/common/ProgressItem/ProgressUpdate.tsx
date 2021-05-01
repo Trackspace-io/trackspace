@@ -86,7 +86,7 @@ const ProgressUpdate: React.FC<IProps> = ({ isOpen, onClose, values, weekNumber 
             <Input
               name="pageFrom"
               type="number"
-              label="Page from"
+              label="Start Page"
               value={Inputs.values.pageFrom}
               onChange={Inputs.handleInputChange}
             />
@@ -100,7 +100,7 @@ const ProgressUpdate: React.FC<IProps> = ({ isOpen, onClose, values, weekNumber 
             <Input
               name="pageDone"
               type="number"
-              label="Page done"
+              label="Got to"
               value={Inputs.values.pageDone}
               onChange={Inputs.handleInputChange}
             />

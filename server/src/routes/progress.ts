@@ -323,12 +323,19 @@ progress.get(
     return invalid ? Promise.reject("Invalid student.") : true;
   }),
 
-  query("color")
+  query("progressColor")
     .optional()
     .isHexColor()
     .withMessage("The color must be a hex code."),
 
-  query("width").optional().isInt(),
+  query("progressWidth").optional().isInt(),
+
+  query("goalsColor")
+    .optional()
+    .isHexColor()
+    .withMessage("The color must be a hex code."),
+
+  query("goalsWidth").optional().isInt(),
 
   async (req: Request, res: Response): Promise<Response> => {
     // Check if the request is valid.
@@ -339,13 +346,18 @@ progress.get(
 
     try {
       const term = await Term.findById(req.params.termId);
-      const graph = new ProgressGraph(term);
       const student = await User.findById(req.params.studentId);
+
+      const graph = new ProgressGraph(
+        term,
+        `${req.query.goalsColor}`,
+        parseInt(`${req.query.goalsWidth}`)
+      );
 
       graph.addStudent(
         student,
-        `${req.query.color}`,
-        parseInt(`${req.query.width}`)
+        `${req.query.progressColor}`,
+        parseInt(`${req.query.progressWidth}`)
       );
 
       return res.status(200).json(await graph.config());

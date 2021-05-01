@@ -81,23 +81,23 @@ const Progress: React.FC<IProgressProps> = ({ classroomId, selectedDate }) => {
           <tr>
             <th></th>
             <th>
-              <Tooltip text="I would like to start from page _." position="top">
+              <Tooltip text="I would like to start from page ..." position="top">
                 <Typography variant="info" weight="light">
-                  Page from
+                  Start page
                 </Typography>
               </Tooltip>
             </th>
             <th>
-              <Tooltip text="I would like to do _ pages" position="top">
+              <Tooltip text="I would like to do ... pages" position="top">
                 <Typography variant="info" weight="light">
                   Page set
                 </Typography>
               </Tooltip>
             </th>
             <th>
-              <Tooltip text="I did _ number of pages" position="top">
+              <Tooltip text="I did ... number of pages" position="top">
                 <Typography variant="info" weight="light">
-                  Page done
+                  Got to
                 </Typography>
               </Tooltip>
             </th>
