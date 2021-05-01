@@ -165,7 +165,7 @@ export class Progress extends Model {
       progress.forEach((p) => {
         const pageFrom = p.pageFrom === null ? 0 : p.pageFrom;
         const pageDone = p.pageDone === null ? 0 : p.pageDone;
-        pagesDone += pageDone - pageFrom;
+        pagesDone += pageDone - pageFrom + 1;
       });
 
       return pagesDone;
