@@ -30,8 +30,8 @@ async function info(params: INotifParams): Promise<INotificationInfo> {
   return {
     text,
     actions: [
-      { id: "confirm", text: "Confirm" },
-      { id: "delete", text: "Delete" },
+      { id: "confirm", text: "✓" },
+      { id: "delete", text: "✗" },
     ],
   };
 }
