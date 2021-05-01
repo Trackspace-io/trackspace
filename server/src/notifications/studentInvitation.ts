@@ -30,6 +30,8 @@ async function info(params: INotifParams): Promise<INotificationInfo> {
 }
 
 async function isValid(params: INotifParams): Promise<boolean> {
+  if (!params.classroomId || !params.studentId) return false;
+
   const classroom = await Classroom.findById(params.classroomId);
   if (!classroom) return false;
 
