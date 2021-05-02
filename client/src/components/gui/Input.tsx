@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import style from '../../styles/gui/Input.module.css';
+import cx from 'classnames';
 
 /**
  * Component representing an input.
@@ -37,10 +38,13 @@ interface IInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
   /* Checkbox */
   checked?: boolean;
+
+  variant?: 'primary' | 'secondary';
 }
 
 const Input: React.FC<IInputProps> = ({
   name,
+  variant = 'primary',
   label,
   type,
   disabled,
@@ -63,10 +67,10 @@ const Input: React.FC<IInputProps> = ({
         onChange={onChange}
         onBlur={onBlur}
         onFocus={onFocus}
-        className={style['input']}
+        className={cx(style[variant], style['input'])}
         checked={checked}
       />
-      {<div className={style['error']}> </div>}
+      {/* {<div className={style['error']}> </div>} */}
     </div>
   );
 };

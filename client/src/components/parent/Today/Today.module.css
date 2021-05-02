@@ -1,0 +1,33 @@
+.container {
+  box-sizing: border-box;
+  padding: 0 24px;
+}
+
+.progress-grid {
+  margin: 36px 0;
+}
+
+.progress-header {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  place-items: center;
+  gap: 16px;
+  margin: 0 16px;
+}
+
+.progress-content {
+  border: 1px solid #ccc;
+  border-radius: 16px;
+  margin: 24px 0;
+  padding: 16px;
+  background: var(--white);
+}
+
+.progress {
+  display: grid;
+  /* grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); */
+  grid-template-columns: repeat(6, 1fr);
+  place-items: end center;
+  gap: 16px;
+  padding: 24px 0;
+}

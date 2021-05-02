@@ -1,11 +1,13 @@
 .default {
   font-size: 100%;
+  margin: 0;
 }
 
 .title {
   font-size: 200%;
   font-weight: 700;
   padding-bottom: 4px;
+  margin: 0;
   color: var(--blue-dark);
 }
 
@@ -13,12 +15,14 @@
   font-size: 140%;
   font-weight: 500;
   padding-bottom: 4px;
+  margin: 0;
 }
 
 .subtitle1 {
   font-size: 110%;
   font-weight: 300;
   padding-bottom: 4px;
+  margin: 0;
 }
 
 .caption {
@@ -26,11 +30,13 @@
   font-weight: 300;
   letter-spacing: 1px;
   padding-bottom: 4px;
+  margin: 0;
 }
 
 .info {
   font-weight: 600;
   padding-bottom: 4px;
+  margin: 0;
 }
 
 .align-center {
