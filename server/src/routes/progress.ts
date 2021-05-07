@@ -142,28 +142,32 @@ progress.post(
       // Validate the new values.
       const errors = [];
 
-      if (!(await progress.validatePageFrom())) {
+      const [pageFromValid, pageFromMsg] = await progress.validatePageFrom();
+      const [pageSetValid, pageSetMsg] = await progress.validatePageSet();
+      const [pageDoneValid, pageDoneMsg] = await progress.validatePageDone();
+
+      if (errors.length === 0 && !pageFromValid) {
         errors.push({
           value: req.body.pageFrom,
-          msg: "Invalid value.",
+          msg: pageFromMsg,
           param: "pageFrom",
           location: "body",
         });
       }
 
-      if (!(await progress.validatePageSet())) {
+      if (errors.length === 0 && !pageSetValid) {
         errors.push({
           value: req.body.pageSet,
-          msg: "Invalid value.",
+          msg: pageSetMsg,
           param: "pageSet",
           location: "body",
         });
       }
 
-      if (!(await progress.validatePageDone())) {
+      if (errors.length === 0 && !pageDoneValid) {
         errors.push({
           value: req.body.pageDone,
-          msg: "Invalid value.",
+          msg: pageDoneMsg,
           param: "pageDone",
           location: "body",
         });

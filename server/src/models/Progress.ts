@@ -360,27 +360,37 @@ export class Progress extends Model {
    *
    * @returns True if it is valid, false otherwise.
    */
-  public async validatePageFrom(): Promise<boolean> {
+  public async validatePageFrom(): Promise<[boolean, string]> {
     if (this._pageFrom === null) {
-      return this._pageSet === null && this._pageDone === null;
+      return this._pageSet !== null || this._pageDone !== null
+        ? [false, "You must also erase the Page Set and the Got To."]
+        : [true, null];
     }
 
     if (this._pageSet !== null && this._pageFrom > this._pageSet) {
-      return false;
+      return [false, "The Page From must be before the Page Set."];
     }
 
     if (this._pageDone !== null && this._pageFrom > this._pageDone) {
-      return false;
+      return [false, "The Page From must be before the Page Done."];
     }
 
     const prev = await this.prevProgress();
-    if (!prev) return await this.isFirstProgress();
-
-    if (prev._homeworkDone) {
-      return prev._pageSet !== null && this._pageSet >= prev._pageSet;
+    if (!prev) {
+      return (await this.isFirstProgress())
+        ? [true, null]
+        : [false, "You must fill the values of the previous days."];
     }
 
-    return prev._pageDone !== null && this._pageSet >= prev._pageDone;
+    if (prev._homeworkDone) {
+      return prev._pageSet !== null && this._pageFrom >= prev._pageSet
+        ? [true, null]
+        : [false, `You already did page ${this._pageFrom}.`];
+    }
+
+    return prev._pageDone !== null && this._pageFrom >= prev._pageDone
+      ? [true, null]
+      : [false, `You already did page ${this._pageFrom}.`];
   }
 
   /**
@@ -388,16 +398,22 @@ export class Progress extends Model {
    *
    * @returns True if it is valid, false otherwise.
    */
-  public async validatePageSet(): Promise<boolean> {
+  public async validatePageSet(): Promise<[boolean, string]> {
     if (this._pageSet === null) {
-      return this._pageDone === null;
+      const errorMsg =
+        "You cannot erase the page set value, if the Got to value is set.";
+      return this._pageDone === null ? [true, null] : [false, errorMsg];
     }
 
     if (this._pageDone !== null && this._pageSet < this._pageDone) {
-      return false;
+      return [false, "The Page Set must be after the Got To."];
     }
 
-    return this._pageFrom !== null && this._pageSet >= this._pageFrom;
+    if (this._pageFrom !== null && this._pageSet < this._pageFrom) {
+      return [false, "The Page Set must be after the Start page."];
+    }
+
+    return [true, null];
   }
 
   /**
@@ -405,9 +421,11 @@ export class Progress extends Model {
    *
    * @returns True if it is valid, false otherwise.
    */
-  public async validatePageDone(): Promise<boolean> {
-    if (this._pageDone === null) return true;
-    return this._pageDone >= this._pageFrom && this._pageDone <= this._pageSet;
+  public async validatePageDone(): Promise<[boolean, string]> {
+    if (this._pageDone === null) return [true, null];
+    return this._pageDone >= this._pageFrom && this._pageDone <= this._pageSet
+      ? [true, null]
+      : [false, "The Page Done must be before the Page Set."];
   }
 
   /**
