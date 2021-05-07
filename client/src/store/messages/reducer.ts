@@ -21,10 +21,12 @@ const reducer = (state: IMessageState, action: IMessageActions): IMessageState =
       return { ...state, list: [...state.list, { ...action.payload, isOpen: true }] };
 
     case MESSAGES.CLOSE:
-      const _messages = state.list.map((m) => {
-        m = { ...m, isOpen: false };
-        return m;
-      });
+      const _messages = state.list;
+      const index = _messages.findIndex((m) => m.id === action.messageId);
+
+      if (index >= 0) {
+        _messages.splice(index, 1);
+      }
 
       return { ...state, list: _messages };
 

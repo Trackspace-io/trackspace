@@ -17,7 +17,13 @@ const Messages: React.FC = () => {
   return (
     <div className={style['container']}>
       {Messages.list.map((m, i) => (
-        <Message key={i} message={m} close={Messages.close} />
+        <Message
+          key={i}
+          message={m}
+          close={() => {
+            Messages.close(`${m.id}`);
+          }}
+        />
       ))}
     </div>
   );

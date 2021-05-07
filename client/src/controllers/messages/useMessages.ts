@@ -26,11 +26,12 @@ const useMessages = () => {
    * @param {string} payload.text
    */
   const add = (payload: IMessage) => {
+    payload.id = `${Date.now()}${Math.floor(Math.random() * 1000)}`;
     dispatch(addMessage(payload));
   };
 
-  const close = () => {
-    dispatch(closeMessage);
+  const close = (id: string) => {
+    dispatch(closeMessage(id));
   };
 
   return {

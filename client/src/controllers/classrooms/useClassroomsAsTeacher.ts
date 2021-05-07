@@ -51,6 +51,7 @@ const useClassrooms = (classroomId?: string) => {
           const { data } = e.response;
 
           Messages.add({
+            id: `${Date.now()}${Math.floor(Math.random() * 1000)}`,
             type: 'error',
             text: `${data}`,
           });
