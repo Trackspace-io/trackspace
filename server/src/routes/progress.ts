@@ -18,14 +18,15 @@ const progress = Router();
  * @method POST
  * @url    /progress
  *
- * @param req.subjectId {string} Identifier of the subject.
- * @param req.studentId {string} Identifier of the student.
- * @param req.date      {date}   Date of the progress (yyyy-mm-dd).
- * @param req.pageFrom  {number} (Optional) Number of the starting page.
- * @param req.pageSet   {number} (Optional) Number of the page that the student
- *                               wants to reach.
- * @param req.pageDone  {number} (Optional) Number of the page reached by the
- *                               student at the end of the day.
+ * @param req.subjectId    {string}  Identifier of the subject.
+ * @param req.studentId    {string}  Identifier of the student.
+ * @param req.date         {date}    Date of the progress (yyyy-mm-dd).
+ * @param req.pageFrom     {number}  (Optional) Number of the starting page.
+ * @param req.pageSet      {number}  (Optional) Number of the page that the
+ *                                   student wants to reach.
+ * @param req.pageDone     {number}  (Optional) Number of the page reached by
+ *                                   the student at the end of the day.
+ * @param req.homeworkDone {boolean} Indicates if the homework was done.
  *
  * @returns 200, 400, 401, 500
  */
@@ -78,6 +79,18 @@ progress.post(
   body("pageSet").optional({ nullable: true }).isInt(),
   body("pageDone").optional({ nullable: true }).isInt(),
 
+  body("homeworkDone")
+    .optional({ nullable: true })
+    .isBoolean()
+    .custom((value, { req }) => {
+      if (!value) return true;
+
+      const user = <User>req.user;
+      return user.role === "student"
+        ? Promise.reject("You are not allowed to validate your own homework.")
+        : true;
+    }),
+
   async (req: Request, res: Response): Promise<Response> => {
     // Check if the request is valid.
     const errors = validationResult(req);
@@ -123,6 +136,7 @@ progress.post(
         pageFrom: req.body.pageFrom,
         pageSet: req.body.pageSet,
         pageDone: req.body.pageDone,
+        homeworkDone: req.body.homeworkDone === true,
       });
 
       // Validate the new values.
@@ -148,7 +162,7 @@ progress.post(
 
       if (!(await progress.validatePageDone())) {
         errors.push({
-          value: req.body.pageSet,
+          value: req.body.pageDone,
           msg: "Invalid value.",
           param: "pageDone",
           location: "body",

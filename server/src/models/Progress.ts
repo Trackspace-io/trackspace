@@ -204,15 +204,12 @@ export class Progress extends Model {
     const prevDate = term.previousValidDate(date);
     if (prevDate === null) return 1;
 
-    const prevProgress = await Progress.findOne({
+    const prev = await Progress.findOne({
       where: { StudentId: studentId, SubjectId: subjectId, date: prevDate },
     });
 
-    if (!prevProgress) return null;
-
-    return prevProgress.getDataValue("homeworkDone")
-      ? prevProgress.getDataValue("pageSet")
-      : prevProgress.getDataValue("pageDone");
+    if (!prev) return null;
+    return prev._homeworkDone ? prev._pageSet : prev._pageDone;
   }
 
   /**
@@ -234,12 +231,8 @@ export class Progress extends Model {
       where: { StudentId: studentId, SubjectId: subjectId, date },
     });
 
-    const pageSet = progress && progress.getDataValue("pageSet");
-    if (pageSet || pageSet === 0) {
-      return pageSet;
-    }
-
-    return null;
+    if (!progress) return null;
+    return progress._pageSet !== null ? progress._pageSet : null;
   }
 
   /**
@@ -261,12 +254,8 @@ export class Progress extends Model {
       where: { StudentId: studentId, SubjectId: subjectId, date },
     });
 
-    const pageDone = progress && progress.getDataValue("pageDone");
-    if (pageDone || pageDone === 0) {
-      return pageDone;
-    }
-
-    return null;
+    if (!progress) return null;
+    return progress._pageDone !== null ? progress._pageDone : null;
   }
 
   /**
@@ -283,17 +272,16 @@ export class Progress extends Model {
     subjectId: string,
     date: Date
   ): Promise<number> {
-    const pageSet = await this.pageSetAtDate(studentId, subjectId, date);
-    if (!pageSet && pageSet !== 0) {
-      return null;
-    }
+    // Check if the value is defined.
+    const progress = await Progress.findOne({
+      where: { StudentId: studentId, SubjectId: subjectId, date },
+    });
 
-    const pageDone = await this.pageDoneAtDate(studentId, subjectId, date);
-    if (!pageDone && pageDone !== 0) {
-      return null;
-    }
+    if (!progress) return null;
 
-    return pageSet - pageDone;
+    return progress._pageSet !== null && progress._pageDone
+      ? progress._pageSet - progress._pageDone
+      : null;
   }
 
   /**
@@ -335,8 +323,36 @@ export class Progress extends Model {
   /**
    * Date of the progress.
    */
-  public get date(): Date {
+  public get _date(): Date {
     return this.getDataValue("date");
+  }
+
+  /**
+   * Start page.
+   */
+  private get _pageFrom(): number {
+    return parseInt(this.getDataValue("pageFrom"));
+  }
+
+  /**
+   * Number of pages to do.
+   */
+  private get _pageSet(): number {
+    return parseInt(this.getDataValue("pageSet"));
+  }
+
+  /**
+   * Number of pages done by the student.
+   */
+  private get _pageDone(): number {
+    return parseInt(this.getDataValue("pageDone"));
+  }
+
+  /**
+   * Flag indicating if the student did the homework.
+   */
+  private get _homeworkDone(): number {
+    return this.getDataValue("homeworkDone");
   }
 
   /**
@@ -345,49 +361,26 @@ export class Progress extends Model {
    * @returns True if it is valid, false otherwise.
    */
   public async validatePageFrom(): Promise<boolean> {
-    const pageFrom = this.getDataValue("pageFrom");
-    const pageSet = this.getDataValue("pageSet");
-    const pageDone = this.getDataValue("pageDone");
-
-    if (pageFrom === null) {
-      return pageSet === null && pageDone === null;
+    if (this._pageFrom === null) {
+      return this._pageSet === null && this._pageDone === null;
     }
 
-    if (pageSet !== null && pageFrom > pageSet) {
+    if (this._pageSet !== null && this._pageFrom > this._pageSet) {
       return false;
     }
 
-    if (pageDone !== null && pageFrom > pageDone) {
+    if (this._pageDone !== null && this._pageFrom > this._pageDone) {
       return false;
     }
 
-    const classroom = await this.getClassroom();
-    const term = await classroom.getTermAtDate(this.date);
-    const prevDate = term.previousValidDate(this.date);
+    const prev = await this.prevProgress();
+    if (!prev) return await this.isFirstProgress();
 
-    if (prevDate === null) {
-      return true;
+    if (prev._homeworkDone) {
+      return prev._pageSet !== null && this._pageSet >= prev._pageSet;
     }
 
-    const prevProgress = await Progress.findOne({
-      where: {
-        StudentId: this.studentId,
-        SubjectId: this.subjectId,
-        date: prevDate,
-      },
-    });
-
-    if (!prevProgress) {
-      return false;
-    }
-
-    if (prevProgress.getDataValue("homeworkDone")) {
-      const prevPageSet = prevProgress.getDataValue("pageSet");
-      return prevPageSet !== null && pageFrom >= prevPageSet;
-    }
-
-    const prevPageDone = prevProgress.getDataValue("pageDone");
-    return prevPageDone !== null && pageFrom >= prevPageDone;
+    return prev._pageDone !== null && this._pageSet >= prev._pageDone;
   }
 
   /**
@@ -396,19 +389,15 @@ export class Progress extends Model {
    * @returns True if it is valid, false otherwise.
    */
   public async validatePageSet(): Promise<boolean> {
-    const pageDone = this.getDataValue("pageDone");
-    const pageSet = this.getDataValue("pageSet");
-
-    if (pageSet === null) {
-      return pageDone === null;
+    if (this._pageSet === null) {
+      return this._pageDone === null;
     }
 
-    if (pageDone !== null && pageSet < pageDone) {
+    if (this._pageDone !== null && this._pageSet < this._pageDone) {
       return false;
     }
 
-    const pageFrom = this.getDataValue("pageFrom");
-    return pageFrom !== null && pageSet >= pageFrom;
+    return this._pageFrom !== null && this._pageSet >= this._pageFrom;
   }
 
   /**
@@ -417,15 +406,8 @@ export class Progress extends Model {
    * @returns True if it is valid, false otherwise.
    */
   public async validatePageDone(): Promise<boolean> {
-    const pageDone = this.getDataValue("pageDone");
-    if (pageDone === null) {
-      return true;
-    }
-
-    const pageFrom = this.getDataValue("pageFrom");
-    const pageSet = this.getDataValue("pageSet");
-
-    return pageDone >= pageFrom && pageDone <= pageSet;
+    if (this._pageDone === null) return true;
+    return this._pageDone >= this._pageFrom && this._pageDone <= this._pageSet;
   }
 
   /**
@@ -457,6 +439,99 @@ export class Progress extends Model {
     const subjectId = this.getDataValue("SubjectId");
     const studentId = this.getDataValue("StudentId");
     return Progress.isUserAuthorized(user, subjectId, studentId);
+  }
+
+  /**
+   * Method called after this progress was saved.
+   */
+  public async afterSave(): Promise<void> {
+    const next = await this.nextProgress();
+    if (!next) return;
+
+    let save = false;
+    const pagesDoneByStudent = this._homeworkDone
+      ? this._pageSet
+      : this._pageDone;
+
+    if (next._pageFrom !== null && next._pageFrom != pagesDoneByStudent) {
+      save = true;
+      next.setDataValue("pageFrom", pagesDoneByStudent);
+    }
+
+    if (next._pageSet !== null && next._pageSet < next._pageFrom) {
+      save = true;
+      next.setDataValue("pageSet", next._pageFrom);
+    }
+
+    if (next._pageDone !== null && next._pageDone < next._pageFrom) {
+      save = true;
+      next.setDataValue("pageDone", next._pageFrom);
+    }
+
+    if (save) await next.save();
+  }
+
+  /**
+   * Checks if this progress is the first in the term.
+   *
+   * @returns True if it's the first, false otherwise
+   */
+  private async isFirstProgress(): Promise<boolean> {
+    const classroom = await this.getClassroom();
+    if (!classroom) return false;
+
+    const term = await classroom.getTermAtDate(this._date);
+    if (!term) return false;
+
+    return term.previousValidDate(this._date) === null;
+  }
+
+  /**
+   * Returns the progress of the previous day.
+   *
+   * @returns Progress of the previous day.
+   */
+  private async prevProgress(): Promise<Progress> {
+    const classroom = await this.getClassroom();
+    if (!classroom) return null;
+
+    const term = await classroom.getTermAtDate(this._date);
+    if (!term) return null;
+
+    const prevDate = term.previousValidDate(this._date);
+    if (prevDate === null) return null;
+
+    return await Progress.findOne({
+      where: {
+        StudentId: this.studentId,
+        SubjectId: this.subjectId,
+        date: prevDate,
+      },
+    });
+  }
+
+  /**
+   * Returns the progress of the next day.
+   *
+   * @returns Progress of the next day.
+   */
+  private async nextProgress(): Promise<Progress> {
+    const classroom = await this.getClassroom();
+    if (!classroom) return null;
+
+    const term = await classroom.getTermAtDate(this._date);
+    if (!term) return null;
+
+    const nextDate = term.nextValidDate(this._date);
+    if (nextDate === null) return null;
+
+    return await Progress.findOne({
+      where: {
+        StudentId: this.studentId,
+        SubjectId: this.subjectId,
+        date: nextDate,
+      },
+    });
   }
 }
 
@@ -492,6 +567,11 @@ export function progressSchema(sequelize: Sequelize): void {
           fields: ["SubjectId", "StudentId", "date"],
         },
       ],
+      hooks: {
+        afterSave: async (instance) => {
+          await instance.afterSave();
+        },
+      },
     }
   );
 }
