@@ -104,6 +104,7 @@ export interface IProgressSetOrUpdate {
   pageFrom?: number;
   pageSet?: number;
   pageDone?: number;
+  homeworkDone?: boolean;
 }
 
 /**

@@ -26,6 +26,7 @@
 
 .input[type='number']:disabled {
   border: 0;
+  background: #ccc;
 }
 
 .secondary {

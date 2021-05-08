@@ -30,20 +30,24 @@
   position: relative;
 }
 
-.progresses-container {
-}
-
 .progresses {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  position: relative;
   width: 100%;
   padding: 36px 0px;
 }
 
-.progresses svg {
-  margin: 24px 8px 0;
-  padding: 8px;
+.progresses .btn-left {
+  position: absolute;
+  top: 72px;
+  left: 0;
+  transform: scale(1.5);
+  cursor: pointer;
+}
+
+.progresses .btn-right {
+  position: absolute;
+  top: 72px;
+  right: 0;
   transform: scale(1.5);
   cursor: pointer;
 }

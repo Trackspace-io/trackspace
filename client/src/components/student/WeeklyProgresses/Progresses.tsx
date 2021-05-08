@@ -60,14 +60,14 @@ const Progresses: React.FC<IProgressesProps> = ({ classroomId }) => {
       <ProgressGraph studentId={Users.current?.id} termId={terms.currentTerm?.id} />
       <div className={style['progresses']}>
         <Button variant="secondary" onClick={handlePrevious} disabled={weekNumber === 1}>
-          <FiChevronLeft />
+          <FiChevronLeft className={style['btn-left']} />
         </Button>
         <ProgressItem week={progresses.byWeek} weekNumber={weekNumber} />
         <Button
           variant="secondary"
           onClick={handleNext}
           disabled={weekNumber >= Number(terms.currentTerm?.numberOfWeeks)}>
-          <FiChevronRight />
+          <FiChevronRight className={style['btn-right']} />
         </Button>
       </div>
     </div>

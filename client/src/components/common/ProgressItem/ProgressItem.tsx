@@ -63,7 +63,7 @@ const ProgressItem: React.FC<IProgressItemProps> = ({ weekNumber, week }) => {
                           <div className={style['data']}>{v.pageSet || 0}</div>
                           <div className={style['data']}>{v.pageDone || 0}</div>
                           <div className={style['data']}>{v.homework || 0}</div>
-                          <div className={style['data']}>{v.homeworkDone || 'no'}</div>
+                          <div className={style['data']}>{v.homeworkDone ? ' yes' : 'no'}</div>
                         </div>
                       )
                     );
