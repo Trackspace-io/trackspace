@@ -417,7 +417,7 @@ progress.get(
       return res.status(200).json({
         termNumber: await term.getNumber(),
         weekNumber: term.getWeekNumber(dateObj),
-        subjects: Promise.all(
+        subjects: await Promise.all(
           subjects.map(async (subject) => {
             const values = await Progress.valuesAtDate(
               req.student.id,
