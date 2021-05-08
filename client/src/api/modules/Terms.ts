@@ -16,8 +16,6 @@ import { ITermCreate, ITermGetByDate, ITermGetById, ITermModify, ITermRemove } f
  * }[]>} terms
  */
 export const get = async (classroomId: string): Promise<any> => {
-  console.log('classroom terms', classroomId);
-
   return await axios.get(`${_apiUrl}/api/classrooms/${classroomId}/terms`, { withCredentials: true });
 };
 
@@ -46,8 +44,6 @@ export const getById = async (body: ITermGetById): Promise<any> => {
  * @returns 200, 400, 401, 500
  */
 export const getByDate = async (body: ITermGetByDate): Promise<any> => {
-  console.log('body', body);
-
   return await axios.get(`${_apiUrl}/api/classrooms/${body.classroomId}/terms/get-at-date?date=${body.date}`, {
     withCredentials: true,
   });
@@ -118,8 +114,6 @@ export const update = async (term: ITermModify): Promise<any> => {
  * @returns 200, 400, 500
  */
 export const remove = async (term: ITermRemove): Promise<any> => {
-  console.log('term', term);
-
   return await axios.delete(`${_apiUrl}/api/classrooms/${term.classroomId}/terms/${term.id}/remove`, {
     withCredentials: true,
   });

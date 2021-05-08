@@ -36,6 +36,8 @@ const useProgresses = (classroomId?: string) => {
    * @param {string}  payload.date
    */
   const getByDate = (payload: IProgressByDate) => {
+    console.log('payload', payload);
+
     return new Promise((resolve) => {
       ProgressesAPI.getProgressByDate(payload)
         .then((response) => {
