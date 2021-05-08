@@ -55,6 +55,24 @@ goals.post(
               "previous goal set for this term."
           )
         : true;
+    })
+    .custom(async (value, { req }) => {
+      if (!value && value !== 0) return true;
+
+      const nextGoal = await Goal.findOne({
+        where: {
+          TermId: req.term.id,
+          weekNumber: { [Op.gt]: req.params.weekNumber },
+        },
+        order: [["weekNumber", "DESC"]],
+      });
+
+      return nextGoal && nextGoal.pages < value
+        ? Promise.reject(
+            "The number of pages must be equal or less than the " +
+              "next goal set for this term."
+          )
+        : true;
     }),
 
   async (req: Request, res: Response): Promise<Response> => {

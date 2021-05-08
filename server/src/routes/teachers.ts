@@ -113,7 +113,7 @@ teachers.post(
       const student = await User.findByEmail(req.body.studentEmail);
 
       await Notification.sendNotification(student, "studentInvitation", {
-        clasroomId: req.classroom.id,
+        classroomId: req.classroom.id,
         studentId: student.id,
       });
 

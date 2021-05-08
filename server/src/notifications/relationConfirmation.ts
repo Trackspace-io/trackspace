@@ -30,13 +30,15 @@ async function info(params: INotifParams): Promise<INotificationInfo> {
   return {
     text,
     actions: [
-      { id: "confirm", text: "Confirm" },
-      { id: "delete", text: "Delete" },
+      { id: "confirm", text: "✓" },
+      { id: "delete", text: "✗" },
     ],
   };
 }
 
 async function isValid(params: INotifParams): Promise<boolean> {
+  if (!params.recipientId || !params.senderId) return false;
+
   const recipient = await User.findById(params.recipientId);
   if (!recipient) return false;
 

@@ -48,9 +48,9 @@ const ProgressItem: React.FC<IProgressItemProps> = ({ weekNumber, week }) => {
                 <div className={style['body']}>
                   <div className={style['row']}>
                     <div className={style['data']}></div>
-                    <div className={cx(style['data'], style['title'])}>Pages from</div>
-                    <div className={cx(style['data'], style['title'])}>Pages set</div>
-                    <div className={cx(style['data'], style['title'])}>Pages done</div>
+                    <div className={cx(style['data'], style['title'])}>Start page</div>
+                    <div className={cx(style['data'], style['title'])}>Page set</div>
+                    <div className={cx(style['data'], style['title'])}>Got to</div>
                     <div className={cx(style['data'], style['title'])}>Homework</div>
                     <div className={cx(style['data'], style['title'])}>Done</div>
                   </div>

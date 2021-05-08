@@ -8,6 +8,7 @@ import { Progress } from "../models/Progress";
 import { Term } from "../models/Term";
 import ProgressGraph from "../graphs/ProgressGraph";
 import { Classroom } from "../models/Classroom";
+import student from "../validators/student";
 
 const progress = Router();
 
@@ -17,14 +18,15 @@ const progress = Router();
  * @method POST
  * @url    /progress
  *
- * @param req.subjectId {string} Identifier of the subject.
- * @param req.studentId {string} Identifier of the student.
- * @param req.date      {date}   Date of the progress (yyyy-mm-dd).
- * @param req.pageFrom  {number} (Optional) Number of the starting page.
- * @param req.pageSet   {number} (Optional) Number of the page that the student
- *                               wants to reach.
- * @param req.pageDone  {number} (Optional) Number of the page reached by the
- *                               student at the end of the day.
+ * @param req.subjectId    {string}  Identifier of the subject.
+ * @param req.studentId    {string}  Identifier of the student.
+ * @param req.date         {date}    Date of the progress (yyyy-mm-dd).
+ * @param req.pageFrom     {number}  (Optional) Number of the starting page.
+ * @param req.pageSet      {number}  (Optional) Number of the page that the
+ *                                   student wants to reach.
+ * @param req.pageDone     {number}  (Optional) Number of the page reached by
+ *                                   the student at the end of the day.
+ * @param req.homeworkDone {boolean} Indicates if the homework was done.
  *
  * @returns 200, 400, 401, 500
  */
@@ -77,6 +79,18 @@ progress.post(
   body("pageSet").optional({ nullable: true }).isInt(),
   body("pageDone").optional({ nullable: true }).isInt(),
 
+  body("homeworkDone")
+    .optional({ nullable: true })
+    .isBoolean()
+    .custom((value, { req }) => {
+      if (!value) return true;
+
+      const user = <User>req.user;
+      return user.role === "student"
+        ? Promise.reject("You are not allowed to validate your own homework.")
+        : true;
+    }),
+
   async (req: Request, res: Response): Promise<Response> => {
     // Check if the request is valid.
     const errors = validationResult(req);
@@ -88,6 +102,7 @@ progress.post(
     const user = <User>req.user;
     const subjectId = req.body.subjectId;
     const studentId = req.body.studentId;
+    const dateObj = date.parse(req.body.date, "YYYY-MM-DD");
 
     if (!Progress.isUserAuthorized(user, subjectId, studentId)) {
       return res.sendStatus(401);
@@ -96,9 +111,9 @@ progress.post(
     try {
       // Find or create the progress in the database.
       const { progress, error } = await Progress.findOrCreateByKey(
-        req.body.subjectId,
-        req.body.studentId,
-        date.parse(req.body.date, "YYYY-MM-DD")
+        subjectId,
+        studentId,
+        dateObj
       );
 
       // Progress.findOrCreateByKey returns undefined if the parameters are in-
@@ -117,46 +132,42 @@ progress.post(
       }
 
       // Set the values.
-      const pageFromSet = "pageFrom" in req.body;
-      const pageFromVal = pageFromSet ? req.body.pageFrom : null;
-
-      const pageSetSet = "pageSet" in req.body;
-      const pageSetVal = pageSetSet ? req.body.pageSet : null;
-
-      const pageDoneSet = "pageDone" in req.body;
-      const pageDoneVal = pageDoneSet ? req.body.pageDone : null;
-
       progress.set({
-        pageFrom: pageFromSet ? pageFromVal : progress.pageFrom,
-        pageSet: pageSetSet ? pageSetVal : progress.pageSet,
-        pageDone: pageDoneSet ? pageDoneVal : progress.pageDone,
+        pageFrom: req.body.pageFrom,
+        pageSet: req.body.pageSet,
+        pageDone: req.body.pageDone,
+        homeworkDone: req.body.homeworkDone === true,
       });
 
       // Validate the new values.
       const errors = [];
 
-      if (pageFromSet && !progress.isPageFromValid) {
+      const [pageFromValid, pageFromMsg] = await progress.validatePageFrom();
+      const [pageSetValid, pageSetMsg] = await progress.validatePageSet();
+      const [pageDoneValid, pageDoneMsg] = await progress.validatePageDone();
+
+      if (errors.length === 0 && !pageFromValid) {
         errors.push({
           value: req.body.pageFrom,
-          msg: "Invalid value.",
+          msg: pageFromMsg,
           param: "pageFrom",
           location: "body",
         });
       }
 
-      if (pageSetSet && !progress.isPageSetValid) {
+      if (errors.length === 0 && !pageSetValid) {
         errors.push({
           value: req.body.pageSet,
-          msg: "Invalid value.",
+          msg: pageSetMsg,
           param: "pageSet",
           location: "body",
         });
       }
 
-      if (pageDoneSet && !progress.isPageDoneValid) {
+      if (errors.length === 0 && !pageDoneValid) {
         errors.push({
-          value: req.body.pageSet,
-          msg: "Invalid value.",
+          value: req.body.pageDone,
+          msg: pageDoneMsg,
           param: "pageDone",
           location: "body",
         });
@@ -191,12 +202,7 @@ progress.post(
 progress.get(
   "/terms/:termId/student/:studentId/weeks/:weekNumber",
   user().isA(["teacher", "student", "parent"]),
-
-  param("studentId").custom(async (value) => {
-    const student = await User.findById(value);
-    const invalid = !student || student.role !== "student";
-    return invalid ? Promise.reject("Invalid student.") : true;
-  }),
+  student().exists(),
 
   param("termId").custom(async (value, { req }) => {
     const user = <User>req.user;
@@ -235,20 +241,10 @@ progress.get(
         });
       }
 
-      // Get the student.
-      const student = await User.findById(req.params.studentId);
-
       // Get the list of subjects.
       const subjects = await classroom.getSubjects({
         order: [["name", "ASC"]],
       });
-
-      // Get the progress values.
-      const progress = await Progress.findByDateInterval(
-        req.params.studentId,
-        weekStart,
-        weekEnd
-      );
 
       // Build the response.
       return res.status(200).json({
@@ -257,35 +253,42 @@ progress.get(
           date.format(weekStart, "YYYY-MM-DD"),
           date.format(weekEnd, "YYYY-MM-DD"),
         ],
-        progress: subjects.map((subject) => {
-          return {
-            subject: {
-              id: subject.id,
-              name: subject.name,
-            },
-            values: term.days.map((day) => {
-              const currentDate = term.getDate(weekNumber, day);
-              if (currentDate === null) return undefined;
+        progress: await Promise.all(
+          subjects.map(async (subject) => {
+            return {
+              subject: {
+                id: subject.id,
+                name: subject.name,
+              },
+              values: await Promise.all(
+                term.days.map(async (day) => {
+                  const currentDate = term.getDate(weekNumber, day);
+                  if (currentDate === null) return undefined;
 
-              const value = progress.find(
-                (p) => p.weekDay === day && p.subjectId === subject.id
-              );
-              return {
-                day,
-                progressKey: {
-                  subjectId: subject.id,
-                  studentId: student.id,
-                  date: date.format(currentDate, "YYYY-MM-DD"),
-                },
-                pageFrom: value ? value.pageFrom : null,
-                pageSet: value ? value.pageSet : null,
-                pageDone: value ? value.pageDone : null,
-                homework: value ? value.homework : null,
-                homeworkDone: value ? value.homeworkDone : false,
-              };
-            }),
-          };
-        }),
+                  const values = await Progress.valuesAtDate(
+                    req.student.id,
+                    subject.id,
+                    currentDate
+                  );
+
+                  return {
+                    day,
+                    progressKey: {
+                      subjectId: subject.id,
+                      studentId: req.student.id,
+                      date: date.format(currentDate, "YYYY-MM-DD"),
+                    },
+                    pageFrom: values.pageFrom,
+                    pageSet: values.pageSet,
+                    pageDone: values.pageDone,
+                    homework: values.homework,
+                    homeworkDone: values.homeworkDone,
+                  };
+                })
+              ),
+            };
+          })
+        ),
       });
     } catch (e) {
       return res.sendStatus(500);
@@ -317,18 +320,19 @@ progress.get(
     return invalid ? Promise.reject("Invalid term.") : true;
   }),
 
-  param("studentId").custom(async (value) => {
-    const student = await User.findById(value);
-    const invalid = !student || student.role !== "student";
-    return invalid ? Promise.reject("Invalid student.") : true;
-  }),
-
-  query("color")
+  query("progressColor")
     .optional()
     .isHexColor()
     .withMessage("The color must be a hex code."),
 
-  query("width").optional().isInt(),
+  query("progressWidth").optional().isInt(),
+
+  query("goalsColor")
+    .optional()
+    .isHexColor()
+    .withMessage("The color must be a hex code."),
+
+  query("goalsWidth").optional().isInt(),
 
   async (req: Request, res: Response): Promise<Response> => {
     // Check if the request is valid.
@@ -339,13 +343,18 @@ progress.get(
 
     try {
       const term = await Term.findById(req.params.termId);
-      const graph = new ProgressGraph(term);
       const student = await User.findById(req.params.studentId);
+
+      const graph = new ProgressGraph(
+        term,
+        `${req.query.goalsColor}`,
+        parseInt(`${req.query.goalsWidth}`)
+      );
 
       graph.addStudent(
         student,
-        `${req.query.color}`,
-        parseInt(`${req.query.width}`)
+        `${req.query.progressColor}`,
+        parseInt(`${req.query.progressWidth}`)
       );
 
       return res.status(200).json(await graph.config());
@@ -368,23 +377,7 @@ progress.get(
 progress.get(
   "/classrooms/:classroomId/students/:studentId",
   user().isA(["teacher", "student", "parent"]).isInClassroom(),
-
-  param("studentId").custom(async (value, { req }) => {
-    const user = <User>req.user;
-    const allowed = user.role !== "student" || user.id === value;
-    if (!allowed) return Promise.reject();
-
-    const student = await User.findById(value);
-    if (
-      !student ||
-      student.role !== "student" ||
-      !student.isInClassroom(req.classroom)
-    ) {
-      return Promise.reject();
-    }
-
-    return true;
-  }),
+  student().exists().senderIsAuthorized(),
 
   query("date").custom(async (value, { req }) => {
     if (!value) {
@@ -415,12 +408,6 @@ progress.get(
 
     try {
       const dateObj = date.parse(`${req.query.date}`, "YYYY-MM-DD");
-
-      const progress = await Progress.findByStudentAndDate(
-        req.params.studentId,
-        dateObj
-      );
-
       const subjects = await req.classroom.getSubjects({
         order: [["name", "ASC"]],
       });
@@ -430,27 +417,34 @@ progress.get(
       return res.status(200).json({
         termNumber: await term.getNumber(),
         weekNumber: term.getWeekNumber(dateObj),
-        subjects: subjects.map((subject) => {
-          const value = progress.find((p) => p.subjectId === subject.id);
-          return {
-            subject: {
-              id: subject.id,
-              name: subject.name,
-            },
-            progressKey: {
-              subjectId: subject.id,
-              studentId: req.params.studentId,
-              date: date.format(dateObj, "YYYY-MM-DD"),
-            },
-            values: {
-              pageFrom: value ? value.pageFrom : null,
-              pageSet: value ? value.pageSet : null,
-              pageDone: value ? value.pageDone : null,
-              homework: value ? value.homework : null,
-              homeworkDone: value ? value.homeworkDone : false,
-            },
-          };
-        }),
+        subjects: Promise.all(
+          subjects.map(async (subject) => {
+            const values = await Progress.valuesAtDate(
+              req.student.id,
+              subject.id,
+              dateObj
+            );
+
+            return {
+              subject: {
+                id: subject.id,
+                name: subject.name,
+              },
+              progressKey: {
+                subjectId: subject.id,
+                studentId: req.params.studentId,
+                date: date.format(dateObj, "YYYY-MM-DD"),
+              },
+              values: {
+                pageFrom: values.pageFrom,
+                pageSet: values.pageSet,
+                pageDone: values.pageDone,
+                homework: values.homework,
+                homeworkDone: values.homeworkDone,
+              },
+            };
+          })
+        ),
       });
     } catch (e) {
       return res.sendStatus(500);

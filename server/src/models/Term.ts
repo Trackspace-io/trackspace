@@ -1,3 +1,4 @@
+import date from "date-and-time";
 import {
   BelongsToGetAssociationMixin,
   DataTypes,
@@ -389,6 +390,48 @@ export class Term extends Model {
     }
 
     this.save();
+  }
+
+  /**
+   * Returns the next valid date in the term.
+   *
+   * @param dateObj The current date.
+   *
+   * @returns The next date or null if there is no next date.
+   */
+  public nextValidDate(dateObj: Date): Date {
+    const dateStr = date.format(dateObj, "YYYY-MM-DD");
+
+    const currDate = date.parse(dateStr, "YYYY-MM-DD");
+    if (currDate < this.start) return this.start;
+
+    const nextDate = date.addDays(currDate, 1);
+    if (nextDate > this.end) return null;
+
+    return !this.isDateAllowed(nextDate)
+      ? this.nextValidDate(nextDate)
+      : nextDate;
+  }
+
+  /**
+   * Returns the previous valid date in the term.
+   *
+   * @param dateObj The current date.
+   *
+   * @returns The previous date or null if there is no previous date.
+   */
+  public previousValidDate(dateObj: Date): Date {
+    const dateStr = date.format(dateObj, "YYYY-MM-DD");
+
+    const currDate = date.parse(dateStr, "YYYY-MM-DD");
+    if (currDate < this.start) return null;
+
+    const prevDate = date.addDays(currDate, -1);
+    if (prevDate > this.end) return this.end;
+
+    return !this.isDateAllowed(prevDate)
+      ? this.previousValidDate(prevDate)
+      : prevDate;
   }
 }
 
