@@ -24,7 +24,7 @@ const ProgressItem: React.FC<IProgressItemProps> = ({ weekNumber, week }) => {
   };
 
   return (
-    <div>
+    <div className={style['progress-container']}>
       {dates && days && (
         <div className={style['progress-header']}>
           <Typography variant="subtitle">{`Week ${weekNumber}`}</Typography>

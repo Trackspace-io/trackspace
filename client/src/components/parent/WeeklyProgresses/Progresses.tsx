@@ -57,20 +57,20 @@ const Progresses: React.FC<IProps> = ({ classroomId, studentId }) => {
   }
 
   return (
-    <div className={style['progresses-container']}>
+    <div>
       {studentId && (
         <React.Fragment>
           <ProgressGraph studentId={studentId} termId={String(terms.currentTerm?.id)} />
           <div className={style['progresses']}>
             <Button variant="secondary" onClick={handlePrevious} disabled={weekNumber === 1}>
-              <FiChevronLeft />
+              <FiChevronLeft className={style['btn-left']} />
             </Button>
             <ProgressItem week={progresses.byWeek} weekNumber={weekNumber} />
             <Button
               variant="secondary"
               onClick={handleNext}
               disabled={weekNumber >= Number(terms.currentTerm?.numberOfWeeks)}>
-              <FiChevronRight />
+              <FiChevronRight className={style['btn-right']} />
             </Button>
           </div>
         </React.Fragment>
