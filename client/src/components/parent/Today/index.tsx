@@ -1,10 +1,12 @@
+import DailyProgress from 'components/common/DailyProgress';
 import Tooltip from 'components/gui/Tooltip';
 import Typography from 'components/gui/Typography';
 import { useClassroomsAsParent, useMenu } from 'controllers';
 import { dateString } from 'helpers/calendar';
 import React from 'react';
 import { useParams } from 'react-router';
-import Progress from './Progress';
+import Terms from './Terms';
+
 import style from './Today.module.css';
 
 interface RouteParams {
@@ -46,11 +48,7 @@ const Today: React.FC = () => {
         <Typography variant="title" align="center" weight="light">
           {`${dateString(Menu.date.toLocaleString())}`}
         </Typography>
-        {terms.selectedTerm && (
-          <Typography variant="subtitle1" align="center" weight="light">
-            {`Term ${terms.selectedTerm?.number} - Week ${terms.selectedTerm?.currentWeek}`}
-          </Typography>
-        )}
+        <Terms classroomId={classroomId} selectedDate={Menu.date} />
       </header>
       <section className={style['progress-grid']}>
         <div className={style['progress-header']}>
@@ -72,7 +70,7 @@ const Today: React.FC = () => {
         <div className={style['progress-content']}>
           {Object.keys(progresses.byDate).length !== 0 ? (
             progresses.byDate.subjects?.map((progress) => (
-              <Progress key={progress.subject.id} progress={progress} setOrUpdate={progresses.setOrUpdate} />
+              <DailyProgress key={progress.subject.id} progress={progress} setOrUpdate={progresses.setOrUpdate} />
             ))
           ) : (
             <Typography align="center">There are no courses on this date</Typography>

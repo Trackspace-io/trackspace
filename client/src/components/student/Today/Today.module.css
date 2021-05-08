@@ -1,53 +1,28 @@
 .container {
   box-sizing: border-box;
+  padding: 0 24px;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 0;
+.terms {
+  text-align: center;
 }
 
-.helper svg {
-  transform: scale(1.5);
-  cursor: pointer;
-  margin: 8px 16px;
+.progress-grid {
+  margin: 36px 0;
 }
 
-.body {
-  display: flex;
-  justify-content: center;
-  margin: 56px 0;
+.progress-header {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  place-items: center;
+  gap: 16px;
+  margin: 0 16px;
 }
 
-.table {
+.progress-content {
   border: 1px solid #ccc;
   border-radius: 16px;
-  padding: 32px;
-}
-
-.table thead th {
-  padding: 8px 16px;
-}
-
-.table tbody td {
-  padding: 8px 16px;
-}
-
-.table input[type='text'],
-.table input[type='number'] {
-  width: 8vw;
-  font-size: 16px;
-  border: none;
-  border-bottom: 1px solid #ccc;
-  border-radius: 0px;
-  text-align: center;
-  -webkit-appearance: none;
-  margin: 0;
-  -moz-appearance: textfield;
-}
-
-.table tbody {
-  vertical-align: center;
+  margin: 24px 0;
+  padding: 16px;
+  background: var(--white);
 }

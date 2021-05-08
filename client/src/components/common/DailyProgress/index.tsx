@@ -4,20 +4,19 @@ import Typography from 'components/gui/Typography';
 import React from 'react';
 import { IProgressSetOrUpdate, IProgressSubject } from 'store/progresses/types';
 
-import style from './Today.module.css';
+import style from './DailyProgress.module.css';
 
 interface IProps {
   progress: IProgressSubject;
   setOrUpdate: (payload: IProgressSetOrUpdate) => Promise<any>;
 }
 
-const Progress: React.FC<IProps> = ({ progress, setOrUpdate }) => {
+const DailyProgress: React.FC<IProps> = ({ progress, setOrUpdate }) => {
   // Controllers
   const Inputs = useInput({});
 
   // States
   const { subject, values, progressKey } = progress;
-  console.log('progress', progress);
 
   /**
    * Fetch progress' inputs.
@@ -97,4 +96,4 @@ const Progress: React.FC<IProps> = ({ progress, setOrUpdate }) => {
   );
 };
 
-export default Progress;
+export default DailyProgress;

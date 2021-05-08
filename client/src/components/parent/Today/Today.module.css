@@ -3,6 +3,10 @@
   padding: 0 24px;
 }
 
+.terms {
+  text-align: center;
+}
+
 .progress-grid {
   margin: 36px 0;
 }
@@ -21,13 +25,4 @@
   margin: 24px 0;
   padding: 16px;
   background: var(--white);
-}
-
-.progress {
-  display: grid;
-  /* grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); */
-  grid-template-columns: repeat(6, 1fr);
-  place-items: end center;
-  gap: 16px;
-  padding: 24px 0;
 }
