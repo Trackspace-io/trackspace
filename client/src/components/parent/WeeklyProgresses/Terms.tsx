@@ -25,9 +25,6 @@ const Terms: React.FC<ITermsProps> = ({ classroomId }) => {
   return (
     <div className={style['terms-container']}>
       <div className={style['terms-header']}>
-        <Typography variant="subtitle" weight="light">
-          Weekly Progresses
-        </Typography>
         {terms.list.length !== 0 && (
           <div className={style['terms-dropdown']}>
             <Dropdown type="title" title="Select term">

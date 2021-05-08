@@ -71,6 +71,11 @@ const ProgressUpdate: React.FC<IProps> = ({ isOpen, onClose, values, weekNumber 
         weekNumber,
       });
 
+      Progresses.getProgressGraph({
+        studentId,
+        termId,
+      });
+
       onClose();
     });
   };
@@ -78,7 +83,9 @@ const ProgressUpdate: React.FC<IProps> = ({ isOpen, onClose, values, weekNumber 
   return (
     <div>
       <Modal isOpen={isOpen} onClose={onClose}>
-        <Typography variant="info"> Update progress. </Typography>
+        <Typography variant="subtitle" align="center" weight="light">
+          Update progress.
+        </Typography>
         <br />
 
         <form onSubmit={handleSubmit} className={style['form']}>
@@ -87,6 +94,7 @@ const ProgressUpdate: React.FC<IProps> = ({ isOpen, onClose, values, weekNumber 
               name="pageFrom"
               type="number"
               label="Page from"
+              variant="primary"
               value={Inputs.values.pageFrom}
               onChange={Inputs.handleInputChange}
             />
