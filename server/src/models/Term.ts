@@ -260,16 +260,14 @@ export class Term extends Model {
       return [null, null];
     }
 
-    // Get the time value in days.
-    const termStartDays = Math.ceil(this.start.getTime() / (24 * 3600 * 1000));
-
     // Compute the week start date.
-    const weekStartDays = termStartDays - this.start.getDay() + 7 * (week - 1);
-    const weekStartDate = new Date(weekStartDays * (24 * 3600 * 1000));
+    const weekStartDate = date.addDays(
+      this.start,
+      7 * (week - 1) - this.start.getDay()
+    );
 
     // Compute the week end date.
-    const weekEndDays = weekStartDays + 6;
-    const weekEndDate = new Date(weekEndDays * (24 * 3600 * 1000));
+    const weekEndDate = date.addDays(weekStartDate, 6);
 
     return [
       this.start > weekStartDate ? this.start : weekStartDate,

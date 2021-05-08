@@ -75,9 +75,20 @@ progress.post(
     return true;
   }),
 
-  body("pageFrom").optional({ nullable: true }).isInt(),
-  body("pageSet").optional({ nullable: true }).isInt(),
-  body("pageDone").optional({ nullable: true }).isInt(),
+  body("pageFrom")
+    .customSanitizer((value) => (value === "" ? null : value))
+    .optional({ nullable: true })
+    .isInt(),
+
+  body("pageSet")
+    .customSanitizer((value) => (value === "" ? null : value))
+    .optional({ nullable: true })
+    .isInt(),
+
+  body("pageDone")
+    .customSanitizer((value) => (value === "" ? null : value))
+    .optional({ nullable: true })
+    .isInt(),
 
   body("homeworkDone")
     .optional({ nullable: true })
@@ -132,12 +143,21 @@ progress.post(
       }
 
       // Set the values.
-      progress.set({
-        pageFrom: req.body.pageFrom,
-        pageSet: req.body.pageSet,
-        pageDone: req.body.pageDone,
-        homeworkDone: req.body.homeworkDone === true,
-      });
+      if ("pageFrom" in req.body) {
+        progress.setDataValue("pageFrom", req.body.pageFrom);
+      }
+
+      if ("pageSet" in req.body) {
+        progress.setDataValue("pageSet", req.body.pageSet);
+      }
+
+      if ("pageDone" in req.body) {
+        progress.setDataValue("pageDone", req.body.pageDone);
+      }
+
+      if ("homeworkDone" in req.body) {
+        progress.setDataValue("homeworkDone", req.body.homeworkDone === true);
+      }
 
       // Validate the new values.
       const errors = [];

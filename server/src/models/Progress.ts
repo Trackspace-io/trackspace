@@ -234,11 +234,11 @@ export class Progress extends Model {
     });
 
     if (!progress) return null;
-    return progress._pageSet !== null ? progress._pageSet : null;
+    return !isNaN(progress._pageSet) ? progress._pageSet : null;
   }
 
   /**
-   * Get the "Page done" value at a date.
+   * Get the "Got To" value at a date.
    *
    * @param studentId The student identifier.
    * @param subjectId The subject identifier.
@@ -257,7 +257,7 @@ export class Progress extends Model {
     });
 
     if (!progress) return null;
-    return progress._pageDone !== null ? progress._pageDone : null;
+    return !isNaN(progress._pageDone) ? progress._pageDone : null;
   }
 
   /**
@@ -281,7 +281,7 @@ export class Progress extends Model {
 
     if (!progress) return null;
 
-    return progress._pageSet !== null && progress._pageDone
+    return !isNaN(progress._pageSet) && progress._pageDone
       ? progress._pageSet - progress._pageDone
       : null;
   }
@@ -333,24 +333,21 @@ export class Progress extends Model {
    * Start page.
    */
   private get _pageFrom(): number {
-    const value = this.getDataValue("pageFrom");
-    return value === null ? null : parseInt(value);
+    return parseInt(this.getDataValue("pageFrom"));
   }
 
   /**
    * Number of pages to do.
    */
   private get _pageSet(): number {
-    const value = this.getDataValue("pageSet");
-    return value === null ? null : parseInt(value);
+    return parseInt(this.getDataValue("pageSet"));
   }
 
   /**
    * Number of pages done by the student.
    */
   private get _pageDone(): number {
-    const value = this.getDataValue("pageDone");
-    return value === null ? null : parseInt(value);
+    return parseInt(this.getDataValue("pageDone"));
   }
 
   /**
@@ -366,18 +363,29 @@ export class Progress extends Model {
    * @returns True if it is valid, false otherwise.
    */
   public async validatePageFrom(): Promise<[boolean, string]> {
-    if (this._pageFrom === null) {
-      return this._pageSet !== null || this._pageDone !== null
+    // If PageFrom is missing, auto-complete it.
+    if (isNaN(this._pageFrom)) {
+      const pageFrom = await Progress.pageFromAtDate(
+        this.studentId,
+        this.subjectId,
+        this._date
+      );
+
+      this.setDataValue("pageFrom", isNaN(pageFrom) ? null : pageFrom);
+    }
+
+    if (isNaN(this._pageFrom)) {
+      return !isNaN(this._pageSet) || !isNaN(this._pageDone)
         ? [false, "You must also erase the Page Set and the Got To."]
         : [true, null];
     }
 
-    if (this._pageSet !== null && this._pageFrom > this._pageSet) {
+    if (!isNaN(this._pageSet) && this._pageFrom > this._pageSet) {
       return [false, "The Start Page must be before the Page Set."];
     }
 
-    if (this._pageDone !== null && this._pageFrom > this._pageDone) {
-      return [false, "The Start Page must be before the Page Done."];
+    if (!isNaN(this._pageDone) && this._pageFrom > this._pageDone) {
+      return [false, "The Start Page must be before the Got To."];
     }
 
     const prev = await this.prevProgress();
@@ -391,7 +399,7 @@ export class Progress extends Model {
       ? prev._pageSet
       : prev._pageDone;
 
-    if (prevPageDoneByStudent === null) {
+    if (isNaN(prevPageDoneByStudent)) {
       return [false, "You must fill the values of the previous days."];
     }
 
@@ -406,17 +414,17 @@ export class Progress extends Model {
    * @returns True if it is valid, false otherwise.
    */
   public async validatePageSet(): Promise<[boolean, string]> {
-    if (this._pageSet === null) {
+    if (isNaN(this._pageSet)) {
       const errorMsg =
-        "You cannot erase the page set value, if the Got to value is set.";
-      return this._pageDone === null ? [true, null] : [false, errorMsg];
+        "You cannot erase the page set value if the Got to value is set.";
+      return isNaN(this._pageDone) ? [true, null] : [false, errorMsg];
     }
 
-    if (this._pageDone !== null && this._pageSet < this._pageDone) {
+    if (!isNaN(this._pageDone) && this._pageSet < this._pageDone) {
       return [false, "The Page Set must be after the Got To."];
     }
 
-    if (this._pageFrom !== null && this._pageSet < this._pageFrom) {
+    if (!isNaN(this._pageFrom) && this._pageSet < this._pageFrom) {
       return [false, "The Page Set must be after the Start page."];
     }
 
@@ -429,15 +437,24 @@ export class Progress extends Model {
    * @returns True if it is valid, false otherwise.
    */
   public async validatePageDone(): Promise<[boolean, string]> {
-    if (this._pageDone === null) return [true, null];
+    if (isNaN(this._pageDone)) {
+      const next = await this.nextProgress();
+      if (!next || isNaN(next._pageFrom)) return [true, null];
 
-    if (this._pageDone !== null && this._pageDone < this._pageFrom) {
-      return [false, "The Got To must be after the Page Done."];
+      return [
+        false,
+        "You cannot erase the Got To value, since the " +
+          "Start Page is already set for the next date.",
+      ];
     }
 
-    return this._pageSet !== null && this._pageDone <= this._pageSet
+    if (!isNaN(this._pageDone) && this._pageDone < this._pageFrom) {
+      return [false, "The Got To must be after the Got To."];
+    }
+
+    return isNaN(this._pageSet) || this._pageDone <= this._pageSet
       ? [true, null]
-      : [false, "The Page Done must be before the Page Set."];
+      : [false, "The Got To must be before the Page Set."];
   }
 
   /**
@@ -483,17 +500,19 @@ export class Progress extends Model {
       ? this._pageSet
       : this._pageDone;
 
-    if (next._pageFrom !== null && next._pageFrom != pagesDoneByStudent + 1) {
+    if (isNaN(pagesDoneByStudent)) return;
+
+    if (!isNaN(next._pageFrom) && next._pageFrom != pagesDoneByStudent + 1) {
       save = true;
       next.setDataValue("pageFrom", pagesDoneByStudent + 1);
     }
 
-    if (next._pageSet !== null && next._pageSet < next._pageFrom) {
+    if (!isNaN(next._pageSet) && next._pageSet < next._pageFrom) {
       save = true;
       next.setDataValue("pageSet", next._pageFrom);
     }
 
-    if (next._pageDone !== null && next._pageDone < next._pageFrom) {
+    if (!isNaN(next._pageDone) && next._pageDone < next._pageFrom) {
       save = true;
       next.setDataValue("pageDone", next._pageFrom);
     }
