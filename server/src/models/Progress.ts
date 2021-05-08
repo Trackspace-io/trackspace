@@ -209,7 +209,9 @@ export class Progress extends Model {
     });
 
     if (!prev) return null;
-    return prev._homeworkDone ? prev._pageSet : prev._pageDone;
+
+    const prevLastPage = prev._homeworkDone ? prev._pageSet : prev._pageDone;
+    return prevLastPage ? prevLastPage + 1 : null;
   }
 
   /**
@@ -331,21 +333,24 @@ export class Progress extends Model {
    * Start page.
    */
   private get _pageFrom(): number {
-    return parseInt(this.getDataValue("pageFrom"));
+    const value = this.getDataValue("pageFrom");
+    return value === null ? null : parseInt(value);
   }
 
   /**
    * Number of pages to do.
    */
   private get _pageSet(): number {
-    return parseInt(this.getDataValue("pageSet"));
+    const value = this.getDataValue("pageSet");
+    return value === null ? null : parseInt(value);
   }
 
   /**
    * Number of pages done by the student.
    */
   private get _pageDone(): number {
-    return parseInt(this.getDataValue("pageDone"));
+    const value = this.getDataValue("pageDone");
+    return value === null ? null : parseInt(value);
   }
 
   /**
@@ -368,11 +373,11 @@ export class Progress extends Model {
     }
 
     if (this._pageSet !== null && this._pageFrom > this._pageSet) {
-      return [false, "The Page From must be before the Page Set."];
+      return [false, "The Start Page must be before the Page Set."];
     }
 
     if (this._pageDone !== null && this._pageFrom > this._pageDone) {
-      return [false, "The Page From must be before the Page Done."];
+      return [false, "The Start Page must be before the Page Done."];
     }
 
     const prev = await this.prevProgress();
@@ -382,13 +387,15 @@ export class Progress extends Model {
         : [false, "You must fill the values of the previous days."];
     }
 
-    if (prev._homeworkDone) {
-      return prev._pageSet !== null && this._pageFrom >= prev._pageSet
-        ? [true, null]
-        : [false, `You already did page ${this._pageFrom}.`];
+    const prevPageDoneByStudent = prev._homeworkDone
+      ? prev._pageSet
+      : prev._pageDone;
+
+    if (prevPageDoneByStudent === null) {
+      return [false, "You must fill the values of the previous days."];
     }
 
-    return prev._pageDone !== null && this._pageFrom >= prev._pageDone
+    return this._pageFrom > prevPageDoneByStudent
       ? [true, null]
       : [false, `You already did page ${this._pageFrom}.`];
   }
@@ -423,7 +430,12 @@ export class Progress extends Model {
    */
   public async validatePageDone(): Promise<[boolean, string]> {
     if (this._pageDone === null) return [true, null];
-    return this._pageDone >= this._pageFrom && this._pageDone <= this._pageSet
+
+    if (this._pageDone !== null && this._pageDone < this._pageFrom) {
+      return [false, "The Got To must be after the Page Done."];
+    }
+
+    return this._pageSet !== null && this._pageDone <= this._pageSet
       ? [true, null]
       : [false, "The Page Done must be before the Page Set."];
   }
@@ -471,9 +483,9 @@ export class Progress extends Model {
       ? this._pageSet
       : this._pageDone;
 
-    if (next._pageFrom !== null && next._pageFrom != pagesDoneByStudent) {
+    if (next._pageFrom !== null && next._pageFrom != pagesDoneByStudent + 1) {
       save = true;
-      next.setDataValue("pageFrom", pagesDoneByStudent);
+      next.setDataValue("pageFrom", pagesDoneByStudent + 1);
     }
 
     if (next._pageSet !== null && next._pageSet < next._pageFrom) {
