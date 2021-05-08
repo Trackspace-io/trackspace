@@ -5,6 +5,7 @@ import React from 'react';
 import { FcHome } from 'react-icons/fc';
 import { Link } from 'react-router-dom';
 import style from './Sidebar.module.css';
+import cx from 'classnames';
 
 const Sidebar: React.FC = () => {
   const Parents = useParents();
@@ -28,7 +29,9 @@ const Sidebar: React.FC = () => {
       {Parents.children.map((student, i) => (
         <React.Fragment key={student.id}>
           <Tooltip text={`${student.firstName} ${student.lastName}`} position="right">
-            <div className={style['bubble']} onClick={handleClick.bind(this, student.id, i)}>
+            <div
+              className={cx(style['bubble'], style[student.invitationPendingSince ? 'disabled' : ''])}
+              onClick={handleClick.bind(this, student.id, i)}>
               {student.firstName[0]}
             </div>
           </Tooltip>

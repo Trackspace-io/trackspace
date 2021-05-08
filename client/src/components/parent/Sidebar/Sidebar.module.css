@@ -33,6 +33,11 @@
   transform: scale(1.2);
 }
 
+.bubble.disabled {
+  pointer-events: none;
+  color: #ccc;
+}
+
 .sub-bubble {
   display: flex;
   justify-content: center;

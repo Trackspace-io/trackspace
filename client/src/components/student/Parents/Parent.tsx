@@ -24,7 +24,7 @@ const Parent: React.FC<IParentProps> = ({ parent, selected }) => {
         </div>
         <div>
           <Typography variant="caption">
-            {parent.invitationPendingSince ? `Pending since ${parent.invitationPendingSince}` : 'Confirmed'}
+            {parent.invitationPendingSince && `Pending since ${parent.invitationPendingSince}`}
           </Typography>
         </div>
       </div>
