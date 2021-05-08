@@ -36,6 +36,8 @@ const useProgresses = (classroomId?: string) => {
    * @param {string}  payload.date
    */
   const getByDate = (payload: IProgressByDate) => {
+    console.log('payload', payload);
+
     return new Promise((resolve) => {
       ProgressesAPI.getProgressByDate(payload)
         .then((response) => {
@@ -44,15 +46,8 @@ const useProgresses = (classroomId?: string) => {
           dispatch(setProgressByDate(data));
           resolve(data);
         })
-        .catch((e) => {
-          const { msg } = e.response.data.errors[0];
-
+        .catch(() => {
           dispatch(setProgressByDate(<IProgress>{}));
-
-          Messages.add({
-            type: 'error',
-            text: `${msg}`,
-          });
         });
     });
   };
@@ -99,7 +94,6 @@ const useProgresses = (classroomId?: string) => {
       ProgressesAPI.getProgressGraph(payload)
         .then((response) => {
           const { data } = response;
-          console.log('data', data);
 
           dispatch(setProgressGraph(data));
           resolve(data);
@@ -135,7 +129,7 @@ const useProgresses = (classroomId?: string) => {
       ProgressesAPI.setOrUpdateProgress(payload)
         .then(() => {
           getByDate({
-            classroomId,
+            classroomId: String(classroomId),
             studentId,
             date,
           }).then((response) => {

@@ -14,8 +14,8 @@ const Home: React.FC = () => {
         <div className={style['sidebar']}>
           <Typography variant="subtitle">Dashboard</Typography>
           <Sidebar>
-            <SidebarItem to="/student/classrooms"> My classrooms </SidebarItem>
-            <SidebarItem to="/student/parents"> My parents </SidebarItem>
+            <SidebarItem to="/student/classrooms"> Classrooms </SidebarItem>
+            <SidebarItem to="/student/parents"> Parents </SidebarItem>
           </Sidebar>
         </div>
         <div className={style['content']}>

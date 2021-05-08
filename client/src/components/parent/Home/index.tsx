@@ -17,7 +17,6 @@ const Home: React.FC = () => {
         </span>
         <Sidebar>
           <SidebarItem to="/parent/dashboard/children"> Children </SidebarItem>
-          <SidebarItem to="/parent/dashboard/settings"> Settings </SidebarItem>
         </Sidebar>
       </div>
       <div className={style['content']}>

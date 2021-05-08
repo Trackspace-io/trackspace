@@ -1,6 +1,5 @@
 import Button from 'components/gui/Button';
 import Checkbox from 'components/gui/Checkbox';
-import Divider from 'components/gui/Divider';
 import Form from 'components/gui/Form';
 import { Input, useInput } from 'components/gui/Input';
 import Modal from 'components/gui/Modal';
@@ -35,14 +34,15 @@ const Terms: React.FC = () => {
   return (
     <div>
       <div className={style['header']}>
-        <Typography variant="subtitle"> Manage terms </Typography>
+        <Typography variant="title" weight="light">
+          {' '}
+          Manage terms{' '}
+        </Typography>
         <Button variant="primary" onClick={() => setAction('create')}>
           Add term
         </Button>
       </div>
-      <Divider />
       <div className={style['body']}>
-        <Typography variant="info"> List of terms </Typography>
         <div className={style['list']}>
           {terms.list.length !== 0 ? (
             terms.list.map((term, i) => (

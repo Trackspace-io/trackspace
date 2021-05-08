@@ -24,7 +24,7 @@ const ProgressItem: React.FC<IProgressItemProps> = ({ weekNumber, week }) => {
   };
 
   return (
-    <div>
+    <div className={style['progress-container']}>
       {dates && days && (
         <div className={style['progress-header']}>
           <Typography variant="subtitle">{`Week ${weekNumber}`}</Typography>
@@ -63,7 +63,7 @@ const ProgressItem: React.FC<IProgressItemProps> = ({ weekNumber, week }) => {
                           <div className={style['data']}>{v.pageSet || 0}</div>
                           <div className={style['data']}>{v.pageDone || 0}</div>
                           <div className={style['data']}>{v.homework || 0}</div>
-                          <div className={style['data']}>{v.homeworkDone || 'no'}</div>
+                          <div className={style['data']}>{v.homeworkDone ? ' yes' : 'no'}</div>
                         </div>
                       )
                     );

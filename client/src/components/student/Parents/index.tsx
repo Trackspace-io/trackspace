@@ -14,8 +14,8 @@ const Parents: React.FC = () => {
   return (
     <div className={style['container']}>
       <div className={style['header']}>
-        <Typography variant="subtitle" weight="light">
-          My parents
+        <Typography variant="title" weight="light">
+          Parents / Tutors
         </Typography>
         <Button variant="primary" onClick={() => setAddModal(true)}>
           <FiUserPlus />

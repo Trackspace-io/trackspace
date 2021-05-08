@@ -117,7 +117,14 @@ const App: React.FC = () => {
         <ProtectedRoute
           condition={Boolean(cookie)}
           exact
-          path="/parent/children/:studentId/classrooms/:classroomId/progress"
+          path="/parent/children/:studentId/classrooms/:classroomId/progresses/today"
+          redirectPath="/">
+          <ParentDashboard />
+        </ProtectedRoute>
+        <ProtectedRoute
+          condition={Boolean(cookie)}
+          exact
+          path="/parent/children/:studentId/classrooms/:classroomId/progresses/weekly"
           redirectPath="/">
           <ParentDashboard />
         </ProtectedRoute>

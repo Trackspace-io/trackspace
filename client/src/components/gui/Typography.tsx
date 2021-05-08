@@ -31,10 +31,9 @@ const Typography: React.FC<ITypographyProps> = ({
   weight = 'inherit',
 }) => {
   return (
-    <div
-      className={cx(style[variant], style[`align-${align}`], style[`display-${display}`], style[`weight-${weight}`])}>
+    <p className={cx(style[variant], style[`align-${align}`], style[`display-${display}`], style[`weight-${weight}`])}>
       {children}
-    </div>
+    </p>
   );
 };
 

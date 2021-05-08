@@ -22,7 +22,16 @@ const Dashboard: React.FC = () => {
             <Route exact path="/parent/dashboard" component={Home} />
             <Route exact path="/parent/dashboard/children" component={Home} />
             <Route exact path="/parent/children/:studentId/classrooms/:classroomId" component={Classroom} />
-            <Route exact path="/parent/children/:studentId/classrooms/:classroomId/progress" component={Classroom} />
+            <Route
+              exact
+              path="/parent/children/:studentId/classrooms/:classroomId/progresses/today"
+              component={Classroom}
+            />
+            <Route
+              exact
+              path="/parent/children/:studentId/classrooms/:classroomId/progresses/weekly"
+              component={Classroom}
+            />
           </Switch>
         </div>
         <div className={style['menu']}>

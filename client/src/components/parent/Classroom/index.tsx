@@ -2,8 +2,9 @@ import { Sidebar, SidebarItem } from 'components/gui/Sidebar';
 import Typography from 'components/gui/Typography';
 import { useClassroomsAsParent } from 'controllers';
 import React from 'react';
-import { FcComboChart } from 'react-icons/fc';
+import { FcClock, FcComboChart } from 'react-icons/fc';
 import { Redirect, Route, Switch, useParams } from 'react-router';
+import Today from '../Today';
 
 import WeeklyProgresses from '../WeeklyProgresses';
 import style from './Classroom.module.css';
@@ -29,7 +30,12 @@ const Classroom: React.FC = () => {
           </div>
           <Sidebar>
             <SidebarItem
-              to={`/parent/children/${studentId}/classrooms/${classroomId}/progress`}
+              to={`/parent/children/${studentId}/classrooms/${classroomId}/progresses/today`}
+              icon={<FcClock />}>
+              Daily
+            </SidebarItem>
+            <SidebarItem
+              to={`/parent/children/${studentId}/classrooms/${classroomId}/progresses/weekly`}
               icon={<FcComboChart />}>
               Weekly progress
             </SidebarItem>
@@ -38,9 +44,13 @@ const Classroom: React.FC = () => {
         <div className={style['content']}>
           <Switch>
             <Route exact path="/parent/children/:studentId/classrooms/:classroomId">
-              <Redirect to={`/parent/children/${studentId}/classrooms/${classroomId}/progress`} />
+              <Redirect to={`/parent/children/${studentId}/classrooms/${classroomId}/progresses/today`} />
             </Route>
-            <Route path="/parent/children/:studentId/classrooms/:classroomId/progress" component={WeeklyProgresses} />
+            <Route path="/parent/children/:studentId/classrooms/:classroomId/progresses/today" component={Today} />
+            <Route
+              path="/parent/children/:studentId/classrooms/:classroomId/progresses/weekly"
+              component={WeeklyProgresses}
+            />
           </Switch>
         </div>
       </div>

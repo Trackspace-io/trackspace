@@ -6,7 +6,7 @@
   border: 1px solid rgb(202, 202, 202);
   /* border-left-width: 4px; */
   /* border-left-color: var(--yellow-main); */
-  margin: 8px auto 0px;
+  margin: 8px auto;
   box-sizing: border-box;
   width: 100%;
   background: transparent;
@@ -16,6 +16,24 @@
   background: var(--yellow-light);
   outline: none;
   box-shadow: 0 0 0 3px lightpink;
+  border-radius: 4px;
+}
+
+.input[type='number'] {
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+}
+
+.input[type='number']:disabled {
+  border: 0;
+  background: #ccc;
+}
+
+.secondary {
+  border: 0;
+  border-bottom: 1px solid #ccc;
+  border-radius: 0px;
+  text-align: center;
 }
 
 .label {

@@ -29,7 +29,7 @@
 }
 
 .progress-table .data {
-  width: 7vw;
+  width: 100%;
   padding: 2px;
   text-align: center;
   font-weight: 300;
@@ -52,8 +52,9 @@
 
 .inputs {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 8px;
+  grid-template-columns: repeat(auto-fill, minmax(min-content, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
 }
 
 .inputs .checkbox {
@@ -61,3 +62,13 @@
   justify-content: center;
   align-items: flex-start;
 }
+
+/* @media (max-width: 1400px) {
+  .inputs {
+    grid-template-columns: auto;
+
+    grid-template-areas:
+      'sidebar'
+      'content';
+  }
+} */

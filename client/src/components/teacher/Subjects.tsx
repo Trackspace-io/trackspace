@@ -1,5 +1,4 @@
 import Button from 'components/gui/Button';
-import Divider from 'components/gui/Divider';
 import Form from 'components/gui/Form';
 import { Input, useInput } from 'components/gui/Input';
 import Modal from 'components/gui/Modal';
@@ -31,14 +30,14 @@ const Subjects: React.FC = () => {
   return (
     <div>
       <div className={style['header']}>
-        <Typography variant="subtitle"> Manage subjects </Typography>
+        <Typography variant="title" weight="light">
+          Manage subjects
+        </Typography>
         <Button variant="primary" onClick={() => setAction('add')}>
           Add subject
         </Button>
       </div>
-      <Divider />
       <div className={style['body']}>
-        <Typography variant="info"> List of students </Typography>
         <div className={style['list']}>
           {subjects.list.length !== 0 ? (
             subjects.list.map((subject) => (

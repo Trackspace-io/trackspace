@@ -54,7 +54,7 @@ const ProgressUpdate: React.FC<IProps> = ({ isOpen, onClose, values, weekNumber 
       progressKey: { date, studentId, subjectId },
     } = values;
 
-    const { pageFrom, pageSet, pageDone } = Inputs.values;
+    const { pageFrom, pageSet, pageDone, homeworkDone } = Inputs.values;
     const termId = String(Terms.currentTerm?.id);
 
     Progresses.setOrUpdate({
@@ -64,11 +64,17 @@ const ProgressUpdate: React.FC<IProps> = ({ isOpen, onClose, values, weekNumber 
       pageDone,
       pageFrom,
       pageSet,
+      homeworkDone,
     }).then(() => {
       Progresses.getByWeek({
         studentId,
         termId,
         weekNumber,
+      });
+
+      Progresses.getProgressGraph({
+        studentId,
+        termId,
       });
 
       onClose();
@@ -78,7 +84,9 @@ const ProgressUpdate: React.FC<IProps> = ({ isOpen, onClose, values, weekNumber 
   return (
     <div>
       <Modal isOpen={isOpen} onClose={onClose}>
-        <Typography variant="info"> Update progress. </Typography>
+        <Typography variant="subtitle" align="center" weight="light">
+          Update progress.
+        </Typography>
         <br />
 
         <form onSubmit={handleSubmit} className={style['form']}>
@@ -109,6 +117,7 @@ const ProgressUpdate: React.FC<IProps> = ({ isOpen, onClose, values, weekNumber 
               type="number"
               label="Homework"
               value={Inputs.values.homework}
+              disabled
               onChange={Inputs.handleInputChange}
             />
             <div className={style['checkbox']}>

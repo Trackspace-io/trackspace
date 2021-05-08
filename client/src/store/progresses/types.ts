@@ -1,12 +1,12 @@
 import { IStudent } from 'store/students/types';
 import { ISubject } from 'store/subjects/types';
 
-interface IProgressValues {
+export interface IProgressValues {
   homework: number;
   pageDone: number;
   pageFrom: number;
   pageSet: number;
-  homeworkDone: number;
+  homeworkDone: boolean;
 }
 
 export interface IProgressByWeekValues {
@@ -34,17 +34,19 @@ export interface IProgressByWeekValues {
  * Progress state interface
  */
 export interface IProgress {
-  subjects: {
-    progressKey: {
-      date: Date;
-      studentId: Pick<IStudent, 'id'>;
-      subjectId: Pick<ISubject, 'id'>;
-    };
-    subject: ISubject;
-    values: IProgressValues;
-  }[];
+  subjects: IProgressSubject[];
   termNumber: number;
   weekNumber: number;
+}
+
+export interface IProgressSubject {
+  progressKey: {
+    date: string;
+    studentId: string;
+    subjectId: string;
+  };
+  subject: ISubject;
+  values: IProgressValues;
 }
 
 /**
@@ -78,8 +80,8 @@ export type IProgressesActions =
  * Progress (of a student) by date interface
  */
 export interface IProgressByDate {
-  classroomId?: string;
-  studentId?: string;
+  classroomId: string;
+  studentId: string;
   date: string;
 }
 
@@ -102,6 +104,7 @@ export interface IProgressSetOrUpdate {
   pageFrom?: number;
   pageSet?: number;
   pageDone?: number;
+  homeworkDone?: boolean;
 }
 
 /**

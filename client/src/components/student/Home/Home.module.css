@@ -7,7 +7,7 @@
 
 .sidebar {
   grid-area: sidebar;
-  margin: 8px 0;
+  margin: 12px 0;
 }
 
 .content {
@@ -15,15 +15,13 @@
 }
 
 .classrooms-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  margin-bottom: 16px;
 }
 
 .classrooms-list {
   margin: 8px 0;
   border: 1px solid #ccc;
-  border-radius: 8px;
+  border-radius: 16px;
 }
 
 .classroom-item {
@@ -31,6 +29,7 @@
   justify-content: space-between;
   border-bottom: 1px solid #ddd;
   padding: 16px;
+  border-radius: 16px;
 }
 
 .classroom-item a {
