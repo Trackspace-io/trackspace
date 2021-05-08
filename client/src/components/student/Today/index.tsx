@@ -25,11 +25,12 @@ const Today: React.FC = () => {
 
   // Fetch the progress by date when the components mounts, and when a date is selected from the menu.
   React.useEffect(() => {
-    progresses.getByDate({
-      classroomId,
-      studentId: Users.current.id,
-      date: Menu.date.format('YYYY-MM-DD'),
-    });
+    Users.current.id &&
+      progresses.getByDate({
+        classroomId,
+        studentId: Users.current.id,
+        date: Menu.date.format('YYYY-MM-DD'),
+      });
 
     terms
       .getByDate({
