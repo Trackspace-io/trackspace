@@ -10,7 +10,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  position: sticky;
+  position: fixed;
   bottom: 1rem;
   left: 1rem;
   max-width: 375px;
