@@ -1,5 +1,4 @@
 import Button from 'components/gui/Button';
-import Divider from 'components/gui/Divider';
 import Form from 'components/gui/Form';
 import { Input, useInput } from 'components/gui/Input';
 import Modal from 'components/gui/Modal';
@@ -16,24 +15,21 @@ import style from '../../styles/teacher/Home.module.css';
 const Home: React.FC = () => {
   return (
     <div className={style['container']}>
-      <div className={style['header']}>
-        <Typography variant="subtitle">Dashboard</Typography>
+      <div className={style['sidebar']}>
+        <span className={style['title']}>
+          <Typography variant="subtitle" display="inline" weight="light">
+            Dashboard
+          </Typography>
+        </span>
+        <Sidebar>
+          <SidebarItem to="/teacher/classrooms"> Classrooms </SidebarItem>
+        </Sidebar>
       </div>
-      <div className={style['body']}>
-        <div className={style['sidebar']}>
-          <Sidebar>
-            <SidebarItem to="/teacher/classrooms"> My classrooms </SidebarItem>
-            <SidebarItem to="/teacher/settings"> Settings </SidebarItem>
-          </Sidebar>
-        </div>
-        <div className={style['content']}>
-          <Switch>
-            <Route path="/teacher/classrooms" component={Classrooms} />
-          </Switch>
-        </div>
+      <div className={style['content']}>
+        <Switch>
+          <Route path="/teacher/classrooms" component={Classrooms} />
+        </Switch>
       </div>
-      <br />
-      <br />
     </div>
   );
 };
@@ -48,14 +44,14 @@ const Classrooms: React.FC = () => {
   return (
     <div>
       <div className={style['classrooms-header']}>
-        <Typography variant="subtitle"> Manage classrooms </Typography>
+        <Typography variant="title" weight="light">
+          Manage classrooms
+        </Typography>
         <Button variant="primary" onClick={() => setAction('create')}>
           Create classroom
         </Button>
       </div>
-      <Divider />
       <div className={style['classrooms-body']}>
-        <Typography variant="info"> List of classrooms </Typography>
         <div className={style['classrooms-list']}>
           {Teachers.classroomsList.length !== 0 ? (
             Teachers.classroomsList.map((classroom) => (

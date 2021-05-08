@@ -1,25 +1,23 @@
 .container {
+  display: grid;
+  grid-template-columns: max-content;
+  grid-template-areas: 'sidebar content';
   box-sizing: border-box;
-}
-
-.header {
-  padding: 0 24px;
-}
-
-.body {
-  display: flex;
-  flex-direction: row;
-  padding: 0 16px;
+  margin: 8px 0;
 }
 
 .sidebar {
-  flex: 0;
-  margin: 40px 0;
+  grid-area: sidebar;
+  margin: 12px 0;
+}
+
+.title {
+  padding-left: 21px;
 }
 
 .content {
-  flex: 1;
-  padding: 32px 0;
+  grid-area: content;
+  margin: 4px 16px;
 }
 
 .students-list {

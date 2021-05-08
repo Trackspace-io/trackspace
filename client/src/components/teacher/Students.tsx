@@ -1,4 +1,3 @@
-import Divider from 'components/gui/Divider';
 import Form from 'components/gui/Form';
 import { Input, useInput } from 'components/gui/Input';
 import Modal from 'components/gui/Modal';
@@ -7,8 +6,7 @@ import { useClassroomsAsTeacher } from 'controllers';
 import * as React from 'react';
 import { FiShare2, FiTrash } from 'react-icons/fi';
 import { useParams } from 'react-router-dom';
-import { IStudentRemove } from 'store/students/types';
-import { IStudent } from 'store/students/types';
+import { IStudent, IStudentRemove } from 'store/students/types';
 
 import style from '../../styles/teacher/Students.module.css';
 import Share from './Share';
@@ -34,15 +32,15 @@ const Students: React.FC = () => {
   return (
     <div>
       <div className={style['header']}>
-        <Typography variant="subtitle"> Manage students </Typography>
+        <Typography variant="title" weight="light">
+          Manage students
+        </Typography>
         <div className={style['share']} onClick={() => setShareModal(true)}>
           <FiShare2 />
-          <span className={style['text']}>Share</span>
+          <span className={style['text']}>Invite</span>
         </div>
       </div>
-      <Divider />
       <div className={style['body']}>
-        <Typography variant="info"> List of students </Typography>
         <div className={style['list']}>
           {students.list.length !== 0 ? (
             students.list.map((student) => (

@@ -2,6 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 24px;
 }
 
 .share {
@@ -31,7 +32,8 @@
 .list {
   margin: 8px 0;
   border: 1px solid #ccc;
-  border-radius: 8px;
+  border-radius: 16px;
+  background: var(--white);
 }
 
 .item {
@@ -39,7 +41,8 @@
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #ddd;
-  padding: 16px;
+  padding: 24px;
+  border-radius: 16px 16px 0 0;
 }
 
 .item a {
@@ -54,6 +57,7 @@
 
 .item:last-child {
   border: none;
+  border-radius: 0 0 16px 16px;
 }
 
 .actions svg {

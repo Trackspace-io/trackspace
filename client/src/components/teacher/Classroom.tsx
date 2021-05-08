@@ -25,41 +25,41 @@ const Classroom: React.FC = () => {
 
   return (
     <div className={style['container']}>
-      <div className={style['header']}>
-        <Typography variant="subtitle">{Classrooms.current?.name}</Typography>
+      <div className={style['sidebar']}>
+        <span className={style['title']}>
+          <Typography variant="subtitle" display="inline" weight="light">
+            {Classrooms.current?.name}
+          </Typography>
+        </span>
+        <Sidebar>
+          <SidebarItem to={`/teacher/classrooms/${id}/students`} icon={<FcCollaboration />}>
+            Students
+          </SidebarItem>
+          <SidebarItem to={`/teacher/classrooms/${id}/subjects`} icon={<FcTimeline />}>
+            Subjects
+          </SidebarItem>
+          <SidebarItem to={`/teacher/classrooms/${id}/terms`} icon={<FcOvertime />}>
+            Terms
+          </SidebarItem>
+          <SidebarItem to={`/teacher/classrooms/${id}/goals`} icon={<FcCheckmark />}>
+            Goals
+          </SidebarItem>
+          <SidebarItem to={`/teacher/classrooms/${id}/progresses`} icon={<FcComboChart />}>
+            Progress
+          </SidebarItem>
+        </Sidebar>
       </div>
-      <div className={style['body']}>
-        <div className={style['sidebar']}>
-          <Sidebar>
-            <SidebarItem to={`/teacher/classrooms/${id}/students`} icon={<FcCollaboration />}>
-              Students
-            </SidebarItem>
-            <SidebarItem to={`/teacher/classrooms/${id}/subjects`} icon={<FcTimeline />}>
-              Subjects
-            </SidebarItem>
-            <SidebarItem to={`/teacher/classrooms/${id}/terms`} icon={<FcOvertime />}>
-              Terms
-            </SidebarItem>
-            <SidebarItem to={`/teacher/classrooms/${id}/goals`} icon={<FcCheckmark />}>
-              Goals
-            </SidebarItem>
-            <SidebarItem to={`/teacher/classrooms/${id}/progresses`} icon={<FcComboChart />}>
-              Progress
-            </SidebarItem>
-          </Sidebar>
-        </div>
-        <div className={style['content']}>
-          <Switch>
-            <Route exact path="/teacher/classrooms/:id">
-              <Redirect to={`/teacher/classrooms/${id}/students`} />
-            </Route>
-            <Route path="/teacher/classrooms/:id/students" component={Students} />
-            <Route path="/teacher/classrooms/:id/subjects" component={Subjects} />
-            <Route path="/teacher/classrooms/:id/terms" component={Terms} />
-            <Route path="/teacher/classrooms/:id/goals" component={Goals} />
-            <Route path="/teacher/classrooms/:id/progresses" component={WeeklyProgresses} />
-          </Switch>
-        </div>
+      <div className={style['content']}>
+        <Switch>
+          <Route exact path="/teacher/classrooms/:id">
+            <Redirect to={`/teacher/classrooms/${id}/students`} />
+          </Route>
+          <Route path="/teacher/classrooms/:id/students" component={Students} />
+          <Route path="/teacher/classrooms/:id/subjects" component={Subjects} />
+          <Route path="/teacher/classrooms/:id/terms" component={Terms} />
+          <Route path="/teacher/classrooms/:id/goals" component={Goals} />
+          <Route path="/teacher/classrooms/:id/progresses" component={WeeklyProgresses} />
+        </Switch>
       </div>
     </div>
   );
