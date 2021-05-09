@@ -7,8 +7,9 @@ export const addMessage = (payload: IMessage) => {
   };
 };
 
-export const closeMessage = () => {
+export const closeMessage = (messageId: string) => {
   return {
     type: MESSAGES.CLOSE,
+    messageId,
   };
 };
