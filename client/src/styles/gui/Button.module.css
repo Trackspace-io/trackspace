@@ -8,7 +8,7 @@
   align-items: center;
   font-size: 16px;
   font-weight: 400;
-  padding: 8px 32px;
+  padding: 10px 32px;
   margin: 8px 0;
   cursor: pointer;
   letter-spacing: 1px;
@@ -55,19 +55,19 @@
 }
 
 .xs {
-  padding: 8px 36px;
+  padding: 10px 32px;
 }
 
 .sm {
-  padding: 8px 48px;
+  padding: 10px 40px;
 }
 
 .md {
-  padding: 8px 64px;
+  padding: 12px 64px;
 }
 
 .lg {
-  padding: 8px 80px;
+  padding: 12px 80px;
 }
 
 .fullWidth-true {
