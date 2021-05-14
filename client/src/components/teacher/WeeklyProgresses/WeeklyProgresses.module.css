@@ -12,10 +12,18 @@
 }
 
 .terms-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
   margin-bottom: 24px;
+}
+
+.terms-header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+
+.terms-info {
+  text-align: center;
+  padding: 16px 0;
 }
 
 .terms-dropdown {
