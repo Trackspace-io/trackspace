@@ -5,6 +5,7 @@ import { useParents, useUsers } from 'controllers';
 import React from 'react';
 import { FiUserMinus } from 'react-icons/fi';
 import { IStudent } from 'store/students/types';
+
 import Child from './Child';
 import style from './Children.module.css';
 
@@ -53,7 +54,6 @@ const ChildrenList: React.FC = () => {
         <Divider />
         <Button variant="primary" align="end" disabled={selectedStudents.length === 0} onClick={handleRemove}>
           <FiUserMinus />
-          Remove
         </Button>
       </div>
     </div>

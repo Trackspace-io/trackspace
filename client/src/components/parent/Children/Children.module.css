@@ -1,12 +1,13 @@
 .container {
   height: 100%;
   box-sizing: border-box;
+  padding: 0 24px;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   width: 100%;
 }
 

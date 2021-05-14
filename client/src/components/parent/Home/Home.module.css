@@ -3,11 +3,16 @@
   grid-template-columns: max-content;
   grid-template-areas: 'sidebar content';
   box-sizing: border-box;
+  margin: 8px 0;
 }
 
 .sidebar {
   grid-area: sidebar;
   margin: 12px 0;
+}
+
+.title {
+  padding-left: 21px;
 }
 
 .content {
