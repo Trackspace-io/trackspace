@@ -3,6 +3,7 @@ import Divider from 'components/gui/Divider';
 import Typography from 'components/gui/Typography';
 import { dateString } from 'helpers/calendar';
 import React from 'react';
+import { FiCheck, FiX } from 'react-icons/fi';
 import { IProgressByWeekValues } from 'store/progresses/types';
 
 import style from './ProgressItem.module.css';
@@ -59,11 +60,11 @@ const ProgressItem: React.FC<IProgressItemProps> = ({ weekNumber, week }) => {
                       v && (
                         <div key={v.day} className={style['row-data']} onClick={handleClick.bind(this, v)}>
                           <div className={cx(style['data'], style['day'])}>{v.day.slice(0, 3)}</div>
-                          <div className={style['data']}>{v.pageFrom || 0}</div>
-                          <div className={style['data']}>{v.pageSet || 0}</div>
-                          <div className={style['data']}>{v.pageDone || 0}</div>
-                          <div className={style['data']}>{v.homework || 0}</div>
-                          <div className={style['data']}>{v.homeworkDone ? ' yes' : 'no'}</div>
+                          <div className={style['data']}>{v.pageFrom || '-'}</div>
+                          <div className={style['data']}>{v.pageSet || '-'}</div>
+                          <div className={style['data']}>{v.pageDone || '-'}</div>
+                          <div className={style['data']}>{v.homework || '-'}</div>
+                          <div className={style['data']}>{v.homeworkDone ? <FiCheck /> : <FiX />}</div>
                         </div>
                       )
                     );
