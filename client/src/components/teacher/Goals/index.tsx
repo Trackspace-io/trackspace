@@ -4,7 +4,6 @@ import React from 'react';
 
 import GoalGraph from './GoalGraph';
 import GoalList from './GoalList';
-import style from './Goals.module.css';
 import Terms from './Terms';
 
 const Goals: React.FC = () => {
@@ -33,7 +32,7 @@ const Goals: React.FC = () => {
   }, [terms.currentTerm?.id, goals.list]);
 
   return (
-    <div className={style['goal-container']}>
+    <div>
       <Terms />
       {terms.currentTerm && (
         <React.Fragment>

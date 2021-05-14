@@ -1,5 +1,15 @@
-.goal-container {
-  margin: 24px 0;
+.terms-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.terms-dropdown {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 8px;
+  margin-bottom: 24px;
 }
 
 .graph-container {
@@ -84,6 +94,7 @@
   border: 1px solid #ccc;
   border-radius: 8px;
   width: 120px;
+  background: var(--white);
 }
 
 .actions {
@@ -105,19 +116,4 @@
 .goal-item:hover .actions {
   cursor: pointer;
   visibility: visible;
-}
-
-.terms-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 24px;
-}
-
-.terms-dropdown {
-  position: relative;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 8px;
-  margin-bottom: 24px;
 }

@@ -5,7 +5,9 @@
     * Main colors
     */
   --black: #000000;
-  --black-light: #3d3d3d;
+  --black-main: #3d3d3d;
+  --black-light: #555555;
+
   --white: #ffffff;
   --white-dark: #cccccc;
 

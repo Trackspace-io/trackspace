@@ -6,7 +6,7 @@ import Modal from 'components/gui/Modal';
 import Typography from 'components/gui/Typography';
 import { useClassroomsAsTeacher } from 'controllers';
 import * as React from 'react';
-import { FiEdit2, FiTrash } from 'react-icons/fi';
+import { FiEdit2, FiPlus, FiTrash } from 'react-icons/fi';
 import { useParams } from 'react-router-dom';
 import { ITerm, ITermCreate, ITermModify, ITermRemove } from 'store/terms/types';
 
@@ -35,11 +35,10 @@ const Terms: React.FC = () => {
     <div>
       <div className={style['header']}>
         <Typography variant="title" weight="light">
-          {' '}
-          Manage terms{' '}
+          Manage terms
         </Typography>
         <Button variant="primary" onClick={() => setAction('create')}>
-          Add term
+          <FiPlus />
         </Button>
       </div>
       <div className={style['body']}>

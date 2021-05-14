@@ -1,3 +1,4 @@
+import Button from 'components/gui/Button';
 import Form from 'components/gui/Form';
 import { Input, useInput } from 'components/gui/Input';
 import Modal from 'components/gui/Modal';
@@ -35,10 +36,9 @@ const Students: React.FC = () => {
         <Typography variant="title" weight="light">
           Manage students
         </Typography>
-        <div className={style['share']} onClick={() => setShareModal(true)}>
+        <Button variant="primary" onClick={() => setShareModal(true)}>
           <FiShare2 />
-          <span className={style['text']}>Invite</span>
-        </div>
+        </Button>
       </div>
       <div className={style['body']}>
         <div className={style['list']}>

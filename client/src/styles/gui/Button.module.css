@@ -8,15 +8,25 @@
   align-items: center;
   font-size: 16px;
   font-weight: 400;
-  padding: 10px 32px;
-  margin: 8px 0;
+  padding: 10px 24px;
+  margin: 8px 2px;
   cursor: pointer;
   letter-spacing: 1px;
   box-shadow: none;
 }
 
 .button svg {
-  padding-right: 8px;
+  color: var(--blue-dark);
+  transform: scale(1.2);
+  padding: 4px 0;
+}
+
+.button:disabled svg {
+  color: var(--white-dark);
+}
+
+.button:hover svg {
+  color: var(--black-light);
 }
 
 .button:focus {

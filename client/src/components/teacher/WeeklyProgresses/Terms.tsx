@@ -25,7 +25,7 @@ const Terms: React.FC<ITermsProps> = ({ classroomId }) => {
   return (
     <div className={style['terms-container']}>
       <div className={style['terms']}>
-        {terms.currentTerm ? (
+        {terms.currentTerm && (
           <React.Fragment>
             <Typography variant="title" weight="light">
               {`Term ${terms.currentTerm.number}: ${dateString(terms.currentTerm.start)}
@@ -40,15 +40,6 @@ const Terms: React.FC<ITermsProps> = ({ classroomId }) => {
                 {` ${day.slice(0, 3).toUpperCase()} `}
               </Typography>
             ))}
-          </React.Fragment>
-        ) : (
-          <React.Fragment>
-            <Typography variant="title" weight="light">
-              Weekly progress
-            </Typography>
-            <br />
-            <Typography variant="subtitle1">No term is associated to the current date.</Typography>
-            <Typography variant="subtitle1"> Please add a term, or select a previous term.</Typography>
           </React.Fragment>
         )}
       </div>
