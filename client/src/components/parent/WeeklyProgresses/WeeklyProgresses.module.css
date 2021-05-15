@@ -27,14 +27,6 @@
   padding: 16px 0;
 }
 
-.terms-dropdown {
-  position: relative;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 8px;
-  margin-bottom: 24px;
-}
-
 .graph-container {
   position: relative;
 }
@@ -43,7 +35,7 @@
   display: grid;
   place-content: center;
   place-items: center;
-  height: 65vh;
+  height: 60vh;
 }
 
 .progresses {

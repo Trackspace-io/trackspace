@@ -49,8 +49,9 @@ const Progresses: React.FC<IProgressesProps> = ({ classroomId }) => {
 
   if (!terms.currentTerm) {
     return (
-      <div className={style['container']}>
-        <Typography variant="subtitle" align="center">{`There's no class this week.`}</Typography>
+      <div className={style['progresses-empty']}>
+        <Typography variant="subtitle">No term is associated to the current date.</Typography>
+        <Typography variant="subtitle1"> Please add a term, or select a previous term.</Typography>
       </div>
     );
   }

@@ -33,7 +33,7 @@
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   grid-template-rows: auto;
   place-content: start;
-  gap: 16px;
+  gap: 24px;
   width: 100%;
   height: 55vh;
 }
@@ -55,6 +55,7 @@
   background: var(--white);
   padding: 16px 16px 8px;
   cursor: pointer;
+  position: relative;
 }
 
 .parent-item:hover {
@@ -74,7 +75,13 @@
   place-content: space-between start;
 }
 
-.item-pending {
+.pending-check {
+  position: absolute;
+  right: 16px;
+  bottom: 8px;
+}
+
+.item-confirm {
   place-self: start center;
 }
 

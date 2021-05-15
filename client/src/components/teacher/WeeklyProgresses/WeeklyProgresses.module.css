@@ -11,27 +11,26 @@
   margin: 24px 0 0;
 }
 
+.progresses-empty {
+  display: grid;
+  place-content: center;
+  place-items: center;
+  height: 60vh;
+}
+
 .terms-container {
   margin-bottom: 24px;
 }
 
 .terms-header {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: flex-start;
 }
 
 .terms-info {
   text-align: center;
   padding: 16px 0;
-}
-
-.terms-dropdown {
-  position: relative;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 8px;
-  margin-bottom: 24px;
 }
 
 .search-item input {

@@ -1,6 +1,6 @@
 import TermDropdown from 'components/common/TermDropdown';
 import Typography from 'components/gui/Typography';
-import { useClassroomsAsStudent, useMenu } from 'controllers';
+import { useClassroomsAsStudent } from 'controllers';
 import { dateString, today, WEEK_DAYS } from 'helpers/calendar';
 import React from 'react';
 
@@ -13,7 +13,6 @@ interface ITermsProps {
 const Terms: React.FC<ITermsProps> = ({ classroomId }) => {
   // Controllers.
   const Classrooms = useClassroomsAsStudent(classroomId);
-  const Menu = useMenu();
 
   // States.
   const { terms } = Classrooms;
@@ -21,8 +20,8 @@ const Terms: React.FC<ITermsProps> = ({ classroomId }) => {
   return (
     <div className={style['terms-container']}>
       <div className={style['terms-header']}>
-        <Typography variant="title" align="center" weight="light">
-          {`${dateString(Menu.date.toLocaleString())}`}
+        <Typography variant="title" weight="light">
+          Weekly progresses
         </Typography>
         <TermDropdown classroomId={classroomId} />
       </div>

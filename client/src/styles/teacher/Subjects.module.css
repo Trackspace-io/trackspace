@@ -12,6 +12,10 @@
   background: var(--white);
 }
 
+.list-empty {
+  padding: 16px 0;
+}
+
 .item {
   display: flex;
   justify-content: space-between;

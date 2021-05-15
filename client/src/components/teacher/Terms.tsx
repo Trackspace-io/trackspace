@@ -48,9 +48,11 @@ const Terms: React.FC = () => {
               <TermItem key={term.id} term={term} index={i} setAction={setAction} setTerm={setTerm} />
             ))
           ) : (
-            <Typography variant="caption" align="center">
-              The list is empty.
-            </Typography>
+            <div className={style['list-empty']}>
+              <Typography variant="caption" align="center">
+                The list is empty.
+              </Typography>
+            </div>
           )}
         </div>
       </div>

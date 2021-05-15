@@ -1,9 +1,10 @@
-import { Dropdown, DropdownItem } from 'components/gui/Dropdown';
+import TermDropdown from 'components/common/TermDropdown';
 import Typography from 'components/gui/Typography';
 import { useClassroomsAsTeacher } from 'controllers';
 import { dateString, today, WEEK_DAYS } from 'helpers/calendar';
 import { useParams } from 'helpers/params';
 import React from 'react';
+
 import style from './Goals.module.css';
 
 const Terms: React.FC = () => {
@@ -16,17 +17,16 @@ const Terms: React.FC = () => {
   // States
   const { terms } = Classrooms.current;
 
-  const handleClick = (termId: string) => {
-    terms.getById({
-      classroomId: id,
-      id: termId,
-    });
-  };
-
   return (
     <div className={style['terms-container']}>
-      <div className={style['terms']}>
-        {terms.currentTerm ? (
+      <div className={style['terms-header']}>
+        <Typography variant="title" weight="light">
+          Goals
+        </Typography>
+        <TermDropdown classroomId={id} />
+      </div>
+      <div className={style['terms-info']}>
+        {terms.currentTerm && (
           <React.Fragment>
             <Typography variant="title" weight="light">
               {`Term ${terms.currentTerm.number}: ${dateString(terms.currentTerm.start)}
@@ -42,30 +42,8 @@ const Terms: React.FC = () => {
               </Typography>
             ))}
           </React.Fragment>
-        ) : (
-          <React.Fragment>
-            <Typography variant="title" weight="light">
-              Goals
-            </Typography>
-            <br />
-            <Typography variant="subtitle1">No term is associated to the current date.</Typography>
-            <Typography variant="subtitle1"> Please add a term, or select a previous term.</Typography>
-          </React.Fragment>
         )}
       </div>
-      {terms.list.length !== 0 && (
-        <div className={style['terms-dropdown']}>
-          <Dropdown type="title" title="Select term">
-            {terms.list.map((term, i) => (
-              <DropdownItem key={term.id} type="button" onClick={handleClick.bind(this, term.id)}>
-                <Typography variant="caption">
-                  {`Term ${i + 1}: ${dateString(term.start)} - ${dateString(term.end)}`}
-                </Typography>
-              </DropdownItem>
-            ))}
-          </Dropdown>
-        </div>
-      )}
     </div>
   );
 };

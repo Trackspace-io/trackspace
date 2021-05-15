@@ -40,33 +40,33 @@ const Students: React.FC = () => {
           <FiShare2 />
         </Button>
       </div>
-      <div className={style['body']}>
-        <div className={style['list']}>
-          {students.list.length !== 0 ? (
-            students.list.map((student) => (
-              <div key={student.id} className={style['item']}>
-                <div>
-                  <Typography>
-                    {student.firstName} {student.lastName}
-                  </Typography>
-                  <Typography variant="caption">{student.email}</Typography>
-                </div>
-                <div className={style['actions']}>
-                  <FiTrash
-                    onClick={() => {
-                      setAction('remove');
-                      setStudent(student);
-                    }}
-                  />
-                </div>
+      <div className={style['list']}>
+        {students.list.length !== 0 ? (
+          students.list.map((student) => (
+            <div key={student.id} className={style['item']}>
+              <div>
+                <Typography>
+                  {student.firstName} {student.lastName}
+                </Typography>
+                <Typography variant="caption">{student.email}</Typography>
               </div>
-            ))
-          ) : (
+              <div className={style['actions']}>
+                <FiTrash
+                  onClick={() => {
+                    setAction('remove');
+                    setStudent(student);
+                  }}
+                />
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className={style['list-empty']}>
             <Typography variant="caption" align="center">
               The list is empty.
             </Typography>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       {action === 'remove' && (

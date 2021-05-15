@@ -37,36 +37,36 @@ const Subjects: React.FC = () => {
           <FiPlus />
         </Button>
       </div>
-      <div className={style['body']}>
-        <div className={style['list']}>
-          {subjects.list.length !== 0 ? (
-            subjects.list.map((subject) => (
-              <div key={subject.id} className={style['item']}>
-                <div>
-                  <Typography>{subject.name}</Typography>
-                </div>
-                <div className={style['actions']}>
-                  <FiEdit2
-                    onClick={() => {
-                      setAction('modify');
-                      setSubject(subject);
-                    }}
-                  />
-                  <FiTrash
-                    onClick={() => {
-                      setAction('remove');
-                      setSubject(subject);
-                    }}
-                  />
-                </div>
+      <div className={style['list']}>
+        {subjects.list.length !== 0 ? (
+          subjects.list.map((subject) => (
+            <div key={subject.id} className={style['item']}>
+              <div>
+                <Typography>{subject.name}</Typography>
               </div>
-            ))
-          ) : (
+              <div className={style['actions']}>
+                <FiEdit2
+                  onClick={() => {
+                    setAction('modify');
+                    setSubject(subject);
+                  }}
+                />
+                <FiTrash
+                  onClick={() => {
+                    setAction('remove');
+                    setSubject(subject);
+                  }}
+                />
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className={style['list-empty']}>
             <Typography variant="caption" align="center">
               The list is empty.
             </Typography>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       {action === 'add' && (

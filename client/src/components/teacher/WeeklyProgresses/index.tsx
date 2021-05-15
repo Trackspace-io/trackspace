@@ -1,3 +1,4 @@
+import Typography from 'components/gui/Typography';
 import { useClassroomsAsTeacher } from 'controllers';
 import React from 'react';
 import { useParams } from 'react-router-dom';
@@ -24,12 +25,19 @@ const WeeklyProgresses: React.FC = () => {
     <div className={style['container']}>
       <header className={style['header']}>
         <Terms classroomId={id} />
-        {terms.currentTerm && (
-          <StudentsSearchBar studentsList={students.list} setStudentId={(studentId) => setStudentId(studentId)} />
-        )}
       </header>
       <main className={style['main']}>
-        <Progresses classroomId={id} studentId={studentId} />
+        {terms.currentTerm ? (
+          <React.Fragment>
+            <StudentsSearchBar studentsList={students.list} setStudentId={(studentId) => setStudentId(studentId)} />
+            <Progresses classroomId={id} studentId={studentId} />
+          </React.Fragment>
+        ) : (
+          <div className={style['progresses-empty']}>
+            <Typography variant="subtitle">No term is associated to the current date.</Typography>
+            <Typography variant="subtitle1"> Please add a term, or select a previous term.</Typography>
+          </div>
+        )}
       </main>
     </div>
   );

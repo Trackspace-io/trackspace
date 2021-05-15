@@ -26,7 +26,9 @@
 
 .input[type='number']:disabled {
   border: 0;
-  background: #ccc;
+  background: var(--white-dark);
+  border-radius: 4px;
+  color: var(--white);
 }
 
 .secondary {

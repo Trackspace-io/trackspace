@@ -26,7 +26,7 @@
 }
 
 .button:hover svg {
-  color: var(--white);
+  color: var(--blue-dark);
 }
 
 .button:focus {
