@@ -1,7 +1,7 @@
 .header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: flex-start;
   margin-bottom: 24px;
 }
 
@@ -12,13 +12,16 @@
   background: var(--white);
 }
 
+.list-empty {
+  padding: 16px 0;
+}
+
 .item {
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #ddd;
   padding: 24px;
-  border-radius: 16px 16px 0 0;
 }
 
 .item a {
@@ -27,13 +30,8 @@
   outline: none;
 }
 
-.item:hover {
-  box-shadow: 0 1px 5px #ccc;
-}
-
 .item:last-child {
-  border: none;
-  border-radius: 0 0 16px 16px;
+  border: 0;
 }
 
 .actions svg {

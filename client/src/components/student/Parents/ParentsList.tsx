@@ -56,7 +56,6 @@ const ParentsList: React.FC = () => {
         <Divider />
         <Button variant="primary" align="end" disabled={selectedParents.length === 0} onClick={handleRemove}>
           <FiUserMinus />
-          Remove
         </Button>
       </div>
     </div>

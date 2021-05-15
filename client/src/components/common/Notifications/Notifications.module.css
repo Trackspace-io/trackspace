@@ -4,7 +4,7 @@
   border: 1px solid #ccc;
   border-radius: 16px;
   max-height: 300px;
-  width: 300px;
+  width: auto;
   overflow-y: scroll;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* Internet Explorer 10+ */

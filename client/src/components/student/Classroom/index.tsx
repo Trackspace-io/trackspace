@@ -23,30 +23,29 @@ const Classroom: React.FC = () => {
   return (
     <div>
       <div className={style['container']}>
-        <div className={style['body']}>
-          <div className={style['sidebar']}>
-            <div className={style['title']}>
-              <Typography variant="subtitle">{Classrooms.current.name}</Typography>
-            </div>
-            <br />
-            <Sidebar>
-              <SidebarItem to={`/student/classrooms/${classroomId}/progress/today`} icon={<FcInspection />}>
-                Today
-              </SidebarItem>
-              <SidebarItem to={`/student/classrooms/${classroomId}/progress/weekly`} icon={<FcComboChart />}>
-                Weekly progress
-              </SidebarItem>
-            </Sidebar>
+        <div className={style['sidebar']}>
+          <div className={style['title']}>
+            <Typography variant="subtitle" display="inline" weight="light">
+              {Classrooms.current.name}
+            </Typography>
           </div>
-          <div className={style['content']}>
-            <Switch>
-              <Route exact path="/student/classrooms/:classroomId">
-                <Redirect to={`/student/classrooms/${classroomId}/progress/today`} />
-              </Route>
-              <Route path="/student/classrooms/:classroomId/progress/today" component={Today} />
-              <Route path="/student/classrooms/:classroomId/progress/weekly" component={WeeklyProgresses} />
-            </Switch>
-          </div>
+          <Sidebar>
+            <SidebarItem to={`/student/classrooms/${classroomId}/progress/today`} icon={<FcInspection />}>
+              Daily
+            </SidebarItem>
+            <SidebarItem to={`/student/classrooms/${classroomId}/progress/weekly`} icon={<FcComboChart />}>
+              Weekly progress
+            </SidebarItem>
+          </Sidebar>
+        </div>
+        <div className={style['content']}>
+          <Switch>
+            <Route exact path="/student/classrooms/:classroomId">
+              <Redirect to={`/student/classrooms/${classroomId}/progress/today`} />
+            </Route>
+            <Route path="/student/classrooms/:classroomId/progress/today" component={Today} />
+            <Route path="/student/classrooms/:classroomId/progress/weekly" component={WeeklyProgresses} />
+          </Switch>
         </div>
       </div>
     </div>

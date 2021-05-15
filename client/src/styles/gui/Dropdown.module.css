@@ -7,7 +7,8 @@
   background: #ffffff;
   border-radius: 8px;
   position: absolute;
-  margin-top: 8px;
+  right: 0;
+  margin-top: 24px;
   width: 256px;
   box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
   opacity: 0;
@@ -31,6 +32,7 @@
 
 .menu li {
   border-bottom: 1px solid #dddddd;
+  cursor: pointer;
 }
 
 .menu li a {

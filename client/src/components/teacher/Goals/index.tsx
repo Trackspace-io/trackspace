@@ -4,8 +4,10 @@ import React from 'react';
 
 import GoalGraph from './GoalGraph';
 import GoalList from './GoalList';
-import style from './Goals.module.css';
 import Terms from './Terms';
+
+import style from './Goals.module.css';
+import Typography from 'components/gui/Typography';
 
 const Goals: React.FC = () => {
   // Retrieve classroom id
@@ -33,13 +35,18 @@ const Goals: React.FC = () => {
   }, [terms.currentTerm?.id, goals.list]);
 
   return (
-    <div className={style['goal-container']}>
+    <div>
       <Terms />
-      {terms.currentTerm && (
+      {terms.currentTerm ? (
         <React.Fragment>
           <GoalGraph graph={goals.graph} />
           <GoalList list={goals.list} numberOfWeeks={Number(terms.currentTerm?.numberOfWeeks)} />
         </React.Fragment>
+      ) : (
+        <div className={style['goals-empty']}>
+          <Typography variant="subtitle">No term is associated to the current date.</Typography>
+          <Typography variant="subtitle1"> Please add a term, or select a previous term.</Typography>
+        </div>
       )}
     </div>
   );

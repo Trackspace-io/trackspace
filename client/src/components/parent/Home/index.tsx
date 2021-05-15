@@ -11,12 +11,12 @@ const Home: React.FC = () => {
     <div className={style['container']}>
       <div className={style['sidebar']}>
         <span className={style['title']}>
-          <Typography variant="subtitle" display="inline">
+          <Typography variant="subtitle" display="inline" weight="light">
             Dashboard
           </Typography>
         </span>
         <Sidebar>
-          <SidebarItem to="/parent/dashboard/children"> Children </SidebarItem>
+          <SidebarItem to="/parent/dashboard/children"> Students </SidebarItem>
         </Sidebar>
       </div>
       <div className={style['content']}>

@@ -26,7 +26,9 @@ const Classroom: React.FC = () => {
       <div className={style['container']}>
         <div className={style['sidebar']}>
           <div className={style['title']}>
-            <Typography variant="subtitle">{Classrooms.current.name}</Typography>
+            <Typography variant="subtitle" display="inline" weight="light">
+              {Classrooms.current.name}
+            </Typography>
           </div>
           <Sidebar>
             <SidebarItem

@@ -1,3 +1,4 @@
+import Button from 'components/gui/Button';
 import Form from 'components/gui/Form';
 import { Input, useInput } from 'components/gui/Input';
 import Modal from 'components/gui/Modal';
@@ -35,38 +36,37 @@ const Students: React.FC = () => {
         <Typography variant="title" weight="light">
           Manage students
         </Typography>
-        <div className={style['share']} onClick={() => setShareModal(true)}>
+        <Button variant="primary" onClick={() => setShareModal(true)}>
           <FiShare2 />
-          <span className={style['text']}>Invite</span>
-        </div>
+        </Button>
       </div>
-      <div className={style['body']}>
-        <div className={style['list']}>
-          {students.list.length !== 0 ? (
-            students.list.map((student) => (
-              <div key={student.id} className={style['item']}>
-                <div>
-                  <Typography>
-                    {student.firstName} {student.lastName}
-                  </Typography>
-                  <Typography variant="caption">{student.email}</Typography>
-                </div>
-                <div className={style['actions']}>
-                  <FiTrash
-                    onClick={() => {
-                      setAction('remove');
-                      setStudent(student);
-                    }}
-                  />
-                </div>
+      <div className={style['list']}>
+        {students.list.length !== 0 ? (
+          students.list.map((student) => (
+            <div key={student.id} className={style['item']}>
+              <div>
+                <Typography>
+                  {student.firstName} {student.lastName}
+                </Typography>
+                <Typography variant="caption">{student.email}</Typography>
               </div>
-            ))
-          ) : (
+              <div className={style['actions']}>
+                <FiTrash
+                  onClick={() => {
+                    setAction('remove');
+                    setStudent(student);
+                  }}
+                />
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className={style['list-empty']}>
             <Typography variant="caption" align="center">
               The list is empty.
             </Typography>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       {action === 'remove' && (

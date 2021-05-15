@@ -13,12 +13,11 @@ const Children: React.FC = () => {
   return (
     <div className={style['container']}>
       <div className={style['header']}>
-        <Typography variant="subtitle" weight="light">
-          Children
+        <Typography variant="title" weight="light">
+          Students
         </Typography>
         <Button variant="primary" onClick={() => setAddModal(true)}>
           <FiUserPlus />
-          Add
         </Button>
       </div>
       <div className={style['body']}>

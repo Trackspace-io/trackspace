@@ -1,7 +1,8 @@
 import cx from 'classnames';
+import Tooltip from 'components/gui/Tooltip';
 import Typography from 'components/gui/Typography';
 import React from 'react';
-import { FiUsers, FiUserX } from 'react-icons/fi';
+import { FiCheck, FiUsers, FiUserX } from 'react-icons/fi';
 import { IParent } from 'store/parents/types';
 
 import ConfirmRelationship from './ConfirmRelationship';
@@ -23,13 +24,17 @@ const Parent: React.FC<IParentProps> = ({ parent, selected }) => {
           <Typography variant="caption">{parent.email}</Typography>
         </div>
         <div>
-          <Typography variant="caption">
-            {parent.invitationPendingSince && `Pending since ${parent.invitationPendingSince}`}
-          </Typography>
+          {parent.invitationPendingSince ? (
+            <Typography variant="caption">Pending since {parent.invitationPendingSince}</Typography>
+          ) : (
+            <FiCheck className={style['pending-check']} />
+          )}
         </div>
       </div>
-      <div className={style['item-pending']}>
-        {parent.mustConfirm ? <FiUserX onClick={() => setConfirmModal(true)} /> : <FiUsers />}
+      <div className={style['item-confirm']}>
+        <Tooltip text="Confirm relationship" position="top">
+          {parent.mustConfirm ? <FiUserX onClick={() => setConfirmModal(true)} /> : <FiUsers />}
+        </Tooltip>
       </div>
       {confirmModal && (
         <ConfirmRelationship isOpen={confirmModal} onClose={() => setConfirmModal(false)} parentId={parent.id} />

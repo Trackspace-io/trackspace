@@ -15,12 +15,12 @@ const WeeklyProgresses: React.FC = () => {
 
   return (
     <div className={style['container']}>
-      <div className={style['header']}>
+      <header className={style['header']}>
         <Terms classroomId={classroomId} />
-      </div>
-      <div className={style['body']}>
+      </header>
+      <main className={style['main']}>
         <Progresses classroomId={classroomId} />
-      </div>
+      </main>
     </div>
   );
 };

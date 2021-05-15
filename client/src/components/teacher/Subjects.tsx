@@ -5,7 +5,7 @@ import Modal from 'components/gui/Modal';
 import Typography from 'components/gui/Typography';
 import { useClassroomsAsTeacher } from 'controllers';
 import * as React from 'react';
-import { FiEdit2, FiTrash } from 'react-icons/fi';
+import { FiEdit2, FiPlus, FiTrash } from 'react-icons/fi';
 import { useParams } from 'react-router-dom';
 import { ISubject, ISubjectAdd, ISubjectModify, ISubjectRemove } from 'store/subjects/types';
 
@@ -34,39 +34,39 @@ const Subjects: React.FC = () => {
           Manage subjects
         </Typography>
         <Button variant="primary" onClick={() => setAction('add')}>
-          Add subject
+          <FiPlus />
         </Button>
       </div>
-      <div className={style['body']}>
-        <div className={style['list']}>
-          {subjects.list.length !== 0 ? (
-            subjects.list.map((subject) => (
-              <div key={subject.id} className={style['item']}>
-                <div>
-                  <Typography>{subject.name}</Typography>
-                </div>
-                <div className={style['actions']}>
-                  <FiEdit2
-                    onClick={() => {
-                      setAction('modify');
-                      setSubject(subject);
-                    }}
-                  />
-                  <FiTrash
-                    onClick={() => {
-                      setAction('remove');
-                      setSubject(subject);
-                    }}
-                  />
-                </div>
+      <div className={style['list']}>
+        {subjects.list.length !== 0 ? (
+          subjects.list.map((subject) => (
+            <div key={subject.id} className={style['item']}>
+              <div>
+                <Typography>{subject.name}</Typography>
               </div>
-            ))
-          ) : (
+              <div className={style['actions']}>
+                <FiEdit2
+                  onClick={() => {
+                    setAction('modify');
+                    setSubject(subject);
+                  }}
+                />
+                <FiTrash
+                  onClick={() => {
+                    setAction('remove');
+                    setSubject(subject);
+                  }}
+                />
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className={style['list-empty']}>
             <Typography variant="caption" align="center">
               The list is empty.
             </Typography>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       {action === 'add' && (

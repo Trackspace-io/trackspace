@@ -9,11 +9,11 @@
 }
 
 .main {
-  margin: 32px 0;
+  margin: 24px 0;
 }
 
 .terms-container {
-  margin-bottom: 24px;
+  /* margin-bottom: 24px; */
 }
 
 .terms-header {
@@ -23,17 +23,8 @@
 }
 
 .terms-info {
-  display: flex;
-  justify-content: center;
+  text-align: center;
   padding: 16px 0;
-}
-
-.terms-dropdown {
-  position: relative;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 8px;
-  margin-bottom: 24px;
 }
 
 .graph-container {
@@ -43,6 +34,8 @@
 .progresses-empty {
   display: grid;
   place-content: center;
+  place-items: center;
+  height: 60vh;
 }
 
 .progresses {

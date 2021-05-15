@@ -1,30 +1,36 @@
 .container {
   box-sizing: border-box;
-  margin: 24px 0;
+  height: 100%;
 }
 
 .header {
   position: relative;
-  margin: 24px 0;
 }
 
-.body {
-  margin: 24px 0;
+.main {
+  margin: 24px 0 0;
+}
+
+.progresses-empty {
+  display: grid;
+  place-content: center;
+  place-items: center;
+  height: 60vh;
 }
 
 .terms-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
   margin-bottom: 24px;
 }
 
-.terms-dropdown {
-  position: relative;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 8px;
-  margin-bottom: 24px;
+.terms-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.terms-info {
+  text-align: center;
+  padding: 16px 0;
 }
 
 .search-item input {
@@ -52,6 +58,7 @@
 
 .graph-container {
   position: relative;
+  margin: 32px 0;
 }
 
 .progresses-container {
@@ -59,17 +66,23 @@
 }
 
 .progresses {
-  display: flex;
-  justify-content: space-evenly;
-  align-items: flex-start;
+  position: relative;
   width: 100%;
   padding: 36px 0px;
 }
 
-.progresses svg {
-  margin-top: 40px;
-  padding: 8px;
-  border-radius: 8px;
+.progresses .btn-left {
+  position: absolute;
+  top: 72px;
+  left: 0;
+  transform: scale(1.5);
+  cursor: pointer;
+}
+
+.progresses .btn-right {
+  position: absolute;
+  top: 72px;
+  right: 0;
   transform: scale(1.5);
   cursor: pointer;
 }

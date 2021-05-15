@@ -1,11 +1,12 @@
+import cx from 'classnames';
+import Tooltip from 'components/gui/Tooltip';
 import Typography from 'components/gui/Typography';
 import React from 'react';
-import { IStudent } from 'store/students/types';
-import style from './Children.module.css';
-import cx from 'classnames';
 import { FiCheck, FiUsers, FiUserX } from 'react-icons/fi';
+import { IStudent } from 'store/students/types';
+
+import style from './Children.module.css';
 import ConfirmRelationship from './ConfirmRelationship';
-import Tooltip from 'components/gui/Tooltip';
 
 interface IChildProps {
   student: IStudent;

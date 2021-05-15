@@ -1,5 +1,23 @@
-.goal-container {
-  margin: 24px 0;
+.goals-empty {
+  display: grid;
+  place-content: center;
+  place-items: center;
+  height: 60vh;
+}
+
+.terms-container {
+  margin-bottom: 24px;
+}
+
+.terms-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.terms-info {
+  text-align: center;
+  padding: 16px 0;
 }
 
 .graph-container {
@@ -82,8 +100,9 @@
   padding: 32px;
   margin: 16px;
   border: 1px solid #ccc;
-  border-radius: 8px;
+  border-radius: 16px;
   width: 120px;
+  background: var(--white);
 }
 
 .actions {
@@ -105,19 +124,4 @@
 .goal-item:hover .actions {
   cursor: pointer;
   visibility: visible;
-}
-
-.terms-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 24px;
-}
-
-.terms-dropdown {
-  position: relative;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 8px;
-  margin-bottom: 24px;
 }

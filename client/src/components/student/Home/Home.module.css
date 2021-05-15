@@ -3,6 +3,7 @@
   grid-template-columns: max-content;
   grid-template-areas: 'sidebar content';
   box-sizing: border-box;
+  margin: 8px 0;
 }
 
 .sidebar {
@@ -10,8 +11,13 @@
   margin: 12px 0;
 }
 
+.title {
+  padding-left: 21px;
+}
+
 .content {
   grid-area: content;
+  padding: 0 24px;
 }
 
 .classrooms-header {
@@ -22,24 +28,20 @@
   margin: 8px 0;
   border: 1px solid #ccc;
   border-radius: 16px;
+  background: var(--white);
 }
 
 .classroom-item {
   display: flex;
   justify-content: space-between;
   border-bottom: 1px solid #ddd;
-  padding: 16px;
-  border-radius: 16px;
+  padding: 24px;
 }
 
 .classroom-item a {
   text-decoration: none;
   color: var(--black);
   outline: none;
-}
-
-.classroom-item:hover {
-  box-shadow: 0 1px 5px #ccc;
 }
 
 .classroom-item:last-child {

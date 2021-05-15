@@ -19,7 +19,6 @@ const Parents: React.FC = () => {
         </Typography>
         <Button variant="primary" onClick={() => setAddModal(true)}>
           <FiUserPlus />
-          Add
         </Button>
       </div>
       <div className={style['body']}>

@@ -12,10 +12,14 @@ const Home: React.FC = () => {
     <div>
       <div className={style['container']}>
         <div className={style['sidebar']}>
-          <Typography variant="subtitle">Dashboard</Typography>
+          <span className={style['title']}>
+            <Typography variant="subtitle" display="inline" weight="light">
+              Dashboard
+            </Typography>
+          </span>
           <Sidebar>
             <SidebarItem to="/student/classrooms"> Classrooms </SidebarItem>
-            <SidebarItem to="/student/parents"> Parents </SidebarItem>
+            <SidebarItem to="/student/parents"> Parents / Tutors </SidebarItem>
           </Sidebar>
         </div>
         <div className={style['content']}>
