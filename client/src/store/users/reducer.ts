@@ -5,15 +5,13 @@ import { USERS, IUserState, IUserAction } from './types';
  */
 export const initialState = {
   current: {
-    loggedIn: false,
+    loggedIn: null,
     id: '',
     email: '',
     firstName: '',
     lastName: '',
     role: '',
   },
-
-  isLogged: false,
 };
 
 /**
@@ -28,9 +26,6 @@ const reducer = (state: IUserState, action: IUserAction): IUserState => {
   switch (action.type) {
     case USERS.SET_USER:
       return { ...state, current: action.payload };
-
-    case USERS.IS_LOGGED:
-      return { ...state, isLogged: true };
 
     default:
       return state;

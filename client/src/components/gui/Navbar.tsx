@@ -1,5 +1,4 @@
 import { useAuths, useUsers } from 'controllers';
-import Cookies from 'js-cookie';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -15,11 +14,11 @@ import LinkButton from './LinkButton';
  * @returns ReactNode
  */
 const Navbar: React.FC = () => {
-  const cookie = Cookies.get('connect.sid') || '';
+  const Users = useUsers();
 
   return (
     <div>
-      {!cookie && (
+      {!Users.current.loggedIn && (
         <div className={style['container']}>
           <Link to="/">
             <img src={logo} className={style['logo']} />

@@ -1,6 +1,5 @@
 import { UserAPI } from 'api';
 import { useMessages } from 'controllers';
-import Cookies from 'js-cookie';
 import { useGlobalStore } from 'store';
 import usersReducer from 'store/users';
 import { IUserConfirmResetPassword, IUserSendResetPassword, IUserSignIn, IUserSignUp } from 'store/users/types';
@@ -83,11 +82,8 @@ const useAuths = () => {
    * @returns void
    */
   const logout = () => {
-    UserAPI.logout().then((response) => {
-      const { data } = response;
-
-      Cookies.remove('connect.sid');
-      window.location.replace(data.redirect);
+    UserAPI.logout().then(() => {
+      window.location.reload();
     });
   };
 

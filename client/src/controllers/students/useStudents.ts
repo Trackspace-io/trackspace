@@ -344,7 +344,7 @@ const useStudents = (classroomId?: string) => {
   };
 
   React.useEffect(() => {
-    Users.current.role === 'student' && Users.isLogged && getClassrooms(Users.current.id);
+    Users.current.role === 'student' && Users.current.loggedIn && getClassrooms(Users.current.id);
     Users.current.role === 'student' && getParents({ studentId: Users.current.id });
   }, [Users.current.id]);
 

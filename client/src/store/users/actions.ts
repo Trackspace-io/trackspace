@@ -13,9 +13,3 @@ export const setCurrentUser = (payload: IUser) => {
     payload,
   };
 };
-
-export const isLogged = () => {
-  return {
-    type: USERS.IS_LOGGED,
-  };
-};
