@@ -3,12 +3,11 @@ import './App.css';
 import Error from 'components/common/Error';
 import Profile from 'components/common/Profile';
 import Messages from 'components/gui/Messages';
+import ParentDashboard from 'components/parent/Dashboard';
 import StudentDashboard from 'components/student/Dashboard';
 import Invitation from 'components/student/Invitation';
 import TeacherDashboard from 'components/teacher/Dashboard';
-import ParentDashboard from 'components/parent/Dashboard';
 import { useUsers } from 'controllers';
-import Cookies from 'js-cookie';
 import * as React from 'react';
 import { BrowserRouter as Router, Redirect, Route, RouteProps, Switch } from 'react-router-dom';
 
@@ -18,111 +17,106 @@ import SignUp from './components/common/SignUp';
 import { Navbar } from './components/gui/Navbar';
 
 const App: React.FC = () => {
-  const cookie = Cookies.get('connect.sid') || '';
   const Users = useUsers();
 
+  const { loggedIn } = Users.current;
+
+  console.log('loggedIn', loggedIn);
+
   React.useEffect(() => {
-    Users.authCheck(cookie);
+    Users.getCurrent();
   }, []);
 
-  // Test comment.
+  if (loggedIn === null) {
+    return <div />;
+  }
   return (
     <Router>
       <Navbar />
       <Switch>
         {/* Public routes */}
-        <ProtectedRoute condition={!Boolean(cookie)} exact path="/" redirectPath={`/${Users.current.role}`}>
-          <SignIn />
-        </ProtectedRoute>
+        <Route exact path="/">
+          {!Users.current.role ? <SignIn /> : <Redirect to={`/${Users.current.role}`} />}
+        </Route>
         <Route path="/sign-up" component={SignUp} />
         <Route path="/reset-password/send" component={ResetPasswordSend} />
         <Route path="/reset-password/confirm" component={ResetPasswordConfirm} />
 
         {/* Private routes */}
-        <ProtectedRoute condition={Boolean(cookie)} path="/user/:firstName-:lastName" redirectPath="/">
+        <ProtectedRoute role="teacher" path="/user/:firstName-:lastName" redirectPath="/">
           <Profile />
         </ProtectedRoute>
 
         {/* Teachers */}
-        <ProtectedRoute condition={Boolean(cookie)} exact path="/teacher" redirectPath="/">
+        <ProtectedRoute role="teacher" exact path="/teacher" redirectPath="/">
           <TeacherDashboard />
         </ProtectedRoute>
-        <ProtectedRoute condition={Boolean(cookie)} path="/teacher/classrooms" redirectPath="/">
+        <ProtectedRoute role="teacher" path="/teacher/classrooms" redirectPath="/">
           <TeacherDashboard />
         </ProtectedRoute>
-        <ProtectedRoute condition={Boolean(cookie)} path="/teacher/classrooms/:id" redirectPath="/">
+        <ProtectedRoute role="teacher" path="/teacher/classrooms/:id" redirectPath="/">
           <TeacherDashboard />
         </ProtectedRoute>
-        <ProtectedRoute condition={Boolean(cookie)} path="/teacher/classrooms/:id/students" redirectPath="/">
+        <ProtectedRoute role="teacher" path="/teacher/classrooms/:id/students" redirectPath="/">
           <TeacherDashboard />
         </ProtectedRoute>
-        <ProtectedRoute condition={Boolean(cookie)} path="/teacher/classrooms/:id/subjects" redirectPath="/">
+        <ProtectedRoute role="teacher" path="/teacher/classrooms/:id/subjects" redirectPath="/">
           <TeacherDashboard />
         </ProtectedRoute>
-        <ProtectedRoute condition={Boolean(cookie)} path="/teacher/classrooms/:id/terms" redirectPath="/">
+        <ProtectedRoute role="teacher" path="/teacher/classrooms/:id/terms" redirectPath="/">
           <TeacherDashboard />
         </ProtectedRoute>
-        <ProtectedRoute condition={Boolean(cookie)} path="/teacher/classrooms/:id/goals" redirectPath="/">
+        <ProtectedRoute role="teacher" path="/teacher/classrooms/:id/goals" redirectPath="/">
           <TeacherDashboard />
         </ProtectedRoute>
-        <ProtectedRoute condition={Boolean(cookie)} path="/teacher/classrooms/:id/progresses" redirectPath="/">
+        <ProtectedRoute role="teacher" path="/teacher/classrooms/:id/progresses" redirectPath="/">
           <TeacherDashboard />
         </ProtectedRoute>
 
         {/* Students */}
-        <ProtectedRoute condition={Boolean(cookie)} exact path="/student" redirectPath="/">
+        <ProtectedRoute role="student" exact path="/student" redirectPath="/">
           <StudentDashboard />
         </ProtectedRoute>
-        <ProtectedRoute condition={Boolean(cookie)} exact path="/student/classrooms" redirectPath="/">
+        <ProtectedRoute role="student" exact path="/student/classrooms" redirectPath="/">
           <StudentDashboard />
         </ProtectedRoute>
-        <ProtectedRoute condition={Boolean(cookie)} exact path="/student/parents" redirectPath="/">
+        <ProtectedRoute role="student" exact path="/student/parents" redirectPath="/">
           <StudentDashboard />
         </ProtectedRoute>
-        <ProtectedRoute condition={Boolean(cookie)} path="/student/classrooms/:classroomId" redirectPath="/">
+        <ProtectedRoute role="student" path="/student/classrooms/:classroomId" redirectPath="/">
           <StudentDashboard />
         </ProtectedRoute>
-        <ProtectedRoute
-          condition={Boolean(cookie)}
-          path="/student/classrooms/:classroomId/progress/today"
-          redirectPath="/">
+        <ProtectedRoute role="student" path="/student/classrooms/:classroomId/progress/today" redirectPath="/">
           <StudentDashboard />
         </ProtectedRoute>
-        <ProtectedRoute
-          condition={Boolean(cookie)}
-          path="/student/classrooms/:classroomId/progress/weekly"
-          redirectPath="/">
+        <ProtectedRoute role="student" path="/student/classrooms/:classroomId/progress/weekly" redirectPath="/">
           <StudentDashboard />
         </ProtectedRoute>
 
         <Route path="/students/classrooms/invitations/accept" component={Invitation} />
 
         {/* Parents */}
-        <ProtectedRoute condition={Boolean(cookie)} exact path="/parent" redirectPath="/">
+        <ProtectedRoute role="parent" exact path="/parent" redirectPath="/">
           <ParentDashboard />
         </ProtectedRoute>
-        <ProtectedRoute condition={Boolean(cookie)} exact path="/parent/dashboard" redirectPath="/">
+        <ProtectedRoute role="parent" exact path="/parent/dashboard" redirectPath="/">
           <ParentDashboard />
         </ProtectedRoute>
-        <ProtectedRoute condition={Boolean(cookie)} exact path="/parent/dashboard/children" redirectPath="/">
+        <ProtectedRoute role="parent" exact path="/parent/dashboard/children" redirectPath="/">
           <ParentDashboard />
         </ProtectedRoute>
-        <ProtectedRoute
-          condition={Boolean(cookie)}
-          exact
-          path="/parent/children/:studentId/classrooms/:classroomId"
-          redirectPath="/">
+        <ProtectedRoute role="parent" exact path="/parent/children/:studentId/classrooms/:classroomId" redirectPath="/">
           <ParentDashboard />
         </ProtectedRoute>
         <ProtectedRoute
-          condition={Boolean(cookie)}
+          role="parent"
           exact
           path="/parent/children/:studentId/classrooms/:classroomId/progresses/today"
           redirectPath="/">
           <ParentDashboard />
         </ProtectedRoute>
         <ProtectedRoute
-          condition={Boolean(cookie)}
+          role="parent"
           exact
           path="/parent/children/:studentId/classrooms/:classroomId/progresses/weekly"
           redirectPath="/">
@@ -141,13 +135,17 @@ const App: React.FC = () => {
  * accessed.
  */
 interface IProtectedRouteProps extends RouteProps {
-  condition: boolean; // Flag to verify if the user should be redirected
+  role?: 'teacher' | 'student' | 'parent';
   path: string; // Path if condition succeeded
   redirectPath: string; // Redirect path if condition fails.
 }
 
 const ProtectedRoute: React.FC<IProtectedRouteProps> = (props) => {
-  return props.condition ? (
+  const Users = useUsers();
+
+  const { loggedIn, role } = Users.current;
+
+  return loggedIn && props.role === role ? (
     <Route {...props} component={props.component} render={undefined} />
   ) : (
     <Redirect

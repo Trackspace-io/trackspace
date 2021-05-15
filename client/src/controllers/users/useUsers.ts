@@ -3,7 +3,7 @@ import { useMessages } from 'controllers';
 import * as React from 'react';
 import { useGlobalStore } from 'store';
 import usersReducer from 'store/users';
-import { IUserUpdate, USERS } from 'store/users/types';
+import { IUserUpdate } from 'store/users/types';
 
 const { actions } = usersReducer;
 
@@ -99,24 +99,11 @@ const useUsers = () => {
     });
   };
 
-  /**
-   * Set isAuthenticated if the cookie exists.
-   *
-   * @param {string | undefined} cookie The session token.
-   *
-   * @returns void
-   */
-  const authCheck = (cookie: string | undefined) => {
-    if (cookie) {
-      dispatch({ type: USERS.IS_LOGGED });
-    }
-  };
-
   React.useEffect(() => {
     getCurrent();
   }, []);
 
-  return { ...users, update, getCurrent, authCheck };
+  return { ...users, update, getCurrent };
 };
 
 export default useUsers;

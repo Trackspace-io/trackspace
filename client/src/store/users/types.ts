@@ -1,6 +1,6 @@
 // User interface
 export interface IUser {
-  loggedIn: boolean;
+  loggedIn: boolean | null;
   id: string;
   email: string;
   firstName: string;
@@ -21,19 +21,15 @@ interface IUserInputs {
 export interface IUserState {
   /* Current logged user */
   current: IUser;
-
-  /* User's logged state */
-  isLogged: boolean;
 }
 
 // Actions' type
 export enum USERS {
   SET_USER = 'SET_USER',
-  IS_LOGGED = 'IS_LOGGED',
 }
 
 // Dispatchers interface. Actions to update the state
-export type IUserAction = { type: USERS.SET_USER; payload: IUser } | { type: USERS.IS_LOGGED };
+export type IUserAction = { type: USERS.SET_USER; payload: IUser };
 
 // Update user interface
 export type IUserUpdate = Partial<IUser> & { oldPassword?: string } & { newPassword?: string };
