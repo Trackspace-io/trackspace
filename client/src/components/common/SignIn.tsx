@@ -53,13 +53,14 @@ const SignIn: React.FC = () => {
                   type="email"
                   label="Email"
                   value={Inputs.values.username}
-                  placeholder="johndoe@email.com"
+                  placeholder="Email address..."
                   onChange={Inputs.handleInputChange}
                 />
                 <Input
                   name="password"
                   type="password"
                   label="Password"
+                  placeholder="Password..."
                   value={Inputs.values.password}
                   onChange={Inputs.handleInputChange}
                 />

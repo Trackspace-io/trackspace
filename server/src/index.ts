@@ -9,7 +9,6 @@ import { User } from "./models/User";
 import Server from "./Server";
 
 const app = express();
-
 const port = process.env.PORT || 8000;
 
 // Configure Express.
@@ -20,8 +19,8 @@ app.use(
     saveUninitialized: false,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 7,
-      httpOnly: false
-    }
+      httpOnly: false,
+    },
   })
 );
 
@@ -29,16 +28,39 @@ app.use(express.json());
 app.use(passport.initialize());
 app.use(passport.session());
 
-if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
-  app.use(cors({
-    origin: "http://localhost:3000", // allow to server to accept request from different origin
-    credentials: true, // allow session cookie from browser to pass through
-  }));
+// In development mode, allow requests from the local client.
+if (process.env.NODE_ENV === "development") {
+  app.use(
+    cors({
+      origin: "http://localhost:3000",
+      credentials: true,
+    })
+  );
+}
+
+// In production, redirect the client to the right URL if necessary.
+if (process.env.NODE_ENV === "production") {
+  app.use(function (req, res, next) {
+    var appUrl = process.env.CLIENT_URL;
+    if (!appUrl) next();
+
+    var protocol = req.get("X-Forwarded-Proto") || "";
+    var host = req.get("Host");
+
+    if (protocol) {
+      protocol += "://";
+    }
+
+    if (`${protocol}${host}` !== appUrl) {
+      res.redirect(`${appUrl}${req.url}`);
+    } else {
+      next();
+    }
+  });
 }
 
 // Configure Passport.
 passport.use(new LocalStrategy(User.authenticate));
-
 passport.serializeUser((user: User, done) => {
   done(null, user.getDataValue("id"));
 });
