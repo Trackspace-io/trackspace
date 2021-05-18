@@ -192,6 +192,40 @@ students.post(
 );
 
 /**
+ * Get the details of a student.
+ *
+ * @method  GET
+ * @url     /users/students/:id/details
+ *
+ * @returns 200, 401, 500
+ */
+students.get(
+  "/:studentId/details",
+  user().isA(["teacher", "student", "parent"]),
+  student().senderIsAuthorized(),
+
+  async (req: Request, res: Response): Promise<Response> => {
+    const parentRelations = await req.student.getRelatedUsers(["parent"]);
+
+    return res.status(200).json({
+      firstName: req.student.firstName,
+      lastname: req.student.lastName,
+      email: req.student.email,
+      parents: parentRelations.map((pair) => {
+        const [parent, relation] = pair;
+        return {
+          id: parent.id,
+          firstName: parent.firstName,
+          lastName: parent.lastName,
+          email: parent.email,
+          confirmed: relation.confirmed,
+        };
+      }),
+    });
+  }
+);
+
+/**
  * Get classrooms in which a student is enrolled.
  *
  * @method  GET
