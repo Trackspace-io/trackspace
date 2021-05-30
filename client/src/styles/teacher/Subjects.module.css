@@ -41,3 +41,12 @@
   padding: 4px 6px;
   transform: scale(1.2);
 }
+
+.remove-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.remove-actions button {
+  padding: 0 16px;
+}

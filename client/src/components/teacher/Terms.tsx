@@ -184,7 +184,9 @@ const AddTerm: React.FC<IAddTermProps> = ({ isOpen, onClose, classroomId, addTer
   return (
     <div>
       <Modal isOpen={isOpen} onClose={onClose}>
-        <Typography variant="info"> Create a term. </Typography>
+        <Typography variant="subtitle" weight="light">
+          Create a term.
+        </Typography>
         <br />
         <Form
           action="Add"
@@ -205,13 +207,14 @@ const AddTerm: React.FC<IAddTermProps> = ({ isOpen, onClose, classroomId, addTer
                 value={dateValue(Inputs.values.end)}
                 onChange={Inputs.handleInputChange}
               />
+              <br />
               <div className={style['checkboxes']}>
                 {WEEK_DAYS.map((day) => {
                   return (
                     <Checkbox
                       key={day}
                       name={day}
-                      label={day.toUpperCase()}
+                      label={day.slice(0, 3).toUpperCase()}
                       checked={Inputs.values[day]}
                       onChange={(e) =>
                         Inputs.setValues({
@@ -300,7 +303,9 @@ const ModifyTerm: React.FC<IModifyTermProps> = ({ isOpen, onClose, classroomId, 
   return (
     <div>
       <Modal isOpen={isOpen} onClose={onClose}>
-        <Typography variant="info"> Update the following term. </Typography>
+        <Typography variant="subtitle" weight="light">
+          Update the following term.
+        </Typography>
         <br />
         <Form
           action="Modify"
@@ -321,13 +326,14 @@ const ModifyTerm: React.FC<IModifyTermProps> = ({ isOpen, onClose, classroomId, 
                 value={dateValue(Inputs.values.end)}
                 onChange={Inputs.handleInputChange}
               />
+              <br />
               <div className={style['checkboxes']}>
                 {WEEK_DAYS.map((day) => {
                   return (
                     <Checkbox
                       key={day}
                       name={day}
-                      label={day.toUpperCase()}
+                      label={day.slice(0, 3).toUpperCase()}
                       checked={Inputs.values[day]}
                       onChange={(e) =>
                         Inputs.setValues({
@@ -370,12 +376,18 @@ const RemoveTerm: React.FC<IRemoveSubjectProps> = ({ isOpen, onClose, classroomI
   return (
     <div>
       <Modal isOpen={isOpen} onClose={onClose}>
-        <Typography variant="info">Would you like to remove the following term </Typography>
+        <Typography variant="subtitle" weight="light">
+          Would you like to remove the following term ?
+        </Typography>
         <br />
-        <Button variant="secondary" onClick={handleSubmit}>
-          Yes
-        </Button>
-        <Button variant="secondary">No</Button>
+        <div className={style['remove-actions']}>
+          <Button variant="secondary" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button variant="secondary" onClick={handleSubmit}>
+            Remove
+          </Button>
+        </div>
       </Modal>
     </div>
   );

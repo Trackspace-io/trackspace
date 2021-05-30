@@ -163,7 +163,7 @@ const useClassrooms = (classroomId?: string) => {
     classroomId && getCurrent(classroomId);
   }, []);
 
-  const students = (({ list, remove }) => ({ list, remove }))(Students);
+  const students = (({ list, remove, getDetails, details }) => ({ list, remove, getDetails, details }))(Students);
 
   return {
     current: {

@@ -5,7 +5,7 @@ import Modal from 'components/gui/Modal';
 import Typography from 'components/gui/Typography';
 import { useClassroomsAsTeacher } from 'controllers';
 import * as React from 'react';
-import { FiShare2, FiTrash } from 'react-icons/fi';
+import { FiInfo, FiShare2, FiTrash } from 'react-icons/fi';
 import { useParams } from 'react-router-dom';
 import { IStudent, IStudentRemove } from 'store/students/types';
 
@@ -51,6 +51,12 @@ const Students: React.FC = () => {
                 <Typography variant="caption">{student.email}</Typography>
               </div>
               <div className={style['actions']}>
+                <FiInfo
+                  onClick={() => {
+                    setAction('info');
+                    setStudent(student);
+                  }}
+                />
                 <FiTrash
                   onClick={() => {
                     setAction('remove');
@@ -76,6 +82,16 @@ const Students: React.FC = () => {
           student={student}
           classroomId={id}
           removeStudent={students.remove}
+        />
+      )}
+
+      {action === 'info' && (
+        <ParentsInfo
+          isOpen={Boolean(action === 'info')}
+          onClose={() => setAction('')}
+          student={student}
+          details={students.details}
+          getDetails={students.getDetails}
         />
       )}
 
@@ -116,7 +132,9 @@ const RemoveStudent: React.FC<IClassroomRemoveProps> = ({ isOpen, onClose, class
   return (
     <div>
       <Modal isOpen={isOpen} onClose={onClose}>
-        <Typography variant="info">Please type the following statement to remove the selected classroom.</Typography>
+        <Typography variant="subtitle" weight="light">
+          Please type the following statement to remove the selected classroom.
+        </Typography>
         <br />
         <Form
           action="Confirm"
@@ -133,6 +151,46 @@ const RemoveStudent: React.FC<IClassroomRemoveProps> = ({ isOpen, onClose, class
             </React.Fragment>
           )}
         />
+      </Modal>
+    </div>
+  );
+};
+
+interface IParentsInfoProps {
+  isOpen: boolean;
+  onClose: () => void;
+  student: IStudent | undefined;
+  details: IStudent | null;
+  getDetails: (studentId: string) => Promise<any>;
+}
+
+const ParentsInfo: React.FC<IParentsInfoProps> = ({ isOpen, onClose, student, details, getDetails }) => {
+  React.useEffect(() => {
+    getDetails(String(student?.id));
+  }, [student?.id]);
+
+  return (
+    <div>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <Typography variant="subtitle" weight="light">
+          {`${student?.firstName} ${student?.lastName}'s parents / tutors`}
+        </Typography>
+        <br />
+        {details?.parents.length !== 0 ? (
+          details?.parents.map((parent) => (
+            <div key={parent.id} className={style['parent-info']}>
+              <div>
+                <Typography variant="subtitle1">
+                  {parent.firstName} {parent.lastName}
+                </Typography>
+                <Typography variant="caption">{parent.email}</Typography>
+              </div>
+              <Typography variant="caption">{`Status: ${parent.confirmed ? 'confirmed' : 'pending'}`}</Typography>
+            </div>
+          ))
+        ) : (
+          <Typography variant="subtitle1">None</Typography>
+        )}
       </Modal>
     </div>
   );

@@ -7,6 +7,7 @@ export const initialState = {
   list: [],
   classroomsList: [],
   parents: [],
+  details: null,
 };
 
 /**
@@ -27,6 +28,9 @@ const reducer = (state: IStudentState, action: IStudentActions): IStudentState =
 
     case STUDENTS.SET_PARENTS:
       return { ...state, parents: action.payload };
+
+    case STUDENTS.SET_DETAILS:
+      return { ...state, details: action.payload };
 
     default:
       return state;
