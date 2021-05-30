@@ -6,10 +6,3 @@ export const setUser = (payload: IUser) => {
     payload,
   };
 };
-
-export const setCurrentUser = (payload: IUser) => {
-  return {
-    type: USERS.SET_USER,
-    payload,
-  };
-};

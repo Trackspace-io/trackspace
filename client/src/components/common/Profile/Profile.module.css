@@ -1,0 +1,36 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  composes: wrapper from '../../../styles/gui/Container.module.css';
+  overflow: hidden;
+  box-sizing: border-box;
+  background-color: var(--yellow-light);
+  min-height: 100vh;
+}
+
+.body {
+  display: grid;
+  grid-template-columns: max-content;
+  grid-template-areas: 'nav main';
+  background: var(--white);
+  border-radius: 16px;
+  height: 100%;
+  padding: 72px 48px;
+  width: 100%;
+  box-shadow: 0 1px 5px #ccc;
+}
+
+.nav {
+  grid-area: nav;
+  margin: 16px 0;
+}
+
+.title {
+  padding-left: 21px;
+}
+
+.main {
+  grid-area: main;
+  margin: 16px;
+}

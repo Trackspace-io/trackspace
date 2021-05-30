@@ -13,7 +13,7 @@ import LinkButton from './LinkButton';
  * @param none
  * @returns ReactNode
  */
-const Navbar: React.FC = () => {
+const NavbarPublic: React.FC = () => {
   const Users = useUsers();
 
   return (
@@ -28,6 +28,24 @@ const Navbar: React.FC = () => {
           </LinkButton>
         </div>
       )}
+    </div>
+  );
+};
+
+const NavbarProtected: React.FC = () => {
+  const Users = useUsers();
+  const Auths = useAuths();
+
+  return (
+    <div className={style['container']}>
+      <Link to="/">
+        <img src={logo} className={style['logo']} />
+      </Link>
+      <Dropdown type="title" title={`${Users.current?.firstName} ${Users.current?.lastName}`}>
+        <DropdownItem type="button" onClick={Auths.logout}>
+          Logout
+        </DropdownItem>
+      </Dropdown>
     </div>
   );
 };
@@ -52,4 +70,4 @@ const NavbarMini: React.FC = () => {
   );
 };
 
-export { Navbar, NavbarMini };
+export { NavbarPublic, NavbarProtected, NavbarMini };

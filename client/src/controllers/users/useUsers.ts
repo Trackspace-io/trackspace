@@ -21,7 +21,7 @@ const useUsers = () => {
   const { users } = state;
 
   // List of actions
-  const { setUser, setCurrentUser } = actions;
+  const { setUser } = actions;
 
   // List of thunks
 
@@ -52,7 +52,7 @@ const useUsers = () => {
       .then((response) => {
         const { data } = response;
 
-        dispatch(setCurrentUser(data));
+        dispatch(setUser(data));
       })
       .catch((e) => {
         const { data } = e.response;
@@ -79,7 +79,7 @@ const useUsers = () => {
     return new Promise((resolve) => {
       UserAPI.update(payload)
         .then(() => {
-          get();
+          getCurrent();
 
           Messages.add({
             type: 'success',
@@ -103,7 +103,7 @@ const useUsers = () => {
     getCurrent();
   }, []);
 
-  return { ...users, update, getCurrent };
+  return { ...users, get, getCurrent, update };
 };
 
 export default useUsers;
