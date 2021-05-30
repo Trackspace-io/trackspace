@@ -22,3 +22,10 @@ export const setParents = (payload: IParent) => {
     payload,
   };
 };
+
+export const setDetails = (payload: IStudent) => {
+  return {
+    type: STUDENTS.SET_DETAILS,
+    payload,
+  };
+};

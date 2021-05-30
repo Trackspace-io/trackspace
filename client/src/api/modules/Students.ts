@@ -167,3 +167,17 @@ export const removeParent = async (body: IStudentRemoveParent): Promise<any> => 
     withCredentials: true,
   });
 };
+
+/**
+ * Get the details of a student.
+ *
+ * @method  GET
+ * @url     /users/students/:id/details
+ *
+ * @param {string}  body.studentId  The identifier of the student
+ *
+ * @returns 200, 401, 500
+ */
+export const getDetails = async (studentId: string): Promise<any> => {
+  return await axios.get(`${_apiUrl}/api/users/students/${studentId}/details`, { withCredentials: true });
+};

@@ -44,5 +44,14 @@
 
 .checkboxes {
   display: flex;
+  justify-content: space-evenly;
+}
+
+.remove-actions {
+  display: flex;
   justify-content: center;
+}
+
+.remove-actions button {
+  padding: 0 16px;
 }

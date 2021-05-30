@@ -123,7 +123,9 @@ const AddSubject: React.FC<IAddSubjectProps> = ({ isOpen, onClose, classroomId, 
   return (
     <div>
       <Modal isOpen={isOpen} onClose={onClose}>
-        <Typography variant="info"> Add a subject. </Typography>
+        <Typography variant="subtitle" weight="light">
+          Add a subject.
+        </Typography>
         <br />
         <Form
           action="Add"
@@ -179,7 +181,9 @@ const EditSubject: React.FC<ISubjectEditProps> = ({ isOpen, onClose, classroomId
   return (
     <div>
       <Modal isOpen={isOpen} onClose={onClose}>
-        <Typography variant="info"> Update subject: {subject?.name} </Typography>
+        <Typography variant="subtitle" weight="light">
+          Update subject: {subject?.name}
+        </Typography>
         <br />
         <Form
           action="Update"
@@ -224,12 +228,18 @@ const RemoveSubject: React.FC<IRemoveSubjectProps> = ({ isOpen, onClose, classro
   return (
     <div>
       <Modal isOpen={isOpen} onClose={onClose}>
-        <Typography variant="info">Would you like to remove the subject {subject?.name} </Typography>
+        <Typography variant="subtitle" weight="light">
+          Would you like to remove the subject {subject?.name}?
+        </Typography>
         <br />
-        <Button variant="secondary" onClick={handleSubmit}>
-          Yes
-        </Button>
-        <Button variant="secondary">No</Button>
+        <div className={style['remove-actions']}>
+          <Button variant="secondary" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button variant="secondary" onClick={handleSubmit}>
+            Remove
+          </Button>
+        </div>
       </Modal>
     </div>
   );

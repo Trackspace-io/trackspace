@@ -41,3 +41,14 @@
   padding: 4px 6px;
   transform: scale(1.2);
 }
+
+.parent-info {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #ddd;
+  padding: 16px 0;
+}
+
+.parent-info:last-child {
+  border: none;
+}

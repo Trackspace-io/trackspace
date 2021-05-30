@@ -11,6 +11,13 @@ export interface IStudent {
   lastName: string;
   invitationPendingSince?: string;
   mustConfirm?: boolean;
+  parents: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    confirmed: boolean;
+  }[];
 }
 
 /**
@@ -25,6 +32,9 @@ export interface IStudentState {
 
   // List of parents.
   parents: IParent[];
+
+  // Details of a student.
+  details: IStudent | null;
 }
 
 /**
@@ -34,6 +44,7 @@ export enum STUDENTS {
   SET_STUDENTS = 'SET_STUDENTS',
   SET_CLASSROOMS = 'SET_CLASSROOMS',
   SET_PARENTS = 'SET_PARENTS',
+  SET_DETAILS = 'SET_DETAILS',
 }
 
 /**
@@ -42,7 +53,8 @@ export enum STUDENTS {
 export type IStudentActions =
   | { type: STUDENTS.SET_STUDENTS; payload: IStudent[] }
   | { type: STUDENTS.SET_CLASSROOMS; payload: IClassroom[] }
-  | { type: STUDENTS.SET_PARENTS; payload: IParent[] };
+  | { type: STUDENTS.SET_PARENTS; payload: IParent[] }
+  | { type: STUDENTS.SET_DETAILS; payload: IStudent };
 
 export interface IStudentAcceptInvitation {
   token: string;

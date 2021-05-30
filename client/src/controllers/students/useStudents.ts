@@ -31,16 +31,43 @@ const useStudents = (classroomId?: string) => {
   const { students } = state;
 
   // List of actions
-  const { setClassrooms, setStudents, setParents } = actions;
+  const { setClassrooms, setStudents, setParents, setDetails } = actions;
 
   // List of thunks
 
   /**
+   * Get the details of a student.
+   *
+   * @param {string}  studentId The identifier of the student.
+   *
+   * @returns Promise
+   */
+  const getDetails = (studentId: string) => {
+    return new Promise((resolve) => {
+      StudentsAPI.getDetails(studentId)
+        .then((response) => {
+          const { data } = response;
+
+          dispatch(setDetails(data));
+          resolve(data);
+        })
+        .catch((e) => {
+          const { data } = e.response;
+
+          Messages.add({
+            type: 'error',
+            text: `${data}`,
+          });
+        });
+    });
+  };
+
+  /**
    * Get the classrooms list of the student.
    *
-   * @param   none.
+   * @param {string}  studentId The identifier of the student.
    *
-   * @returns void
+   * @returns Promise
    */
   const getClassrooms = (studentId: string) => {
     return new Promise((resolve) => {
@@ -354,6 +381,8 @@ const useStudents = (classroomId?: string) => {
 
   return {
     ...students,
+
+    getDetails,
     getClassrooms,
     remove,
 
