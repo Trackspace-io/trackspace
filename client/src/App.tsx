@@ -1,7 +1,6 @@
 import './App.css';
 
 import Error from 'components/common/Error';
-import Profile from 'components/common/Profile';
 import Messages from 'components/gui/Messages';
 import ParentDashboard from 'components/parent/Dashboard';
 import StudentDashboard from 'components/student/Dashboard';
@@ -14,14 +13,13 @@ import { BrowserRouter as Router, Redirect, Route, RouteProps, Switch } from 're
 import { ResetPasswordConfirm, ResetPasswordSend } from './components/common/ResetPassword';
 import SignIn from './components/common/SignIn';
 import SignUp from './components/common/SignUp';
-import { Navbar } from './components/gui/Navbar';
+import { NavbarPublic } from './components/gui/Navbar';
+import Profile from 'components/common/Profile';
 
 const App: React.FC = () => {
   const Users = useUsers();
 
   const { loggedIn } = Users.current;
-
-  console.log('loggedIn', loggedIn);
 
   React.useEffect(() => {
     Users.getCurrent();
@@ -30,9 +28,10 @@ const App: React.FC = () => {
   if (loggedIn === null) {
     return <div />;
   }
+
   return (
     <Router>
-      <Navbar />
+      <NavbarPublic />
       <Switch>
         {/* Public routes */}
         <Route exact path="/">
@@ -43,7 +42,13 @@ const App: React.FC = () => {
         <Route path="/reset-password/confirm" component={ResetPasswordConfirm} />
 
         {/* Private routes */}
-        <ProtectedRoute role="teacher" path="/user/:firstName-:lastName" redirectPath="/">
+        <ProtectedRoute role="all" exact path="/user/:firstName-:lastName" redirectPath="/">
+          <Profile />
+        </ProtectedRoute>
+        <ProtectedRoute role="all" path="/user/:firstName-:lastName/public" redirectPath="/">
+          <Profile />
+        </ProtectedRoute>
+        <ProtectedRoute role="all" path="/user/:firstName-:lastName/security" redirectPath="/">
           <Profile />
         </ProtectedRoute>
 
@@ -135,7 +140,8 @@ const App: React.FC = () => {
  * accessed.
  */
 interface IProtectedRouteProps extends RouteProps {
-  role?: 'teacher' | 'student' | 'parent';
+  exact?: boolean;
+  role?: 'teacher' | 'student' | 'parent' | 'all';
   path: string; // Path if condition succeeded
   redirectPath: string; // Redirect path if condition fails.
 }
@@ -145,8 +151,8 @@ const ProtectedRoute: React.FC<IProtectedRouteProps> = (props) => {
 
   const { loggedIn, role } = Users.current;
 
-  return loggedIn && props.role === role ? (
-    <Route {...props} component={props.component} render={undefined} />
+  return loggedIn && (props.role === role || props.role === 'all') ? (
+    <Route exact={props.exact} {...props} component={props.component} render={undefined} />
   ) : (
     <Redirect
       to={{

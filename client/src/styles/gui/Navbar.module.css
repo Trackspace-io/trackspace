@@ -1,6 +1,7 @@
 .container {
   composes: wrapper from '../gui/Container.module.css';
   position: absolute;
+  top: 0px;
   height: 72px;
   background: transparent;
   display: flex;
