@@ -5,7 +5,7 @@ import Modal from 'components/gui/Modal';
 import Typography from 'components/gui/Typography';
 import { useClassroomsAsTeacher } from 'controllers';
 import * as React from 'react';
-import { FiInfo, FiShare2, FiTrash } from 'react-icons/fi';
+import { FiInfo, FiTrash, FiPlus } from 'react-icons/fi';
 import { useParams } from 'react-router-dom';
 import { IStudent, IStudentRemove } from 'store/students/types';
 
@@ -37,7 +37,7 @@ const Students: React.FC = () => {
           Manage students
         </Typography>
         <Button variant="primary" onClick={() => setShareModal(true)}>
-          <FiShare2 />
+          <FiPlus />
         </Button>
       </div>
       <div className={style['list']}>

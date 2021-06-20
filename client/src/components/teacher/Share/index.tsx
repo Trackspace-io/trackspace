@@ -1,3 +1,5 @@
+import { faClock } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from 'components/gui/Button';
 import { Input, useInput } from 'components/gui/Input';
 import Modal from 'components/gui/Modal';
@@ -25,7 +27,7 @@ const Share: React.FC<IProps> = ({ isOpen, onClose, classroomId }) => {
   React.useEffect(() => {
     const payload = {
       classroomId,
-      expiresIn: 3600,
+      expiresIn: 24 * 3600,
     };
 
     Teachers.generateLink(payload).then((response) => {
@@ -53,9 +55,18 @@ const Share: React.FC<IProps> = ({ isOpen, onClose, classroomId }) => {
         <Typography variant="subtitle"> Invite students </Typography>
         <br />
 
-        <Typography variant="info"> Send invitation </Typography>
+        <Typography variant="caption">
+          {' '}
+          If the student already has an account, enter his/her email address below:{' '}
+        </Typography>
         <div className={style['input-control']}>
-          <Input name="email" type="text" value={Inputs.values.email} onChange={Inputs.handleInputChange} />
+          <Input
+            name="email"
+            type="text"
+            value={Inputs.values.email}
+            onChange={Inputs.handleInputChange}
+            placeholder="Email address..."
+          />
           <Button variant="secondary" align="center" onClick={handleSendInvitation}>
             Send
           </Button>
@@ -77,6 +88,9 @@ const Share: React.FC<IProps> = ({ isOpen, onClose, classroomId }) => {
               {!onCopied ? 'Copy' : 'Copied'}
             </Button>
           </CopyToClipboard>
+          <small>
+            <FontAwesomeIcon icon={faClock} /> This link will be valid for the next 24 hours.
+          </small>
         </div>
       </Modal>
     </div>
