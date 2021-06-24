@@ -1,0 +1,112 @@
+.container {
+    display: grid;
+    grid-template-columns: 70px auto;
+}
+
+.sidenav {
+    padding-top: 95px;
+    display: block;
+    place-self: start center;
+}
+
+.panel {
+    display: grid;
+    border-radius: 16px;
+    background: var(--white);
+    box-shadow: 0 1px 5px #ccc;
+    margin: 16px;
+    margin-left: 0;
+    grid-template-rows: 70px auto;
+    height: calc(100vh - 32px);
+    min-height: 500px;
+}
+
+.header {
+    padding: 25px 35px 0 35px;
+}
+
+.header-left {
+    float: left;
+}
+
+.header-right {
+    float: right;
+}
+
+.content {
+    padding: 0;
+    border-radius: 0 0 16px 16px;
+    background: #fafafa;
+    overflow-y: auto;
+    max-width: 100vw;
+}
+
+.logo {
+    height: 35px;
+}
+
+.icon {
+    display: flex;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    font-size: 28px;
+    color: var(--black);
+}
+
+.bubble-square {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 48px;
+    height: 48px;
+    border: 1px solid #bbb;
+    border-radius: 16px;
+    margin-bottom: 10px;
+    text-decoration: none;
+    color: var(--black);
+    outline: none;
+    transition: transform 0.5s;
+    box-sizing: border-box;
+    user-select: none;
+}
+
+.bubble-square:hover {
+    cursor: pointer;
+    background: var(--blue-dark);
+    box-shadow: 0 1px 5px #ccc;
+    transform: scale(1.2);
+}
+
+.bubble-circle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 48px;
+    height: 48px;
+    border: 1px solid #bbb;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    text-decoration: none;
+    color: var(--black);
+    outline: none;
+    transition: transform 0.5s;
+    box-sizing: border-box;
+    user-select: none;
+}
+
+.bubble-circle:hover {
+    cursor: pointer;
+    background: var(--blue-dark);
+    box-shadow: 0 1px 5px #ccc;
+    transform: scale(1.2);
+}
+
+.notif-badge {
+    position: absolute;
+    top: 40px;
+    right: 35px;
+    padding: 5px 5px;
+    border-radius: 50%;
+    background: red;
+}

@@ -9,6 +9,22 @@ export interface IProgressValues {
   homeworkDone: boolean;
 }
 
+export interface IProgressKey {
+  date: string;
+  studentId: string;
+  subjectId: string;
+}
+
+export interface IProgressByDateValues {
+  termNumber: number;
+  weekNumber: number;
+  subjects: {
+    subject: ISubject;
+    progressKey: IProgressKey;
+    values: IProgressValues;
+  }[];
+}
+
 export interface IProgressByWeekValues {
   dates: string[];
   days: string[];

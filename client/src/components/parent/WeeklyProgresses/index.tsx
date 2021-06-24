@@ -1,19 +1,13 @@
-import React from 'react';
-import { useParams } from 'react-router';
-
-import Progresses from './Progresses';
-import Terms from './Terms';
 import style from './WeeklyProgresses.module.css';
 
-interface RouteParams {
+import React from 'react';
+import Progresses from './Progresses';
+import Terms from './Terms';
+
+const WeeklyProgresses: React.FC<{
   studentId: string;
   classroomId: string;
-}
-
-const WeeklyProgresses: React.FC = () => {
-  // Retrieve id
-  const { studentId, classroomId } = useParams<RouteParams>();
-
+}> = ({ studentId, classroomId }) => {
   return (
     <div className={style['container']}>
       <header className={style['header']}>

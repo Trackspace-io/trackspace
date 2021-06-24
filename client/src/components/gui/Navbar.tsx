@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import logo from '../../images/logo.svg';
 import style from '../../styles/gui/Navbar.module.css';
-import { Dropdown, DropdownItem } from './Dropdown';
+import { Dropdown, DropdownItem, DropdownTrigger } from './Dropdown';
 import LinkButton from './LinkButton';
 
 /**
@@ -41,10 +41,9 @@ const NavbarProtected: React.FC = () => {
       <Link to="/">
         <img src={logo} className={style['logo']} />
       </Link>
-      <Dropdown type="title" title={`${Users.current?.firstName} ${Users.current?.lastName}`}>
-        <DropdownItem type="button" onClick={Auths.logout}>
-          Logout
-        </DropdownItem>
+      <Dropdown>
+        <DropdownTrigger>{`${Users.current?.firstName} ${Users.current?.lastName}`}</DropdownTrigger>
+        <DropdownItem onClick={Auths.logout}>Logout</DropdownItem>
       </Dropdown>
     </div>
   );
@@ -56,15 +55,12 @@ const NavbarMini: React.FC = () => {
 
   return (
     <div className={style['container-mini']}>
-      <Dropdown type="title" title={`${Users.current?.firstName} ${Users.current?.lastName}`}>
+      <Dropdown>
         <DropdownItem
-          type="link"
-          to={`/user/${Users.current?.firstName?.toLowerCase()}-${Users.current?.lastName?.toLowerCase()}`}>
+          link={`/user/${Users.current?.firstName?.toLowerCase()}-${Users.current?.lastName?.toLowerCase()}`}>
           Profile
         </DropdownItem>
-        <DropdownItem type="button" onClick={Auths.logout}>
-          Logout
-        </DropdownItem>
+        <DropdownItem onClick={Auths.logout}>Logout</DropdownItem>
       </Dropdown>
     </div>
   );

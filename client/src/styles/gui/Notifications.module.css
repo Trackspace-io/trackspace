@@ -1,0 +1,33 @@
+.notification {
+    border: 1px solid #bbb;
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    width: 300px;
+    user-select: none;
+    font-size: 95%;
+}
+
+.notification:hover {
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+}
+
+.text {
+    margin-bottom: 15px;
+}
+
+.actions {
+    text-align: right;
+}
+
+.action {
+    font-weight: bold;
+    display: inline;
+    margin-left: 35px;
+    cursor: pointer;
+    color: var(--blue-dark);
+}
+
+.action:hover {
+    border-bottom: 3px solid var(--blue-dark);
+}

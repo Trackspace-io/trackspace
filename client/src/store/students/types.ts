@@ -18,6 +18,10 @@ export interface IStudent {
     email: string;
     confirmed: boolean;
   }[];
+  classrooms: {
+    id: string;
+    name: string;
+  }[];
 }
 
 /**

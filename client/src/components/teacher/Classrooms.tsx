@@ -2,37 +2,14 @@ import Button from 'components/gui/Button';
 import Form from 'components/gui/Form';
 import { Input, useInput } from 'components/gui/Input';
 import Modal from 'components/gui/Modal';
-import { Sidebar, SidebarItem } from 'components/gui/Sidebar';
 import Typography from 'components/gui/Typography';
 import { useClassroomsAsTeacher, useTeachers } from 'controllers';
 import * as React from 'react';
 import { FiEdit2, FiTrash } from 'react-icons/fi';
-import { Link, Route, Switch } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { IClassroom, IClassroomCreate, IClassroomModify, IClassroomRemove } from 'store/classrooms/types';
 
-import style from '../../styles/teacher/Home.module.css';
-
-const Home: React.FC = () => {
-  return (
-    <div className={style['container']}>
-      <div className={style['sidebar']}>
-        <span className={style['title']}>
-          <Typography variant="subtitle" display="inline" weight="light">
-            Dashboard
-          </Typography>
-        </span>
-        <Sidebar>
-          <SidebarItem to="/teacher/classrooms"> Classrooms </SidebarItem>
-        </Sidebar>
-      </div>
-      <div className={style['content']}>
-        <Switch>
-          <Route path="/teacher/classrooms" component={Classrooms} />
-        </Switch>
-      </div>
-    </div>
-  );
-};
+import style from '../../styles/teacher/Classrooms.module.css';
 
 const Classrooms: React.FC = () => {
   const Classrooms = useClassroomsAsTeacher();
@@ -252,4 +229,4 @@ const ClassroomRemove: React.FC<IClassroomRemoveProps> = ({ isOpen, onClose, cla
   );
 };
 
-export default Home;
+export default Classrooms;

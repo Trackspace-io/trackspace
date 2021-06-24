@@ -1,22 +1,16 @@
 import Typography from 'components/gui/Typography';
 import { useClassroomsAsTeacher } from 'controllers';
 import React from 'react';
-import { useParams } from 'react-router-dom';
 
 import Progresses from './Progresses';
 import StudentsSearchBar from './StudentsSearchBar';
 import Terms from './Terms';
 import style from './WeeklyProgresses.module.css';
 
-interface RouteParams {
-  id: string;
-}
-
-const WeeklyProgresses: React.FC = () => {
-  // Retrieve id
-  const { id } = useParams<RouteParams>();
-
-  const Classrooms = useClassroomsAsTeacher(id);
+const WeeklyProgresses: React.FC<{
+  classroomId: string;
+}> = ({ classroomId }) => {
+  const Classrooms = useClassroomsAsTeacher(classroomId);
   const { students, terms } = Classrooms.current;
 
   const [studentId, setStudentId] = React.useState<string>('');
@@ -24,13 +18,13 @@ const WeeklyProgresses: React.FC = () => {
   return (
     <div className={style['container']}>
       <header className={style['header']}>
-        <Terms classroomId={id} />
+        <Terms classroomId={classroomId} />
       </header>
       <main className={style['main']}>
         {terms.currentTerm ? (
           <React.Fragment>
             <StudentsSearchBar studentsList={students.list} setStudentId={(studentId) => setStudentId(studentId)} />
-            <Progresses classroomId={id} studentId={studentId} />
+            <Progresses classroomId={classroomId} studentId={studentId} />
           </React.Fragment>
         ) : (
           <div className={style['progresses-empty']}>

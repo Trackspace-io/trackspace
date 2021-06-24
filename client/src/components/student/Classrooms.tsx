@@ -1,9 +1,9 @@
+import style from '../../styles/student/Classrooms.module.css';
+
 import Typography from 'components/gui/Typography';
 import { useStudents } from 'controllers';
 import React from 'react';
 import { Link } from 'react-router-dom';
-
-import style from './Home.module.css';
 
 const Classrooms: React.FC = () => {
   const Students = useStudents();
@@ -15,10 +15,10 @@ const Classrooms: React.FC = () => {
           Classrooms
         </Typography>
       </header>
-      <main className={style['classrooms-list']}>
+      <main className={style['list']}>
         {Students.classroomsList.length !== 0 ? (
           Students.classroomsList.map((classroom) => (
-            <div key={classroom.id} className={style['classroom-item']}>
+            <div key={classroom.id} className={style['item']}>
               <Link to={`/student/classrooms/${classroom.id}`}>{classroom.name}</Link>
             </div>
           ))

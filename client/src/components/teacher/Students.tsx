@@ -6,20 +6,15 @@ import Typography from 'components/gui/Typography';
 import { useClassroomsAsTeacher } from 'controllers';
 import * as React from 'react';
 import { FiInfo, FiTrash, FiPlus } from 'react-icons/fi';
-import { useParams } from 'react-router-dom';
 import { IStudent, IStudentRemove } from 'store/students/types';
 
 import style from '../../styles/teacher/Students.module.css';
 import Share from './Share';
 
-interface RouteParams {
-  id: string;
-}
-
-const Students: React.FC = () => {
-  const { id } = useParams<RouteParams>();
-
-  const Classrooms = useClassroomsAsTeacher(id);
+const Students: React.FC<{
+  classroomId: string;
+}> = ({ classroomId }) => {
+  const Classrooms = useClassroomsAsTeacher(classroomId);
 
   const {
     current: { students },
@@ -80,7 +75,7 @@ const Students: React.FC = () => {
           isOpen={Boolean(action === 'remove')}
           onClose={() => setAction('')}
           student={student}
-          classroomId={id}
+          classroomId={classroomId}
           removeStudent={students.remove}
         />
       )}
@@ -95,7 +90,7 @@ const Students: React.FC = () => {
         />
       )}
 
-      {shareModal && <Share isOpen={shareModal} onClose={() => setShareModal(false)} classroomId={id} />}
+      {shareModal && <Share isOpen={shareModal} onClose={() => setShareModal(false)} classroomId={classroomId} />}
     </div>
   );
 };

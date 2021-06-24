@@ -1,75 +1,104 @@
-import cx from 'classnames';
-import * as React from 'react';
-import { Link } from 'react-router-dom';
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import style from '../../styles/gui/Dropdown.module.css';
+
+import cx from 'classnames';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import ClickHandler from './ClickHandler';
+import Typography from './Typography';
 
-interface IDropdownProps {
-  title?: string;
-  icon?: React.ReactNode;
-  type: 'icon' | 'title';
-}
+const Dropdown: React.FC<{
+  orientation?: 'left' | 'right';
+}> = ({ children, orientation = 'left' }) => {
+  const [isActive, setIsActive] = useState(false);
+  const [trigger, setTrigger] = useState<any>(null);
+  const [sections, setSections] = useState<any[]>([]);
 
-const Dropdown: React.FC<IDropdownProps> = ({ children, type, icon, title }) => {
-  const [isActive, setIsActive] = React.useState(false);
+  useEffect(() => {
+    const _triggers: any[] = [];
+    const _sections: any[] = [];
 
-  const handleClick = () => {
-    setIsActive(!isActive);
-  };
+    React.Children.forEach(children, (c: any) => {
+      if (c.type?.name === DropdownSection.name) {
+        _sections.push(c);
+      } else if (c.type?.name === DropdownTrigger.name) {
+        _triggers.push(c);
+      }
+    });
 
-  const renderTrigger = (type: 'icon' | 'title') => {
-    switch (type) {
-      case 'title':
-        return (
-          <button className={style['trigger']} onClick={handleClick}>
-            <span> {title} </span>
-          </button>
-        );
-      case 'icon':
-        return (
-          <span onClick={handleClick} className={style['icon']}>
-            {icon}
-          </span>
-        );
-      default:
-        throw new Error('Unable to render.');
-    }
-  };
+    setTrigger(_triggers.length > 0 ? _triggers[0] : null);
+    setSections(_sections);
+  }, [children]);
 
   return (
     <div className={style['container']}>
-      {renderTrigger(type)}
-      <ClickHandler onClickOutside={() => setIsActive(false)}>
-        <nav className={cx(style['menu'], style[isActive ? 'active' : 'inactive'])} onClick={handleClick}>
-          <ul>{children}</ul>
-        </nav>
+      <div
+        className={style['trigger']}
+        onClick={() => {
+          setIsActive(!isActive);
+        }}>
+        {trigger ?? null}
+      </div>
+      <ClickHandler
+        onClickOutside={() => {
+          setIsActive(false);
+        }}>
+        <div
+          className={cx(style['dropdown'], style[`dropdown-${orientation}`], style[isActive ? 'active' : 'inactive'])}>
+          <div
+            className={cx(
+              style['dropdown-content'],
+              style[isActive ? 'active' : 'inactive'],
+              style[`dropdown-content-${orientation}`],
+            )}>
+            {sections}
+          </div>
+        </div>
       </ClickHandler>
     </div>
   );
 };
 
-interface IDropdownMenuProps {
-  type: 'button' | 'link' | 'text';
-  to?: string;
-  onClick?: () => void;
-}
-
-const DropdownItem: React.FC<IDropdownMenuProps> = ({ children, type, to = '', onClick }) => {
-  const renderItem = () => {
-    switch (type) {
-      case 'link':
-        return <Link to={to}> {children} </Link>;
-      case 'button':
-        return <button onClick={onClick}> {children}</button>;
-      case 'text':
-        return <span> {children} </span>;
-      default:
-        throw new Error('Unable to render.');
-    }
-  };
-
-  return <li>{renderItem()}</li>;
+const DropdownTrigger: React.FC = ({ children }) => {
+  return <>{children}</>;
 };
 
-export { Dropdown, DropdownItem };
+const DropdownSection: React.FC<{
+  title?: string;
+}> = ({ children, title }) => {
+  const [items, setItems] = useState<any[]>([]);
+
+  useEffect(() => {
+    setItems(
+      React.Children.toArray(children).filter((c) => {
+        return (c as any)?.type?.name === DropdownItem.name;
+      }),
+    );
+  }, [children]);
+
+  return (
+    <div className={style['section']}>
+      {title && (
+        <div className={style['section-title']}>
+          <Typography variant="caption" weight="bold">
+            {title}
+          </Typography>
+        </div>
+      )}
+      {items}
+    </div>
+  );
+};
+
+const DropdownItem: React.FC<{
+  link?: string;
+  onClick?: () => void;
+}> = ({ children, link, onClick }) => {
+  return (
+    <div onClick={onClick} className={cx(style['dropdown-item'], link || onClick ? style['dropdown-action'] : null)}>
+      {link ? <Link to={link}>{children}</Link> : children}
+    </div>
+  );
+};
+
+export { Dropdown, DropdownTrigger, DropdownSection, DropdownItem };

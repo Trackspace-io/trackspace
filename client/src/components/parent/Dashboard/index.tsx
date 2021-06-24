@@ -1,43 +1,59 @@
-import Menu from 'components/common/Menu';
-import React from 'react';
-import { Redirect, Route, Switch } from 'react-router';
-import Classroom from '../Classroom';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
-import Home from '../Home';
-import Sidebar from '../Sidebar';
 import style from './Dashboard.module.css';
 
+import React from 'react';
+import { FcBullish, FcPlanner } from 'react-icons/fc';
+import { Content, Home, Page } from 'components/gui/Home';
+import { FiBookOpen } from 'react-icons/fi';
+import Children from '../Children';
+import { useParents } from 'controllers';
+import { PageGroup } from 'components/gui/Page';
+import WeeklyProgresses from '../WeeklyProgresses';
+import { IStudent } from 'store/students/types';
+import { IClassroom } from 'store/classrooms/types';
+import DailyProgress from 'components/common/DailyProgress';
+
 const Dashboard: React.FC = () => {
+  const Parents = useParents();
+
+  const classroomPage = (student: IStudent, classroom: IClassroom) => {
+    return (
+      <Page path={`/classrooms/${classroom.id}`} title={classroom.name}>
+        <Content path="/progress/daily" title="Daily progress" icon={<FcPlanner />}>
+          <DailyProgress classroomId={classroom.id} studentId={student.id} />
+        </Content>
+        <Content path="/progress/term" title="Term progress" icon={<FcBullish />}>
+          <WeeklyProgresses studentId={student.id} classroomId={classroom.id} />
+        </Content>
+      </Page>
+    );
+  };
+
+  const studentGroup = (student: IStudent) => {
+    const fullName = `${student.firstName} ${student.lastName}`;
+
+    return (
+      <PageGroup path={`/students/${student.id}`} title={fullName}>
+        {/* Generate one page per classroom */}
+        {(student.classrooms as any[])?.map((classroom) => classroomPage(student, classroom))}
+      </PageGroup>
+    );
+  };
+
   return (
     <div className={style['container']}>
-      <div className={style['sidebar']}>
-        <Sidebar />
-      </div>
-      <div className={style['main']}>
-        <div className={style['content']}>
-          <Switch>
-            <Route exact path="/parent">
-              <Redirect to="/parent/dashboard" />
-            </Route>
-            <Route exact path="/parent/dashboard" component={Home} />
-            <Route exact path="/parent/dashboard/children" component={Home} />
-            <Route exact path="/parent/children/:studentId/classrooms/:classroomId" component={Classroom} />
-            <Route
-              exact
-              path="/parent/children/:studentId/classrooms/:classroomId/progresses/today"
-              component={Classroom}
-            />
-            <Route
-              exact
-              path="/parent/children/:studentId/classrooms/:classroomId/progresses/weekly"
-              component={Classroom}
-            />
-          </Switch>
-        </div>
-        <div className={style['menu']}>
-          <Menu />
-        </div>
-      </div>
+      <Home path="/parent">
+        {/* Home page */}
+        <Page path="/home" title="Home" icon={<FiBookOpen />}>
+          <Content>
+            <Children />
+          </Content>
+        </Page>
+
+        {/* Generate one group per student */}
+        {Parents.children.map((student) => studentGroup(student))}
+      </Home>
     </div>
   );
 };

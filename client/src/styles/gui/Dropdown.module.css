@@ -1,90 +1,77 @@
-.menu-container {
+.dropdown {
   position: relative;
-}
-
-.menu {
-  outline: none;
-  background: #ffffff;
-  border-radius: 8px;
-  position: absolute;
-  right: 24px;
-  margin-top: 24px;
-  width: 256px;
-  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-20px);
-  transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
+  display: inline-block;
   z-index: 999;
 }
 
-.menu.active {
+.active {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
 }
 
-.menu ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.inactive {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-20px);
 }
 
-.menu li {
-  border-bottom: 1px solid #dddddd;
-  cursor: pointer;
+.dropdown-right {
+  float: right;
+  margin-top: 15px;
 }
 
-.menu li a {
-  text-decoration: none;
+.dropdown-content-right {
+  right: 0;
+}
+
+.dropdown-content {
+  outline: none;
+  position: absolute;
+  background: white;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+  max-height: 400px;
+  min-width: 150px;
+  overflow-y: auto;
+  border-radius: 8px;
+  z-index: 999;
+  transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
+  min-width: 175px;
+}
+
+.dropdown-item {
   color: #333333;
-  padding: 15px 20px;
   display: block;
-  cursor: pointer;
-  font-size: 16px;
+  font-size: 90%;
+  padding: 10px;
 }
 
-.menu li button {
+.dropdown-item a {
   text-decoration: none;
-  color: #333333;
-  padding: 15px 20px;
-  display: block;
-  cursor: pointer;
-  border: none;
-  background: transparent;
-  font-size: 16px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
-    'Helvetica Neue', sans-serif;
+  color: inherit;
 }
 
-.menu li span {
-  text-decoration: none;
-  color: #333333;
-  padding: 15px 20px;
-  display: block;
-  font-size: 16px;
+.dropdown-action {
+  cursor: pointer;
+  padding: 12px 16px;
+}
+
+.dropdown-action:hover {
+  font-weight: bold;
 }
 
 .trigger {
-  background: transparent;
   cursor: pointer;
-  padding: 4px 6px;
-  border: none;
-  vertical-align: middle;
-  transition: box-shadow 0.4s ease;
-  outline: none;
-}
-
-.trigger span {
-  font-weight: 300;
-  font-size: 16px;
-  margin: 0 10px;
-  letter-spacing: 1px;
-  outline: none;
+  user-select: none;
 }
 
 .icon svg {
   cursor: pointer;
   transform: scale(1.2);
   color: var(--blue-dark);
+}
+
+.section-title {
+  padding: 15px 15px 0 15px;
+  font-size: 102%;
 }
