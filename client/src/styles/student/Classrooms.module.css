@@ -1,0 +1,27 @@
+.header {
+    margin-bottom: 16px;
+}
+
+.list {
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 16px;
+    background: var(--white);
+}
+
+.item {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #ddd;
+    padding: 24px;
+}
+
+.item a {
+    text-decoration: none;
+    color: var(--black);
+    outline: none;
+}
+
+.item:last-child {
+    border: none;
+}

@@ -36,9 +36,7 @@ const useProgresses = (classroomId?: string) => {
    * @param {string}  payload.date
    */
   const getByDate = (payload: IProgressByDate) => {
-    console.log('payload', payload);
-
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       ProgressesAPI.getProgressByDate(payload)
         .then((response) => {
           const { data } = response;
@@ -48,6 +46,7 @@ const useProgresses = (classroomId?: string) => {
         })
         .catch(() => {
           dispatch(setProgressByDate(<IProgress>{}));
+          reject();
         });
     });
   };
@@ -113,14 +112,14 @@ const useProgresses = (classroomId?: string) => {
   /**
    * Set or update a progress
    *
-   * @param req.subjectId {string} Identifier of the subject.
-   * @param req.studentId {string} Identifier of the student.
-   * @param req.date      {date}   Date of the progress (yyyy-mm-dd).
-   * @param req.pageFrom  {number} (Optional) Number of the starting page.
-   * @param req.pageSet   {number} (Optional) Number of the page that the student
-   *                               wants to reach.
-   * @param req.pageDone  {number} (Optional) Number of the page reached by the
-   *                               student at the end of the day.
+   * @param req.subjectId   {string} Identifier of the subject.
+   * @param req.studentId   {string} Identifier of the student.
+   * @param req.date        {date}   Date of the progress (yyyy-mm-dd).
+   * @param req.pageFrom    {number} (Optional) Number of the starting page.
+   * @param req.pageSet     {number} (Optional) Number of the page that the student
+   *                                 wants to reach.
+   * @param req.pageDone    {number} (Optional) Number of the page reached by the
+   *                                 student at the end of the day.
    */
   const setOrUpdate = (payload: IProgressSetOrUpdate) => {
     const { studentId, date } = payload;

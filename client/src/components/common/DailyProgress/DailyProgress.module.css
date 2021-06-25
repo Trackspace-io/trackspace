@@ -6,3 +6,38 @@
   gap: 16px;
   padding: 24px 0;
 }
+
+.progress-header {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  place-items: center;
+  gap: 16px;
+  margin: 0 16px;
+}
+
+.table {
+  margin: 50px 0;
+  border: 1px solid #ccc;
+  border-radius: 16px;
+  margin: 24px 0;
+  padding: 16px;
+  background: var(--white);
+}
+
+.title {
+  text-align: center;
+}
+
+.date-dropdown-button {
+  position: relative;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 8px;
+  width: fit-content;
+  margin-right: 0;
+  margin-left: auto;
+}
+
+.date-dropdown-button:hover {
+  box-shadow: 0 1px 5px #ccc;
+}

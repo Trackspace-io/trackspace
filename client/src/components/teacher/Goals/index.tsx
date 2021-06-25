@@ -1,5 +1,4 @@
 import { useClassroomsAsTeacher } from 'controllers';
-import { useParams } from 'helpers/params';
 import React from 'react';
 
 import GoalGraph from './GoalGraph';
@@ -9,17 +8,16 @@ import Terms from './Terms';
 import style from './Goals.module.css';
 import Typography from 'components/gui/Typography';
 
-const Goals: React.FC = () => {
-  // Retrieve classroom id
-  const id = useParams();
-
-  const Classrooms = useClassroomsAsTeacher(id);
+const Goals: React.FC<{
+  classroomId: string;
+}> = ({ classroomId }) => {
+  const Classrooms = useClassroomsAsTeacher(classroomId);
   const { goals, terms } = Classrooms.current;
 
   React.useEffect(() => {
     terms.currentTerm?.id &&
       goals.get({
-        classroomId: id,
+        classroomId,
         termId: terms.currentTerm?.id,
       });
   }, [terms.currentTerm?.id]);
@@ -27,7 +25,7 @@ const Goals: React.FC = () => {
   React.useEffect(() => {
     terms.currentTerm?.id &&
       goals.getGraph({
-        classroomId: id,
+        classroomId,
         termId: terms.currentTerm?.id,
         color: `${'9ab986'}`,
         width: 3,

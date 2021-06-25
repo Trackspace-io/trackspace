@@ -46,6 +46,7 @@ const useParents = () => {
         dispatch(setChildren(data));
       })
       .catch((e) => {
+        console.log(e);
         const { msg } = e.response.data.errors[0];
 
         Messages.add({

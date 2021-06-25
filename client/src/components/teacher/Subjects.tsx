@@ -6,20 +6,15 @@ import Typography from 'components/gui/Typography';
 import { useClassroomsAsTeacher } from 'controllers';
 import * as React from 'react';
 import { FiEdit2, FiPlus, FiTrash } from 'react-icons/fi';
-import { useParams } from 'react-router-dom';
 import { ISubject, ISubjectAdd, ISubjectModify, ISubjectRemove } from 'store/subjects/types';
 
 import style from '../../styles/teacher/Subjects.module.css';
 
-interface RouteParams {
-  id: string;
-}
-
-const Subjects: React.FC = () => {
-  const { id } = useParams<RouteParams>();
-
+const Subjects: React.FC<{
+  classroomId: string;
+}> = ({ classroomId }) => {
   // Controllers
-  const Classrooms = useClassroomsAsTeacher(id);
+  const Classrooms = useClassroomsAsTeacher(classroomId);
 
   const { subjects } = Classrooms.current;
 
@@ -73,7 +68,7 @@ const Subjects: React.FC = () => {
         <AddSubject
           isOpen={Boolean(action === 'add')}
           onClose={() => setAction('')}
-          classroomId={id}
+          classroomId={classroomId}
           addSubject={subjects.add}
         />
       )}
@@ -83,7 +78,7 @@ const Subjects: React.FC = () => {
           isOpen={Boolean(action === 'modify')}
           onClose={() => setAction('')}
           subject={subject}
-          classroomId={id}
+          classroomId={classroomId}
           editSubject={subjects.modify}
         />
       )}
@@ -93,7 +88,7 @@ const Subjects: React.FC = () => {
           isOpen={Boolean(action === 'remove')}
           onClose={() => setAction('')}
           subject={subject}
-          classroomId={id}
+          classroomId={classroomId}
           removeSubject={subjects.remove}
         />
       )}

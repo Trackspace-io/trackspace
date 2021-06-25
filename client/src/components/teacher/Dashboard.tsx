@@ -1,78 +1,55 @@
 import 'rc-calendar/assets/index.css';
+import style from '../../styles/teacher/Dashboard.module.css';
 
-import Menu from 'components/common/Menu';
-import Divider from 'components/gui/Divider';
-import Tooltip from 'components/gui/Tooltip';
 import { useTeachers } from 'controllers';
 import * as React from 'react';
-import { FcHome } from 'react-icons/fc';
-import { Link, Redirect, Route, Switch } from 'react-router-dom';
-import { IClassroom } from 'store/classrooms/types';
-
-import style from '../../styles/teacher/Dashboard.module.css';
-import Classroom from './Classroom';
-import Home from './Home';
+import { FiBookOpen } from 'react-icons/fi';
+import { Content, Home, Page } from 'components/gui/Home';
+import { FcApproval, FcBookmark, FcCalendar, FcComboChart, FcGraduationCap } from 'react-icons/fc';
+import Subjects from './Subjects';
+import Students from './Students';
+import Terms from './Terms';
+import Goals from './Goals';
+import WeeklyProgresses from './WeeklyProgresses';
+import Classrooms from './Classrooms';
 
 /**
  * Component representing the Teacher's home page, and access to their classrooms.
- *
- * @param none
- *
- * @returns ReactNode
  */
 const Dashboard: React.FC = () => {
   const Teachers = useTeachers();
 
   return (
     <div className={style['container']}>
-      <div className={style['sidebar']}>
-        <Sidebar classrooms={Teachers.classroomsList} />
-      </div>
-      <div className={style['main']}>
-        <div className={style['content']}>
-          <Switch>
-            <Route exact path="/teacher">
-              <Redirect to="/teacher/classrooms" />
-            </Route>
-            <Route exact path="/teacher/classrooms" component={Home} />
-            <Route path="/teacher/classrooms/:id" component={Classroom} />
-          </Switch>
-        </div>
-        <div className={style['menu']}>
-          <Menu />
-        </div>
-      </div>
-    </div>
-  );
-};
+      <Home path="/teacher">
+        {/* Home page */}
+        <Page path="/home" title="Home" icon={<FiBookOpen />}>
+          <Content>
+            <Classrooms />
+          </Content>
+        </Page>
 
-interface ISidebarProps {
-  classrooms: IClassroom[];
-}
-
-/**
- * Classrooms' navigation tab.
- *
- * @param { IClassroom[] } classrooms List of classrooms
- *
- * @returns ReactNode
- */
-const Sidebar: React.FC<ISidebarProps> = ({ classrooms }) => {
-  return (
-    <div>
-      <Tooltip text="Home" position="right">
-        <Link to="/teacher" className={style['home']}>
-          <FcHome />
-        </Link>
-      </Tooltip>
-      <Divider />
-      {classrooms.map((classroom) => (
-        <Tooltip key={classroom.id} text={classroom.name} position="right">
-          <Link to={`/teacher/classrooms/${classroom.id}`} className={style['bubble']}>
-            {classroom.name[0]}
-          </Link>
-        </Tooltip>
-      ))}
+        {/* Generate one page per classroom */}
+        {Teachers.classroomsList.map((classroom, index) => (
+          <Page key={index} path={`/classrooms/${classroom.id}`} title={classroom.name}>
+            <Content path="/students" icon={<FcGraduationCap />} title="Students">
+              <Students classroomId={classroom.id} />
+            </Content>
+            <Content path="/subjects" icon={<FcBookmark />} title="Subjects">
+              <Subjects classroomId={classroom.id} />
+            </Content>
+            <Content path="/terms" icon={<FcCalendar />} title="Terms">
+              <Terms classroomId={classroom.id} />
+            </Content>
+            <Content path="/goals" icon={<FcApproval />} title="Goals">
+              <Goals classroomId={classroom.id} />
+            </Content>
+            <Content path="/progress" icon={<FcComboChart />} title="Progress">
+              <WeeklyProgresses classroomId={classroom.id} />
+            </Content>
+          </Page>
+        ))}
+      </Home>
     </div>
   );
 };

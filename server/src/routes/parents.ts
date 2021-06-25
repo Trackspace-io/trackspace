@@ -26,22 +26,30 @@ parents.get(
     try {
       const children = await req.parent.getRelatedUsers(["student"]);
       return res.status(200).json(
-        children.map(([user, relation]) => {
-          const pendingDate = relation.pendingSince;
-          const isConfirmed = relation.confirmed;
-          const isInitiator = req.parent.id === relation.user1Id;
+        await Promise.all(
+          children.map(async ([user, relation]) => {
+            const classrooms = await user.getClassrooms();
 
-          return {
-            id: user.id,
-            email: user.email,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            invitationPendingSince: pendingDate
-              ? date.format(pendingDate, "YYYY-MM-DD")
-              : null,
-            mustConfirm: !isConfirmed && !isInitiator,
-          };
-        })
+            const pendingDate = relation.pendingSince;
+            const isConfirmed = relation.confirmed;
+            const isInitiator = req.parent.id === relation.user1Id;
+
+            return {
+              id: user.id,
+              email: user.email,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              invitationPendingSince: pendingDate
+                ? date.format(pendingDate, "YYYY-MM-DD")
+                : null,
+              mustConfirm: !isConfirmed && !isInitiator,
+              classrooms: classrooms.map((classroom) => ({
+                id: classroom.id,
+                name: classroom.name,
+              })),
+            };
+          })
+        )
       );
     } catch (e) {
       return res.sendStatus(500);

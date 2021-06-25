@@ -7,21 +7,16 @@ import Typography from 'components/gui/Typography';
 import { useClassroomsAsTeacher } from 'controllers';
 import * as React from 'react';
 import { FiEdit2, FiPlus, FiTrash } from 'react-icons/fi';
-import { useParams } from 'react-router-dom';
 import { ITerm, ITermCreate, ITermModify, ITermRemove } from 'store/terms/types';
 
 import { dateValue, today, WEEK_DAYS } from '../../helpers/calendar';
 import style from '../../styles/teacher/Terms.module.css';
 
-interface RouteParams {
-  id: string;
-}
-
-const Terms: React.FC = () => {
-  const { id } = useParams<RouteParams>();
-
+const Terms: React.FC<{
+  classroomId: string;
+}> = ({ classroomId }) => {
   // Controllers
-  const Classrooms = useClassroomsAsTeacher(id);
+  const Classrooms = useClassroomsAsTeacher(classroomId);
 
   const {
     current: { terms },
@@ -61,7 +56,7 @@ const Terms: React.FC = () => {
         <AddTerm
           isOpen={Boolean(action === 'create')}
           onClose={() => setAction('')}
-          classroomId={id}
+          classroomId={classroomId}
           addTerm={terms.create}
         />
       )}
@@ -71,7 +66,7 @@ const Terms: React.FC = () => {
           isOpen={Boolean(action === 'modify')}
           onClose={() => setAction('')}
           term={term}
-          classroomId={id}
+          classroomId={classroomId}
           modifyTerm={terms.modify}
         />
       )}
@@ -81,7 +76,7 @@ const Terms: React.FC = () => {
           isOpen={Boolean(action === 'remove')}
           onClose={() => setAction('')}
           term={term}
-          classroomId={id}
+          classroomId={classroomId}
           removeTerm={terms.remove}
         />
       )}

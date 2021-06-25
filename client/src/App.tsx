@@ -53,78 +53,19 @@ const App: React.FC = () => {
         </ProtectedRoute>
 
         {/* Teachers */}
-        <ProtectedRoute role="teacher" exact path="/teacher" redirectPath="/">
-          <TeacherDashboard />
-        </ProtectedRoute>
-        <ProtectedRoute role="teacher" path="/teacher/classrooms" redirectPath="/">
-          <TeacherDashboard />
-        </ProtectedRoute>
-        <ProtectedRoute role="teacher" path="/teacher/classrooms/:id" redirectPath="/">
-          <TeacherDashboard />
-        </ProtectedRoute>
-        <ProtectedRoute role="teacher" path="/teacher/classrooms/:id/students" redirectPath="/">
-          <TeacherDashboard />
-        </ProtectedRoute>
-        <ProtectedRoute role="teacher" path="/teacher/classrooms/:id/subjects" redirectPath="/">
-          <TeacherDashboard />
-        </ProtectedRoute>
-        <ProtectedRoute role="teacher" path="/teacher/classrooms/:id/terms" redirectPath="/">
-          <TeacherDashboard />
-        </ProtectedRoute>
-        <ProtectedRoute role="teacher" path="/teacher/classrooms/:id/goals" redirectPath="/">
-          <TeacherDashboard />
-        </ProtectedRoute>
-        <ProtectedRoute role="teacher" path="/teacher/classrooms/:id/progresses" redirectPath="/">
+        <ProtectedRoute role="teacher" path="/teacher" redirectPath="/">
           <TeacherDashboard />
         </ProtectedRoute>
 
         {/* Students */}
-        <ProtectedRoute role="student" exact path="/student" redirectPath="/">
-          <StudentDashboard />
-        </ProtectedRoute>
-        <ProtectedRoute role="student" exact path="/student/classrooms" redirectPath="/">
-          <StudentDashboard />
-        </ProtectedRoute>
-        <ProtectedRoute role="student" exact path="/student/parents" redirectPath="/">
-          <StudentDashboard />
-        </ProtectedRoute>
-        <ProtectedRoute role="student" path="/student/classrooms/:classroomId" redirectPath="/">
-          <StudentDashboard />
-        </ProtectedRoute>
-        <ProtectedRoute role="student" path="/student/classrooms/:classroomId/progress/today" redirectPath="/">
-          <StudentDashboard />
-        </ProtectedRoute>
-        <ProtectedRoute role="student" path="/student/classrooms/:classroomId/progress/weekly" redirectPath="/">
+        <ProtectedRoute role="student" path="/student" redirectPath="/">
           <StudentDashboard />
         </ProtectedRoute>
 
         <Route path="/students/classrooms/invitations/accept" component={Invitation} />
 
         {/* Parents */}
-        <ProtectedRoute role="parent" exact path="/parent" redirectPath="/">
-          <ParentDashboard />
-        </ProtectedRoute>
-        <ProtectedRoute role="parent" exact path="/parent/dashboard" redirectPath="/">
-          <ParentDashboard />
-        </ProtectedRoute>
-        <ProtectedRoute role="parent" exact path="/parent/dashboard/children" redirectPath="/">
-          <ParentDashboard />
-        </ProtectedRoute>
-        <ProtectedRoute role="parent" exact path="/parent/children/:studentId/classrooms/:classroomId" redirectPath="/">
-          <ParentDashboard />
-        </ProtectedRoute>
-        <ProtectedRoute
-          role="parent"
-          exact
-          path="/parent/children/:studentId/classrooms/:classroomId/progresses/today"
-          redirectPath="/">
-          <ParentDashboard />
-        </ProtectedRoute>
-        <ProtectedRoute
-          role="parent"
-          exact
-          path="/parent/children/:studentId/classrooms/:classroomId/progresses/weekly"
-          redirectPath="/">
+        <ProtectedRoute role="parent" path="/parent" redirectPath="/">
           <ParentDashboard />
         </ProtectedRoute>
 
