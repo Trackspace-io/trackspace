@@ -15,6 +15,7 @@ import SignIn from './components/common/SignIn';
 import SignUp from './components/common/SignUp';
 import { NavbarPublic } from './components/gui/Navbar';
 import Profile from 'components/common/Profile';
+import { SetRole } from 'components/common/SetRole';
 
 const App: React.FC = () => {
   const Users = useUsers();
@@ -69,6 +70,11 @@ const App: React.FC = () => {
           <ParentDashboard />
         </ProtectedRoute>
 
+        {/* Unknown role (after Google sign-up) */}
+        <ProtectedRoute role="unknown" path="/unknown" redirectPath="/">
+          <SetRole />
+        </ProtectedRoute>
+
         <Route path="*" component={Error} />
       </Switch>
       <Messages />
@@ -82,7 +88,7 @@ const App: React.FC = () => {
  */
 interface IProtectedRouteProps extends RouteProps {
   exact?: boolean;
-  role?: 'teacher' | 'student' | 'parent' | 'all';
+  role?: 'teacher' | 'student' | 'parent' | 'unknown' | 'all';
   path: string; // Path if condition succeeded
   redirectPath: string; // Redirect path if condition fails.
 }

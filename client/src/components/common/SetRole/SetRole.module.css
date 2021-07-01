@@ -1,0 +1,74 @@
+.container {
+    background-color: var(--yellow-light);
+    box-sizing: border-box;
+    min-height: 100vh;
+    min-width: 100vw;
+    position: absolute;
+    user-select: none;
+}
+
+.logo {
+    height: 35px;
+}
+
+.form-container {
+    border-radius: 16px;
+    max-width: 900px;
+    margin: 25px auto;
+    box-shadow: 0 1px 5px #ccc;
+    min-height: calc(100vh - 50px);
+    background: #fafafa;
+}
+
+.form-header {
+    padding: 25px 35px 0 35px;
+    background-color: var(--white);
+    border-radius: 16px 16px 0 0;
+}
+
+.form-content {
+    padding: 35px;
+}
+
+.role-cards {
+    display: flex;
+    padding: 25px 0;
+}
+
+@media (max-width: 800px) {
+    .role-cards {
+        flex-direction: column;
+    }
+}
+
+.role-card {
+    background-color: var(--white);
+    margin-right: 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 5px #ccc;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+.role-card-selected {
+    border: 2px solid #353535;
+}
+
+.role-card:hover {
+    box-shadow: 0 1px 5px #aaa;
+}
+
+.role-card-selected:hover {
+    box-shadow: 0 1px 5px #ccc;
+}
+
+.role-thumbnail {
+    width: 100%;
+    border-radius: 6px 6px 0 0;
+}
+
+.role-card-text {
+    padding: 5px 10px 10px 10px;
+    font-size: 90%;
+    text-align: center;
+}

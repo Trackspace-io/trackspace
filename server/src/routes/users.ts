@@ -110,6 +110,42 @@ users.post(
 );
 
 /**
+ * Google authentication callback route. This route is called by Google
+ * when the user signs in using his/her Google credentials.
+ *
+ * @method GET
+ * @url    /users/auth/google/callback
+ */
+users.get(
+  "/auth/google/callback",
+  passport.authenticate("google", {
+    failureRedirect: `${process.env.CLIENT_URL}`,
+  }),
+
+  async (req: Request, res: Response): Promise<void> => {
+    const user: User = <User>req.user;
+    res.redirect(`${process.env.CLIENT_URL}/${user.role}`);
+  }
+);
+
+/**
+ * Google authentication. Calling this route will redirect the user to the
+ * Google sign-in page.
+ *
+ * @method GET
+ * @url    /users/auth/google
+ */
+users.get(
+  "/auth/google",
+  passport.authenticate("google", {
+    scope: [
+      "https://www.googleapis.com/auth/plus.login",
+      "https://www.googleapis.com/auth/userinfo.email",
+    ],
+  })
+);
+
+/**
  * Sign-in. On success, redirects users to their role's home page (/<role>).
  * Otherwise, returns 401.
  *
@@ -135,13 +171,10 @@ users.post(
  *
  * @returns Redirect.
  */
-users.get(
-  "/sign-out",
-  async (req: Request, res: Response): Promise<void> => {
-    req.logout();
-    res.status(200).json({ redirect: `/` });
-  }
-);
+users.get("/sign-out", async (req: Request, res: Response): Promise<void> => {
+  req.logout();
+  res.status(200).json({ redirect: `/` });
+});
 
 /**
  * Send an email to reset the password of a user.
@@ -296,8 +329,13 @@ users.get(
  * @param req.email           {string | undefined} New email address.
  * @param req.firstName       {string | undefined} New first name.
  * @param req.lastName        {string | undefined} New last name.
- * @param req.oldPassword     {string | undefined} Old password. Required to set a new password.
- * @param req.password        {string | undefined} New password.
+ * @param req.role            {string | undefined} Role of the user. This para-
+ *                                                 meter is only considered if
+ *                                                 the role of the user is cur-
+ *                                                 rently unknown.
+ * @param req.oldPassword     {string | undefined} Old password. Required to
+ *                                                 set a new password.
+ * @param req.newPassword     {string | undefined} New password.
  * @param req.confirmPassword {string | undefined} Confirm password.
  *
  * @returns 200, 400, 500
@@ -306,12 +344,28 @@ users.put(
   "/profile",
   user().isAuthenticated(),
 
+  body("role").custom((value: string, { req }) => {
+    const user = <User>req.user;
+    if (user.role !== "unknown") {
+      return value
+        ? Promise.reject("You cannot modify your current role.")
+        : true;
+    }
+
+    return !["teacher", "student", "parent"].includes(value)
+      ? Promise.reject("Invalid value.")
+      : true;
+  }),
+
   body("oldPassword").custom((value: string, { req }) => {
     if (!req.body.password) return true;
 
+    const user = <User>req.user;
+    if (user.role === "unknown") return true;
+
     const passwordIsOk: boolean = bcrypt.compareSync(
       req.body.oldPassword,
-      (<User>req.user).passwordHash
+      user.passwordHash
     );
 
     if (!passwordIsOk) {
@@ -321,8 +375,17 @@ users.put(
     return true;
   }),
 
+  body("newPassword").custom((value, { req }) => {
+    const user = <User>req.user;
+    if (!value && user.role === "unknown") {
+      return Promise.reject("The password is required.");
+    }
+
+    return true;
+  }),
+
   body("confirmPassword").custom((value: string, { req }) => {
-    if (req.body.password && value !== req.body.password) {
+    if (req.body.newPassword && value !== req.body.newPassword) {
       return Promise.reject("The passwords do not match");
     }
 
@@ -349,8 +412,14 @@ users.put(
       if (req.body.lastName) {
         user.setDataValue("lastName", req.body.lastName);
       }
-      if (req.body.password) {
-        user.setDataValue("password", bcrypt.hashSync(req.body.password, 10));
+      if (req.body.role) {
+        user.setDataValue("role", req.body.role);
+      }
+      if (req.body.newPassword) {
+        user.setDataValue(
+          "password",
+          bcrypt.hashSync(req.body.newPassword, 10)
+        );
       }
 
       user.save();

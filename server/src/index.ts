@@ -3,6 +3,7 @@ import express from "express";
 import session from "express-session";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
+import { OAuth2Strategy as GoogleStrategy } from "passport-google-oauth";
 import path from "path";
 import { ShortLink } from "./models/ShortLink";
 import { User } from "./models/User";
@@ -10,6 +11,7 @@ import Server from "./Server";
 
 const app = express();
 const port = process.env.PORT || 8000;
+const server = Server.get();
 
 // Configure Express.
 app.use(
@@ -41,11 +43,11 @@ if (process.env.NODE_ENV === "development") {
 // In production, redirect the client to the right URL if necessary.
 if (process.env.NODE_ENV === "production") {
   app.use(function (req, res, next) {
-    var appUrl = process.env.CLIENT_URL;
+    const appUrl = process.env.CLIENT_URL;
     if (!appUrl) next();
 
-    var protocol = req.get("X-Forwarded-Proto") || "";
-    var host = req.get("Host");
+    let protocol = req.get("X-Forwarded-Proto") || "";
+    const host = req.get("Host");
 
     if (protocol) {
       protocol += "://";
@@ -60,7 +62,20 @@ if (process.env.NODE_ENV === "production") {
 }
 
 // Configure Passport.
-passport.use(new LocalStrategy(User.authenticate));
+
+// Local strategy
+const localStrategy = new LocalStrategy(User.authenticate);
+passport.use(localStrategy);
+
+// Google strategy.
+const googleStrategy = new GoogleStrategy(
+  server.googleSettings,
+  User.authenticateByGoogle
+);
+
+passport.use(googleStrategy);
+
+// Passport user serialization/deserialization.
 passport.serializeUser((user: User, done) => {
   done(null, user.getDataValue("id"));
 });
@@ -76,7 +91,7 @@ passport.deserializeUser(function (id: string, done) {
 });
 
 // Serve the API routes.
-app.use("/api", Server.get().router);
+app.use("/api", server.router);
 
 // Serve the public assets files.
 app.use("/assets", express.static(path.join(__dirname, "../assets")));

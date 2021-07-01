@@ -99,6 +99,21 @@ class Server {
   }
 
   /**
+   * Google settings of the application.
+   */
+  public get googleSettings(): {
+    clientID: string;
+    clientSecret: string;
+    callbackURL: string;
+  } {
+    return {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: `${process.env.SERVER_URL}/api/users/auth/google/callback`,
+    };
+  }
+
+  /**
    * Express router containing the routes of the server.
    */
   public get router(): Router {

@@ -74,6 +74,15 @@ export const get = async (): Promise<any> => {
 };
 
 /**
+ * Sign-in with Google.
+ *
+ * @method GET
+ */
+export const googleSignIn = async (): Promise<any> => {
+  window.location.replace(`${_apiUrl}/api/users/auth/google`);
+};
+
+/**
  * Get the current user information
  *
  * @method GET

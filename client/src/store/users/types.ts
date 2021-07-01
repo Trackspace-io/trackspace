@@ -32,7 +32,9 @@ export enum USERS {
 export type IUserAction = { type: USERS.SET_USER; payload: IUser };
 
 // Update user interface
-export type IUserUpdate = Partial<IUser> & { oldPassword?: string } & { newPassword?: string };
+export type IUserUpdate = Partial<IUser> & { oldPassword?: string } & { newPassword?: string } & {
+  confirmPassword?: string;
+};
 
 // Sign up interface
 export type IUserSignUp = IUserInputs;

@@ -1,9 +1,11 @@
+import Button from 'components/gui/Button';
 import Form from 'components/gui/Form';
 import { Input, useInput } from 'components/gui/Input';
 import LinkButton from 'components/gui/LinkButton';
 import Typography from 'components/gui/Typography';
-import { useAuths } from 'controllers';
+import { useAuths, useUsers } from 'controllers';
 import * as React from 'react';
+import { FcGoogle } from 'react-icons/fc';
 
 import SignInSrc from '../../images/teacher.svg';
 import style from '../../styles/common/SignIn.module.css';
@@ -17,6 +19,7 @@ import style from '../../styles/common/SignIn.module.css';
 
 const SignIn: React.FC = () => {
   // Controllers
+  const Users = useUsers();
   const Auths = useAuths();
 
   // Inputs
@@ -36,13 +39,18 @@ const SignIn: React.FC = () => {
         </div>
         <div className={style['content']}>
           <Typography variant="title" align="center">
-            Welcome to Trackspace
-          </Typography>
-          <br />
-          <Typography variant="subtitle" align="center">
             Sign In
           </Typography>
           <br />
+          <Button
+            variant="primary"
+            align="center"
+            onClick={() => {
+              Users.googleSignIn();
+            }}>
+            <FcGoogle />
+            &nbsp;&nbsp;Sign In with Google
+          </Button>
           <Form
             handleSubmit={handleSubmit}
             action="Sign in"
