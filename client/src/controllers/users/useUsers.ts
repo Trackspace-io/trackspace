@@ -47,6 +47,13 @@ const useUsers = () => {
       });
   };
 
+  /**
+   * Sign-in with Google.
+   */
+  const googleSignIn = () => {
+    UserAPI.googleSignIn();
+  };
+
   const getCurrent = () => {
     UserAPI.getCurrent()
       .then((response) => {
@@ -103,7 +110,7 @@ const useUsers = () => {
     getCurrent();
   }, []);
 
-  return { ...users, get, getCurrent, update };
+  return { ...users, get, getCurrent, googleSignIn, update };
 };
 
 export default useUsers;

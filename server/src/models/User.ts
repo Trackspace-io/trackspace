@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { Profile, VerifyFunction } from "passport-google-oauth";
 import {
   BelongsToManyGetAssociationsMixin,
   DataTypes,
@@ -34,7 +35,7 @@ export class User extends Model {
   ): Promise<void> {
     try {
       const user = await User.findByEmail(email);
-      if (!user) {
+      if (!user || user.role === "unknown") {
         return done(null, false);
       }
 
@@ -46,6 +47,43 @@ export class User extends Model {
       return done(null, user);
     } catch (e) {
       done(e);
+    }
+  }
+
+  /**
+   * Authenticates a user using Google credentials.
+   *
+   * @param accessToken  Access token (not used).
+   * @param refreshToken Refresh token (not used).
+   * @param profile      Google profile object.
+   * @param done         Verify callback.
+   */
+  public static async authenticateByGoogle(
+    accessToken: string,
+    refreshToken: string,
+    profile: Profile,
+    done: VerifyFunction
+  ): Promise<void> {
+    try {
+      // Check if there is an account associated to the Google address
+      for (let i = 0; i < profile.emails?.length ?? 0; i++) {
+        const user = await User.findByEmail(profile.emails[i].value);
+        if (user) return done(null, user);
+      }
+
+      // No account found. Create a new account if possible.
+      const user = await User.create({
+        id: shortid.generate(),
+        email: profile.emails[0]?.value,
+        firstName: profile.name?.givenName,
+        lastName: profile.name?.familyName,
+        role: "unknown",
+        password: "none",
+      });
+
+      return done(null, user);
+    } catch (e) {
+      return done(null, false);
     }
   }
 
@@ -116,7 +154,7 @@ export class User extends Model {
   /**
    * Role address of the user.
    */
-  public get role(): "teacher" | "student" | "parent" {
+  public get role(): "teacher" | "student" | "parent" | "unknown" {
     return this.getDataValue("role");
   }
 

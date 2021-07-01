@@ -11,7 +11,9 @@
     "SERVER_URL": "http://localhost:8000",
     "SESSION_SECRET": "secret",
     "RESET_PASSWORD_TOKEN_SECRET": "secret",
-    "CLASSROOM_INVITATION_SECRET": "secret"
+    "CLASSROOM_INVITATION_SECRET": "secret",
+    "GOOGLE_CLIENT_ID": "google-id",
+    "GOOGLE_CLIENT_SECRET": "google-secret"
   },
   "ext": "js,json,ts",
   "exec": "npm start"

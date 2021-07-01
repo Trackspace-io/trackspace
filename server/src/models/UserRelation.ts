@@ -77,6 +77,8 @@ export class UserRelation extends Model {
           ? await relations[i].getUser1()
           : await relations[i].getUser2();
 
+      if (relatedUser.role === "unknown") continue;
+
       if (roles.length == 0 || roles.includes(relatedUser.role)) {
         result.push([relatedUser, relations[i]]);
       }
