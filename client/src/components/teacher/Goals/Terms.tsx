@@ -2,15 +2,13 @@ import TermDropdown from 'components/common/TermDropdown';
 import Typography from 'components/gui/Typography';
 import { useClassroomsAsTeacher } from 'controllers';
 import { dateString, today, WEEK_DAYS } from 'helpers/calendar';
-import { useParams } from 'helpers/params';
 import React from 'react';
 
 import style from './Goals.module.css';
 
-const Terms: React.FC = () => {
-  // Retrieve classroom id
-  const id = useParams();
-
+const Terms: React.FC<{
+  classroomId: string;
+}> = ({ classroomId }) => {
   // Controllers
   const Classrooms = useClassroomsAsTeacher();
 
@@ -23,7 +21,7 @@ const Terms: React.FC = () => {
         <Typography variant="title" weight="light">
           Goals
         </Typography>
-        <TermDropdown classroomId={id} />
+        <TermDropdown classroomId={classroomId} />
       </div>
       <div className={style['terms-info']}>
         {terms.currentTerm && (

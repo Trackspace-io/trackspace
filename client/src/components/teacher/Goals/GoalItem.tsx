@@ -6,16 +6,15 @@ import style from './Goals.module.css';
 import ModifyGoal from './ModifyGoal';
 import UnsetGoal from './UnsetGoal';
 
-interface IGoalItemProps {
+const GoalItem: React.FC<{
+  classroomId: string;
   goal: IGoal;
-}
-
-const GoalItem: React.FC<IGoalItemProps> = ({ goal }) => {
+}> = ({ classroomId, goal }) => {
   return (
     <div className={style['goal-item']}>
       <span className={style['actions']}>
-        <ModifyGoal weekNumber={goal.weekNumber} pages={goal.pages} />
-        <UnsetGoal weekNumber={goal.weekNumber} />
+        <ModifyGoal classroomId={classroomId} weekNumber={goal.weekNumber} pages={goal.pages} />
+        <UnsetGoal classroomId={classroomId} weekNumber={goal.weekNumber} />
       </span>
       <Typography variant="info">{`Week ${goal.weekNumber}`}</Typography>
       <Typography variant="title">{goal.pages}</Typography>
