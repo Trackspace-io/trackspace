@@ -6,12 +6,11 @@ import GoalItem from './GoalItem';
 import style from './Goals.module.css';
 import SetGoal from './SetGoal';
 
-interface IGoalListProps {
+const GoalList: React.FC<{
+  classroomId: string;
   list: IGoal[];
   numberOfWeeks: number;
-}
-
-const GoalList: React.FC<IGoalListProps> = ({ list, numberOfWeeks }) => {
+}> = ({ classroomId, list, numberOfWeeks }) => {
   // States
   const [modal, setModal] = React.useState<boolean>(false);
   const [weeks, setWeeks] = React.useState<number[]>([]);
@@ -79,11 +78,11 @@ const GoalList: React.FC<IGoalListProps> = ({ list, numberOfWeeks }) => {
       {list.map((goal, i) => (
         <React.Fragment key={i}>
           {setPreviousTrigger(i, goal)}
-          <GoalItem goal={goal} />
+          <GoalItem classroomId={classroomId} goal={goal} />
           {setNextTrigger(goal)}
         </React.Fragment>
       ))}
-      {modal && <SetGoal isOpen={modal} onClose={() => setModal(false)} weeks={weeks} />}
+      {modal && <SetGoal classroomId={classroomId} isOpen={modal} onClose={() => setModal(false)} weeks={weeks} />}
       {renderIfEmpty()}
     </div>
   );

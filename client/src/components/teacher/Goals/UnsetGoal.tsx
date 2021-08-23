@@ -1,16 +1,11 @@
 import { useClassroomsAsTeacher } from 'controllers';
-import { useParams } from 'helpers/params';
 import React from 'react';
 import { FiTrash } from 'react-icons/fi';
 
-interface IUnsetGoalProps {
+const UnsetGoal: React.FC<{
+  classroomId: string;
   weekNumber: number;
-}
-
-const UnsetGoal: React.FC<IUnsetGoalProps> = ({ weekNumber }) => {
-  // Retrieve classroom id
-  const id = useParams();
-
+}> = ({ classroomId, weekNumber }) => {
   // Controllers
   const Classrooms = useClassroomsAsTeacher();
 
@@ -19,7 +14,7 @@ const UnsetGoal: React.FC<IUnsetGoalProps> = ({ weekNumber }) => {
 
   const handleClick = () => {
     const payload = {
-      classroomId: id,
+      classroomId,
       termId: String(terms.currentTerm?.id),
       weekNumber: weekNumber,
     };

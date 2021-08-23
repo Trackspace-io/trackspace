@@ -34,11 +34,15 @@ const Goals: React.FC<{
 
   return (
     <div>
-      <Terms />
+      <Terms classroomId={classroomId} />
       {terms.currentTerm ? (
         <React.Fragment>
           <GoalGraph graph={goals.graph} />
-          <GoalList list={goals.list} numberOfWeeks={Number(terms.currentTerm?.numberOfWeeks)} />
+          <GoalList
+            classroomId={classroomId}
+            list={goals.list}
+            numberOfWeeks={Number(terms.currentTerm?.numberOfWeeks)}
+          />
         </React.Fragment>
       ) : (
         <div className={style['goals-empty']}>

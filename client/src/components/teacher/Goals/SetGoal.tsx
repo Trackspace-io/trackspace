@@ -3,23 +3,18 @@ import Modal from 'components/gui/Modal';
 import { Select, useSelect } from 'components/gui/Select';
 import Typography from 'components/gui/Typography';
 import { useClassroomsAsTeacher } from 'controllers';
-import { useParams } from 'helpers/params';
 import React from 'react';
 import { FiCheck, FiX } from 'react-icons/fi';
 
 import style from './Goals.module.css';
 
-interface ISetGoalProps {
+const SetGoal: React.FC<{
+  classroomId: string;
   isOpen: boolean;
   onClose: () => void;
   weeks: number[];
   pages?: number;
-}
-
-const SetGoal: React.FC<ISetGoalProps> = ({ isOpen, onClose, weeks, pages }) => {
-  // Retrieve classroom id
-  const id = useParams();
-
+}> = ({ classroomId, isOpen, onClose, weeks, pages }) => {
   // Controllers
   const Classrooms = useClassroomsAsTeacher();
   const Inputs = useInput({ pages: 0 });
@@ -39,7 +34,7 @@ const SetGoal: React.FC<ISetGoalProps> = ({ isOpen, onClose, weeks, pages }) => 
   // Handle form submit
   const handleSubmit = () => {
     const payload = {
-      classroomId: id,
+      classroomId,
       termId: String(terms.currentTerm?.id),
       weekNumber: Selects.values.weekNumber,
       pages: Inputs.values.pages,
